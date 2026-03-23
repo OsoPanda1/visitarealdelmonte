@@ -1,5 +1,4 @@
 import { useCallback, useState } from "react";
-import { apiPost } from "@/lib/apiClient";
 
 export interface RealitoMessage {
   id: string;
@@ -16,14 +15,13 @@ export interface SuggestedAction {
 }
 
 interface RealitoChatResponse {
-  reply?: string;
+  reply: string;
+  intent?: string;
+  suggestedActions?: SuggestedAction[];
   trace?: {
     interactionId: string;
     source: string;
   };
-  reply: string;
-  intent: string;
-  suggestedActions: SuggestedAction[];
   gaSuggestion?: {
     id: string;
     label: string;
@@ -49,8 +47,8 @@ interface RealitoChatResponse {
       immersion: string;
     }>;
   } | null;
-  engine: string;
-  twinNodesQueried: number;
+  engine?: string;
+  twinNodesQueried?: number;
 }
 
 interface ChatMessageDTO {
@@ -96,74 +94,47 @@ export function useRealitoChat() {
       setMessages((prev) => [...prev, userMessage]);
       setIsLoading(true);
 
-    try {
-      const nextHistory = [...messages, userMessage].map((message) => ({
-        role: message.role,
-        content: message.content,
-      }));
-
-      const response = await fetch("/api/realito/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          history: nextHistory,
-          context: { queryType: text },
-        }),
-      });
       try {
         const contextHistory: ChatMessageDTO[] = messages.slice(-6).map((m) => ({
-          from: m.role === "user" ? "user" : "realito",
+          from: m.role === "user" ? ("user" as const) : ("realito" as const),
           text: m.content,
         }));
 
-        const payload = await apiPost<RealitoChatResponse>("/api/realito/chat", {
-          message: text,
-          contextHistory,
-          userPreferences: {},
+        const response = await fetch("/api/realito/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message: text,
+            contextHistory,
+            userPreferences: {},
+          }),
         });
 
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: crypto.randomUUID(),
-            role: "assistant",
-            content: payload.reply,
-            intent: payload.intent,
-            suggestedActions: payload.suggestedActions,
-          },
-        ]);
+        if (response.ok) {
+          const payload = (await response.json()) as RealitoChatResponse;
+          if (payload.trace?.interactionId) {
+            setLastTraceId(payload.trace.interactionId);
+          }
+
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: crypto.randomUUID(),
+              role: "assistant",
+              content: payload.reply ?? "Estoy preparando recomendaciones precisas para tu visita.",
+              intent: payload.intent,
+              suggestedActions: payload.suggestedActions,
+            },
+          ]);
+        } else {
+          throw new Error("API error");
+        }
       } catch {
         // Fallback to local intelligence
         const lowerText = text.toLowerCase();
         let fallbackReply: string;
         let fallbackActions: SuggestedAction[] = [];
 
-      const payload = (await response.json()) as RealitoChatResponse;
-      if (payload.trace?.interactionId) {
-        setLastTraceId(payload.trace.interactionId);
-      }
-
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: crypto.randomUUID(),
-          role: "assistant",
-          content: payload.reply ?? "Estoy preparando recomendaciones precisas para tu visita.",
-        },
-      ]);
-    } catch {
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: crypto.randomUUID(),
-          role: "assistant",
-          content: "Ahora estoy en modo de respaldo. Te sugiero Centro Histórico, Mina La Acosta y la Ruta Gastronómica del Paste.",
-        },
-      ]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [messages]);
         if (/ruta|tour|recorrido|caminar/.test(lowerText)) {
           fallbackReply =
             "Te recomiendo iniciar en el Centro Histórico, visitar la Mina de Acosta y cerrar en el Panteón Inglés. Es la ruta del patrimonio más popular y toma aproximadamente 1.5 horas.";
