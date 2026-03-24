@@ -9,14 +9,14 @@ import { AuroraBackground, TextReveal } from "@/components/VisualEffects";
 import { motion } from "framer-motion";
 import { Search, Store, Sparkles } from "lucide-react";
 
-import pasteImg from "@/assets/paste.webp";
-import panteonImg from "@/assets/panteon-ingles.webp";
+import pasteriasImg from "@/assets/pasterias.png";
+import plateriasImg from "@/assets/platerias.png";
+import artesaniasImg from "@/assets/artesanias.png";
+import sanitariosImg from "@/assets/sanitarios.png";
 import minaImg from "@/assets/mina-acosta.webp";
 import callesImg from "@/assets/calles-colonial.webp";
 import rdm1 from "@/assets/rdm1.jpeg";
 import rdm2 from "@/assets/rdm2.jpeg";
-import rdm3 from "@/assets/rdm01.jpg";
-import rdm4 from "@/assets/rdm02.jpg";
 
 const businesses = [
   { name: "Pastes El Portal", category: "Pastes", description: "Los pastes mas tradicionales desde 1985. Sabores clasicos y nuevas creaciones.", image: pasteImg, isPremium: true, rating: 4.9, phone: "771 123 4567" },
