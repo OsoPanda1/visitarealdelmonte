@@ -1,8 +1,9 @@
 // @ts-nocheck
 import { useEffect, useRef, useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Navigation, MapPin, Search } from "lucide-react";
+import { Navigation, MapPin, Search, Car } from "lucide-react";
 import { REAL_DEL_MONTE_SITES, CATEGORY_COLORS } from "@/lib/rdm-data";
+import { ESTACIONAMIENTOS, ALL_TERRITORIAL_SITES } from "@/data/rdm-territorial";
 import "leaflet/dist/leaflet.css";
 
 type MapPlace = { id: string; name: string; category: string; lat: number; lng: number; rating: number | null; description: string | null; };
