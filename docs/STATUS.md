@@ -2,35 +2,61 @@
 
 Modelo: **M0** Conceptual · **M1** Scaffolded · **M2** Functional · **M3** Stable · **M4** Verified · **M5** Frozen
 
-Actualizado: Etapa 1 del refactor federado (façades en `packages/`).
+Actualizado: **Etapas 1-3 del refactor federado completadas** (façades en `packages/`, `services/` y `apps/`).
 
-## Capas
+## Capas y aliases activos
 
-| Capa | Módulo | Ubicación actual | Façade | Estado | Notas |
-|---|---|---|---|---|---|
-| Foundations | geo-engine | `src/core/geo/*` | `@geo-engine` | **M4** | LRU+TTL, haversine, spatial index, bbox. Estable. |
-| Foundations | core-kernel | `src/lib/{kernel,tamv-kernel,heptafederation,operational-readiness}.ts` + `src/core/system/*` + `src/core/audit/logger.ts` | `@core-kernel` | **M3** | Falta unificar tipos de modos. |
-| Foundations | data-models | `src/core/models.ts` + `src/lib/types.ts` + `src/features/places/mapTypes.ts` | `@data-models` | **M3** | Algunos tipos duplicados pendientes de fusión. |
-| Foundations | ui-kit | `src/components/ui/*` + Logo, NavLink, SectionHeader | `@ui-kit` | **M2** | shadcn aún se importa directo desde `@/components/ui`. |
-| Intelligence | ai-core (Isabella/Realito) | `src/ai/*` + `src/core/ai/*` + `src/features/ai/*` + `src/app/api/isabella/*` | _(Etapa 2)_ | **M2** | Decision engine + guardian funcionando, falta consolidar intent-router. |
-| Territorial | territorial-twin | `src/core/{engine,events,orchestrator}/*` + `src/orchestrator/*` + `src/realito/gen4/*` | _(Etapa 2)_ | **M3** | Orchestrator + scoring engine estables. |
-| Economy | economy / points | `supabase/functions/award-points` + `src/lib/business-catalog.ts` | _(Etapa 2)_ | **M2** | Stripe live pendiente (Bloque C). |
-| Economy | auth + roles + gamificación | `src/contexts/RDMAuthContext.tsx` + `supabase/functions/award-points` | — | **M3** | Cerrado en bloque previo. |
-| Governance | analytics | `src/infra/metrics/*` + `src/core/metrics/*` | _(Etapa 2)_ | **M2** | Dashboard placeholder funcional. |
-| Culture | culture engine | `src/data/atlas/*` + `src/lib/{codex,tourism-knowledge}.ts` | _(Etapa 2)_ | **M3** | Corpus y dichos listos. |
-| Experience | apps/web | `src/components/*` + `src/pages/*` | _(Etapa 3)_ | **M3** | 80+ rutas montadas, navegación estable. |
-| Experience | apps/admin | `src/pages/admin/*` | _(Etapa 3)_ | **M2** | Sólo dashboard básico. |
-| Infra | supabase | `supabase/*` | _(Etapa 4)_ | **M3** | Migraciones aplicadas, edge functions desplegadas. |
-| Infra | metrics | `src/infra/metrics/*` | _(Etapa 4)_ | **M2** | Prometheus + monitoring registrados. |
+| Alias | Capa | Apunta a | Etapa |
+|---|---|---|---|
+| `@` | Legacy | `src/*` | 0 |
+| `@geo-engine` | Foundations | `packages/geo-engine/src` | 1 ✅ |
+| `@core-kernel` | Foundations | `packages/core-kernel/src` | 1 ✅ |
+| `@data-models` | Foundations | `packages/data-models/src` | 1 ✅ |
+| `@ui-kit` | Foundations | `packages/ui-kit/src` | 1 ✅ |
+| `@ai-core` | Services | `services/ai-core/src` | 2 ✅ |
+| `@twin` | Services | `services/territorial-twin/src` | 2 ✅ |
+| `@economy` | Services | `services/economy/src` | 2 ✅ |
+| `@analytics` | Services | `services/analytics/src` | 2 ✅ |
+| `@culture` | Services | `services/culture/src` | 2 ✅ |
+| `@app-web/*` | Apps | `apps/web/src/*` | 3 ✅ |
+| `@app-admin/*` | Apps | `apps/admin/src/*` | 3 ✅ |
 
-## Deuda técnica conocida
+## Matriz de madurez
 
-- `@ts-nocheck` activo en: `src/components/ExplorerView.tsx`, `src/pages/Dashboard.tsx`, `src/pages/Auth.tsx`, `src/orchestrator/experience.orchestrator.ts`, varios `src/data/imported/*`.
-- `src/integrations/supabase/{client,types}.ts` son autogenerados — nunca editar.
-- Bloques pendientes (post-refactor): **A** cableado mapa+comercios · **B** páginas faltantes /federation, /nodocero, /realito-ai, /mitos, /transporte · **C** Stripe live + membresías.
+| Capa | Módulo | Façade | Estado | Notas |
+|---|---|---|---|---|
+| Foundations | geo-engine | `@geo-engine` | **M4** | LRU+TTL, haversine, bbox, spatial index. |
+| Foundations | core-kernel | `@core-kernel` | **M3** | Kernel + modos + auditoría unificados. |
+| Foundations | data-models | `@data-models` | **M3** | `Intent` canónico desde `core/models`; legacy expuesto como `LegacyIntent`. |
+| Foundations | ui-kit | `@ui-kit` | **M2** | Primitives RDM expuestas; shadcn aún directo. |
+| Intelligence | ai-core (Isabella/Realito) | `@ai-core` | **M3** | Decision engine + guardian + tamv base por namespace. |
+| Territorial | territorial-twin | `@twin` | **M3** | Orchestrators v1/v2 + scoring v1/v2 + realito gen4 por namespace para evitar colisiones. |
+| Economy | economy | `@economy` | **M2** | Catálogo + tipo `AwardPointsRequest`. Stripe live pendiente (Bloque C). |
+| Economy | auth + roles + gamificación | — | **M3** | Cerrado bloque previo. |
+| Governance | analytics | `@analytics` | **M2** | `CoreMetrics`, `InfraMetrics`, `Monitoring` segregados por namespace. |
+| Culture | culture engine | `@culture` | **M3** | Corpus, dichos, tesis TAMV, federations, ecosystem. |
+| Experience | apps/web | `@app-web/*` | **M3** | 5 dominios (rdm/community/economy/governance/intelligence) + shared. Manifest lazy. |
+| Experience | apps/admin | `@app-admin/*` | **M2** | Surface separada, expone Dashboard. |
+| Infra | supabase | _(Etapa 4)_ | **M3** | Migraciones y edge functions desplegadas. |
+| Infra | metrics | _(Etapa 4)_ | **M2** | Prometheus + monitoring registrados. |
 
-## Próximas etapas
+## Decisiones de diseño Etapa 2-3
 
-- **Etapa 2** — Extraer `services/{ai-core, territorial-twin, economy, analytics, culture}` con su propio `index.ts` público.
-- **Etapa 3** — Reorganizar `apps/web/src/domains/{rdm, atlas, community, economy, governance}` y separar `apps/admin`.
-- **Etapa 4** — Mover `supabase/` a `infra/supabase/`, consolidar `infra/metrics/`, eliminar re-exports puente.
+- **Namespaces frente a `export *`**: módulos con APIs solapadas (dos `ScoringEngine`, dos `ExperienceOrchestrator`, dos `prometheus`) se exponen como `export * as X` para evitar colisión de símbolos. La selección de la versión canónica se difiere a Etapa 4.
+- **App.tsx intacto**: los manifests de dominio (`apps/web/src/domains/*/pages.ts`) son lazy-imports estables. El routing actual sigue funcionando; en Etapa 4 se sustituyen los `lazy(() => import("@/pages/X"))` por moves físicos sin tocar App.tsx.
+- **No se introdujo runtime nuevo**: cero dependencias añadidas, cero archivos movidos físicamente, cero rutas modificadas. Sólo aliases + manifests + docs.
+
+## Deuda técnica
+
+- `@ts-nocheck` activo: `ExplorerView`, `Dashboard`, `Auth`, `experience.orchestrator`, varios `data/imported/*`.
+- `src/integrations/supabase/{client,types}.ts` autogenerados — nunca editar.
+- Dos versiones de `ScoringEngine`, `ExperienceOrchestrator`, `prometheus`: consolidar en Etapa 4.
+- Pendientes funcionales: Bloque A (cableado mapa+comercios) · Bloque B (páginas /federation, /nodocero, /realito-ai, /mitos, /transporte) · Bloque C (Stripe live).
+
+## Próxima Etapa (4)
+
+- Mover `supabase/` → `infra/supabase/`.
+- Consolidar `infra/metrics/`.
+- Resolver duplicidades de scoring/orchestrator/prometheus eligiendo versión canónica.
+- Eliminar re-exports puente legacy en `src/core/geo/index.ts`, `src/lib/kernel.ts`, etc.
+- Mover archivos físicamente de `src/` → `packages/*/src/` y `services/*/src/`.
