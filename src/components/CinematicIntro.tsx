@@ -25,7 +25,7 @@ const AudioEqualizer = ({ analyser }: { analyser: AnalyserNode | null }) => {
 
     const draw = () => {
       rafRef.current = requestAnimationFrame(draw);
-      analyser.getByteFrequencyData(dataArr); // frecuencia en tiempo real[web:641][web:645]
+      analyser.getByteFrequencyData(dataArr);
 
       const { width: w, height: h } = canvas;
       ctx.clearRect(0, 0, w, h);
@@ -64,7 +64,6 @@ const AudioEqualizer = ({ analyser }: { analyser: AnalyserNode | null }) => {
         ctx.closePath();
         ctx.fill();
 
-        // Reflejo sutil
         ctx.save();
         ctx.globalAlpha = 0.16;
         ctx.scale(1, -0.35);
@@ -114,7 +113,7 @@ const AudioWaveform = ({ analyser }: { analyser: AnalyserNode | null }) => {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const dataArr = new Uint8Array(analyser.fftSize); // tamaño temporal[web:641][web:645]
+    const dataArr = new Uint8Array(analyser.fftSize);
 
     const draw = () => {
       rafRef.current = requestAnimationFrame(draw);
@@ -147,7 +146,6 @@ const AudioWaveform = ({ analyser }: { analyser: AnalyserNode | null }) => {
       ctx.lineTo(w, h / 2);
       ctx.stroke();
 
-      // Línea central
       ctx.lineWidth = 0.5;
       ctx.strokeStyle = "hsla(210, 100%, 50%, 0.12)";
       ctx.shadowBlur = 0;
@@ -180,24 +178,48 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
+  const introDoneRef = useRef(false);
+  const minPlayTimeoutRef = useRef<number | null>(null);
+  const fadeIntervalRef = useRef<number | null>(null);
 
-  const handleSkip = useCallback(() => {
+  const stopAudio = useCallback(() => {
+    if (minPlayTimeoutRef.current) {
+      clearTimeout(minPlayTimeoutRef.current);
+      minPlayTimeoutRef.current = null;
+    }
+
+    if (fadeIntervalRef.current) {
+      clearInterval(fadeIntervalRef.current);
+      fadeIntervalRef.current = null;
+    }
+
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
+      audioRef.current = null;
     }
+
     if (audioCtxRef.current) {
       audioCtxRef.current.close().catch(() => {});
+      audioCtxRef.current = null;
     }
+
+    setAnalyser(null);
+  }, []);
+
+  const handleSkip = useCallback(() => {
+    stopAudio();
     onComplete();
-  }, [onComplete]);
+  }, [onComplete, stopAudio]);
 
   // ESC para saltar
   useEffect(() => {
     if (!started) return;
+
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") handleSkip();
     };
+
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [started, handleSkip]);
@@ -208,7 +230,7 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
 
     try {
       const ctx = new AudioContext();
-      // Reanudar contexto sólo tras gesto de usuario (autoplay policies).[web:646][web:649]
+
       if (ctx.state === "suspended") {
         await ctx.resume();
       }
@@ -217,6 +239,7 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
 
       const audio = new Audio(introAudioSrc);
       audio.crossOrigin = "anonymous";
+      audio.preload = "auto";
       audioRef.current = audio;
 
       const source = ctx.createMediaElementSource(audio);
@@ -280,9 +303,13 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
         .play()
         .then(() => {
           let vol = 0;
-          const fadeIn = setInterval(() => {
+          const fadeIn = window.setInterval(() => {
+            if (!audioRef.current) {
+              clearInterval(fadeIn);
+              return;
+            }
             vol = Math.min(vol + 0.15, 1);
-            audio.volume = vol;
+            audioRef.current.volume = vol;
             if (vol >= 1) clearInterval(fadeIn);
           }, 80);
         })
@@ -290,63 +317,70 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
           console.warn("Audio play failed:", err);
         });
 
-      // Al terminar el audio, completamos, con fade‑out defensivo
+      // Mantener audio al menos 70 segundos
+      const MIN_PLAY_MS = 70_000;
+      const FADE_OUT_STEP_MS = 80;
+      const FADE_OUT_STEP_DELTA = 0.03;
+
+      minPlayTimeoutRef.current = window.setTimeout(() => {
+        if (!audioRef.current) return;
+
+        fadeIntervalRef.current = window.setInterval(() => {
+          if (!audioRef.current) {
+            if (fadeIntervalRef.current) {
+              clearInterval(fadeIntervalRef.current);
+              fadeIntervalRef.current = null;
+            }
+            return;
+          }
+
+          const nextVol = Math.max(audioRef.current.volume - FADE_OUT_STEP_DELTA, 0);
+          audioRef.current.volume = nextVol;
+
+          if (nextVol <= 0) {
+            if (fadeIntervalRef.current) {
+              clearInterval(fadeIntervalRef.current);
+              fadeIntervalRef.current = null;
+            }
+            stopAudio();
+          }
+        }, FADE_OUT_STEP_MS);
+      }, MIN_PLAY_MS);
+
       audio.addEventListener("ended", () => {
-        handleSkip();
+        if (introDoneRef.current) return;
+        introDoneRef.current = true;
       });
-
-    // Fade out cronometrado (por si el mp3 es más largo)
-// Inicia el fade-out a los ~60 segundos
-const FADE_OUT_START_MS = 60_000; // 60 segundos
-const FADE_OUT_STEP_MS = 80;      // cada 80 ms baja volumen
-const FADE_OUT_STEP_DELTA = 0.03; // baja 0.03 por paso
-
-setTimeout(() => {
-  if (!audioRef.current) return;
-
-  let vol = audioRef.current.volume;
-  const fadeOut = setInterval(() => {
-    if (!audioRef.current) {
-      clearInterval(fadeOut);
-      return;
+    } catch (e) {
+      console.warn("Audio init failed:", e);
     }
+  };
 
-    vol = Math.max(vol - FADE_OUT_STEP_DELTA, 0);
-    audioRef.current.volume = vol;
-
-    if (vol <= 0) {
-      clearInterval(fadeOut);
-      audioRef.current.pause();
-    }
-  }, FADE_OUT_STEP_MS);
-}, FADE_OUT_START_MS);
-      
   // Fases visuales
   useEffect(() => {
     if (!started) return;
+
     const timers = [
       setTimeout(() => setPhase(1), 400),
       setTimeout(() => setPhase(2), 2200),
       setTimeout(() => setPhase(3), 4600),
       setTimeout(() => setPhase(4), 7200),
       setTimeout(() => setPhase(5), 9400),
-      setTimeout(() => handleSkip(), 10_400),
+      setTimeout(() => {
+        introDoneRef.current = true;
+        onComplete();
+      }, 10_400),
     ];
+
     return () => timers.forEach(clearTimeout);
-  }, [started, handleSkip]);
+  }, [started, onComplete]);
 
   // Limpieza global
   useEffect(() => {
     return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-      }
-      if (audioCtxRef.current) {
-        audioCtxRef.current.close().catch(() => {});
-      }
+      stopAudio();
     };
-  }, []);
+  }, [stopAudio]);
 
   return (
     <AnimatePresence>
@@ -362,7 +396,6 @@ setTimeout(() => {
           }}
           onClick={!started ? startIntro : undefined}
         >
-          {/* Pantalla de “toca para iniciar” (gesto requerido para audio) */}
           {!started && (
             <motion.div
               className="absolute inset-0 z-50 flex flex-col items-center justify-center gap-6"
@@ -413,7 +446,6 @@ setTimeout(() => {
 
           {started && (
             <>
-              {/* Fondo hero + gradiente nocturno */}
               <motion.div
                 className="absolute inset-0 z-0"
                 initial={{ opacity: 0, scale: 1.1 }}
@@ -432,7 +464,6 @@ setTimeout(() => {
                 <div className="absolute inset-0 bg-gradient-to-t from-[hsl(220,25%,4%)] via-transparent to-[hsl(220,25%,4%)]" />
               </motion.div>
 
-              {/* Partículas territoriales */}
               <div className="pointer-events-none absolute inset-0 overflow-hidden">
                 {Array.from({ length: 72 }).map((_, i) => (
                   <motion.div
@@ -469,7 +500,6 @@ setTimeout(() => {
                 ))}
               </div>
 
-              {/* Anillos orbitales */}
               <motion.div
                 className="pointer-events-none absolute inset-0 flex items-center justify-center"
                 initial={{ opacity: 0 }}
@@ -507,7 +537,6 @@ setTimeout(() => {
                 ))}
               </motion.div>
 
-              {/* Líneas de escaneo */}
               <div
                 className="pointer-events-none absolute inset-0 opacity-[0.018]"
                 style={{
@@ -516,7 +545,6 @@ setTimeout(() => {
                 }}
               />
 
-              {/* Distintivo central RDM DIGITAL */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.4, filter: "blur(40px)" }}
                 animate={
@@ -584,7 +612,6 @@ setTimeout(() => {
                 </div>
               </motion.div>
 
-              {/* Era badge */}
               <motion.div
                 initial={{ opacity: 0, y: 25, scale: 0.9 }}
                 animate={
@@ -607,7 +634,6 @@ setTimeout(() => {
                 </span>
               </motion.div>
 
-              {/* Título principal */}
               <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 animate={phase >= 2 ? { opacity: 1, y: 0 } : {}}
@@ -650,11 +676,10 @@ setTimeout(() => {
                 </motion.p>
               </motion.div>
 
-              {/* Visualizadores de audio */}
               <motion.div
                 initial={{ opacity: 0, scaleY: 0.3 }}
                 animate={phase >= 2 ? { opacity: 1, scaleY: 1 } : {}}
-                transition={{ duration: 0.8, delay: 0.8, ease: "easeOut" }}
+                transition={{ duration: 1.8, delay: 0.8, ease: "easeOut" }}
                 className="relative z-10 mb-4 flex flex-col items-center gap-1"
               >
                 <AudioEqualizer analyser={analyser} />
@@ -662,7 +687,7 @@ setTimeout(() => {
                 <motion.p
                   initial={{ opacity: 0 }}
                   animate={phase >= 2 ? { opacity: 0.45 } : {}}
-                  transition={{ delay: 1.2, duration: 0.6 }}
+                  transition={{ delay: 1.2, duration: 1.6 }}
                   className="mt-2 text-[9px] tracking-[0.35em] uppercase"
                   style={{ color: "hsl(210 40% 55%)" }}
                 >
@@ -670,11 +695,10 @@ setTimeout(() => {
                 </motion.p>
               </motion.div>
 
-              {/* Tagline */}
               <motion.div
                 initial={{ opacity: 0, y: 15 }}
                 animate={phase >= 3 ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 1.2, ease: "easeOut" }}
+                transition={{ duration: 1.9, ease: "easeOut" }}
                 className="relative z-10 max-w-2xl px-6 text-center"
               >
                 <p
@@ -691,11 +715,10 @@ setTimeout(() => {
                 </p>
               </motion.div>
 
-              {/* Mini‑galería de experiencias */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={phase >= 4 ? { opacity: 1 } : {}}
-                transition={{ duration: 1 }}
+                transition={{ duration: 1.8 }}
                 className="absolute bottom-28 z-10 flex justify-center gap-4"
               >
                 {[
@@ -707,7 +730,7 @@ setTimeout(() => {
                     key={item.label}
                     initial={{ opacity: 0, y: 20, scale: 0.8 }}
                     animate={phase >= 4 ? { opacity: 1, y: 0, scale: 1 } : {}}
-                    transition={{ duration: 0.6, delay: i * 0.15 }}
+                    transition={{ duration: 0.9, delay: i * 0.15 }}
                     className="group relative"
                   >
                     <div
@@ -733,11 +756,10 @@ setTimeout(() => {
                 ))}
               </motion.div>
 
-              {/* Tagline inferior */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={phase >= 3 ? { opacity: 1 } : {}}
-                transition={{ duration: 0.8, delay: 0.5 }}
+                transition={{ duration: 1.8, delay: 0.5 }}
                 className="absolute bottom-16 z-10 text-center"
               >
                 <p
@@ -748,7 +770,6 @@ setTimeout(() => {
                 </p>
               </motion.div>
 
-              {/* Botón Skip */}
               <motion.button
                 initial={{ opacity: 0 }}
                 animate={phase >= 1 ? { opacity: 0.6 } : {}}
@@ -758,7 +779,7 @@ setTimeout(() => {
                 style={{
                   background: "hsla(0,0%,100%,0.05)",
                   border: "1px solid hsla(0,0%,100%,0.15)",
-                  color: "hsl(0 0% 60%)",
+                  color: "hsl(0 0% 70%)",
                 }}
               >
                 Saltar (Esc)
