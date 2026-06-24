@@ -1,10 +1,17 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { ChevronDown, Mountain, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 
+/**
+ * RDMHero — cinematic video background with gradient fallback.
+ * To activate the video, place your file at /public/video/hero.mp4
+ * (and optionally /public/video/hero.webm for better browser support).
+ * The poster image at /public/images/rdm-hero.png is used while the video loads.
+ */
 export function RDMHero() {
   const ref = useRef<HTMLDivElement>(null);
+  const [videoLoaded, setVideoLoaded] = useState(false);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
@@ -12,8 +19,39 @@ export function RDMHero() {
   return (
     <section ref={ref} className="relative h-[100vh] overflow-hidden">
       <motion.div style={{ y }} className="absolute inset-0">
-        <div className="h-full w-full" style={{ background: "linear-gradient(135deg, hsl(220 25% 12%) 0%, hsl(215 30% 18%) 30%, hsl(24 40% 25%) 70%, hsl(218 24% 10%) 100%)" }} />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[hsl(48_38%_96%)]" />
+        {/* ── Gradient fallback (always visible under the video) ── */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(135deg, hsl(220 25% 12%) 0%, hsl(215 30% 18%) 30%, hsl(24 40% 25%) 70%, hsl(218 24% 10%) 100%)",
+          }}
+        />
+
+        {/* ── Cinematic video ── */}
+        <motion.video
+          src="/video/hero.mp4"
+          poster="/images/rdm-hero.png"
+          autoPlay
+          muted
+          loop
+          playsInline
+          onCanPlay={() => setVideoLoaded(true)}
+          className="absolute inset-0 h-full w-full object-cover"
+          style={{ opacity: videoLoaded ? 1 : 0 }}
+          animate={{ opacity: videoLoaded ? 1 : 0 }}
+          transition={{ duration: 1.4 }}
+          aria-hidden="true"
+        />
+
+        {/* ── Cinematic grading overlay ── */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(to bottom, hsl(220 30% 6% / 0.55) 0%, hsl(220 25% 8% / 0.3) 50%, hsl(48 38% 96% / 1) 100%)",
+          }}
+        />
       </motion.div>
 
       <motion.div style={{ opacity }} className="relative z-10 h-full flex flex-col justify-end pb-24 px-6 md:px-16 lg:px-24">

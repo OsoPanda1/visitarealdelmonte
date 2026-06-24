@@ -14,7 +14,6 @@ import RealitoChatLauncher from './components/RealitoChatLauncher'
 import AmbientLayer from '@/components/AmbientLayer'
 import LiveTelemetryBadge from '@/components/LiveTelemetryBadge'
 import SearchOverlay from '@/components/SearchOverlay'
-import CompassNav from '@/components/CompassNav'
 import SmartSidebar from '@/components/SmartSidebar'
 import { RDMAuthProvider, useRDMAuth } from '@/contexts/RDMAuthContext'
 import { logUIError } from '@/integrations/telemetry/uiTelemetry'
@@ -39,6 +38,7 @@ const Apoya = lazy(() => import('./pages/Apoya'))
 const Reglamento = lazy(() => import('./pages/Reglamento'))
 const AdminDashboard = lazy(() => import('./pages/admin/Dashboard'))
 const AdminMusica = lazy(() => import('./pages/admin/Musica'))
+const Musica = lazy(() => import('./pages/Musica'))
 const Dichos = lazy(() => import('./pages/Dichos'))
 const Catalogo = lazy(() => import('./pages/Catalogo'))
 const NegociosPortal = lazy(() => import('./pages/NegociosPortal'))
@@ -212,6 +212,7 @@ const AnimatedRoutes = () => {
           <Route path="/reglamento" element={<Reglamento />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/musica" element={<AdminMusica />} />
+          <Route path="/musica" element={<Musica />} />
           <Route path="/dichos" element={<Dichos />} />
           <Route path="/dichos-mineros" element={<Dichos />} />
           <Route path="/catalogo" element={<Catalogo />} />
@@ -346,7 +347,7 @@ const AppInner = () => {
             <AnimatedRoutes />
             <LiveTelemetryBadge />
             <SearchOverlay />
-            <CompassNav />
+            {/* CompassNav disabled — RDMNavbar now covers all navigation */}
             <SmartSidebar />
           </>
         )}
