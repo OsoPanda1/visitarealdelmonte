@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import introAudioSrc = "@/assets/tumirada.mp3"
+import introAudioSrc from "@/assets/legado.mp3"
 
 interface CinematicIntroProps {
   onComplete: () => void
 }
 
 /**
- * AudioEqualizer — Barras espectrales que reaccionan de forma cálida y orgánica
+ * Pulso visual de la música
  */
 const AudioEqualizer = ({ analyser }: { analyser: AnalyserNode | null }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -40,7 +40,9 @@ const AudioEqualizer = ({ analyser }: { analyser: AnalyserNode | null }) => {
       const gap = (w / BAR_COUNT) * 0.4
 
       for (let i = 0; i < BAR_COUNT; i++) {
-        const binIndex = Math.floor((i / BAR_COUNT) * (analyser.frequencyBinCount * 0.6))
+        const binIndex = Math.floor(
+          (i / BAR_COUNT) * (analyser.frequencyBinCount * 0.6),
+        )
         const rawVal = dataArr[binIndex] / 255
         const barH = Math.max(4, rawVal * h * 0.9)
 
@@ -48,7 +50,7 @@ const AudioEqualizer = ({ analyser }: { analyser: AnalyserNode | null }) => {
         const y = h - barH
 
         const grad = ctx.createLinearGradient(x, h, x, y)
-        // Oro viejo artesanal, bronce de campana y destellos ámbar de hogar
+        // Oro, bronce de campana, luz de hogar
         grad.addColorStop(0, `hsla(36, 75%, 45%, ${0.3 + rawVal * 1.0})`)
         grad.addColorStop(0.6, `hsla(43, 90%, 55%, ${0.5 + rawVal * 0.5})`)
         grad.addColorStop(1, `hsla(24, 85%, 60%, ${0.2 + rawVal * 1.2})`)
@@ -86,7 +88,7 @@ const AudioEqualizer = ({ analyser }: { analyser: AnalyserNode | null }) => {
 }
 
 /**
- * AudioWaveform — Línea de pulso y latido del corazón del proyecto
+ * Latido de la historia
  */
 const AudioWaveform = ({ analyser }: { analyser: AnalyserNode | null }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -152,6 +154,24 @@ const AudioWaveform = ({ analyser }: { analyser: AnalyserNode | null }) => {
   )
 }
 
+/**
+ * Estrellas que acompañan al recuerdo
+ */
+type Star = {
+  id: number
+  size: number
+  baseX: number
+  baseY: number
+  depth: number
+  color: string
+  driftX: number
+  driftY: number
+  duration: number
+  delay: number
+  layer: 0 | 1 | 2
+  twinklePhase: number
+}
+
 type Particle = {
   id: number
   size: number
@@ -163,7 +183,39 @@ type Particle = {
   delay: number
 }
 
-// Emulación visual de la neblina suspendida característica de la montaña
+const STAR_COLORS = [
+  "hsla(210,100%,80%,0.9)",
+  "hsla(43,95%,72%,0.9)",
+  "hsla(280,70%,75%,0.85)",
+  "hsla(0,0%,100%,0.8)",
+]
+
+const createStarField = (count: number): Star[] => {
+  const stars: Star[] = []
+  for (let i = 0; i < count; i++) {
+    const layer = (i % 3) as 0 | 1 | 2
+    const depth = 0.5 + Math.random() * 1.5
+    const sizeBase = layer === 0 ? 0.7 : layer === 1 ? 1.4 : 2.3
+
+    stars.push({
+      id: i,
+      size: sizeBase + Math.random() * (layer === 2 ? 2.6 : 1.4),
+      baseX: Math.random() * 100,
+      baseY: Math.random() * 100,
+      depth,
+      color: STAR_COLORS[i % STAR_COLORS.length],
+      driftX: (Math.random() - 0.5) * (layer === 2 ? 90 : 40),
+      driftY: -40 - Math.random() * (layer === 2 ? 130 : 60),
+      duration: 6 + Math.random() * 6,
+      delay: Math.random() * 4.5,
+      layer,
+      twinklePhase: Math.random() * Math.PI * 2,
+    })
+  }
+  return stars
+}
+
+// Neblina de la montaña
 const createMistField = (count: number): Particle[] => {
   const particles: Particle[] = []
   for (let i = 0; i < count; i++) {
@@ -181,12 +233,13 @@ const createMistField = (count: number): Particle[] => {
   return particles
 }
 
-export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
+const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
   const [phase, setPhase] = useState(0)
   const [started, setStarted] = useState(false)
   const [overlayVisible, setOverlayVisible] = useState(true)
   const [analyser, setAnalyser] = useState<AnalyserNode | null>(null)
-  const [mistParticles] = useState<Particle[]>(() => createMistField(120))
+  const [stars] = useState<Star[]>(() => createStarField(180))
+  const [mistParticles] = useState<Particle[]>(() => createMistField(130))
 
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const audioCtxRef = useRef<AudioContext | null>(null)
@@ -261,16 +314,15 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
       anal.smoothingTimeConstant = 0.85
       setAnalyser(anal)
 
-      // Ecualización enfocada en la calidez emocional y la fuerza acústica
       const bass = ctx.createBiquadFilter()
       bass.type = "lowshelf"
       bass.frequency.value = 180
-      bass.gain.value = 6 // Latido profundo de la tierra
+      bass.gain.value = 6
 
       const presence = ctx.createBiquadFilter()
       presence.type = "peaking"
       presence.frequency.value = 3200
-      presence.gain.value = 2.5 // Claridad en los matices de las cuerdas
+      presence.gain.value = 2.5
 
       const compressor = ctx.createDynamicsCompressor()
       compressor.threshold.value = -20
@@ -291,6 +343,7 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
         await playPromise
       }
 
+      // Entrada suave
       fadeInIntervalRef.current = window.setInterval(() => {
         if (!audioRef.current) return
         const nextVol = Math.min(audioRef.current.volume + 0.05, 0.85)
@@ -300,6 +353,7 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
         }
       }, 120)
 
+      // Despedida suave al final
       setTimeout(() => {
         if (!audioRef.current) return
         fadeIntervalRef.current = window.setInterval(() => {
@@ -322,23 +376,25 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
     }
   }
 
-  // Cronograma de Sentimiento, Orgullo y Legado Familiar
+  /**
+   * Tiempo extendido: más calma para leer y sentir
+   */
   useEffect(() => {
     if (!started) return
 
     const timers = [
-      setTimeout(() => setPhase(1), 600),   // Identidad y Raíces de la Montaña
-      setTimeout(() => setPhase(2), 9000),  // Raíz y Cimientos: Reina Trejo Serrano
-      setTimeout(() => setPhase(3), 19500), // El peso del desvelo y el amor silencioso
-      setTimeout(() => setPhase(4), 31500), // Rendición de cuentas y victoria compartida
-      setTimeout(() => setPhase(5), 42500), // El arraigo a Real del Monte
-      setTimeout(() => setPhase(6), 53500), // Herencia de paciencia y trabajo artesanal
-      setTimeout(() => setPhase(7), 64500), // Las 7 Federaciones construidas a pulso
-      setTimeout(() => setPhase(8), 73000), // El Horizonte final: Bienvenidos al Legado
+      setTimeout(() => setPhase(1), 600),   // Origen y orgullo
+      setTimeout(() => setPhase(2), 9500),  // Dedicado a Reina
+      setTimeout(() => setPhase(3), 20500), // Las noches de desvelo
+      setTimeout(() => setPhase(4), 33000), // Oveja negra, logro compartido
+      setTimeout(() => setPhase(5), 44500), // Real del Monte
+      setTimeout(() => setPhase(6), 56000), // Trabajo artesanal y manos
+      setTimeout(() => setPhase(7), 67000), // Siete federaciones / legado
+      setTimeout(() => setPhase(8), 76000), // Bienvenida final
       setTimeout(() => {
         setOverlayVisible(false)
         onComplete()
-      }, 79000),
+      }, 81500),
     ]
 
     return () => timers.forEach(clearTimeout)
@@ -352,57 +408,66 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
     }
   }, [stopAudio])
 
+  // Texto totalmente orientado a legado, amor, historia
   const scene = (() => {
     switch (phase) {
       case 0:
       case 1:
         return {
-          tag: "TAMV ONLINE NETWORK · NUESTRAS RAÍCES",
-          title: "Orgullo que nace en la montaña",
-          body: "Más que tecnología, esta es nuestra historia. Una red construida entre el frío, la piedra y la neblina de Real del Monte, forjada con el carácter indomable de quienes pertenecemos a la tierra alta.",
+          tag: "NUESTRA RAÍZ",
+          title: "Orgullosamente realmontenses",
+          body:
+            "Más que un proyecto, esto es la voz de nuestra historia. Nació entre el frío, la piedra y la neblina de Real del Monte, forjado con el carácter de quienes aprendimos a amar la montaña.",
         }
       case 2:
         return {
-          tag: "EL ORIGEN DE TODO",
+          tag: "EL ORIGEN DE ESTA HISTORIA",
           title: "Para mi madre, Reina Trejo Serrano",
-          body: "Porque antes de que se escribiera una sola línea de código, existieron tus manos, tu resguardo y tu guía incondicional, sosteniendo mi vida desde el cimiento más profundo y honesto.",
+          body:
+            "Antes de que existiera cualquier idea, ya estaban tus manos sosteniendo mi mundo. Esta obra nace de tu amor silencioso, de tu fuerza y de cada paso que caminaste a mi lado.",
         }
       case 3:
         return {
-          tag: "EL VALOR DEL DESVELO",
-          title: "Por cada noche que cuidaste mi camino",
-          body: "A ti, que enfrentaste el cansancio y los momentos más duros en absoluto silencio para que a mí jamás me faltaran alas. Este logro es el vivo reflejo de tu fe ciega y de tu amor inquebrantable.",
+          tag: "NOCHES EN VELA",
+          title: "Por cada madrugada en la que no me soltaste",
+          body:
+            "A ti, que enfrentaste el cansancio y el miedo sin una sola queja, solo para que yo tuviera un mañana distinto. Cada logro aquí es un reflejo de tu fe inquebrantable y de tu corazón inmenso.",
         }
       case 4:
         return {
-          tag: "HONRA Y SANGRE",
+          tag: "HONOR A TU NOMBRE",
           title: "Mamá, lo hemos logrado",
-          body: "Mírame con orgullo y levanta la frente: tu oveja negra cambió el destino familiar para siempre. Cada hora invertida en esta obra es para devolverte un poco de lo infinito que me diste. Te amo.",
+          body:
+            "Mírame con orgullo y levanta la frente: la oveja negra encontró su camino. Todo este esfuerzo, cada hora y cada detalle, es una forma de devolverte un poco de lo infinito que me diste. Te amo.",
         }
       case 5:
         return {
-          tag: "NUESTRO HOGAR",
-          title: "Donde la neblina abraza la historia",
-          body: "Real del Monte no es solo nuestro lugar de origen; es el latido de nuestras venas. Entre callejones empedrados y el eco del viento en los tejados, habita el alma de un pueblo que sabe resistir.",
+          tag: "TIERRA QUE NOS FORMÓ",
+          title: "Real del Monte, un lugar cerca del cielo",
+          body:
+            "Entre niebla, viento y campanas, un pueblo mágico levanta la voz y se cuenta a sí mismo. Aquí la montaña no es paisaje: es memoria, carácter y hogar para quienes nunca la hemos dejado de amar.",
         }
       case 6:
         return {
-          tag: "HERENCIA DE ESFUERZO",
+          tag: "HERENCIA DE TRABAJO",
           title: "Manos que moldean la vida con paciencia",
-          body: "Crecimos aprendiendo el valor del trabajo real, dándole forma al porvenir con la constancia del artesano que esculpe el pino y respeta la piedra. Llevamos la memoria de nuestra gente grabada en el pecho.",
+          body:
+            "Crecimos viendo manos que transforman la madera, la plata y la piedra en sustento y dignidad. Ese mismo pulso está aquí: en cada palabra, en cada imagen y en cada segundo de esta historia.",
         }
       case 7:
         return {
-          tag: "EL LEGADO DE NUESTRO TRABAJO",
-          title: "Siete federaciones unidas a pulso",
-          body: "Un ecosistema coordinado por pura voluntad, constancia y más de 23,000 horas de dedicación absoluta y solitaria. Un testimonio de que cuando el esfuerzo es puro, el legado trasciende las fronteras.",
+          tag: "ESFUERZO QUE DEJA HUELLA",
+          title: "Siete federaciones, un solo corazón",
+          body:
+            "Lo que ves es fruto de años de constancia, de más de 23,000 horas de entrega sincera y solitaria. Cuando el trabajo nace del alma, el resultado deja de ser un sistema y se convierte en legado.",
         }
       case 8:
       default:
         return {
-          tag: "BIENVENIDO A CASA",
+          tag: "BIENVENIDOS A CASA",
           title: "Real del Monte Digital",
-          body: "Bienvenidos a una herramienta creada desde el corazón de la montaña, con respeto infinito por el pasado y la mirada firme en el mañana. El fruto del esfuerzo está listo.",
+          body:
+            "Esto es una ofrenda a nuestra tierra y a quienes la habitan. Una herramienta nacida del amor, el respeto por nuestra historia y la gratitud por todo lo que recibimos. Gracias por entrar a esta memoria viva.",
         }
     }
   })()
@@ -425,28 +490,29 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
           transition={{ duration: 1.5, ease: "easeInOut" }}
           className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden"
           style={{
-            background: "radial-gradient(circle at center, hsl(223, 40%, 7%) 0%, hsl(224, 45%, 4%) 60%, hsl(225, 60%, 2%) 100%)",
+            background:
+              "radial-gradient(circle at center, hsl(223, 40%, 7%) 0%, hsl(224, 45%, 4%) 60%, hsl(225, 60%, 2%) 100%)",
             cursor: !started ? "pointer" : "default",
           }}
           onClick={!started ? startIntro : undefined}
         >
-          {/* BOTÓN OMITIR INTRO */}
+          {/* Botón para entrar directo */}
           {started && (
             <motion.button
               initial={{ opacity: 0 }}
-              animate={{ opacity: 0.5 }}
-              whileHover={{ opacity: 0.9, scale: 1.02 }}
+              animate={{ opacity: 0.6 }}
+              whileHover={{ opacity: 1, scale: 1.03 }}
               onClick={(e) => {
                 e.stopPropagation()
                 handleSkip()
               }}
-              className="absolute right-6 top-6 z-[60] font-mono text-[10px] tracking-[0.3em] text-amber-100/80 uppercase border border-amber-500/20 px-4 py-2 rounded-full backdrop-blur-md transition-all"
+              className="absolute right-6 top-6 z-[60] rounded-full border border-amber-500/20 px-4 py-2 font-mono text-[10px] uppercase tracking-[0.3em] text-amber-100/80 backdrop-blur-md transition-all"
             >
-              Entrar directamente [ESC]
+              Saltar presentación [ESC]
             </motion.button>
           )}
 
-          {/* Interfaz de entrada: Invitación de Inicio */}
+          {/* Pantalla de invitación inicial */}
           {!started && (
             <motion.div
               className="absolute inset-0 z-50 flex flex-col items-center justify-center gap-6"
@@ -456,20 +522,21 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
               <div className="relative">
                 <img
                   src="/images/rdm-hero.png"
-                  alt="RDM Digital"
+                  alt="Real del Monte"
                   className="relative h-40 w-40 rounded-full object-cover md:h-52 md:w-52"
                   style={{
-                    filter: "drop-shadow(0 0 40px hsla(36,80%,50%,0.3)) saturate(1.1)",
-                    border: "2px solid hsla(43, 70%, 55%, 0.3)"
+                    filter:
+                      "drop-shadow(0 0 40px hsla(36,80%,50%,0.3)) saturate(1.1)",
+                    border: "2px solid hsla(43, 70%, 55%, 0.3)",
                   }}
                 />
               </div>
-              <div className="text-center space-y-1 px-4">
-                <p className="text-[11px] tracking-[0.35em] uppercase text-amber-200/90 font-mono">
-                  TAMV Online Network
+              <div className="space-y-1 px-4 text-center">
+                <p className="font-mono text-[11px] tracking-[0.35em] uppercase text-amber-200/90">
+                  TAMV · raíz y memoria
                 </p>
                 <p className="text-xs tracking-[0.2em] text-slate-300/70">
-                  Haz clic para escuchar y conocer nuestra historia
+                  Haz clic para escuchar esta historia de amor, origen y legado
                 </p>
               </div>
               <motion.div
@@ -495,7 +562,7 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
 
           {started && (
             <>
-              {/* Paisajes de Fondo Reales */}
+              {/* Fondo de paisajes reales */}
               <AnimatePresence mode="wait">
                 <motion.div
                   key={heroIndex}
@@ -517,19 +584,19 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
                 </motion.div>
               </AnimatePresence>
 
-              {/* Foco íntimo para transiciones emotivas dedicadas a la familia */}
+              {/* Oscurecimiento íntimo para escenas familiares */}
               <motion.div
                 className="absolute inset-0 z-[1]"
                 animate={{
                   backgroundColor:
                     phase >= 2 && phase <= 4
-                      ? "rgba(0, 0, 0, 0.8)"
-                      : "rgba(0, 0, 0, 0.4)",
+                      ? "rgba(0,0,0,0.8)"
+                      : "rgba(0,0,0,0.45)",
                 }}
                 transition={{ duration: 1.5, ease: "easeInOut" }}
               />
 
-              {/* Partículas de neblina suspendida de la montaña */}
+              {/* Neblina suave */}
               <div className="pointer-events-none absolute inset-0 z-[2] overflow-hidden">
                 {mistParticles.map((pt) => (
                   <motion.div
@@ -556,84 +623,202 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
                 ))}
               </div>
 
-              {/* Centro de Identidad Territorial */}
+              {/* Estrellas que danzan alrededor del texto */}
+              <div className="pointer-events-none absolute inset-0 z-[3] overflow-hidden">
+                {stars.map((star) => {
+                  const orbitFactor =
+                    star.layer === 2 ? 1.2 : star.layer === 1 ? 0.9 : 0.6
+                  const depthScale = 0.6 + star.depth * 0.4
+                  const isNearCenter = Math.abs(star.baseX - 50) < 22
+
+                  return (
+                    <motion.div
+                      key={star.id}
+                      className="absolute rounded-full"
+                      style={{
+                        width: `${star.size * depthScale}px`,
+                        height: `${star.size * depthScale}px`,
+                        background: star.color,
+                        left: `${star.baseX}%`,
+                        top: `${star.baseY}%`,
+                        boxShadow: isNearCenter
+                          ? "0 0 24px hsla(43,95%,70%,0.9)"
+                          : star.layer === 2
+                          ? "0 0 18px hsla(43,95%,70%,0.75)"
+                          : "0 0 10px hsla(210,100%,80%,0.7)",
+                      }}
+                      initial={{ opacity: 0, scale: 0, y: 0, x: 0 }}
+                      animate={{
+                        opacity: [
+                          0,
+                          0.8 + Math.sin(star.twinklePhase) * 0.2,
+                          0.4,
+                          1,
+                          0,
+                        ],
+                        scale: [0.5, 1.8 * depthScale, 1.2, 2 * depthScale, 0.8],
+                        y: [0, star.driftY * orbitFactor, star.driftY * 1.1, 0],
+                        x: [0, star.driftX * orbitFactor, star.driftX * 0.7, 0],
+                      }}
+                      transition={{
+                        duration: star.duration,
+                        repeat: Infinity,
+                        delay: star.delay,
+                        ease: "easeInOut",
+                      }}
+                    />
+                  )
+                })}
+
+                {/* Manchas de luz como recuerdos */}
+                <motion.div
+                  className="absolute inset-[-20%] blur-3xl"
+                  initial={{ opacity: 0 }}
+                  animate={
+                    phase >= 1 ? { opacity: [0.2, 0.6, 0.3] } : { opacity: 0 }
+                  }
+                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                  style={{
+                    backgroundImage:
+                      "radial-gradient(circle at 30% 20%, hsla(210,100%,65%,0.32) 0, transparent 50%), radial-gradient(circle at 70% 80%, hsla(43,90%,60%,0.26) 0, transparent 55%), radial-gradient(circle at 50% 40%, hsla(280,60%,70%,0.22) 0, transparent 60%)",
+                    mixBlendMode: "screen",
+                  }}
+                />
+              </div>
+
+              {/* Anillos suaves rodeando el centro */}
+              <motion.div
+                className="pointer-events-none absolute inset-0 z-[4] flex items-center justify-center"
+                initial={{ opacity: 0 }}
+                animate={phase >= 1 ? { opacity: 1 } : {}}
+              >
+                {[0, 1, 2].map((ring) => (
+                  <motion.div
+                    key={ring}
+                    className="absolute rounded-full"
+                    style={{
+                      width: `${520 + ring * 220}px`,
+                      height: `${520 + ring * 220}px`,
+                      border: `1px solid ${
+                        ring === 1
+                          ? "hsla(43,80%,65%,0.3)"
+                          : "hsla(210,100%,70%,0.24)"
+                      }`,
+                    }}
+                    initial={{ opacity: 0, scale: 0.35 }}
+                    animate={
+                      phase >= 1
+                        ? {
+                            opacity: [0, 0.38, 0.14],
+                            scale: [0.35, 1, 1.1],
+                            rotate: ring % 2 === 0 ? [0, 220] : [60, -160],
+                          }
+                        : {}
+                    }
+                    transition={{
+                      duration: 3.4 + ring * 0.8,
+                      ease: "easeOut",
+                      delay: ring * 0.4,
+                    }}
+                  />
+                ))}
+              </motion.div>
+
+              {/* Centro: sello de identidad */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 1.8, ease: "easeOut" }}
-                className="relative z-[4] mb-6 flex items-center justify-center"
+                className="relative z-[5] mb-8 flex items-center justify-center"
               >
-                <div
-                  className="relative flex h-36 w-36 flex-col items-center justify-center rounded-full md:h-44 md:w-44"
+                <motion.div
+                  className="absolute h-80 w-80 rounded-full blur-3xl md:h-[380px] md:w-[380px]"
                   style={{
-                    background: "linear-gradient(135deg, hsl(224,30%,10%), hsl(225,45%,5%))",
+                    background:
+                      "radial-gradient(circle,hsla(210,100%,60%,0.4) 0%,hsla(43,80%,50%,0.3) 45%,transparent 80%)",
+                  }}
+                  animate={{
+                    opacity: [0.35, 0.8, 0.35],
+                    scale: [1, 1.05, 1],
+                  }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                />
+                <div
+                  className="relative flex h-40 w-40 flex-col items-center justify-center rounded-full md:h-56 md:w-56"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, hsl(224,30%,10%), hsl(225,45%,5%))",
                     border: "1px solid hsla(43,70%,55%,0.4)",
-                    boxShadow: "0 15px 40px rgba(0,0,0,0.6), inset 0 0 20px rgba(255,215,0,0.05)",
+                    boxShadow:
+                      "0 15px 40px rgba(0,0,0,0.6), inset 0 0 28px rgba(255,215,0,0.1)",
                   }}
                 >
-                  <div className="text-center px-3 space-y-0.5">
+                  <div className="space-y-1 px-4 text-center">
                     <p className="font-mono text-[9px] tracking-[0.3em] text-amber-200/70 uppercase">
-                      RDM DIGITAL
+                      Real del Monte
                     </p>
                     <h2
                       className="font-serif text-xl font-bold tracking-wide md:text-2xl"
                       style={{
-                        background: "linear-gradient(135deg, #fff, hsl(43, 70%, 65%))",
+                        background:
+                          "linear-gradient(135deg, #fff, hsl(43, 70%, 65%))",
                         WebkitBackgroundClip: "text",
                         WebkitTextFillColor: "transparent",
                       }}
                     >
-                      REAL DEL
+                      RAÍZ
                     </h2>
                     <h2
                       className="font-serif text-xl font-bold tracking-wide md:text-2xl"
                       style={{
-                        background: "linear-gradient(135deg, #ddd, #94a3b8)",
+                        background:
+                          "linear-gradient(135deg, #ddd, #94a3b8)",
                         WebkitBackgroundClip: "text",
                         WebkitTextFillColor: "transparent",
                       }}
                     >
-                      MONTE
+                      Y MEMORIA
                     </h2>
                   </div>
                 </div>
               </motion.div>
 
-              {/* Bloque Central de Narrativa */}
+              {/* Bloque central de palabras */}
               <AnimatePresence mode="wait">
                 <motion.div
                   key={phase}
                   initial={{ opacity: 0, y: 25, filter: "blur(8px)" }}
                   animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                  exit={{ opacity: 0, y: -20, filter: "blur(8px)" }}
-                  transition={{ duration: 1.2, ease: "easeInOut" }}
-                  className="relative z-[5] mb-6 flex max-w-3xl flex-col items-center px-6 text-center"
+                  exit={{ opacity: 0, y: -22, filter: "blur(8px)" }}
+                  transition={{ duration: 1.4, ease: "easeInOut" }}
+                  className="relative z-[5] mb-8 flex max-w-4xl flex-col items-center px-6 text-center"
                 >
-                  <p className="mb-3 font-mono text-[10px] tracking-[0.4em] text-amber-400/80 uppercase md:text-xs">
+                  <p className="mb-3 font-mono text-[10px] tracking-[0.4em] text-amber-300/85 uppercase md:text-xs">
                     {scene.tag}
                   </p>
 
-                  <h1 className="font-serif text-2xl font-bold leading-tight tracking-normal text-white md:text-4xl lg:text-5xl">
+                  <h1 className="font-serif text-3xl font-bold leading-tight tracking-normal text-white md:text-5xl lg:text-6xl">
                     {scene.title}
                   </h1>
 
                   <motion.div
                     className="mx-auto my-4 h-[1px]"
                     style={{
-                      background: "linear-gradient(90deg, transparent, hsl(43,70%,55%), transparent)",
+                      background:
+                        "linear-gradient(90deg, transparent, hsl(43,70%,55%), transparent)",
                     }}
                     initial={{ width: 0 }}
-                    animate={{ width: "12rem" }}
-                    transition={{ duration: 1 }}
+                    animate={{ width: "14rem" }}
+                    transition={{ duration: 1.1, ease: "easeOut" }}
                   />
 
-                  <p className="mx-auto max-w-xl text-sm leading-relaxed tracking-wide text-slate-300 font-light md:text-base">
+                  <p className="mx-auto max-w-3xl text-sm leading-relaxed tracking-wide text-slate-200/90 font-light md:text-base">
                     {scene.body}
                   </p>
                 </motion.div>
               </AnimatePresence>
 
-              {/* Armonización de Audio */}
+              {/* Pulso visual de la música */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={phase >= 1 ? { opacity: 1 } : {}}
@@ -643,11 +828,11 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
                 <AudioEqualizer analyser={analyser} />
                 <AudioWaveform analyser={analyser} />
                 <p className="mt-2 font-mono text-[8px] tracking-[0.3em] text-slate-500 uppercase">
-                  Sindicación Territorial · Orgullo Realmontense
+                  Un homenaje nacido del amor y la memoria
                 </p>
               </motion.div>
 
-              {/* Carrusel Tradición Realmontense Inferior */}
+              {/* Imágenes inferiores: vida cotidiana del pueblo */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={phase >= 5 ? { opacity: 1, y: 0 } : {}}
@@ -655,9 +840,9 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
                 className="absolute bottom-10 z-[5] flex w-full justify-center gap-5 px-4"
               >
                 {[
-                  { src: "/images/realito-pasterias.png", label: "Gastronomía" },
-                  { src: "/images/realito-platerias.png", label: "Artesanías" },
-                  { src: "/images/realito-sanitarios.png", label: "Servicios" },
+                  { src: "/images/realito-pasterias.png", label: "Sabores de nuestra tierra" },
+                  { src: "/images/realito-platerias.png", label: "Manos que trabajan la plata" },
+                  { src: "/images/realito-sanitarios.png", label: "Servicio y cuidado al visitante" },
                 ].map((item, i) => (
                   <motion.div
                     key={item.label}
@@ -667,7 +852,7 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
                     className="group relative"
                   >
                     <div
-                      className="h-16 w-16 overflow-hidden rounded-xl md:h-20 md:w-20 transition-all duration-300 border"
+                      className="relative h-16 w-16 overflow-hidden rounded-xl border md:h-20 md:w-20 transition-all duration-300"
                       style={{
                         borderColor: "hsla(43,50%,50%,0.25)",
                         boxShadow: "0 8px 20px rgba(0,0,0,0.4)",
@@ -678,9 +863,9 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
                         alt={item.label}
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                     </div>
-                    <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 font-mono text-[8px] tracking-widest text-slate-400 uppercase opacity-0 transition-opacity duration-300 group-hover:opacity-100 whitespace-nowrap">
+                    <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap font-mono text-[8px] uppercase tracking-widest text-slate-300 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                       {item.label}
                     </span>
                   </motion.div>
@@ -693,3 +878,5 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
     </AnimatePresence>
   )
 }
+
+export default CinematicIntro
