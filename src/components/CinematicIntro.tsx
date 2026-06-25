@@ -188,10 +188,10 @@ type Star = {
 }
 
 const STAR_COLORS = [
-  "hsla(210,100%,80%,0.9)", // azul brillante
-  "hsla(43,95%,72%,0.9)", // dorado cálido
-  "hsla(280,70%,75%,0.8)", // violeta místico
-  "hsla(0,0%,100%,0.7)", // blanco suave
+  "hsla(210,100%,80%,0.9)",
+  "hsla(43,95%,72%,0.9)",
+  "hsla(280,70%,75%,0.8)",
+  "hsla(0,0%,100%,0.7)",
 ]
 
 const createStarField = (count: number): Star[] => {
@@ -208,8 +208,8 @@ const createStarField = (count: number): Star[] => {
       color: STAR_COLORS[i % STAR_COLORS.length],
       driftX: (Math.random() - 0.5) * (layer === 2 ? 80 : 40),
       driftY: -40 - Math.random() * (layer === 2 ? 110 : 55),
-      duration: 4.5 + Math.random() * 4.5,
-      delay: Math.random() * 3.2,
+      duration: 5 + Math.random() * 5,
+      delay: Math.random() * 4,
       layer,
     })
   }
@@ -221,23 +221,16 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
   const [started, setStarted] = useState(false)
   const [overlayVisible, setOverlayVisible] = useState(true)
   const [analyser, setAnalyser] = useState<AnalyserNode | null>(null)
-  const [stars] = useState<Star[]>(() => createStarField(130))
+  const [stars] = useState<Star[]>(() => createStarField(150))
 
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const audioCtxRef = useRef<AudioContext | null>(null)
   const sourceRef = useRef<MediaElementAudioSourceNode | null>(null)
-  const introDoneRef = useRef(false)
-  const minPlayTimeoutRef = useRef<number | null>(null)
   const fadeIntervalRef = useRef<number | null>(null)
   const fadeInIntervalRef = useRef<number | null>(null)
   const cleanupCalledRef = useRef(false)
 
   const stopAudio = useCallback(() => {
-    if (minPlayTimeoutRef.current !== null) {
-      clearTimeout(minPlayTimeoutRef.current)
-      minPlayTimeoutRef.current = null
-    }
-
     if (fadeIntervalRef.current !== null) {
       clearInterval(fadeIntervalRef.current)
       fadeIntervalRef.current = null
@@ -268,8 +261,8 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
   const handleSkip = useCallback(() => {
     if (cleanupCalledRef.current) return
     cleanupCalledRef.current = true
-    stopAudio()
     setOverlayVisible(false)
+    stopAudio()
     onComplete()
   }, [onComplete, stopAudio])
 
@@ -361,6 +354,7 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
         await playPromise
       }
 
+      // Fade in suave
       fadeInIntervalRef.current = window.setInterval(() => {
         if (!audioRef.current) {
           if (fadeInIntervalRef.current !== null) {
@@ -370,24 +364,20 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
           return
         }
 
-        const nextVol = Math.min(audioRef.current.volume + 0.15, 1)
+        const nextVol = Math.min(audioRef.current.volume + 0.06, 1)
         audioRef.current.volume = nextVol
 
-        if (nextVol >= 1) {
+        if (nextVol >= 0.85) {
           if (fadeInIntervalRef.current !== null) {
             clearInterval(fadeInIntervalRef.current)
             fadeInIntervalRef.current = null
           }
         }
-      }, 80)
+      }, 120)
 
-      const MIN_PLAY_MS = 90_000
-      const FADE_OUT_STEP_MS = 80
-      const FADE_OUT_STEP_DELTA = 0.03
-
-      minPlayTimeoutRef.current = window.setTimeout(() => {
+      // Fade out final suave sobre los últimos segundos
+      setTimeout(() => {
         if (!audioRef.current) return
-
         fadeIntervalRef.current = window.setInterval(() => {
           if (!audioRef.current) {
             if (fadeIntervalRef.current !== null) {
@@ -397,7 +387,7 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
             return
           }
 
-          const nextVol = Math.max(audioRef.current.volume - FADE_OUT_STEP_DELTA, 0)
+          const nextVol = Math.max(audioRef.current.volume - 0.04, 0)
           audioRef.current.volume = nextVol
 
           if (nextVol <= 0) {
@@ -407,31 +397,35 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
             }
             stopAudio()
           }
-        }, FADE_OUT_STEP_MS)
-      }, MIN_PLAY_MS)
+        }, 120)
+      }, 62000)
 
       audio.addEventListener("ended", () => {
-        introDoneRef.current = true
+        setOverlayVisible(false)
+        onComplete()
       })
     } catch (e) {
       console.error("Audio init failed:", e)
     }
   }
 
+  // Timeline de escenas (≈70s)
   useEffect(() => {
     if (!started) return
 
     const timers = [
-      setTimeout(() => setPhase(1), 700),
-      setTimeout(() => setPhase(2), 3200),
-      setTimeout(() => setPhase(3), 6600),
-      setTimeout(() => setPhase(4), 7900),
-      setTimeout(() => setPhase(5), 9900),
+      setTimeout(() => setPhase(1), 800),    // Presentación TAMV
+      setTimeout(() => setPhase(2), 7000),   // Dedicado a Reina
+      setTimeout(() => setPhase(3), 16000),  // Texto emotivo largo
+      setTimeout(() => setPhase(4), 27000),  // A mi madre / oveja negra
+      setTimeout(() => setPhase(5), 36000),  // Real del Monte / cerca del cielo
+      setTimeout(() => setPhase(6), 47000),  // Orgullo, memoria y magia
+      setTimeout(() => setPhase(7), 57000),  // Legado
+      setTimeout(() => setPhase(8), 65000),  // Bienvenidos / entrada al proyecto
       setTimeout(() => {
-        introDoneRef.current = true
         setOverlayVisible(false)
         onComplete()
-      }, 28_300),
+      }, 70000),
     ]
 
     return () => timers.forEach(clearTimeout)
@@ -444,6 +438,69 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
       stopAudio()
     }
   }, [stopAudio])
+
+  // Contenido por fase
+  const scene = (() => {
+    switch (phase) {
+      case 0:
+      case 1:
+        return {
+          tag: "TAMV ONLINE NETWORK",
+          title: "Orgullosamente realmontenses",
+          body:
+            "Una red nacida desde la montaña, hecha por manos que conocen el frío, la neblina y el corazón de este pueblo.",
+        }
+      case 2:
+        return {
+          tag: "Dedicado con amor",
+          title: "Proyecto dedicado a Reina Trejo Serrano",
+          body:
+            "Porque detrás de cada sueño que se levanta, hubo una mujer que sostuvo el mundo en silencio.",
+        }
+      case 3:
+        return {
+          tag: "A ti, mamá",
+          title: "A ti que en silencio sostuviste noches interminables",
+          body:
+            "A ti que desde la sombra sufriste sin una sola queja. A ti que renunciaste a tu propia vida para darme alas, camino y futuro.",
+        }
+      case 4:
+        return {
+          tag: "A mi madre",
+          title: "Hoy tu oveja negra te entrega su trabajo",
+          body:
+            "Sonríe, levanta el rostro y siéntete orgullosa: por fin lo logré. Todo esto también es tuyo. Te amo con toda el alma.",
+        }
+      case 5:
+        return {
+          tag: "Real del Monte",
+          title: "Un lugar cerca del cielo",
+          body:
+            "Entre niebla, viento y campanas, un pueblo mágico levanta la voz y cuenta su propia historia.",
+        }
+      case 6:
+        return {
+          tag: "Orgullo, memoria y magia",
+          title: "Una tierra que late con historia",
+          body:
+            "Aquí cada calle guarda una leyenda, cada mina un recuerdo, cada mirada un pedazo de eternidad.",
+        }
+      case 7:
+        return {
+          tag: "Esto no es solo un proyecto",
+          title: "Es un legado",
+          body:
+            "Una forma de honrar lo que somos, lo que amamos y lo que soñamos dejarle a quienes vienen detrás.",
+        }
+      case 8:
+      default:
+        return {
+          tag: "Bienvenidos",
+          title: "Real del Monte Digital",
+          body: "Aquí comienza una experiencia hecha con alma, memoria y orgullo.",
+        }
+    }
+  })()
 
   return (
     <AnimatePresence>
@@ -460,6 +517,7 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
           }}
           onClick={!started ? startIntro : undefined}
         >
+          {/* Pantalla inicial: tocar para iniciar */}
           {!started && (
             <motion.div
               className="absolute inset-0 z-50 flex flex-col items-center justify-center gap-6"
@@ -513,9 +571,9 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
               {/* Fondo hero suavizado */}
               <motion.div
                 className="absolute inset-0 z-0"
-                initial={{ opacity: 0, scale: 1.1 }}
-                animate={{ opacity: 0.5, scale: 1 }}
-                transition={{ duration: 2 }}
+                initial={{ opacity: 0, scale: 1.05 }}
+                animate={{ opacity: 0.55, scale: 1 }}
+                transition={{ duration: 2.4 }}
               >
                 <img
                   src="/images/rdm-hero.png"
@@ -546,12 +604,12 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
                           ? "0 0 18px hsla(43,95%,70%,0.75)"
                           : "0 0 9px hsla(210,100%,80%,0.7)",
                       opacity:
-                        star.layer === 0 ? 0.55 : star.layer === 1 ? 0.78 : 0.95,
+                        star.layer === 0 ? 0.5 : star.layer === 1 ? 0.8 : 1,
                     }}
                     initial={{ opacity: 0, scale: 0, y: 0, x: 0 }}
                     animate={{
-                      opacity: [0, 1, 0.35, 0.9, 0],
-                      scale: [0.45, 1.7, 1.1, 1.9, 0.5],
+                      opacity: [0, 1, 0.4, 0.9, 0],
+                      scale: [0.4, 1.8, 1.1, 2, 0.6],
                       y: [0, star.driftY, star.driftY * 1.1, 0],
                       x: [0, star.driftX, star.driftX * 0.7, 0],
                     }}
@@ -569,7 +627,7 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
                   className="absolute inset-[-20%] blur-3xl"
                   initial={{ opacity: 0 }}
                   animate={
-                    phase >= 1 ? { opacity: [0.18, 0.5, 0.25] } : { opacity: 0 }
+                    phase >= 1 ? { opacity: [0.18, 0.55, 0.25] } : { opacity: 0 }
                   }
                   transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                   style={{
@@ -695,77 +753,69 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
                 </div>
               </motion.div>
 
-              {/* Badge año / era */}
-              <motion.div
-                initial={{ opacity: 0, y: 25, scale: 0.9 }}
-                animate={
-                  phase >= 2 ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0 }
-                }
-                transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-                className="relative z-10 mb-4"
-              >
-                <span
-                  className="inline-block rounded-full px-6 py-2 text-[10px] font-medium tracking-[0.5em] uppercase md:text-xs"
-                  style={{
-                    background:
-                      "linear-gradient(135deg,hsla(210,100%,60%,0.12),hsla(43,80%,50%,0.08))",
-                    border: "1px solid hsla(210,100%,70%,0.25)",
-                    color: "hsl(210 80% 75%)",
-                    boxShadow: "0 0 30px hsla(210,100%,60%,0.15)",
-                  }}
-                >
-                  2026 · Nueva Era Digital Territorial
-                </span>
-              </motion.div>
-
-              {/* Título central */}
-              <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                animate={phase >= 2 ? { opacity: 1, y: 0 } : {}}
-                transition={{
-                  duration: 1.2,
-                  delay: 0.15,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-                className="relative z-10 mb-2 px-6 text-center"
-              >
-                <h1
-                  className="mb-3 font-serif text-5xl font-bold tracking-tight md:text-7xl lg:text-8xl"
-                  style={{
-                    background:
-                      "linear-gradient(135deg,hsl(0 0% 97%),hsl(43 70% 78%),hsl(210 60% 85%),hsl(0 0% 90%))",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                  }}
-                >
-                  Real del Monte
-                </h1>
+              {/* Bloque de texto: escenas */}
+              <AnimatePresence mode="wait">
                 <motion.div
-                  className="mx-auto mb-4 h-[2px]"
-                  style={{
-                    background:
-                      "linear-gradient(90deg,transparent,hsl(210 80% 65%),hsl(43 80% 55%),transparent)",
-                  }}
-                  initial={{ width: 0 }}
-                  animate={phase >= 2 ? { width: "10rem" } : {}}
-                  transition={{ duration: 1, delay: 0.4, ease: "easeOut" }}
-                />
-                <motion.p
-                  className="text-sm font-light tracking-[0.3em] uppercase md:text-base"
-                  style={{ color: "hsl(210 30% 60%)" }}
-                  initial={{ opacity: 0 }}
-                  animate={phase >= 2 ? { opacity: 1 } : {}}
-                  transition={{ delay: 0.6, duration: 0.8 }}
+                  key={phase}
+                  initial={{ opacity: 0, y: 30, scale: 0.98, filter: "blur(10px)" }}
+                  animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                  exit={{ opacity: 0, y: -20, scale: 1.02, filter: "blur(8px)" }}
+                  transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+                  className="relative z-10 mb-6 max-w-4xl px-6 text-center"
                 >
-                  Pueblo Mágico de Hidalgo
-                </motion.p>
-              </motion.div>
+                  <p
+                    className="mb-2 text-[11px] tracking-[0.5em] uppercase md:text-xs"
+                    style={{ color: "hsl(210 55% 70%)" }}
+                  >
+                    {scene.tag}
+                  </p>
+
+                  <h1
+                    className="font-serif text-3xl font-bold leading-tight md:text-5xl lg:text-6xl"
+                    style={{
+                      background:
+                        "linear-gradient(135deg,hsl(0 0% 98%),hsl(43 78% 78%),hsl(210 60% 86%),hsl(0 0% 92%))",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                    }}
+                  >
+                    {scene.title}
+                  </h1>
+
+                  <motion.div
+                    className="mx-auto my-4 h-[2px]"
+                    style={{
+                      background:
+                        "linear-gradient(90deg,transparent,hsl(210 80% 65%),hsl(43 80% 55%),transparent)",
+                    }}
+                    initial={{ width: 0 }}
+                    animate={{
+                      width:
+                        phase <= 1
+                          ? "11rem"
+                          : phase <= 3
+                          ? "15rem"
+                          : phase <= 5
+                          ? "14rem"
+                          : "10rem",
+                    }}
+                    transition={{ duration: 1, ease: "easeOut" }}
+                  />
+
+                  <p
+                    className="mx-auto max-w-3xl text-sm leading-7 text-[hsl(210_25%_75%)] md:text-lg"
+                    style={{ textShadow: "0 0 18px rgba(255,255,255,0.08)" }}
+                  >
+                    {scene.body}
+                  </p>
+                </motion.div>
+              </AnimatePresence>
 
               {/* Ecualizador + texto intro sonora */}
               <motion.div
                 initial={{ opacity: 0, scaleY: 0.3 }}
                 animate={phase >= 2 ? { opacity: 1, scaleY: 1 } : {}}
-                transition={{ duration: 1.8, delay: 0.8, ease: "easeOut" }}
+                transition={{ duration: 1.8, delay: 0.6, ease: "easeOut" }}
                 className="relative z-10 mb-4 flex flex-col items-center gap-1"
               >
                 <AudioEqualizer analyser={analyser} />
@@ -781,31 +831,10 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
                 </motion.p>
               </motion.div>
 
-              {/* Frase y bienvenida */}
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                animate={phase >= 3 ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 1.9, ease: "easeOut" }}
-                className="relative z-10 max-w-2xl px-6 text-center"
-              >
-                <p
-                  className="mb-1 text-base font-light leading-relaxed md:text-lg"
-                  style={{ color: "hsl(43 55% 72%)" }}
-                >
-                  “Servicios de altura para sus visitantes”
-                </p>
-                <p
-                  className="text-sm italic tracking-wide"
-                  style={{ color: "hsl(0 0% 50%)" }}
-                >
-                  Bienvenidos a RDM Digital
-                </p>
-              </motion.div>
-
-              {/* Thumbnails de experiencias */}
+              {/* Thumbnails de experiencias, entrando más tarde */}
               <motion.div
                 initial={{ opacity: 0 }}
-                animate={phase >= 4 ? { opacity: 1 } : {}}
+                animate={phase >= 5 ? { opacity: 1 } : {}}
                 transition={{ duration: 1.8 }}
                 className="absolute bottom-28 z-10 flex justify-center gap-4"
               >
@@ -817,7 +846,7 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
                   <motion.div
                     key={item.label}
                     initial={{ opacity: 0, y: 20, scale: 0.8 }}
-                    animate={phase >= 4 ? { opacity: 1, y: 0, scale: 1 } : {}}
+                    animate={phase >= 5 ? { opacity: 1, y: 0, scale: 1 } : {}}
                     transition={{ duration: 0.9, delay: i * 0.15 }}
                     className="group relative"
                   >
