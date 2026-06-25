@@ -1,93 +1,93 @@
-import { useState, useEffect, useRef, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import introAudioSrc from "@/assets/tumirada.mp3";
+import { useState, useEffect, useRef, useCallback } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import introAudioSrc from "@/assets/tumirada.mp3"
 
 interface CinematicIntroProps {
-  onComplete: () => void;
+  onComplete: () => void
 }
 
 /**
  * AudioEqualizer — barras espectrales ligadas al AnalyserNode
  */
 const AudioEqualizer = ({ analyser }: { analyser: AnalyserNode | null }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const rafRef = useRef<number>();
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const rafRef = useRef<number>()
 
   useEffect(() => {
-    if (!analyser || !canvasRef.current) return;
+    if (!analyser || !canvasRef.current) return
 
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    const canvas = canvasRef.current
+    const ctx = canvas.getContext("2d")
+    if (!ctx) return
 
-    const BAR_COUNT = 48;
-    const dataArr = new Uint8Array(analyser.frequencyBinCount);
+    const BAR_COUNT = 48
+    const dataArr = new Uint8Array(analyser.frequencyBinCount)
 
     const draw = () => {
-      rafRef.current = requestAnimationFrame(draw);
-      analyser.getByteFrequencyData(dataArr);
+      rafRef.current = requestAnimationFrame(draw)
+      analyser.getByteFrequencyData(dataArr)
 
-      const { width: w, height: h } = canvas;
-      ctx.clearRect(0, 0, w, h);
+      const { width: w, height: h } = canvas
+      ctx.clearRect(0, 0, w, h)
 
-      const barW = (w / BAR_COUNT) * 0.8;
-      const gap = (w / BAR_COUNT) * 0.4;
+      const barW = (w / BAR_COUNT) * 0.8
+      const gap = (w / BAR_COUNT) * 0.4
 
       for (let i = 0; i < BAR_COUNT; i++) {
         const binIndex = Math.floor(
           (i / BAR_COUNT) * (analyser.frequencyBinCount * 0.75),
-        );
-        const rawVal = dataArr[binIndex] / 255;
-        const barH = Math.max(4, rawVal * h * 0.9);
+        )
+        const rawVal = dataArr[binIndex] / 255
+        const barH = Math.max(4, rawVal * h * 0.9)
 
-        const x = i * (barW + gap);
-        const y = h - barH;
+        const x = i * (barW + gap)
+        const y = h - barH
 
-        const grad = ctx.createLinearGradient(x, h, x, y);
-        grad.addColorStop(0, `hsla(43, 75%, 65%, ${0.3 + rawVal * 1.3})`);
-        grad.addColorStop(0.5, `hsla(210, 80%, 65%, ${0.45 + rawVal * 0.4})`);
-        grad.addColorStop(1, `hsla(280, 60%, 70%, ${0.3 + rawVal * 1.4})`);
+        const grad = ctx.createLinearGradient(x, h, x, y)
+        grad.addColorStop(0, `hsla(43, 75%, 65%, ${0.3 + rawVal * 1.3})`)
+        grad.addColorStop(0.5, `hsla(210, 80%, 65%, ${0.45 + rawVal * 0.4})`)
+        grad.addColorStop(1, `hsla(280, 60%, 70%, ${0.3 + rawVal * 1.4})`)
 
-        ctx.fillStyle = grad;
-        ctx.shadowBlur = rawVal > 0.55 ? 14 : 4;
-        ctx.shadowColor = `hsla(210, 100%, 65%, ${rawVal * 0.9})`;
+        ctx.fillStyle = grad
+        ctx.shadowBlur = rawVal > 0.55 ? 14 : 4
+        ctx.shadowColor = `hsla(210, 100%, 65%, ${rawVal * 0.9})`
 
-        const radius = Math.min(barW / 2, 3);
-        ctx.beginPath();
-        ctx.moveTo(x + radius, y);
-        ctx.lineTo(x + barW - radius, y);
-        ctx.quadraticCurveTo(x + barW, y, x + barW, y + radius);
-        ctx.lineTo(x + barW, h);
-        ctx.lineTo(x, h);
-        ctx.lineTo(x, y + radius);
-        ctx.quadraticCurveTo(x, y, x + radius, y);
-        ctx.closePath();
-        ctx.fill();
+        const radius = Math.min(barW / 2, 3)
+        ctx.beginPath()
+        ctx.moveTo(x + radius, y)
+        ctx.lineTo(x + barW - radius, y)
+        ctx.quadraticCurveTo(x + barW, y, x + barW, y + radius)
+        ctx.lineTo(x + barW, h)
+        ctx.lineTo(x, h)
+        ctx.lineTo(x, y + radius)
+        ctx.quadraticCurveTo(x, y, x + radius, y)
+        ctx.closePath()
+        ctx.fill()
 
-        ctx.save();
-        ctx.globalAlpha = 0.36;
-        ctx.scale(1, -0.35);
-        ctx.translate(0, -h * 2 - 6);
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.moveTo(x + radius, y);
-        ctx.lineTo(x + barW - radius, y);
-        ctx.quadraticCurveTo(x + barW, y, x + barW, y + radius);
-        ctx.lineTo(x + barW, h);
-        ctx.lineTo(x, h);
-        ctx.lineTo(x, y + radius);
-        ctx.quadraticCurveTo(x, y, x + radius, y);
-        ctx.closePath();
-        ctx.fill();
-        ctx.restore();
+        ctx.save()
+        ctx.globalAlpha = 0.36
+        ctx.scale(1, -0.35)
+        ctx.translate(0, -h * 2 - 6)
+        ctx.fillStyle = grad
+        ctx.beginPath()
+        ctx.moveTo(x + radius, y)
+        ctx.lineTo(x + barW - radius, y)
+        ctx.quadraticCurveTo(x + barW, y, x + barW, y + radius)
+        ctx.lineTo(x + barW, h)
+        ctx.lineTo(x, h)
+        ctx.lineTo(x, y + radius)
+        ctx.quadraticCurveTo(x, y, x + radius, y)
+        ctx.closePath()
+        ctx.fill()
+        ctx.restore()
       }
-    };
+    }
 
-    draw();
+    draw()
     return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
-  }, [analyser]);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current)
+    }
+  }, [analyser])
 
   return (
     <canvas
@@ -96,70 +96,70 @@ const AudioEqualizer = ({ analyser }: { analyser: AnalyserNode | null }) => {
       height={70}
       className="h-[70px] w-[290px] md:h-[72px] md:w-[420px]"
     />
-  );
-};
+  )
+}
 
 /**
  * AudioWaveform — osciloscopio temporal
  */
 const AudioWaveform = ({ analyser }: { analyser: AnalyserNode | null }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const rafRef = useRef<number>();
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const rafRef = useRef<number>()
 
   useEffect(() => {
-    if (!analyser || !canvasRef.current) return;
+    if (!analyser || !canvasRef.current) return
 
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    const canvas = canvasRef.current
+    const ctx = canvas.getContext("2d")
+    if (!ctx) return
 
-    const dataArr = new Uint8Array(analyser.fftSize);
+    const dataArr = new Uint8Array(analyser.fftSize)
 
     const draw = () => {
-      rafRef.current = requestAnimationFrame(draw);
-      analyser.getByteTimeDomainData(dataArr);
+      rafRef.current = requestAnimationFrame(draw)
+      analyser.getByteTimeDomainData(dataArr)
 
-      const { width: w, height: h } = canvas;
-      ctx.clearRect(0, 0, w, h);
+      const { width: w, height: h } = canvas
+      ctx.clearRect(0, 0, w, h)
 
-      ctx.lineWidth = 3;
-      ctx.strokeStyle = "hsla(210, 100%, 75%, 0.85)";
-      ctx.shadowBlur = 15;
-      ctx.shadowColor = "hsla(210, 100%, 65%, 0.8)";
+      ctx.lineWidth = 3
+      ctx.strokeStyle = "hsla(210, 100%, 75%, 0.85)"
+      ctx.shadowBlur = 15
+      ctx.shadowColor = "hsla(210, 100%, 65%, 0.8)"
 
-      ctx.beginPath();
+      ctx.beginPath()
 
-      const sliceWidth = (w * 1.0) / dataArr.length;
-      let x = 0;
+      const sliceWidth = (w * 1.0) / dataArr.length
+      let x = 0
 
       for (let i = 0; i < dataArr.length; i++) {
-        const v = dataArr[i] / 128.0;
-        const y = (v * h) / 2;
+        const v = dataArr[i] / 128.0
+        const y = (v * h) / 2
         if (i === 0) {
-          ctx.moveTo(x, y);
+          ctx.moveTo(x, y)
         } else {
-          ctx.lineTo(x, y);
+          ctx.lineTo(x, y)
         }
-        x += sliceWidth;
+        x += sliceWidth
       }
 
-      ctx.lineTo(w, h / 2);
-      ctx.stroke();
+      ctx.lineTo(w, h / 2)
+      ctx.stroke()
 
-      ctx.lineWidth = 0.5;
-      ctx.strokeStyle = "hsla(210, 100%, 50%, 0.12)";
-      ctx.shadowBlur = 0;
-      ctx.beginPath();
-      ctx.moveTo(0, h / 2);
-      ctx.lineTo(w, h / 2);
-      ctx.stroke();
-    };
+      ctx.lineWidth = 0.5
+      ctx.strokeStyle = "hsla(210, 100%, 50%, 0.12)"
+      ctx.shadowBlur = 0
+      ctx.beginPath()
+      ctx.moveTo(0, h / 2)
+      ctx.lineTo(w, h / 2)
+      ctx.stroke()
+    }
 
-    draw();
+    draw()
     return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
-  }, [analyser]);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current)
+    }
+  }, [analyser])
 
   return (
     <canvas
@@ -168,212 +168,258 @@ const AudioWaveform = ({ analyser }: { analyser: AnalyserNode | null }) => {
       height={45}
       className="h-[30px] w-[280px] opacity-70 md:h-[40px] md:w-[420px]"
     />
-  );
-};
+  )
+}
+
+/**
+ * Estrellas y cielo mágico
+ */
+type Star = {
+  id: number
+  size: number
+  baseX: number
+  baseY: number
+  color: string
+  driftX: number
+  driftY: number
+  duration: number
+  delay: number
+  layer: 0 | 1 | 2
+}
+
+const STAR_COLORS = [
+  "hsla(210,100%,80%,0.9)", // azul brillante
+  "hsla(43,95%,72%,0.9)", // dorado cálido
+  "hsla(280,70%,75%,0.8)", // violeta místico
+  "hsla(0,0%,100%,0.7)", // blanco suave
+]
+
+const createStarField = (count: number): Star[] => {
+  const stars: Star[] = []
+  for (let i = 0; i < count; i++) {
+    const layer = (i % 3) as 0 | 1 | 2
+    const sizeBase = layer === 0 ? 0.8 : layer === 1 ? 1.4 : 2.1
+
+    stars.push({
+      id: i,
+      size: sizeBase + Math.random() * (layer === 2 ? 2.2 : 1.2),
+      baseX: Math.random() * 100,
+      baseY: Math.random() * 100,
+      color: STAR_COLORS[i % STAR_COLORS.length],
+      driftX: (Math.random() - 0.5) * (layer === 2 ? 80 : 40),
+      driftY: -40 - Math.random() * (layer === 2 ? 110 : 55),
+      duration: 4.5 + Math.random() * 4.5,
+      delay: Math.random() * 3.2,
+      layer,
+    })
+  }
+  return stars
+}
 
 const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
-  const [phase, setPhase] = useState(0);
-  const [started, setStarted] = useState(false);
-  const [overlayVisible, setOverlayVisible] = useState(true);
-  const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
+  const [phase, setPhase] = useState(0)
+  const [started, setStarted] = useState(false)
+  const [overlayVisible, setOverlayVisible] = useState(true)
+  const [analyser, setAnalyser] = useState<AnalyserNode | null>(null)
+  const [stars] = useState<Star[]>(() => createStarField(130))
 
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const audioCtxRef = useRef<AudioContext | null>(null);
-  const sourceRef = useRef<MediaElementAudioSourceNode | null>(null);
-  const introDoneRef = useRef(false);
-  const minPlayTimeoutRef = useRef<number | null>(null);
-  const fadeIntervalRef = useRef<number | null>(null);
-  const fadeInIntervalRef = useRef<number | null>(null);
-  const cleanupCalledRef = useRef(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const audioCtxRef = useRef<AudioContext | null>(null)
+  const sourceRef = useRef<MediaElementAudioSourceNode | null>(null)
+  const introDoneRef = useRef(false)
+  const minPlayTimeoutRef = useRef<number | null>(null)
+  const fadeIntervalRef = useRef<number | null>(null)
+  const fadeInIntervalRef = useRef<number | null>(null)
+  const cleanupCalledRef = useRef(false)
 
   const stopAudio = useCallback(() => {
     if (minPlayTimeoutRef.current !== null) {
-      clearTimeout(minPlayTimeoutRef.current);
-      minPlayTimeoutRef.current = null;
+      clearTimeout(minPlayTimeoutRef.current)
+      minPlayTimeoutRef.current = null
     }
 
     if (fadeIntervalRef.current !== null) {
-      clearInterval(fadeIntervalRef.current);
-      fadeIntervalRef.current = null;
+      clearInterval(fadeIntervalRef.current)
+      fadeIntervalRef.current = null
     }
 
     if (fadeInIntervalRef.current !== null) {
-      clearInterval(fadeInIntervalRef.current);
-      fadeInIntervalRef.current = null;
+      clearInterval(fadeInIntervalRef.current)
+      fadeInIntervalRef.current = null
     }
 
     if (audioRef.current) {
       try {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
+        audioRef.current.pause()
+        audioRef.current.currentTime = 0
       } catch {}
-      audioRef.current = null;
+      audioRef.current = null
     }
 
     if (audioCtxRef.current) {
-      audioCtxRef.current.close().catch(() => {});
-      audioCtxRef.current = null;
+      audioCtxRef.current.close().catch(() => {})
+      audioCtxRef.current = null
     }
 
-    sourceRef.current = null;
-    setAnalyser(null);
-  }, []);
+    sourceRef.current = null
+    setAnalyser(null)
+  }, [])
 
   const handleSkip = useCallback(() => {
-    if (cleanupCalledRef.current) return;
-    cleanupCalledRef.current = true;
-    stopAudio();
-    setOverlayVisible(false);
-    onComplete();
-  }, [onComplete, stopAudio]);
+    if (cleanupCalledRef.current) return
+    cleanupCalledRef.current = true
+    stopAudio()
+    setOverlayVisible(false)
+    onComplete()
+  }, [onComplete, stopAudio])
 
   useEffect(() => {
-    if (!started) return;
+    if (!started) return
 
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") handleSkip();
-    };
+      if (e.key === "Escape") handleSkip()
+    }
 
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [started, handleSkip]);
+    window.addEventListener("keydown", onKey)
+    return () => window.removeEventListener("keydown", onKey)
+  }, [started, handleSkip])
 
   const startIntro = async () => {
-    if (started) return;
-    setStarted(true);
+    if (started) return
+    setStarted(true)
 
     try {
-      const Ctor = window.AudioContext || (window as any).webkitAudioContext;
-      const ctx = new Ctor();
+      const Ctor = window.AudioContext || (window as any).webkitAudioContext
+      const ctx = new Ctor()
 
       if (ctx.state === "suspended") {
-        await ctx.resume();
+        await ctx.resume()
       }
 
-      audioCtxRef.current = ctx;
+      audioCtxRef.current = ctx
 
-      const audio = new Audio(introAudioSrc);
-      audio.crossOrigin = "anonymous";
-      audio.preload = "auto";
-      audioRef.current = audio;
+      const audio = new Audio(introAudioSrc)
+      audio.crossOrigin = "anonymous"
+      audio.preload = "auto"
+      audioRef.current = audio
 
-      const source = ctx.createMediaElementSource(audio);
-      sourceRef.current = source;
+      const source = ctx.createMediaElementSource(audio)
+      sourceRef.current = source
 
-      const anal = ctx.createAnalyser();
-      anal.fftSize = 512;
-      anal.smoothingTimeConstant = 0.85;
-      setAnalyser(anal);
+      const anal = ctx.createAnalyser()
+      anal.fftSize = 512
+      anal.smoothingTimeConstant = 0.85
+      setAnalyser(anal)
 
-      const bass = ctx.createBiquadFilter();
-      bass.type = "lowshelf";
-      bass.frequency.value = 280;
-      bass.gain.value = 6;
+      const bass = ctx.createBiquadFilter()
+      bass.type = "lowshelf"
+      bass.frequency.value = 280
+      bass.gain.value = 6
 
-      const high = ctx.createBiquadFilter();
-      high.type = "highshelf";
-      high.frequency.value = 6500;
-      high.gain.value = 2;
+      const high = ctx.createBiquadFilter()
+      high.type = "highshelf"
+      high.frequency.value = 6500
+      high.gain.value = 2
 
-      const compressor = ctx.createDynamicsCompressor();
-      compressor.threshold.value = -26;
-      compressor.knee.value = 24;
-      compressor.ratio.value = 3.5;
-      compressor.attack.value = 0.013;
-      compressor.release.value = 0.25;
+      const compressor = ctx.createDynamicsCompressor()
+      compressor.threshold.value = -26
+      compressor.knee.value = 24
+      compressor.ratio.value = 3.5
+      compressor.attack.value = 0.013
+      compressor.release.value = 0.25
 
-      const delay = ctx.createDelay(1.0);
-      delay.delayTime.value = 0.38;
+      const delay = ctx.createDelay(1.0)
+      delay.delayTime.value = 0.38
 
-      const feedback = ctx.createGain();
-      feedback.gain.value = 0.32;
+      const feedback = ctx.createGain()
+      feedback.gain.value = 0.32
 
-      const wet = ctx.createGain();
-      wet.gain.value = 0.28;
+      const wet = ctx.createGain()
+      wet.gain.value = 0.28
 
-      const dry = ctx.createGain();
-      dry.gain.value = 1.0;
+      const dry = ctx.createGain()
+      dry.gain.value = 1.0
 
-      source.connect(bass);
-      bass.connect(high);
-      high.connect(dry);
-      dry.connect(compressor);
+      source.connect(bass)
+      bass.connect(high)
+      high.connect(dry)
+      dry.connect(compressor)
 
-      source.connect(delay);
-      delay.connect(feedback);
-      feedback.connect(delay);
-      delay.connect(wet);
-      wet.connect(compressor);
+      source.connect(delay)
+      delay.connect(feedback)
+      feedback.connect(delay)
+      delay.connect(wet)
+      wet.connect(compressor)
 
-      compressor.connect(anal);
-      anal.connect(ctx.destination);
+      compressor.connect(anal)
+      anal.connect(ctx.destination)
 
-      audio.volume = 0;
+      audio.volume = 0
 
-      const playPromise = audio.play();
+      const playPromise = audio.play()
       if (playPromise !== undefined) {
-        await playPromise;
+        await playPromise
       }
 
       fadeInIntervalRef.current = window.setInterval(() => {
         if (!audioRef.current) {
           if (fadeInIntervalRef.current !== null) {
-            clearInterval(fadeInIntervalRef.current);
-            fadeInIntervalRef.current = null;
+            clearInterval(fadeInIntervalRef.current)
+            fadeInIntervalRef.current = null
           }
-          return;
+          return
         }
 
-        const nextVol = Math.min(audioRef.current.volume + 0.15, 1);
-        audioRef.current.volume = nextVol;
+        const nextVol = Math.min(audioRef.current.volume + 0.15, 1)
+        audioRef.current.volume = nextVol
 
         if (nextVol >= 1) {
           if (fadeInIntervalRef.current !== null) {
-            clearInterval(fadeInIntervalRef.current);
-            fadeInIntervalRef.current = null;
+            clearInterval(fadeInIntervalRef.current)
+            fadeInIntervalRef.current = null
           }
         }
-      }, 80);
+      }, 80)
 
-      const MIN_PLAY_MS = 90_000;
-      const FADE_OUT_STEP_MS = 80;
-      const FADE_OUT_STEP_DELTA = 0.03;
+      const MIN_PLAY_MS = 90_000
+      const FADE_OUT_STEP_MS = 80
+      const FADE_OUT_STEP_DELTA = 0.03
 
       minPlayTimeoutRef.current = window.setTimeout(() => {
-        if (!audioRef.current) return;
+        if (!audioRef.current) return
 
         fadeIntervalRef.current = window.setInterval(() => {
           if (!audioRef.current) {
             if (fadeIntervalRef.current !== null) {
-              clearInterval(fadeIntervalRef.current);
-              fadeIntervalRef.current = null;
+              clearInterval(fadeIntervalRef.current)
+              fadeIntervalRef.current = null
             }
-            return;
+            return
           }
 
-          const nextVol = Math.max(audioRef.current.volume - FADE_OUT_STEP_DELTA, 0);
-          audioRef.current.volume = nextVol;
+          const nextVol = Math.max(audioRef.current.volume - FADE_OUT_STEP_DELTA, 0)
+          audioRef.current.volume = nextVol
 
           if (nextVol <= 0) {
             if (fadeIntervalRef.current !== null) {
-              clearInterval(fadeIntervalRef.current);
-              fadeIntervalRef.current = null;
+              clearInterval(fadeIntervalRef.current)
+              fadeIntervalRef.current = null
             }
-            stopAudio();
+            stopAudio()
           }
-        }, FADE_OUT_STEP_MS);
-      }, MIN_PLAY_MS);
+        }, FADE_OUT_STEP_MS)
+      }, MIN_PLAY_MS)
 
       audio.addEventListener("ended", () => {
-        introDoneRef.current = true;
-      });
+        introDoneRef.current = true
+      })
     } catch (e) {
-      console.error("Audio init failed:", e);
+      console.error("Audio init failed:", e)
     }
-  };
+  }
 
   useEffect(() => {
-    if (!started) return;
+    if (!started) return
 
     const timers = [
       setTimeout(() => setPhase(1), 700),
@@ -382,22 +428,22 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
       setTimeout(() => setPhase(4), 7900),
       setTimeout(() => setPhase(5), 9900),
       setTimeout(() => {
-        introDoneRef.current = true;
-        setOverlayVisible(false);
-        onComplete();
+        introDoneRef.current = true
+        setOverlayVisible(false)
+        onComplete()
       }, 28_300),
-    ];
+    ]
 
-    return () => timers.forEach(clearTimeout);
-  }, [started, onComplete]);
+    return () => timers.forEach(clearTimeout)
+  }, [started, onComplete])
 
   useEffect(() => {
     return () => {
-      if (cleanupCalledRef.current) return;
-      cleanupCalledRef.current = true;
-      stopAudio();
-    };
-  }, [stopAudio]);
+      if (cleanupCalledRef.current) return
+      cleanupCalledRef.current = true
+      stopAudio()
+    }
+  }, [stopAudio])
 
   return (
     <AnimatePresence>
@@ -408,8 +454,9 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
           className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden"
           style={{
             background:
-              "radial-gradient(ellipse at center, hsl(220 25% 6%) 0%, hsl(220 35% 2%) 100%)",
+              "radial-gradient(circle at top, hsl(220 45% 8%) 0%, hsl(220 35% 3%) 40%, hsl(220 25% 2%) 100%)",
             cursor: !started ? "pointer" : "default",
+            backgroundAttachment: "fixed",
           }}
           onClick={!started ? startIntro : undefined}
         >
@@ -463,10 +510,11 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
 
           {started && (
             <>
+              {/* Fondo hero suavizado */}
               <motion.div
                 className="absolute inset-0 z-0"
                 initial={{ opacity: 0, scale: 1.1 }}
-                animate={{ opacity: 0.45, scale: 1 }}
+                animate={{ opacity: 0.5, scale: 1 }}
                 transition={{ duration: 2 }}
               >
                 <img
@@ -475,48 +523,73 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
                   className="h-full w-full object-cover"
                   style={{
                     filter:
-                      "saturate(0.75) contrast(1.1) brightness(0.6) blur(0.2px)",
+                      "saturate(0.78) contrast(1.12) brightness(0.58) blur(0.35px)",
                   }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[hsl(220,25%,4%)] via-transparent to-[hsl(220,25%,4%)]" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[hsl(220,25%,4%)] via-transparent to-[hsl(220,20%,3%)]" />
               </motion.div>
 
+              {/* Cielo estelar mágico */}
               <div className="pointer-events-none absolute inset-0 overflow-hidden">
-                {Array.from({ length: 72 }).map((_, i) => (
+                {stars.map((star) => (
                   <motion.div
-                    key={i}
+                    key={star.id}
                     className="absolute rounded-full"
                     style={{
-                      width: `${1 + Math.random() * 2}px`,
-                      height: `${1 + Math.random() * 2}px`,
-                      background:
-                        i % 4 === 0
-                          ? "hsla(210,100%,70%,0.7)"
-                          : i % 4 === 1
-                          ? "hsla(43,90%,60%,0.6)"
-                          : i % 4 === 2
-                          ? "hsla(280,60%,70%,0.35)"
-                          : "hsla(0,0%,90%,0.3)",
-                      left: `${Math.random() * 100}%`,
-                      top: `${Math.random() * 100}%`,
+                      width: `${star.size}px`,
+                      height: `${star.size}px`,
+                      background: star.color,
+                      left: `${star.baseX}%`,
+                      top: `${star.baseY}%`,
+                      boxShadow:
+                        star.layer === 2
+                          ? "0 0 18px hsla(43,95%,70%,0.75)"
+                          : "0 0 9px hsla(210,100%,80%,0.7)",
+                      opacity:
+                        star.layer === 0 ? 0.55 : star.layer === 1 ? 0.78 : 0.95,
                     }}
-                    initial={{ opacity: 0, scale: 0 }}
+                    initial={{ opacity: 0, scale: 0, y: 0, x: 0 }}
                     animate={{
-                      opacity: [0, 0.85, 0],
-                      scale: [0.2, 1.9, 0.2],
-                      y: [0, -80 - Math.random() * 60, 0],
-                      x: [0, (Math.random() - 0.5) * 40, 0],
+                      opacity: [0, 1, 0.35, 0.9, 0],
+                      scale: [0.45, 1.7, 1.1, 1.9, 0.5],
+                      y: [0, star.driftY, star.driftY * 1.1, 0],
+                      x: [0, star.driftX, star.driftX * 0.7, 0],
                     }}
                     transition={{
-                      duration: 3 + Math.random() * 3,
+                      duration: star.duration,
                       repeat: Infinity,
-                      delay: Math.random() * 2.5,
+                      delay: star.delay,
                       ease: "easeInOut",
                     }}
                   />
                 ))}
+
+                {/* Nebulosas suaves centrales */}
+                <motion.div
+                  className="absolute inset-[-20%] blur-3xl"
+                  initial={{ opacity: 0 }}
+                  animate={
+                    phase >= 1 ? { opacity: [0.18, 0.5, 0.25] } : { opacity: 0 }
+                  }
+                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                  style={{
+                    backgroundImage:
+                      "radial-gradient(circle at 30% 20%, hsla(210,100%,65%,0.32) 0, transparent 50%), radial-gradient(circle at 70% 80%, hsla(43,90%,60%,0.26) 0, transparent 55%), radial-gradient(circle at 50% 40%, hsla(280,60%,70%,0.22) 0, transparent 60%)",
+                    mixBlendMode: "screen",
+                  }}
+                />
+
+                {/* Grain sutil */}
+                <div
+                  className="absolute inset-0 opacity-[0.02]"
+                  style={{
+                    backgroundImage:
+                      "repeating-linear-gradient(0deg,transparent,transparent 2px,hsla(0,0%,100%,0.05) 2px,hsla(0,0%,100%,0.05) 4px)",
+                  }}
+                />
               </div>
 
+              {/* Anillos concéntricos */}
               <motion.div
                 className="pointer-events-none absolute inset-0 flex items-center justify-center"
                 initial={{ opacity: 0 }}
@@ -554,14 +627,7 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
                 ))}
               </motion.div>
 
-              <div
-                className="pointer-events-none absolute inset-0 opacity-[0.018]"
-                style={{
-                  backgroundImage:
-                    "repeating-linear-gradient(0deg,transparent,transparent 2px,hsla(0,0%,100%,0.05) 2px,hsla(0,0%,100%,0.05) 4px)",
-                }}
-              />
-
+              {/* Núcleo RDM */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.4, filter: "blur(40px)" }}
                 animate={
@@ -576,8 +642,8 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
                   className="absolute inset-0 rounded-full blur-3xl"
                   style={{
                     background:
-                      "radial-gradient(circle,hsla(210,100%,60%,0.3) 0%,hsla(43,80%,50%,0.2) 50%,transparent 80%)",
-                    transform: "scale(2.5)",
+                      "radial-gradient(circle,hsla(210,100%,60%,0.35) 0%,hsla(43,80%,50%,0.26) 45%,transparent 80%)",
+                    transform: "scale(2.8)",
                   }}
                   animate={
                     phase >= 1
@@ -590,10 +656,10 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
                   className="relative flex h-36 w-36 items-center justify-center rounded-full md:h-52 md:w-52"
                   style={{
                     background:
-                      "linear-gradient(135deg, hsla(220,30%,15%,0.9), hsla(220,40%,8%,0.95))",
-                    border: "2px solid hsla(43,80%,55%,0.4)",
+                      "linear-gradient(135deg, hsla(220,30%,15%,0.94), hsla(220,40%,8%,0.98))",
+                    border: "2px solid hsla(43,80%,55%,0.45)",
                     boxShadow:
-                      "0 0 60px hsla(210,100%,60%,0.32), inset 0 0 30px hsla(210,100%,60%,0.12)",
+                      "0 0 70px hsla(210,100%,60%,0.38), inset 0 0 32px hsla(210,100%,60%,0.16)",
                   }}
                 >
                   <div className="text-center">
@@ -629,6 +695,7 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
                 </div>
               </motion.div>
 
+              {/* Badge año / era */}
               <motion.div
                 initial={{ opacity: 0, y: 25, scale: 0.9 }}
                 animate={
@@ -651,6 +718,7 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
                 </span>
               </motion.div>
 
+              {/* Título central */}
               <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 animate={phase >= 2 ? { opacity: 1, y: 0 } : {}}
@@ -693,6 +761,7 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
                 </motion.p>
               </motion.div>
 
+              {/* Ecualizador + texto intro sonora */}
               <motion.div
                 initial={{ opacity: 0, scaleY: 0.3 }}
                 animate={phase >= 2 ? { opacity: 1, scaleY: 1 } : {}}
@@ -712,6 +781,7 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
                 </motion.p>
               </motion.div>
 
+              {/* Frase y bienvenida */}
               <motion.div
                 initial={{ opacity: 0, y: 15 }}
                 animate={phase >= 3 ? { opacity: 1, y: 0 } : {}}
@@ -732,6 +802,7 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
                 </p>
               </motion.div>
 
+              {/* Thumbnails de experiencias */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={phase >= 4 ? { opacity: 1 } : {}}
@@ -773,6 +844,7 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
                 ))}
               </motion.div>
 
+              {/* Claim inferior */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={phase >= 3 ? { opacity: 1 } : {}}
@@ -787,6 +859,7 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
                 </p>
               </motion.div>
 
+              {/* Botón de saltar */}
               <motion.button
                 initial={{ opacity: 0 }}
                 animate={phase >= 1 ? { opacity: 0.6 } : {}}
@@ -806,7 +879,7 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
         </motion.div>
       )}
     </AnimatePresence>
-  );
-};
+  )
+}
 
-export default CinematicIntro;
+export default CinematicIntro
