@@ -10,6 +10,17 @@ import {
 
 import legadoMp3 from "@/assets/legado.mp3";
 import tumiradaMp3 from "@/assets/tumirada.mp3";
+import aMimadreMp3 from "@/assets/musica/a_mimadre.mp3";
+import adictedToyouMp3 from "@/assets/musica/adicted_toyou).mp3";
+import cadaNocheMp3 from "@/assets/musica/cada_noche.mp3";
+import elSenaladoMp3 from "@/assets/musica/el_señalado.mp3";
+import legado1Mp3 from "@/assets/musica/Legado (1).mp3";
+import patioDeTierraMp3 from "@/assets/musica/patio_detierra.mp3";
+import puroDolorMp3 from "@/assets/musica/puro_dolor.mp3";
+import rdmintro2Mp3 from "@/assets/musica/rdmintro (2).mp3";
+import rdmYoteadoroMp3 from "@/assets/musica/rdm_yoteadoro.mp3";
+import shootingStarMp3 from "@/assets/musica/shooting_star.mp3";
+import tumiradaMusicaMp3 from "@/assets/musica/tumirada.mp3";
 import playlistMd from "@/assets/musica/playlist.md?raw";
 import ReactMarkdown from "react-markdown";
 
@@ -26,10 +37,18 @@ interface Track {
 
 const PLAYLIST: Track[] = [
   { id: "legado", title: "Legado de Real del Monte", artist: "RDM Digital", description: "Tema principal del proyecto. Una travesía sonora por calles empedradas, niebla eterna y el latir minero del Pueblo Mágico.", src: legadoMp3, duration: 200, bpm: 80, mood: "Épico" },
-  { id: "tumirada", title: "Mirada de Plata", artist: "RDM Digital", description: "Melodía inspirada en las vetas de plata que forjaron la historia de la región. Brillos tímidos que se abren paso entre la roca.", src: tumiradaMp3, duration: 240, bpm: 72, mood: "Melancólico" },
-  { id: "neblina", title: "Neblina en el Monte", artist: "Isabella Villaseñor", description: "Paisaje sonoro del bosque de niebla. El viento entre oyameles y la respiración profunda de la sierra.", src: legadoMp3, duration: 200, bpm: 60, mood: "Ambiental" },
-  { id: "paste", title: "Paste y Tradición", artist: "RDM Digital", description: "Ritmos cálidos que evocan la cocina tradicional. El horno de leña, la masa dorada y la conversación en la plaza.", src: tumiradaMp3, duration: 160, bpm: 95, mood: "Festivo" },
-  { id: "canto", title: "Canto de las Antiguas", artist: "Coro Comunitario", description: "Canto ceremonial inspirado en las voces de las mujeres mineras. Memoria ancestral que se niega al silencio.", src: legadoMp3, duration: 300, bpm: 66, mood: "Ceremonial" },
+  { id: "tumirada", title: "Tu Mirada", artist: "RDM Digital", description: "Melodía íntima que captura la esencia de una mirada que lo dice todo. Inspirada en momentos de conexión profunda.", src: tumiradaMp3, duration: 240, bpm: 72, mood: "Melancólico" },
+  { id: "a_mimadre", title: "A Mi Madre", artist: "Edwin Castillo", description: "Homenaje musical a la madre, al amor incondicional y al sacrificio silencioso que sostiene cada sueño.", src: aMimadreMp3, duration: 210, bpm: 70, mood: "Emotivo" },
+  { id: "adicted_toyou", title: "Adicted to You", artist: "Edwin Castillo", description: "Canción que explora la adicción emocional, esa que nace del corazón y se niega a soltar.", src: adictedToyouMp3, duration: 220, bpm: 85, mood: "Pasional" },
+  { id: "cada_noche", title: "Cada Noche", artist: "Edwin Castillo", description: "Ritmo nocturno que evoca las madrugadas de insomnio y reflexión. El silencio de la noche como testigo.", src: cadaNocheMp3, duration: 230, bpm: 78, mood: "Nocturno" },
+  { id: "el_senalado", title: "El Señalado", artist: "Edwin Castillo", description: "Narrativa musical sobre llevar una marca distinta, ser diferente y encontrar fuerza en la propia identidad.", src: elSenaladoMp3, duration: 240, bpm: 82, mood: "Intenso" },
+  { id: "legado_1", title: "Legado (Versión Extendida)", artist: "RDM Digital", description: "Versión extendida del tema principal con arreglos adicionales y una instrumentación más profunda.", src: legado1Mp3, duration: 260, bpm: 80, mood: "Épico" },
+  { id: "patio_tierra", title: "Patio de Tierra", artist: "Edwin Castillo", description: "Melodía que evoca los patios de las casas antiguas, la tierra pisada por generaciones y las memorias que ahí habitan.", src: patioDeTierraMp3, duration: 200, bpm: 65, mood: "Nostálgico" },
+  { id: "puro_dolor", title: "Puro Dolor", artist: "Edwin Castillo", description: "Balada que transforma el dolor en arte. Una catarsis musical para los momentos más difíciles de la vida.", src: puroDolorMp3, duration: 250, bpm: 68, mood: "Triste" },
+  { id: "rdmintro2", title: "RDM Intro (Versión 2)", artist: "RDM Digital", description: "Segunda versión de la introducción musical de Real del Monte Digital. Una reinvención del sonido del pueblo.", src: rdmintro2Mp3, duration: 180, bpm: 90, mood: "Energético" },
+  { id: "rdm_yoteadoro", title: "Yo Te Adoro", artist: "Edwin Castillo", description: "Declaración de amor en forma de canción. Letras que nacen del corazón y se convierten en melodía.", src: rdmYoteadoroMp3, duration: 215, bpm: 75, mood: "Romántico" },
+  { id: "shooting_star", title: "Shooting Star", artist: "Edwin Castillo", description: "Inspirado en las estrellas fugaces que cruzan el cielo de Real del Monte. Un deseo musical hecho canción.", src: shootingStarMp3, duration: 225, bpm: 88, mood: "Inspirador" },
+  { id: "tumirada_musica", title: "Tu Mirada (Alternativa)", artist: "Edwin Castillo", description: "Versión alternativa con arreglos distintos. Una mirada diferente a la misma melodía.", src: tumiradaMusicaMp3, duration: 235, bpm: 72, mood: "Melancólico" },
 ];
 
 const DONATION_AMOUNTS = [50, 100, 200, 500, 1000];
@@ -260,7 +279,7 @@ export default function Musica() {
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}
             className="flex flex-wrap items-center justify-center gap-3 mt-8"
           >
-            <span className="flex items-center gap-2 text-white/30 text-xs"><Award className="w-3.5 h-3.5" />5 tracks</span>
+            <span className="flex items-center gap-2 text-white/30 text-xs"><Award className="w-3.5 h-3.5" />{PLAYLIST.length} tracks</span>
             <span className="w-1 h-1 rounded-full bg-white/20" />
             <span className="flex items-center gap-2 text-white/30 text-xs"><Clock className="w-3.5 h-3.5" />{formatDuration(PLAYLIST.reduce((a, t) => a + t.duration, 0))}</span>
             <span className="w-1 h-1 rounded-full bg-white/20" />
