@@ -1,11 +1,11 @@
-import { useEffect, useState, useRef } from "react";
+import { useState } from "react";
 import { RDMLayout } from "@/components/rdm/RDMLayout";
 import { SEOMeta } from "@/components/SEOMeta";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
-  Music2, Play, Pause, Download, Heart, Clock, ChevronRight,
-  Volume2, SkipBack, SkipForward, Headphones, Disc3,
-  Sparkles, Award, BookOpen, Quote, FileText, ExternalLink
+  Play, Pause, Download, Heart, Clock,
+  Headphones, Disc3,
+  Sparkles, Award, BookOpen, ExternalLink
 } from "lucide-react";
 
 import legadoMp3 from "@/assets/legado.mp3";
@@ -23,32 +23,22 @@ import shootingStarMp3 from "@/assets/musica/shooting_star.mp3";
 import tumiradaMusicaMp3 from "@/assets/musica/tumirada.mp3";
 import playlistMd from "@/assets/musica/playlist.md?raw";
 import ReactMarkdown from "react-markdown";
-
-interface Track {
-  id: string;
-  title: string;
-  artist: string;
-  description: string;
-  src: string;
-  duration: number;
-  bpm?: number;
-  mood?: string;
-}
+import { useAudioPlayer, type Track } from "@/contexts/AudioPlayerContext";
 
 const PLAYLIST: Track[] = [
   { id: "legado", title: "Legado de Real del Monte", artist: "RDM Digital", description: "Tema principal del proyecto. Una travesía sonora por calles empedradas, niebla eterna y el latir minero del Pueblo Mágico.", src: legadoMp3, duration: 200, bpm: 80, mood: "Épico" },
-  { id: "tumirada", title: "Tu Mirada", artist: "RDM Digital", description: "Melodía íntima que captura la esencia de una mirada que lo dice todo. Inspirada en momentos de conexión profunda.", src: tumiradaMp3, duration: 240, bpm: 72, mood: "Melancólico" },
-  { id: "a_mimadre", title: "A Mi Madre", artist: "Edwin Castillo", description: "Homenaje musical a la madre, al amor incondicional y al sacrificio silencioso que sostiene cada sueño.", src: aMimadreMp3, duration: 210, bpm: 70, mood: "Emotivo" },
-  { id: "adicted_toyou", title: "Adicted to You", artist: "Edwin Castillo", description: "Canción que explora la adicción emocional, esa que nace del corazón y se niega a soltar.", src: adictedToyouMp3, duration: 220, bpm: 85, mood: "Pasional" },
-  { id: "cada_noche", title: "Cada Noche", artist: "Edwin Castillo", description: "Ritmo nocturno que evoca las madrugadas de insomnio y reflexión. El silencio de la noche como testigo.", src: cadaNocheMp3, duration: 230, bpm: 78, mood: "Nocturno" },
-  { id: "el_senalado", title: "El Señalado", artist: "Edwin Castillo", description: "Narrativa musical sobre llevar una marca distinta, ser diferente y encontrar fuerza en la propia identidad.", src: elSenaladoMp3, duration: 240, bpm: 82, mood: "Intenso" },
-  { id: "legado_1", title: "Legado (Versión Extendida)", artist: "RDM Digital", description: "Versión extendida del tema principal con arreglos adicionales y una instrumentación más profunda.", src: legado1Mp3, duration: 260, bpm: 80, mood: "Épico" },
-  { id: "patio_tierra", title: "Patio de Tierra", artist: "Edwin Castillo", description: "Melodía que evoca los patios de las casas antiguas, la tierra pisada por generaciones y las memorias que ahí habitan.", src: patioDeTierraMp3, duration: 200, bpm: 65, mood: "Nostálgico" },
-  { id: "puro_dolor", title: "Puro Dolor", artist: "Edwin Castillo", description: "Balada que transforma el dolor en arte. Una catarsis musical para los momentos más difíciles de la vida.", src: puroDolorMp3, duration: 250, bpm: 68, mood: "Triste" },
-  { id: "rdmintro2", title: "RDM Intro (Versión 2)", artist: "RDM Digital", description: "Segunda versión de la introducción musical de Real del Monte Digital. Una reinvención del sonido del pueblo.", src: rdmintro2Mp3, duration: 180, bpm: 90, mood: "Energético" },
-  { id: "rdm_yoteadoro", title: "Yo Te Adoro", artist: "Edwin Castillo", description: "Declaración de amor en forma de canción. Letras que nacen del corazón y se convierten en melodía.", src: rdmYoteadoroMp3, duration: 215, bpm: 75, mood: "Romántico" },
-  { id: "shooting_star", title: "Shooting Star", artist: "Edwin Castillo", description: "Inspirado en las estrellas fugaces que cruzan el cielo de Real del Monte. Un deseo musical hecho canción.", src: shootingStarMp3, duration: 225, bpm: 88, mood: "Inspirador" },
-  { id: "tumirada_musica", title: "Tu Mirada (Alternativa)", artist: "Edwin Castillo", description: "Versión alternativa con arreglos distintos. Una mirada diferente a la misma melodía.", src: tumiradaMusicaMp3, duration: 235, bpm: 72, mood: "Melancólico" },
+  { id: "tumirada", title: "Tu Mirada", artist: "RDM Digital", description: "Melodía íntima que captura la esencia de una mirada que lo dice todo.", src: tumiradaMp3, duration: 240, bpm: 72, mood: "Melancólico" },
+  { id: "a_mimadre", title: "A Mi Madre (Legend)", artist: "Edwin Castillo", description: "Homenaje musical a la madre, al amor incondicional y al sacrificio silencioso.", src: aMimadreMp3, duration: 210, bpm: 70, mood: "Emotivo" },
+  { id: "adicted_toyou", title: "Adicted to You", artist: "Edwin Castillo", description: "Canción que explora la adicción emocional que nace del corazón y se niega a soltar.", src: adictedToyouMp3, duration: 220, bpm: 85, mood: "Pasional" },
+  { id: "cada_noche", title: "Cada Noche", artist: "Edwin Castillo", description: "Ritmo nocturno que evoca las madrugadas de insomnio y reflexión.", src: cadaNocheMp3, duration: 230, bpm: 78, mood: "Nocturno" },
+  { id: "el_senalado", title: "El Señalado", artist: "Edwin Castillo", description: "Narrativa musical sobre llevar una marca distinta y encontrar fuerza en la propia identidad.", src: elSenaladoMp3, duration: 240, bpm: 82, mood: "Intenso" },
+  { id: "legado_1", title: "Legado (Versión Extendida)", artist: "RDM Digital", description: "Versión extendida del tema principal con arreglos adicionales.", src: legado1Mp3, duration: 260, bpm: 80, mood: "Épico" },
+  { id: "patio_tierra", title: "Patio de Tierra", artist: "Edwin Castillo", description: "Melodía que evoca los patios de las casas antiguas y las memorias que ahí habitan.", src: patioDeTierraMp3, duration: 200, bpm: 65, mood: "Nostálgico" },
+  { id: "puro_dolor", title: "Puro Dolor", artist: "Edwin Castillo", description: "Balada que transforma el dolor en arte y catarsis musical.", src: puroDolorMp3, duration: 250, bpm: 68, mood: "Triste" },
+  { id: "rdmintro2", title: "RDM Intro (Versión 2)", artist: "RDM Digital", description: "Segunda versión de la introducción musical de Real del Monte Digital.", src: rdmintro2Mp3, duration: 180, bpm: 90, mood: "Energético" },
+  { id: "rdm_yoteadoro", title: "Yo Te Adoro", artist: "Edwin Castillo", description: "Declaración de amor en forma de canción.", src: rdmYoteadoroMp3, duration: 215, bpm: 75, mood: "Romántico" },
+  { id: "shooting_star", title: "Shooting Star", artist: "Edwin Castillo", description: "Inspirado en las estrellas fugaces que cruzan el cielo de Real del Monte.", src: shootingStarMp3, duration: 225, bpm: 88, mood: "Inspirador" },
+  { id: "tumirada_musica", title: "Tu Mirada", artist: "Edwin Castillo", description: "Versión de estudio con arreglos acústicos.", src: tumiradaMusicaMp3, duration: 235, bpm: 72, mood: "Melancólico" },
 ];
 
 const DONATION_AMOUNTS = [50, 100, 200, 500, 1000];
@@ -65,86 +55,6 @@ function formatDuration(secs: number): string {
   const m = Math.floor(secs / 60);
   const s = secs % 60;
   return `${m}:${s.toString().padStart(2, "0")}`;
-}
-
-function PlayerBar({ track, playing, onToggle, onPrev, onNext, hasPrev, hasNext }: {
-  track: Track; playing: boolean; onToggle: () => void;
-  onPrev: () => void; onNext: () => void; hasPrev: boolean; hasNext: boolean;
-}) {
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const [progress, setProgress] = useState(0);
-  const [volume, setVolume] = useState(0.8);
-  const [currentTime, setCurrentTime] = useState(0);
-
-  useEffect(() => {
-    const el = audioRef.current;
-    if (!el) return;
-    el.volume = volume;
-    if (playing) el.play().catch(() => {});
-    else el.pause();
-  }, [playing, track.id]);
-
-  useEffect(() => {
-    const el = audioRef.current;
-    if (!el) return;
-    const onTime = () => {
-      setProgress(el.duration ? el.currentTime / el.duration : 0);
-      setCurrentTime(el.currentTime);
-    };
-    const onEnd = () => onNext();
-    el.addEventListener("timeupdate", onTime);
-    el.addEventListener("ended", onEnd);
-    return () => { el.removeEventListener("timeupdate", onTime); el.removeEventListener("ended", onEnd); };
-  }, [track.id]);
-
-  const seek = (e: React.MouseEvent<HTMLDivElement>) => {
-    const el = audioRef.current;
-    if (!el || !el.duration) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    el.currentTime = ((e.clientX - rect.left) / rect.width) * el.duration;
-  };
-
-  return (
-    <motion.div
-      initial={{ y: 80, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      exit={{ y: 80, opacity: 0 }}
-      className="fixed bottom-0 left-0 right-0 z-50 bg-[hsl(218_24%_12%/0.98)] backdrop-blur-2xl border-t border-white/10 px-4 py-3 shadow-2xl"
-    >
-      <audio ref={audioRef} src={track.src} preload="auto" />
-      <div className="max-w-5xl mx-auto">
-        <div className="h-1 w-full bg-white/10 rounded-full mb-3 cursor-pointer group" onClick={seek}>
-          <div className="h-full bg-gradient-to-r from-[hsl(var(--rdm-amber))] to-amber-400 rounded-full transition-all duration-100 relative" style={{ width: `${progress * 100}%` }}>
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-white shadow-md opacity-0 group-hover:opacity-100 transition-opacity" />
-          </div>
-        </div>
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3 flex-1 min-w-0">
-            <div className="w-9 h-9 rounded-lg bg-[hsl(var(--rdm-amber)/0.15)] flex items-center justify-center shrink-0">
-              <Disc3 className="w-4 h-4 text-[hsl(var(--rdm-amber))]" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-sm font-semibold text-white truncate">{track.title}</p>
-              <p className="text-[11px] text-white/40 truncate">{track.artist} · {formatDuration(currentTime)} / {formatDuration(track.duration)}</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <button onClick={onPrev} disabled={!hasPrev} className="text-white/40 hover:text-white disabled:opacity-20 transition-colors"><SkipBack className="w-5 h-5" /></button>
-            <button onClick={onToggle} className="w-11 h-11 rounded-full bg-gradient-to-br from-[hsl(var(--rdm-amber))] to-amber-500 text-white flex items-center justify-center hover:scale-110 transition-transform shadow-lg shadow-[hsl(var(--rdm-amber)/0.4)]">
-              {playing ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
-            </button>
-            <button onClick={onNext} disabled={!hasNext} className="text-white/40 hover:text-white disabled:opacity-20 transition-colors"><SkipForward className="w-5 h-5" /></button>
-          </div>
-          <div className="hidden md:flex items-center gap-2 flex-1 justify-end">
-            <Volume2 className="w-4 h-4 text-white/30" />
-            <input type="range" min={0} max={1} step={0.05} value={volume}
-              onChange={e => { const v = parseFloat(e.target.value); setVolume(v); if (audioRef.current) audioRef.current.volume = v; }}
-              className="w-20 accent-[hsl(var(--rdm-amber))] cursor-pointer" />
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
 }
 
 function TrackCard({ track, index, isActive, isPlaying, onPlay }: {
@@ -211,19 +121,12 @@ function TrackCard({ track, index, isActive, isPlaying, onPlay }: {
 }
 
 export default function Musica() {
-  const [activeIdx, setActiveIdx] = useState<number | null>(null);
-  const [playing, setPlaying] = useState(false);
+  const { currentTrack, isPlaying, play, togglePlay } = useAudioPlayer();
   const [donationAmount, setDonationAmount] = useState<number | null>(null);
   const [customAmount, setCustomAmount] = useState("");
   const [donating, setDonating] = useState(false);
 
-  const playTrack = (idx: number) => {
-    if (activeIdx === idx) { setPlaying(p => !p); return; }
-    setActiveIdx(idx);
-    setPlaying(true);
-  };
-
-  const activeTrack = activeIdx !== null ? PLAYLIST[activeIdx] : null;
+  const activeIdx = currentTrack ? PLAYLIST.findIndex(t => t.id === currentTrack.id) : -1;
 
   const handleDonation = async () => {
     const amount = donationAmount ?? (customAmount ? parseInt(customAmount) : null);
@@ -281,7 +184,7 @@ export default function Musica() {
           >
             <span className="flex items-center gap-2 text-white/30 text-xs"><Award className="w-3.5 h-3.5" />{PLAYLIST.length} tracks</span>
             <span className="w-1 h-1 rounded-full bg-white/20" />
-            <span className="flex items-center gap-2 text-white/30 text-xs"><Clock className="w-3.5 h-3.5" />{formatDuration(PLAYLIST.reduce((a, t) => a + t.duration, 0))}</span>
+            <span className="flex items-center gap-2 text-white/30 text-xs"><Clock className="w-3.5 h-3.5" />{formatDuration(PLAYLIST.reduce((a: number, t: Track) => a + t.duration, 0))}</span>
             <span className="w-1 h-1 rounded-full bg-white/20" />
             <span className="flex items-center gap-2 text-white/30 text-xs"><Download className="w-3.5 h-3.5" />Descarga libre</span>
           </motion.div>
@@ -320,9 +223,15 @@ export default function Musica() {
                 key={track.id}
                 track={track}
                 index={idx}
-                isActive={activeIdx === idx}
-                isPlaying={playing && activeIdx === idx}
-                onPlay={() => playTrack(idx)}
+                isActive={currentTrack?.id === track.id}
+                isPlaying={isPlaying && currentTrack?.id === track.id}
+                onPlay={() => {
+                  if (currentTrack?.id === track.id) {
+                    togglePlay()
+                  } else {
+                    play(track, PLAYLIST)
+                  }
+                }}
               />
             ))}
           </div>
@@ -435,9 +344,9 @@ export default function Musica() {
             className="mt-8 p-5 rounded-2xl bg-white/[0.02] border border-white/5"
           >
             <div className="flex gap-3">
-              <FileText className="w-5 h-5 text-white/20 shrink-0 mt-0.5" />
+              <BookOpen className="w-5 h-5 text-white/20 shrink-0 mt-0.5" />
               <div className="prose prose-invert prose-xs max-w-none text-white/40">
-                <p className="text-xs font-semibold text-white/40 mb-1">Fuente: src/assets/musica/playlist.md</p>
+                <p className="text-xs font-semibold text-white/40 mb-1">Manifiesto</p>
                 <ReactMarkdown>{playlistMd}</ReactMarkdown>
               </div>
             </div>
@@ -445,20 +354,6 @@ export default function Musica() {
         </div>
       </section>
 
-      {/* Player */}
-      <AnimatePresence>
-        {activeTrack && (
-          <PlayerBar
-            track={activeTrack}
-            playing={playing}
-            onToggle={() => setPlaying(p => !p)}
-            onPrev={() => { if (activeIdx !== null && activeIdx > 0) playTrack(activeIdx - 1); }}
-            onNext={() => { if (activeIdx !== null && activeIdx < PLAYLIST.length - 1) playTrack(activeIdx + 1); else setPlaying(false); }}
-            hasPrev={activeIdx !== null && activeIdx > 0}
-            hasNext={activeIdx !== null && activeIdx < PLAYLIST.length - 1}
-          />
-        )}
-      </AnimatePresence>
     </RDMLayout>
   );
 }

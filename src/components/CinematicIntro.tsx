@@ -7,6 +7,9 @@ import rdm01 from "@/assets/rdm01.jpg"
 import rdm02 from "@/assets/rdm02.jpg"
 import rdm03 from "@/assets/rdm03.jpg"
 import rdm04 from "@/assets/rdm-plaza-principal.jpg"
+import logoTamv from "@/assets/logo-tamv.jpg"
+import isabellaLogo from "@/assets/isabella_logo.jpg"
+import rdmLogo from "@/assets/rdm-logo.png"
 
 interface CinematicIntroProps {
   onComplete: () => void
@@ -911,25 +914,25 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
                 </p>
               </motion.div>
 
-              {/* Imágenes inferiores: vida cotidiana del pueblo */}
+              {/* Logos institucionales */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={phase >= 5 ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 1.5 }}
-                className="absolute bottom-10 z-[5] flex w-full justify-center gap-5 px-4"
+                className="absolute bottom-10 z-[5] flex w-full justify-center gap-6 px-4"
               >
                 {[
                   {
-                    src: rdm01,
-                    label: "Real del Monte desde las alturas",
+                    src: logoTamv,
+                    label: "TAMV",
                   },
                   {
-                    src: rdm02,
-                    label: "Calles de nuestra tierra",
+                    src: isabellaLogo,
+                    label: "Isabella AI",
                   },
                   {
-                    src: rdm04,
-                    label: "Plaza principal",
+                    src: rdmLogo,
+                    label: "Real del Monte Digital",
                   },
                 ].map((item, i) => (
                   <motion.div
@@ -940,7 +943,7 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
                     className="group relative"
                   >
                     <div
-                      className="relative h-16 w-16 overflow-hidden rounded-xl border md:h-20 md:w-20 transition-all duration-300"
+                      className="relative h-14 w-14 overflow-hidden rounded-xl border md:h-20 md:w-20 transition-all duration-300 bg-black/40 flex items-center justify-center p-1"
                       style={{
                         borderColor: "hsla(43,50%,50%,0.25)",
                         boxShadow: "0 8px 20px rgba(0,0,0,0.4)",
@@ -949,10 +952,10 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
                       <img
                         src={item.src}
                         alt={item.label}
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
                         onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none" }}
                       />
-                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                     </div>
                     <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap font-mono text-[8px] uppercase tracking-widest text-slate-300 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                       {item.label}

@@ -2,6 +2,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useState } from "react";
 import { ChevronDown, Mountain, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
+import heroPrincipalBg from "@/assets/heroprincipal.png";
 
 /**
  * RDMHero — cinematic video background with gradient fallback.
@@ -19,6 +20,15 @@ export function RDMHero() {
   return (
     <section ref={ref} className="relative h-[100vh] overflow-hidden">
       <motion.div style={{ y }} className="absolute inset-0">
+        {/* ── heroprincipal.png background at 45% opacity ── */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `url(${heroPrincipalBg})`,
+            opacity: 0.45,
+          }}
+        />
+
         {/* ── Gradient fallback (always visible under the video) ── */}
         <div
           className="absolute inset-0"

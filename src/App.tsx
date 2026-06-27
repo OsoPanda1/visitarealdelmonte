@@ -15,6 +15,8 @@ import AmbientLayer from '@/components/AmbientLayer'
 import LiveTelemetryBadge from '@/components/LiveTelemetryBadge'
 import SearchOverlay from '@/components/SearchOverlay'
 import SmartSidebar from '@/components/SmartSidebar'
+import GlobalPlayerBar from '@/components/GlobalPlayerBar'
+import { AudioPlayerProvider } from '@/contexts/AudioPlayerContext'
 import { RDMAuthProvider, useRDMAuth } from '@/contexts/RDMAuthContext'
 import { PostHogProvider } from '@/integrations/observability/posthog'
 import { logUIError } from '@/integrations/telemetry/uiTelemetry'
@@ -353,17 +355,20 @@ const AppInner = () => {
         {showIntro && !introComplete && (
           <CinematicIntro onComplete={handleIntroComplete} />
         )}
-        {(!showIntro || introComplete) && (
-          <>
-            <MicroPageIntro />
-            <AnimatedRoutes />
-            <LiveTelemetryBadge />
-            <SearchOverlay />
-            {/* CompassNav disabled — RDMNavbar now covers all navigation */}
-            <SmartSidebar />
-          </>
-        )}
-        <RealitoChatLauncher />
+          {(!showIntro || introComplete) && (
+            <>
+              <AudioPlayerProvider>
+                <MicroPageIntro />
+                <AnimatedRoutes />
+                <GlobalPlayerBar />
+                <LiveTelemetryBadge />
+                <SearchOverlay />
+                {/* CompassNav disabled — RDMNavbar now covers all navigation */}
+                <SmartSidebar />
+              </AudioPlayerProvider>
+            </>
+          )}
+          <RealitoChatLauncher />
       </TooltipProvider>
     </ErrorBoundary>
   )
