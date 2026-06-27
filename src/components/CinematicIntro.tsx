@@ -13,7 +13,7 @@ interface CinematicIntroProps {
 }
 
 /**
- * Pulso visual de la música
+ * 3D Equalizer — bars rendered with perspective transforms
  */
 const AudioEqualizer = ({ analyser }: { analyser: AnalyserNode | null }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
@@ -27,55 +27,98 @@ const AudioEqualizer = ({ analyser }: { analyser: AnalyserNode | null }) => {
     if (!ctx) return
 
     const dpr = window.devicePixelRatio || 1
-    canvas.width = 530 * dpr
-    canvas.height = 80 * dpr
+    const W = 530
+    const H = 80
+    canvas.width = W * dpr
+    canvas.height = H * dpr
     ctx.scale(dpr, dpr)
 
-    const BAR_COUNT = 52
+    const BAR_COUNT = 60
     const dataArr = new Uint8Array(analyser.frequencyBinCount)
 
     const draw = () => {
       rafRef.current = requestAnimationFrame(draw)
       analyser.getByteFrequencyData(dataArr)
 
-      const w = 530
-      const h = 80
-      ctx.clearRect(0, 0, w, h)
+      ctx.clearRect(0, 0, W, H)
 
-      const barW = (w / BAR_COUNT) * 0.6
-      const gap = (w / BAR_COUNT) * 0.4
+      const barW = (W / BAR_COUNT) * 0.55
+      const gap = (W / BAR_COUNT) * 0.45
+      const centerX = W / 2
 
       for (let i = 0; i < BAR_COUNT; i++) {
         const binIndex = Math.floor(
           (i / BAR_COUNT) * (analyser.frequencyBinCount * 0.6),
         )
         const rawVal = dataArr[binIndex] / 255
-        const barH = Math.max(4, rawVal * h * 0.9)
+        const barH = Math.max(3, rawVal * H * 0.92)
 
-        const x = i * (barW + gap)
-        const y = h - barH
+        // 3D perspective: mirror from center, tilt inward
+        const mirrored = i >= BAR_COUNT / 2
+        const localI = mirrored ? BAR_COUNT - 1 - i : i
+        const halfCount = BAR_COUNT / 2
+        const distanceFromCenter = Math.abs(localI - halfCount) / halfCount
+        const perspectiveScale = 1 - distanceFromCenter * 0.35
+        const xOffset = mirrored
+          ? centerX + (localI - halfCount) * (barW + gap)
+          : localI * (barW + gap)
 
-        const grad = ctx.createLinearGradient(x, h, x, y)
-        // Oro, bronce de campana, luz de hogar
-        grad.addColorStop(0, `hsla(36, 75%, 45%, ${0.3 + rawVal * 1.0})`)
-        grad.addColorStop(0.6, `hsla(43, 90%, 55%, ${0.5 + rawVal * 0.5})`)
-        grad.addColorStop(1, `hsla(24, 85%, 60%, ${0.2 + rawVal * 1.2})`)
+        const effectiveH = barH * perspectiveScale
+        const effectiveW = barW * perspectiveScale
+        const x = xOffset + (barW - effectiveW) / 2
+        const y = H - effectiveH
+
+        // 3D top face
+        const topDepth = effectiveW * 0.15
+        const grad = ctx.createLinearGradient(x, H, x, y - topDepth)
+        grad.addColorStop(0, `hsla(36, 75%, 45%, ${0.2 + rawVal * 0.8})`)
+        grad.addColorStop(0.5, `hsla(43, 90%, 55%, ${0.4 + rawVal * 0.5})`)
+        grad.addColorStop(1, `hsla(24, 85%, 60%, ${0.15 + rawVal * 1.0})`)
 
         ctx.fillStyle = grad
-        ctx.shadowBlur = rawVal > 0.6 ? 12 : 0
-        ctx.shadowColor = `hsla(43, 90%, 55%, ${rawVal * 0.6})`
+        ctx.shadowBlur = rawVal > 0.5 ? 10 : 0
+        ctx.shadowColor = `hsla(43, 90%, 55%, ${rawVal * 0.5})`
 
-        const radius = Math.min(barW / 2, 3)
+        // Front face
+        const radius = Math.min(effectiveW / 2, 2)
         ctx.beginPath()
         ctx.moveTo(x + radius, y)
-        ctx.lineTo(x + barW - radius, y)
-        ctx.quadraticCurveTo(x + barW, y, x + barW, y + radius)
-        ctx.lineTo(x + barW, h)
-        ctx.lineTo(x, h)
+        ctx.lineTo(x + effectiveW - radius, y)
+        ctx.quadraticCurveTo(x + effectiveW, y, x + effectiveW, y + radius)
+        ctx.lineTo(x + effectiveW, H)
+        ctx.lineTo(x, H)
         ctx.lineTo(x, y + radius)
         ctx.quadraticCurveTo(x, y, x + radius, y)
         ctx.closePath()
         ctx.fill()
+
+        // Top face (3D extrusion)
+        ctx.fillStyle = `hsla(43, 70%, 65%, ${0.1 + rawVal * 0.4})`
+        ctx.beginPath()
+        ctx.moveTo(x, y)
+        ctx.lineTo(x + effectiveW, y)
+        ctx.lineTo(x + effectiveW + topDepth, y - topDepth)
+        ctx.lineTo(x + topDepth, y - topDepth)
+        ctx.closePath()
+        ctx.fill()
+
+        // Right face (3D extrusion)
+        ctx.fillStyle = `hsla(36, 60%, 35%, ${0.05 + rawVal * 0.3})`
+        ctx.beginPath()
+        ctx.moveTo(x + effectiveW, y)
+        ctx.lineTo(x + effectiveW, H)
+        ctx.lineTo(x + effectiveW + topDepth, H - topDepth)
+        ctx.lineTo(x + effectiveW + topDepth, y - topDepth)
+        ctx.closePath()
+        ctx.fill()
+
+        // Glow dots on top
+        if (rawVal > 0.7) {
+          ctx.beginPath()
+          ctx.arc(x + effectiveW / 2, y - topDepth - 2, 2 * perspectiveScale, 0, Math.PI * 2)
+          ctx.fillStyle = `hsla(43, 100%, 80%, ${rawVal * 0.6})`
+          ctx.fill()
+        }
       }
     }
 
@@ -161,7 +204,7 @@ const AudioWaveform = ({ analyser }: { analyser: AnalyserNode | null }) => {
 }
 
 /**
- * Estrellas que acompañan al recuerdo
+ * Realistic star field — white dwarfs, blue giants, yellow stars, red giants
  */
 type Star = {
   id: number
@@ -170,12 +213,15 @@ type Star = {
   baseY: number
   depth: number
   color: string
+  glowColor: string
   driftX: number
   driftY: number
   duration: number
   delay: number
   layer: 0 | 1 | 2
   twinklePhase: number
+  twinkleSpeed: number
+  twinkleDepth: number
 }
 
 type Particle = {
@@ -189,33 +235,54 @@ type Particle = {
   delay: number
 }
 
+/**
+ * Realistic star color distribution:
+ * ~60% white (main sequence)
+ * ~20% blue-white (hotter)
+ * ~15% yellow (like our sun)
+ * ~5% red (red giants/cooler)
+ */
 const STAR_COLORS = [
-  "hsla(210,100%,80%,0.9)",
-  "hsla(43,95%,72%,0.9)",
-  "hsla(280,70%,75%,0.85)",
-  "hsla(0,0%,100%,0.8)",
+  { color: "hsla(0,0%,95%,0.95)", glow: "hsla(0,0%,100%,0.4)", weight: 60 },
+  { color: "hsla(210,100%,85%,0.95)", glow: "hsla(210,100%,75%,0.35)", weight: 20 },
+  { color: "hsla(43,90%,75%,0.9)", glow: "hsla(43,80%,70%,0.3)", weight: 15 },
+  { color: "hsla(15,90%,65%,0.85)", glow: "hsla(15,90%,55%,0.25)", weight: 5 },
 ]
+
+function pickStarColor() {
+  const total = STAR_COLORS.reduce((s, c) => s + c.weight, 0)
+  let r = Math.random() * total
+  for (const sc of STAR_COLORS) {
+    r -= sc.weight
+    if (r <= 0) return sc
+  }
+  return STAR_COLORS[0]
+}
 
 const createStarField = (count: number): Star[] => {
   const stars: Star[] = []
   for (let i = 0; i < count; i++) {
     const layer = (i % 3) as 0 | 1 | 2
-    const depth = 0.5 + Math.random() * 1.5
-    const sizeBase = layer === 0 ? 0.7 : layer === 1 ? 1.4 : 2.3
+    const depth = 0.3 + Math.random() * 1.7
+    const sizeBase = layer === 0 ? 0.5 : layer === 1 ? 1.2 : 2.0
+    const sc = pickStarColor()
 
     stars.push({
       id: i,
-      size: sizeBase + Math.random() * (layer === 2 ? 2.6 : 1.4),
+      size: sizeBase + Math.random() * (layer === 2 ? 2.8 : 1.2),
       baseX: Math.random() * 100,
       baseY: Math.random() * 100,
       depth,
-      color: STAR_COLORS[i % STAR_COLORS.length],
-      driftX: (Math.random() - 0.5) * (layer === 2 ? 90 : 40),
-      driftY: -40 - Math.random() * (layer === 2 ? 130 : 60),
-      duration: 6 + Math.random() * 6,
-      delay: Math.random() * 4.5,
+      color: sc.color,
+      glowColor: sc.glow,
+      driftX: (Math.random() - 0.5) * (layer === 2 ? 100 : 50),
+      driftY: -30 - Math.random() * (layer === 2 ? 140 : 70),
+      duration: 8 + Math.random() * 8,
+      delay: Math.random() * 5,
       layer,
       twinklePhase: Math.random() * Math.PI * 2,
+      twinkleSpeed: 0.5 + Math.random() * 2.5,
+      twinkleDepth: 0.15 + Math.random() * 0.6,
     })
   }
   return stars
@@ -630,13 +697,13 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
                 ))}
               </div>
 
-              {/* Estrellas que danzan alrededor del texto */}
+              {/* Estrellas realistas con paralaje y brillo natural */}
               <div className="pointer-events-none absolute inset-0 z-[3] overflow-hidden">
                 {stars.map((star) => {
                   const orbitFactor =
                     star.layer === 2 ? 1.2 : star.layer === 1 ? 0.9 : 0.6
-                  const depthScale = 0.6 + star.depth * 0.4
-                  const isNearCenter = Math.abs(star.baseX - 50) < 22
+                  const depthScale = 0.5 + star.depth * 0.5
+                  const parallaxFactor = 0.5 + star.depth * 0.5
 
                   return (
                     <motion.div
@@ -648,27 +715,32 @@ const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
                         background: star.color,
                         left: `${star.baseX}%`,
                         top: `${star.baseY}%`,
-                        boxShadow: isNearCenter
-                          ? "0 0 24px hsla(43,95%,70%,0.9)"
-                          : star.layer === 2
-                          ? "0 0 18px hsla(43,95%,70%,0.75)"
-                          : "0 0 10px hsla(210,100%,80%,0.7)",
+                        boxShadow: star.size > 2
+                          ? `0 0 ${6 + star.size * 3}px ${star.glowColor}`
+                          : `0 0 ${2 + star.size}px ${star.glowColor}`,
+                        transform: `translateZ(${parallaxFactor * 50}px)`,
                       }}
                       initial={{ opacity: 0, scale: 0, y: 0, x: 0 }}
                       animate={{
                         opacity: [
                           0,
-                          0.8 + Math.sin(star.twinklePhase) * 0.2,
-                          0.4,
-                          1,
+                          0.3 + Math.sin(star.twinklePhase) * star.twinkleDepth * 0.5 + 0.5,
+                          0.2 + Math.sin(star.twinklePhase + 1.5) * star.twinkleDepth * 0.4 + 0.4,
+                          0.4 + Math.sin(star.twinklePhase + 3) * star.twinkleDepth * 0.3 + 0.6,
                           0,
                         ],
-                        scale: [0.5, 1.8 * depthScale, 1.2, 2 * depthScale, 0.8],
+                        scale: [
+                          0.3,
+                          1.2 + Math.sin(star.twinklePhase) * 0.4,
+                          1 + Math.sin(star.twinklePhase * 0.7) * 0.3,
+                          1.5 + Math.sin(star.twinklePhase * 1.3) * 0.5,
+                          0.3,
+                        ],
                         y: [0, star.driftY * orbitFactor, star.driftY * 1.1, 0],
                         x: [0, star.driftX * orbitFactor, star.driftX * 0.7, 0],
                       }}
                       transition={{
-                        duration: star.duration,
+                        duration: star.duration / star.twinkleSpeed,
                         repeat: Infinity,
                         delay: star.delay,
                         ease: "easeInOut",
