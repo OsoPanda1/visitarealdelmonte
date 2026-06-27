@@ -132,7 +132,7 @@ export function sanitizeObject<T extends Record<string, unknown>>(obj: T, schema
       data[key as keyof T] = (value as string).slice(0, rules.maxLength) as T[keyof T];
       errors.push(`${key} truncated to ${rules.maxLength} characters`);
     } else {
-      data[key as keyof T] = value;
+      data[key as keyof T] = value as T[keyof T];
     }
   }
 

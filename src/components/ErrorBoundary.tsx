@@ -25,8 +25,7 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // Log mínimo en consola, útil en dev
-    logger.error('ErrorBoundary caught:', error, errorInfo)
+    logger.error('ErrorBoundary caught:', { error, errorInfo })
 
     // Emite evento global para cualquier listener de telemetría/UI
     if (typeof window !== 'undefined') {

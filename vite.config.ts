@@ -41,6 +41,9 @@ export default defineConfig(({ mode }) => ({
     // Umbral de advertencia aumentado (bundles legítimamente grandes)
     chunkSizeWarningLimit: 600,
     target: 'es2020',
+    rolldownOptions: {
+      external: [/@sentry\//, /posthog-js/],
+    },
     rollupOptions: {
       output: {
         // Vendor chunks: cada dependencia pesada en su propio chunk

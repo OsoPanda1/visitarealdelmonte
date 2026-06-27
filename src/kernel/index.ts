@@ -16,7 +16,7 @@ const mockDb: QueryableDb = {
 
 const mockPubSub: PublishClient = {
   async publish(channel: string, payload: string) {
-    logger.info(`[KERNEL:MOCK] ${channel}`, payload);
+    logger.info(`[KERNEL:MOCK] ${channel}`, { payload });
   },
 };
 

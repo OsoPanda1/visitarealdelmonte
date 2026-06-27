@@ -8,9 +8,8 @@
  */
 
 import { lazy, type ComponentType } from "react"
-// Si ya tienes un logger/analytics central, conéctalo aquí.
-import { logger } from "@/services/logger"
-import { trackPerfMetric } from "@/services/analytics" // opcional
+import { logger } from "@/lib/logger"
+const trackPerfMetric: ((name: string, data?: Record<string, unknown>) => void) | undefined = undefined
 
 /**
  * Orquestador e Instrumentador Asíncrono de Chunks.

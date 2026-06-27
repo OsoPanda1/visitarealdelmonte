@@ -1,5 +1,5 @@
-import { RDMLayout } from "@/components/rdm/RDMLayout";
 // @ts-nocheck
+import { RDMLayout } from "@/components/rdm/RDMLayout";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Compass, Clock, Zap } from "lucide-react";

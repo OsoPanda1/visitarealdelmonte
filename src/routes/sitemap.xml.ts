@@ -3,7 +3,11 @@
 // - Poblar entries desde el router o la BD (rutas dinámicas, slugs).
 // - Mantener lastmod en formato ISO (YYYY-MM-DD o completo con TZ).
 
-import type { APIContext } from "./_types";
+interface APIContext {
+  request: Request;
+  params: Record<string, string>;
+  locals: Record<string, unknown>;
+}
 
 const BASE_URL = "https://realdelmonte.example";
 

@@ -342,7 +342,7 @@ const AppInner = () => {
   })
 
   return (
-    <ErrorBoundary boundaryId="AppRoot">
+    <ErrorBoundary>
       <TooltipProvider>
         <AmbientLayer />
         {/* Banner global de estado de auth/Supabase */}
