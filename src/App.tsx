@@ -18,6 +18,7 @@ import SmartSidebar from '@/components/SmartSidebar'
 import { RDMAuthProvider, useRDMAuth } from '@/contexts/RDMAuthContext'
 import { PostHogProvider } from '@/integrations/observability/posthog'
 import { logUIError } from '@/integrations/telemetry/uiTelemetry'
+import { NotificationProvider } from '@/components/NotificationSystem'
 
 // ===== Mother repo pages =====
 const Index = lazy(() => import('./pages/Index'))
@@ -374,7 +375,9 @@ const App = () => {
       <BrowserRouter>
         <PostHogProvider>
           <RDMAuthProvider>
-            <AppInner />
+            <NotificationProvider>
+              <AppInner />
+            </NotificationProvider>
           </RDMAuthProvider>
         </PostHogProvider>
       </BrowserRouter>

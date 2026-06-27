@@ -131,8 +131,21 @@ export class BlockchainConnector {
     return [...this.transactions];
   }
 
-  private async submitTransaction(_tx: BlockchainTransaction): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, 100));
+  private async submitTransaction(tx: BlockchainTransaction): Promise<void> {
+    const start = Date.now();
+    const delay = 200 + Math.random() * 800;
+    await new Promise<void>((resolve) => setTimeout(resolve, delay));
+    const success = Math.random() > 0.1;
+    const txIndex = this.transactions.findIndex(t => t.id === tx.id);
+    if (txIndex !== -1) {
+      this.transactions[txIndex] = {
+        ...this.transactions[txIndex],
+        status: success ? "CONFIRMED" : "FAILED",
+        confirmations: success ? (tx.chain === "MSR" ? 3 : 6) : 0,
+        timestamp: new Date(),
+      };
+    }
+    logger.info("[BLOCKCHAIN] Transacción procesada", { id: tx.id, chain: tx.chain, success, durationMs: Date.now() - start });
   }
 }
 

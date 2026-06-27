@@ -4,6 +4,7 @@
  */
 
 import { v4 as uuidv4 } from 'uuid';
+import { supabase } from "@/integrations/supabase/client";
 import type {
   TuristaEstado,
   IsabellaDecision,
@@ -166,7 +167,15 @@ export function registrarFeedback(
     timestamp: new Date().toISOString(),
   });
 
-  // TODO: Persistir en base de datos
+  supabase.from("isabella_feedback").insert({
+    decision_trace_id: decisionTraceId,
+    rating,
+    feedback: feedback ?? null,
+    consentimiento: consentimiento ?? null,
+    created_at: new Date().toISOString(),
+  }).then(({ error }) => {
+    if (error) logger.error("[Isabella] Error al persistir feedback", error);
+  });
 }
 
 /**

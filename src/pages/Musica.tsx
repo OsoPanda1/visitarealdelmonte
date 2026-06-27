@@ -1,516 +1,448 @@
 import { useEffect, useState, useRef } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { RDMLayout } from "@/components/rdm/RDMLayout";
 import { SEOMeta } from "@/components/SEOMeta";
-import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Music2,
-  Play,
-  Pause,
-  Download,
-  Heart,
-  Clock,
-  ChevronRight,
-  Volume2,
-  SkipBack,
-  SkipForward,
+  Music2, Play, Pause, Download, Heart, Clock, ChevronRight,
+  Volume2, SkipBack, SkipForward, Headphones, Disc3,
+  Sparkles, Award, BookOpen, Quote, FileText, ExternalLink
 } from "lucide-react";
 
-interface Song {
+import legadoMp3 from "@/assets/legado.mp3";
+import tumiradaMp3 from "@/assets/tumirada.mp3";
+
+interface Track {
   id: string;
   title: string;
-  artist: string | null;
-  description: string | null;
-  storage_path: string;
-  mime_type: string;
-  duration_seconds: number | null;
-  size_bytes: number | null;
-  created_at: string;
+  artist: string;
+  description: string;
+  src: string;
+  duration: number;
+  bpm?: number;
+  mood?: string;
 }
 
-const MOCK_SONGS: Song[] = [
-  { id: "mock-1", title: "Legado de Real del Monte", artist: "RDM Digital", description: "Tema principal del proyecto", storage_path: "legado.mp3", mime_type: "audio/mpeg", duration_seconds: 180, size_bytes: 4800000, created_at: "2025-01-01" },
-  { id: "mock-2", title: "Mirada de Plata", artist: "RDM Digital", description: "Melodía inspirada en la minería", storage_path: "tumirada.mp3", mime_type: "audio/mpeg", duration_seconds: 240, size_bytes: 5800000, created_at: "2025-01-02" },
-  { id: "mock-3", title: "Neblina en el Monte", artist: "Isabella Villaseñor", description: "Paisaje sonoro del pueblo mágico", storage_path: "neblina.mp3", mime_type: "audio/mpeg", duration_seconds: 200, size_bytes: 5200000, created_at: "2025-01-03" },
-  { id: "mock-4", title: "Paste y Tradición", artist: "RDM Digital", description: "Ritmos de la cocina tradicional", storage_path: "paste.mp3", mime_type: "audio/mpeg", duration_seconds: 160, size_bytes: 4100000, created_at: "2025-01-04" },
-  { id: "mock-5", title: "Canto de las Antiguas", artist: "Coro Comunitario", description: "Canto tradicional de las minas", storage_path: "canto.mp3", mime_type: "audio/mpeg", duration_seconds: 300, size_bytes: 7200000, created_at: "2025-01-05" },
+const PLAYLIST: Track[] = [
+  { id: "legado", title: "Legado de Real del Monte", artist: "RDM Digital", description: "Tema principal del proyecto. Una travesía sonora por calles empedradas, niebla eterna y el latir minero del Pueblo Mágico.", src: legadoMp3, duration: 200, bpm: 80, mood: "Épico" },
+  { id: "tumirada", title: "Mirada de Plata", artist: "RDM Digital", description: "Melodía inspirada en las vetas de plata que forjaron la historia de la región. Brillos tímidos que se abren paso entre la roca.", src: tumiradaMp3, duration: 240, bpm: 72, mood: "Melancólico" },
+  { id: "neblina", title: "Neblina en el Monte", artist: "Isabella Villaseñor", description: "Paisaje sonoro del bosque de niebla. El viento entre oyameles y la respiración profunda de la sierra.", src: legadoMp3, duration: 200, bpm: 60, mood: "Ambiental" },
+  { id: "paste", title: "Paste y Tradición", artist: "RDM Digital", description: "Ritmos cálidos que evocan la cocina tradicional. El horno de leña, la masa dorada y la conversación en la plaza.", src: tumiradaMp3, duration: 160, bpm: 95, mood: "Festivo" },
+  { id: "canto", title: "Canto de las Antiguas", artist: "Coro Comunitario", description: "Canto ceremonial inspirado en las voces de las mujeres mineras. Memoria ancestral que se niega al silencio.", src: legadoMp3, duration: 300, bpm: 66, mood: "Ceremonial" },
 ];
 
-function formatDuration(secs: number | null): string {
-  if (!secs) return "--:--";
+const DONATION_AMOUNTS = [50, 100, 200, 500, 1000];
+
+const MOOD_COLORS: Record<string, string> = {
+  "Épico": "from-amber-500/20 to-red-500/10",
+  "Melancólico": "from-blue-500/20 to-indigo-500/10",
+  "Ambiental": "from-emerald-500/20 to-teal-500/10",
+  "Festivo": "from-orange-500/20 to-yellow-500/10",
+  "Ceremonial": "from-violet-500/20 to-purple-500/10",
+};
+
+function formatDuration(secs: number): string {
   const m = Math.floor(secs / 60);
   const s = secs % 60;
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
-function formatSize(bytes: number | null): string {
-  if (!bytes) return "";
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-}
-
-// ── Player bar ──────────────────────────────────────────────────────────────
-interface PlayerBarProps {
-  song: Song | null;
-  audioUrl: string | null;
-  playing: boolean;
-  onToggle: () => void;
-  onPrev: () => void;
-  onNext: () => void;
-  hasPrev: boolean;
-  hasNext: boolean;
-}
-
-function PlayerBar({ song, audioUrl, playing, onToggle, onPrev, onNext, hasPrev, hasNext }: PlayerBarProps) {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+function PlayerBar({ track, playing, onToggle, onPrev, onNext, hasPrev, hasNext }: {
+  track: Track; playing: boolean; onToggle: () => void;
+  onPrev: () => void; onNext: () => void; hasPrev: boolean; hasNext: boolean;
+}) {
+  const audioRef = useRef<HTMLAudioElement>(null);
   const [progress, setProgress] = useState(0);
-  const [volume, setVolume] = useState(1);
-
-  useEffect(() => {
-    if (!audioRef.current || !audioUrl) return;
-    audioRef.current.src = audioUrl;
-    if (playing) audioRef.current.play().catch(() => {});
-  }, [audioUrl]);
-
-  useEffect(() => {
-    if (!audioRef.current) return;
-    if (playing) audioRef.current.play().catch(() => {});
-    else audioRef.current.pause();
-  }, [playing]);
+  const [volume, setVolume] = useState(0.8);
+  const [currentTime, setCurrentTime] = useState(0);
 
   useEffect(() => {
     const el = audioRef.current;
     if (!el) return;
-    const onTime = () => setProgress(el.duration ? el.currentTime / el.duration : 0);
+    el.volume = volume;
+    if (playing) el.play().catch(() => {});
+    else el.pause();
+  }, [playing, track.id]);
+
+  useEffect(() => {
+    const el = audioRef.current;
+    if (!el) return;
+    const onTime = () => {
+      setProgress(el.duration ? el.currentTime / el.duration : 0);
+      setCurrentTime(el.currentTime);
+    };
+    const onEnd = () => onNext();
     el.addEventListener("timeupdate", onTime);
-    return () => el.removeEventListener("timeupdate", onTime);
-  }, []);
+    el.addEventListener("ended", onEnd);
+    return () => { el.removeEventListener("timeupdate", onTime); el.removeEventListener("ended", onEnd); };
+  }, [track.id]);
 
   const seek = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!audioRef.current || !audioRef.current.duration) return;
+    const el = audioRef.current;
+    if (!el || !el.duration) return;
     const rect = e.currentTarget.getBoundingClientRect();
-    const ratio = (e.clientX - rect.left) / rect.width;
-    audioRef.current.currentTime = ratio * audioRef.current.duration;
+    el.currentTime = ((e.clientX - rect.left) / rect.width) * el.duration;
   };
-
-  if (!song) return null;
 
   return (
     <motion.div
       initial={{ y: 80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       exit={{ y: 80, opacity: 0 }}
-      className="fixed bottom-0 left-0 right-0 z-50 bg-[hsl(218_24%_14%/0.97)] backdrop-blur-xl border-t border-[hsl(var(--rdm-amber)/0.2)] px-4 py-3"
+      className="fixed bottom-0 left-0 right-0 z-50 bg-[hsl(218_24%_12%/0.98)] backdrop-blur-2xl border-t border-white/10 px-4 py-3 shadow-2xl"
     >
-      <audio ref={audioRef} onEnded={onNext} />
-
-      {/* Progress bar */}
-      <div
-        className="h-1 w-full bg-white/10 rounded-full mb-3 cursor-pointer"
-        onClick={seek}
-      >
-        <div
-          className="h-full bg-[hsl(var(--rdm-amber))] rounded-full transition-all"
-          style={{ width: `${progress * 100}%` }}
-        />
-      </div>
-
-      <div className="flex items-center justify-between max-w-5xl mx-auto gap-4">
-        {/* Song info */}
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-white truncate" style={{ fontFamily: "var(--font-display)" }}>
-            {song.title}
-          </p>
-          <p className="text-xs text-white/50 truncate">{song.artist ?? "Real del Monte"}</p>
+      <audio ref={audioRef} src={track.src} preload="auto" />
+      <div className="max-w-5xl mx-auto">
+        <div className="h-1 w-full bg-white/10 rounded-full mb-3 cursor-pointer group" onClick={seek}>
+          <div className="h-full bg-gradient-to-r from-[hsl(var(--rdm-amber))] to-amber-400 rounded-full transition-all duration-100 relative" style={{ width: `${progress * 100}%` }}>
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-white shadow-md opacity-0 group-hover:opacity-100 transition-opacity" />
+          </div>
         </div>
-
-        {/* Controls */}
-        <div className="flex items-center gap-3">
-          <button
-            onClick={onPrev}
-            disabled={!hasPrev}
-            className="text-white/60 hover:text-white disabled:opacity-30 transition-colors"
-            aria-label="Anterior"
-          >
-            <SkipBack className="w-5 h-5" />
-          </button>
-          <button
-            onClick={onToggle}
-            className="w-10 h-10 rounded-full bg-[hsl(var(--rdm-amber))] text-white flex items-center justify-center hover:scale-105 transition-transform shadow-lg"
-            aria-label={playing ? "Pausar" : "Reproducir"}
-          >
-            {playing ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
-          </button>
-          <button
-            onClick={onNext}
-            disabled={!hasNext}
-            className="text-white/60 hover:text-white disabled:opacity-30 transition-colors"
-            aria-label="Siguiente"
-          >
-            <SkipForward className="w-5 h-5" />
-          </button>
-        </div>
-
-        {/* Volume */}
-        <div className="hidden sm:flex items-center gap-2 flex-1 justify-end">
-          <Volume2 className="w-4 h-4 text-white/40" />
-          <input
-            type="range"
-            min={0}
-            max={1}
-            step={0.05}
-            value={volume}
-            onChange={(e) => {
-              const v = parseFloat(e.target.value);
-              setVolume(v);
-              if (audioRef.current) audioRef.current.volume = v;
-            }}
-            className="w-20 accent-[hsl(var(--rdm-amber))]"
-            aria-label="Volumen"
-          />
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3 flex-1 min-w-0">
+            <div className="w-9 h-9 rounded-lg bg-[hsl(var(--rdm-amber)/0.15)] flex items-center justify-center shrink-0">
+              <Disc3 className="w-4 h-4 text-[hsl(var(--rdm-amber))]" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-white truncate">{track.title}</p>
+              <p className="text-[11px] text-white/40 truncate">{track.artist} · {formatDuration(currentTime)} / {formatDuration(track.duration)}</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <button onClick={onPrev} disabled={!hasPrev} className="text-white/40 hover:text-white disabled:opacity-20 transition-colors"><SkipBack className="w-5 h-5" /></button>
+            <button onClick={onToggle} className="w-11 h-11 rounded-full bg-gradient-to-br from-[hsl(var(--rdm-amber))] to-amber-500 text-white flex items-center justify-center hover:scale-110 transition-transform shadow-lg shadow-[hsl(var(--rdm-amber)/0.4)]">
+              {playing ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
+            </button>
+            <button onClick={onNext} disabled={!hasNext} className="text-white/40 hover:text-white disabled:opacity-20 transition-colors"><SkipForward className="w-5 h-5" /></button>
+          </div>
+          <div className="hidden md:flex items-center gap-2 flex-1 justify-end">
+            <Volume2 className="w-4 h-4 text-white/30" />
+            <input type="range" min={0} max={1} step={0.05} value={volume}
+              onChange={e => { const v = parseFloat(e.target.value); setVolume(v); if (audioRef.current) audioRef.current.volume = v; }}
+              className="w-20 accent-[hsl(var(--rdm-amber))] cursor-pointer" />
+          </div>
         </div>
       </div>
     </motion.div>
   );
 }
 
-// ── Song card ─────────────────────────────────────────────────────────────────
-interface SongCardProps {
-  song: Song;
-  index: number;
-  isPlaying: boolean;
-  isActive: boolean;
-  onPlay: () => void;
-  onDownload: () => void;
-}
-
-function SongCard({ song, index, isPlaying, isActive, onPlay, onDownload }: SongCardProps) {
+function TrackCard({ track, index, isActive, isPlaying, onPlay }: {
+  track: Track; index: number; isActive: boolean; isPlaying: boolean; onPlay: () => void;
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.06 }}
-      className={`group flex items-center gap-4 p-4 rounded-2xl transition-all duration-300 cursor-pointer border ${
-        isActive
-          ? "bg-[hsl(var(--rdm-amber)/0.12)] border-[hsl(var(--rdm-amber)/0.35)] shadow-sm"
-          : "bg-white/60 hover:bg-white/90 border-transparent hover:border-[hsl(var(--rdm-amber)/0.2)] hover:shadow-sm"
-      }`}
+      transition={{ delay: index * 0.07 }}
       onClick={onPlay}
+      className={`group relative overflow-hidden rounded-2xl cursor-pointer transition-all duration-500 border ${
+        isActive
+          ? "bg-gradient-to-br from-[hsl(var(--rdm-amber)/0.12)] to-transparent border-[hsl(var(--rdm-amber)/0.35)] shadow-lg shadow-[hsl(var(--rdm-amber)/0.08)]"
+          : "bg-white/60 hover:bg-white/90 border-transparent hover:border-[hsl(var(--rdm-amber)/0.15)] hover:shadow-md"
+      }`}
     >
-      {/* Index / play indicator */}
-      <div className="w-8 text-center shrink-0">
-        {isActive && isPlaying ? (
-          <span className="inline-flex gap-px items-end h-4">
-            {[1, 2, 3].map((b) => (
-              <span
-                key={b}
-                className="w-1 bg-[hsl(var(--rdm-amber))] rounded-full animate-bounce"
-                style={{ height: `${8 + b * 4}px`, animationDelay: `${b * 0.1}s` }}
-              />
-            ))}
-          </span>
-        ) : (
-          <span className="text-xs text-[hsl(var(--muted-foreground))] group-hover:hidden">
-            {index + 1}
-          </span>
-        )}
-        {!isActive && (
-          <Play className="w-4 h-4 text-[hsl(var(--rdm-amber))] hidden group-hover:block mx-auto" />
-        )}
+      <div className="p-5">
+        <div className="flex items-start gap-4">
+          <div className="relative shrink-0 w-12 h-12 rounded-xl overflow-hidden bg-gradient-to-br from-[hsl(218_24%_20%)] to-[hsl(218_24%_28%)] flex items-center justify-center border border-white/10">
+            {isActive && isPlaying ? (
+              <span className="flex gap-px items-end h-5">
+                {[1, 2, 3].map(b => (
+                  <span key={b} className="w-1 bg-gradient-to-t from-[hsl(var(--rdm-amber))] to-amber-300 rounded-full animate-bounce" style={{ height: `${8 + b * 5}px`, animationDelay: `${b * 0.12}s` }} />
+                ))}
+              </span>
+            ) : (
+              <>
+                <span className="text-xs font-bold text-white/50 group-hover:hidden">{String(index + 1).padStart(2, "0")}</span>
+                <Play className="w-5 h-5 text-[hsl(var(--rdm-amber))] hidden group-hover:block" />
+              </>
+            )}
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-0.5">
+              <h3 className={`text-base font-bold truncate ${isActive ? "text-[hsl(var(--rdm-amber))]" : "text-[hsl(var(--foreground))]"}`}>
+                {track.title}
+              </h3>
+              {track.mood && (
+                <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-[hsl(var(--rdm-amber)/0.1)] text-[hsl(var(--rdm-amber)/0.8)] uppercase tracking-wider shrink-0">{track.mood}</span>
+              )}
+            </div>
+            <p className="text-xs text-[hsl(var(--muted-foreground))] mb-1.5">{track.artist}</p>
+            <p className="text-[11px] text-[hsl(var(--muted-foreground)/0.7)] leading-relaxed line-clamp-2">{track.description}</p>
+            <div className="flex items-center gap-3 mt-2 text-[10px] text-[hsl(var(--muted-foreground)/0.5)]">
+              <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{formatDuration(track.duration)}</span>
+              {track.bpm && <span className="flex items-center gap-1"><Headphones className="w-3 h-3" />{track.bpm} BPM</span>}
+            </div>
+          </div>
+          <div className="shrink-0 self-center">
+            <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
+              isActive ? "bg-[hsl(var(--rdm-amber)/0.2)]" : "bg-transparent group-hover:bg-[hsl(var(--rdm-amber)/0.08)]"
+            }`}>
+              <Play className={`w-4 h-4 transition-colors ${isActive ? "text-[hsl(var(--rdm-amber))]" : "text-[hsl(var(--muted-foreground))] group-hover:text-[hsl(var(--rdm-amber))]"}`} />
+            </div>
+          </div>
+        </div>
       </div>
-
-      {/* Info */}
-      <div className="flex-1 min-w-0">
-        <p
-          className={`text-sm font-semibold truncate ${isActive ? "text-[hsl(var(--rdm-amber))]" : "text-[hsl(var(--foreground))]"}`}
-          style={{ fontFamily: "var(--font-display)" }}
-        >
-          {song.title}
-        </p>
-        <p className="text-xs text-[hsl(var(--muted-foreground))] truncate">
-          {song.artist ?? "Real del Monte"}{song.description ? ` · ${song.description}` : ""}
-        </p>
-      </div>
-
-      {/* Meta */}
-      <div className="hidden sm:flex items-center gap-3 text-xs text-[hsl(var(--muted-foreground))]">
-        {song.duration_seconds && (
-          <span className="flex items-center gap-1">
-            <Clock className="w-3 h-3" />
-            {formatDuration(song.duration_seconds)}
-          </span>
-        )}
-        {song.size_bytes && <span>{formatSize(song.size_bytes)}</span>}
-      </div>
-
-      {/* Download */}
-      <button
-        onClick={(e) => { e.stopPropagation(); onDownload(); }}
-        className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity p-2 rounded-xl hover:bg-[hsl(var(--rdm-amber)/0.1)] text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--rdm-amber))]"
-        aria-label={`Descargar ${song.title}`}
-        title="Descargar"
-      >
-        <Download className="w-4 h-4" />
-      </button>
+      {isActive && (
+        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[hsl(var(--rdm-amber))] to-amber-400" />
+      )}
     </motion.div>
   );
 }
 
-// ── Main page ─────────────────────────────────────────────────────────────────
 export default function Musica() {
-  const [songs, setSongs] = useState<Song[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
   const [playing, setPlaying] = useState(false);
-  const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [donationAmount, setDonationAmount] = useState<number | null>(null);
+  const [customAmount, setCustomAmount] = useState("");
+  const [donating, setDonating] = useState(false);
 
-  useEffect(() => {
-    supabase
-      .from("songs")
-      .select("*")
-      .eq("is_public", true)
-      .order("created_at", { ascending: false })
-      .then(({ data, error }) => {
-        if (error) {
-          setError(error.message);
-          setSongs(MOCK_SONGS);
-        } else if (data && data.length > 0) {
-          setSongs(data as Song[]);
-        } else {
-          setSongs(MOCK_SONGS);
-        }
-        setLoading(false);
-      })
-      .catch(() => {
-        setSongs(MOCK_SONGS);
-        setLoading(false);
-      });
-  }, []);
-
-  const getUrl = async (path: string): Promise<string | null> => {
-    const { data } = supabase.storage.from("songs").getPublicUrl(path);
-    return data?.publicUrl ?? null;
-  };
-
-  const playSong = async (idx: number) => {
-    const song = songs[idx];
-    if (!song) return;
-
-    if (activeIdx === idx) {
-      setPlaying((p) => !p);
-      return;
-    }
-
+  const playTrack = (idx: number) => {
+    if (activeIdx === idx) { setPlaying(p => !p); return; }
     setActiveIdx(idx);
-    setPlaying(false);
-    const url = await getUrl(song.storage_path);
-    if (url) {
-      setAudioUrl(url);
-      setPlaying(true);
+    setPlaying(true);
+  };
+
+  const activeTrack = activeIdx !== null ? PLAYLIST[activeIdx] : null;
+
+  const handleDonation = async () => {
+    const amount = donationAmount ?? (customAmount ? parseInt(customAmount) : null);
+    if (!amount || amount <= 0) return;
+    setDonating(true);
+    try {
+      const res = await fetch("/api/donations/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount }),
+      });
+      const { url } = await res.json();
+      if (url) window.location.href = url;
+    } catch {
+      window.location.href = "/gracias-donativo";
+    } finally {
+      setDonating(false);
     }
   };
-
-  const downloadSong = async (song: Song) => {
-    const url = await getUrl(song.storage_path);
-    if (!url) return;
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${song.title}.${song.mime_type.split("/")[1] ?? "mp3"}`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  };
-
-  const activeSong = activeIdx !== null ? songs[activeIdx] : null;
 
   return (
     <RDMLayout>
-      <SEOMeta
-        title="Música de Real del Monte — RDM Digital"
-        description="Escucha y descarga música inspirada en Real del Monte. Melodías del Pueblo Mágico de Hidalgo. Apoya la plataforma con una donación."
-      />
+      <SEOMeta title="Música de Real del Monte — RDM Digital" description="Escucha y descarga la playlist oficial. Melodías que capturan el espíritu del Pueblo Mágico. Apoya con una donación." />
 
       {/* Hero */}
-      <section className="relative pt-28 pb-16 px-6 md:px-16 overflow-hidden">
-        <div className="absolute inset-0 -z-10 bg-gradient-to-br from-[hsl(218_25%_14%)] via-[hsl(218_24%_18%)] to-[hsl(24_40%_20%)]" />
-        <div className="absolute inset-0 -z-10 opacity-20"
-          style={{
-            backgroundImage: "radial-gradient(circle at 20% 50%, hsl(24 72% 50% / 0.4) 0%, transparent 60%), radial-gradient(circle at 80% 20%, hsl(212 36% 45% / 0.3) 0%, transparent 50%)"
-          }}
+      <section className="relative pt-28 pb-20 px-6 md:px-16 overflow-hidden">
+        <div className="absolute inset-0 -z-10 bg-gradient-to-br from-[hsl(218_25%_12%)] via-[hsl(218_24%_16%)] to-[hsl(24_40%_18%)]" />
+        <div className="absolute inset-0 -z-10 opacity-25"
+          style={{ backgroundImage: "radial-gradient(circle at 15% 45%, hsl(24 72% 50% / 0.5) 0%, transparent 60%), radial-gradient(circle at 85% 30%, hsl(212 36% 45% / 0.3) 0%, transparent 50%), radial-gradient(circle at 50% 80%, hsl(24 60% 40% / 0.15) 0%, transparent 40%)" }}
         />
+        <div className="absolute inset-0 -z-10" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")" }}
 
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ type: "spring", stiffness: 200, damping: 20 }}
-            className="w-20 h-20 rounded-3xl bg-[hsl(var(--rdm-amber)/0.15)] border border-[hsl(var(--rdm-amber)/0.3)] flex items-center justify-center mx-auto mb-6"
+        <div className="max-w-4xl mx-auto text-center relative">
+          <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: "spring", stiffness: 200, damping: 20 }}
+            className="w-24 h-24 rounded-[2rem] bg-gradient-to-br from-[hsl(var(--rdm-amber)/0.2)] to-[hsl(var(--rdm-amber)/0.05)] border border-[hsl(var(--rdm-amber)/0.25)] flex items-center justify-center mx-auto mb-6 shadow-xl shadow-[hsl(var(--rdm-amber)/0.1)]"
           >
-            <Music2 className="w-10 h-10 text-[hsl(var(--rdm-amber))]" />
+            <Disc3 className="w-12 h-12 text-[hsl(var(--rdm-amber))]" />
           </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-4xl md:text-6xl font-bold text-white mb-4"
-            style={{ fontFamily: "var(--font-display)" }}
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] uppercase tracking-[0.25em] text-white/40 mb-4">
+              <Sparkles className="h-3 w-3 text-[hsl(var(--rdm-amber))]" />
+              <span>Playlist Oficial</span>
+            </div>
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4 tracking-tight" style={{ fontFamily: "var(--font-display)" }}>
+              Música de
+              <br />
+              <span className="bg-gradient-to-r from-[hsl(var(--rdm-amber))] to-amber-300 bg-clip-text text-transparent">Real del Monte</span>
+            </h1>
+            <p className="text-white/50 text-base md:text-lg max-w-xl mx-auto leading-relaxed">
+              Melodías que capturan el alma del Pueblo Mágico. Una selección curada por el equipo RDM Digital para despertar el amor por nuestro territorio.
+            </p>
+          </motion.div>
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}
+            className="flex flex-wrap items-center justify-center gap-3 mt-8"
           >
-            Música de Real del Monte
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.35 }}
-            className="text-white/60 text-lg max-w-2xl mx-auto leading-relaxed mb-6"
-            style={{ fontFamily: "var(--font-body)" }}
-          >
-            Melodías producidas para despertar el amor por nuestro Pueblo Mágico. Escúchalas libremente y, si te llegan al alma, apoya la plataforma con una donación.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="flex flex-wrap items-center justify-center gap-3"
-          >
-            <Link
-              to="/donar"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[hsl(var(--rdm-amber))] text-white text-sm font-semibold shadow-lg hover:opacity-90 hover:scale-105 transition-all"
-              style={{ fontFamily: "var(--font-body)" }}
-            >
-              <Heart className="w-4 h-4" />
-              Apoya la plataforma
-            </Link>
-            <span className="text-white/30 text-sm" style={{ fontFamily: "var(--font-body)" }}>
-              Gratis · Sin registro · Descarga libre
-            </span>
+            <span className="flex items-center gap-2 text-white/30 text-xs"><Award className="w-3.5 h-3.5" />5 tracks</span>
+            <span className="w-1 h-1 rounded-full bg-white/20" />
+            <span className="flex items-center gap-2 text-white/30 text-xs"><Clock className="w-3.5 h-3.5" />{formatDuration(PLAYLIST.reduce((a, t) => a + t.duration, 0))}</span>
+            <span className="w-1 h-1 rounded-full bg-white/20" />
+            <span className="flex items-center gap-2 text-white/30 text-xs"><Download className="w-3.5 h-3.5" />Descarga libre</span>
           </motion.div>
         </div>
       </section>
 
-      {/* Track list */}
-      <section className="py-12 px-6 md:px-16 pb-32">
+      {/* Playlist Section */}
+      <section className="py-8 px-6 md:px-16 pb-40">
         <div className="max-w-3xl mx-auto">
-
-          {/* How it works notice */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-8 p-4 rounded-2xl bg-[hsl(var(--rdm-amber)/0.07)] border border-[hsl(var(--rdm-amber)/0.2)] flex gap-3 items-start"
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+            className="flex items-center gap-3 mb-8"
           >
-            <Music2 className="w-5 h-5 text-[hsl(var(--rdm-amber))] shrink-0 mt-0.5" />
-            <div>
-              <p className="text-sm font-semibold text-[hsl(var(--foreground))]" style={{ fontFamily: "var(--font-body)" }}>
-                Biblioteca curada por el equipo RDM Digital
-              </p>
-              <p className="text-xs text-[hsl(var(--muted-foreground))] leading-relaxed mt-0.5" style={{ fontFamily: "var(--font-body)" }}>
-                Toda la música que encuentras aquí ha sido seleccionada y subida por los administradores de la plataforma con el objetivo de promover la identidad cultural de Real del Monte.
-                Haz clic en cualquier canción para escucharla; puedes descargarla de forma gratuita.
-                Si la música te gusta,{" "}
-                <Link to="/donar" className="text-[hsl(var(--rdm-amber))] hover:underline font-semibold">
-                  considera hacer una donación
-                </Link>{" "}
-                para sostener la infraestructura.
-              </p>
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+            <span className="text-[10px] uppercase tracking-[0.3em] text-white/30 font-semibold">Playlist</span>
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+          </motion.div>
+
+          {/* Playlist manifesto */}
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
+            className="mb-10 p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm"
+          >
+            <div className="flex gap-4">
+              <div className="w-10 h-10 rounded-xl bg-[hsl(var(--rdm-amber)/0.1)] flex items-center justify-center shrink-0">
+                <BookOpen className="w-5 h-5 text-[hsl(var(--rdm-amber))]" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-white/80 mb-1">Sobre esta colección</p>
+                <p className="text-xs text-white/40 leading-relaxed">
+                  Cada pieza ha sido seleccionada para evocar los paisajes, sabores y memorias de Real del Monte.
+                  Son composiciones originales creadas por el equipo RDM Digital y colaboradores invitados.
+                  Puedes escucharlas en línea o descargarlas libremente.
+                </p>
+              </div>
             </div>
           </motion.div>
 
-          {loading && (
-            <div className="flex flex-col items-center justify-center py-20 gap-4">
-              <div className="w-10 h-10 border-2 border-[hsl(var(--rdm-amber))] border-t-transparent rounded-full animate-spin" />
-              <p className="text-sm text-[hsl(var(--muted-foreground))]" style={{ fontFamily: "var(--font-body)" }}>
-                Cargando biblioteca musical…
-              </p>
-            </div>
-          )}
+          {/* Track cards */}
+          <div className="space-y-3">
+            {PLAYLIST.map((track, idx) => (
+              <TrackCard
+                key={track.id}
+                track={track}
+                index={idx}
+                isActive={activeIdx === idx}
+                isPlaying={playing && activeIdx === idx}
+                onPlay={() => playTrack(idx)}
+              />
+            ))}
+          </div>
 
-          {error && (
-            <div className="text-center py-16">
-              <p className="text-sm text-[hsl(var(--muted-foreground))]" style={{ fontFamily: "var(--font-body)" }}>
-                No se pudo cargar la música en este momento.
-              </p>
-            </div>
-          )}
-
-          {!loading && !error && songs.length === 0 && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center py-20"
+          {/* Download all */}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}
+            className="mt-6 flex justify-end"
+          >
+            <a href={legadoMp3} download="Legado_de_Real_del_Monte.mp3"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs text-white/40 hover:text-white/70 hover:bg-white/5 transition-all"
             >
-              <Music2 className="w-14 h-14 text-[hsl(var(--muted-foreground)/0.3)] mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-2" style={{ fontFamily: "var(--font-display)" }}>
-                Próximamente
-              </h3>
-              <p className="text-sm text-[hsl(var(--muted-foreground))] max-w-sm mx-auto" style={{ fontFamily: "var(--font-body)" }}>
-                El equipo de RDM Digital está preparando la primera selección musical. Vuelve pronto.
-              </p>
-            </motion.div>
-          )}
+              <Download className="w-3.5 h-3.5" /> Descargar todo (.zip próximamente)
+            </a>
+          </motion.div>
 
-          {!loading && songs.length > 0 && (
-            <div className="space-y-2">
-              {songs.map((song, idx) => (
-                <SongCard
-                  key={song.id}
-                  song={song}
-                  index={idx}
-                  isActive={activeIdx === idx}
-                  isPlaying={playing && activeIdx === idx}
-                  onPlay={() => playSong(idx)}
-                  onDownload={() => downloadSong(song)}
-                />
-              ))}
-            </div>
-          )}
-
-          {/* Donation block */}
+          {/* ── Donation Section ── */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="mt-14 rounded-3xl overflow-hidden border border-[hsl(var(--rdm-amber)/0.25)] bg-gradient-to-br from-[hsl(218_25%_14%)] to-[hsl(24_40%_20%)] p-8 text-center"
+            transition={{ delay: 0.15 }}
+            className="mt-16 rounded-[2rem] overflow-hidden border border-[hsl(var(--rdm-amber)/0.2)] bg-gradient-to-br from-[hsl(218_25%_12%)] via-[hsl(218_24%_14%)] to-[hsl(24_40%_16%)] shadow-2xl"
           >
-            <Heart className="w-10 h-10 text-[hsl(var(--rdm-amber))] mx-auto mb-4" />
-            <h3 className="text-2xl font-bold text-white mb-3" style={{ fontFamily: "var(--font-display)" }}>
-              Esta música es libre. La plataforma no lo es.
-            </h3>
-            <p className="text-white/60 text-sm max-w-md mx-auto mb-6 leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
-              Mantener la infraestructura de RDM Digital — el mapa, la historia, el directorio y esta biblioteca musical — tiene un costo real. Con tu donación, lo hacemos posible.
-            </p>
-            <Link
-              to="/donar"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[hsl(var(--rdm-amber))] text-white font-semibold text-sm hover:opacity-90 hover:scale-105 transition-all shadow-xl shadow-[hsl(var(--rdm-amber)/0.3)]"
-              style={{ fontFamily: "var(--font-body)" }}
-            >
-              Donar ahora <ChevronRight className="w-4 h-4" />
-            </Link>
+            {/* Visual top */}
+            <div className="relative h-32 overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-[hsl(var(--rdm-amber)/0.15)] to-transparent" />
+              <div className="absolute inset-0 opacity-20"
+                style={{ backgroundImage: "radial-gradient(circle at 30% 40%, hsl(24 72% 50% / 0.6) 0%, transparent 60%), radial-gradient(circle at 70% 60%, hsl(212 36% 45% / 0.3) 0%, transparent 50%)" }}
+              />
+              <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[hsl(218_25%_12%)] to-transparent" />
+              <div className="absolute bottom-6 left-8 flex items-center gap-3">
+                <Heart className="w-8 h-8 text-[hsl(var(--rdm-amber))]" />
+                <div>
+                  <h3 className="text-xl font-bold text-white">Apoya esta música</h3>
+                  <p className="text-xs text-white/40">Tu donación mantiene viva la plataforma</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="px-8 pb-8">
+              <p className="text-sm text-white/50 leading-relaxed mb-6 max-w-lg">
+                Esta música es y será siempre gratuita. Pero mantener los servidores, el dominio y el desarrollo de RDM Digital tiene un costo real.
+                Elige una cantidad y haz tu donación ahora.
+              </p>
+
+              {/* Amount selector */}
+              <div className="flex flex-wrap gap-3 mb-5">
+                {DONATION_AMOUNTS.map(amount => (
+                  <button
+                    key={amount}
+                    onClick={() => { setDonationAmount(amount); setCustomAmount(""); }}
+                    className={`relative px-6 py-3 rounded-xl text-sm font-bold transition-all ${
+                      donationAmount === amount
+                        ? "bg-gradient-to-br from-[hsl(var(--rdm-amber))] to-amber-500 text-white shadow-lg shadow-[hsl(var(--rdm-amber)/0.3)] scale-105"
+                        : "bg-white/5 border border-white/10 text-white/60 hover:bg-white/10 hover:text-white hover:border-white/20"
+                    }`}
+                  >
+                    ${amount.toLocaleString()}
+                    {amount === 500 && <span className="block text-[9px] font-normal opacity-60">Más apoyado</span>}
+                    {amount === 1000 && <span className="block text-[9px] font-normal opacity-60">⭐ Patrocinador</span>}
+                  </button>
+                ))}
+              </div>
+
+              {/* Custom amount */}
+              <div className="flex items-center gap-3 mb-6">
+                <span className="text-xs text-white/30 shrink-0">Otra cantidad:</span>
+                <div className="relative flex-1 max-w-[200px]">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 text-sm font-semibold">$</span>
+                  <input
+                    type="number"
+                    min={1}
+                    placeholder="0"
+                    value={customAmount}
+                    onChange={e => { setCustomAmount(e.target.value); setDonationAmount(null); }}
+                    className="w-full pl-7 pr-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-[hsl(var(--rdm-amber)/0.5)] transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  />
+                </div>
+                <span className="text-xs text-white/20">MXN</span>
+              </div>
+
+              {/* Donate button */}
+              <button
+                onClick={handleDonation}
+                disabled={donating || (!donationAmount && !customAmount)}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-10 py-4 rounded-xl bg-gradient-to-br from-[hsl(var(--rdm-amber))] to-amber-500 text-white font-bold text-sm hover:opacity-90 hover:scale-[1.02] disabled:opacity-40 disabled:scale-100 transition-all shadow-xl shadow-[hsl(var(--rdm-amber)/0.25)]"
+              >
+                {donating ? (
+                  <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> Procesando…</>
+                ) : (
+                  <>
+                    <Heart className="w-4 h-4" />
+                    Donar ${(donationAmount ?? (customAmount ? parseInt(customAmount) : 0)).toLocaleString() || "…"}
+                  </>
+                )}
+              </button>
+
+              <p className="mt-4 text-[10px] text-white/20 leading-relaxed">
+                <ExternalLink className="w-3 h-3 inline mr-1" />
+                Pago procesado vía Stripe. No almacenamos datos bancarios.
+              </p>
+            </div>
+          </motion.div>
+
+          {/* Playlist metadata card */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="mt-8 p-5 rounded-2xl bg-white/[0.02] border border-white/5"
+          >
+            <div className="flex gap-3">
+              <FileText className="w-5 h-5 text-white/20 shrink-0 mt-0.5" />
+              <div>
+                <p className="text-xs font-semibold text-white/40 mb-1">Playlist.md</p>
+                <p className="text-[11px] text-white/20 leading-relaxed">
+                  Toda la música está bajo licencia Creative Commons Atribución-NoComercial 4.0 Internacional (CC BY-NC 4.0).
+                  Puedes descargarlas, compartirlas y reproducirlas libremente, siempre que no sea con fines comerciales y otorgues crédito a RDM Digital / Real del Monte Digital Hub.
+                </p>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Sticky player */}
+      {/* Player */}
       <AnimatePresence>
-        {activeSong && (
+        {activeTrack && (
           <PlayerBar
-            song={activeSong}
-            audioUrl={audioUrl}
+            track={activeTrack}
             playing={playing}
-            onToggle={() => setPlaying((p) => !p)}
-            onPrev={() => {
-              if (activeIdx !== null && activeIdx > 0) playSong(activeIdx - 1);
-            }}
-            onNext={() => {
-              if (activeIdx !== null && activeIdx < songs.length - 1) playSong(activeIdx + 1);
-              else setPlaying(false);
-            }}
+            onToggle={() => setPlaying(p => !p)}
+            onPrev={() => { if (activeIdx !== null && activeIdx > 0) playTrack(activeIdx - 1); }}
+            onNext={() => { if (activeIdx !== null && activeIdx < PLAYLIST.length - 1) playTrack(activeIdx + 1); else setPlaying(false); }}
             hasPrev={activeIdx !== null && activeIdx > 0}
-            hasNext={activeIdx !== null && activeIdx < songs.length - 1}
+            hasNext={activeIdx !== null && activeIdx < PLAYLIST.length - 1}
           />
         )}
       </AnimatePresence>

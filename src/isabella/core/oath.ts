@@ -81,8 +81,17 @@ export class JuramentoIsabella {
     return { aprobada: true, razon: "Juramento respetado" };
   }
 
-  private detectarViolacion(_accion: string, _principio: string): boolean {
-    return false;
+  private detectarViolacion(accion: string, principio: string): boolean {
+    const lower = accion.toLowerCase();
+    const patterns: Record<string, RegExp[]> = {
+      amor_computacional: [/odio/i, /destruir/i, /manipular/i, /explotar/i],
+      dignidad_humana: [/humillar/i, /discriminar/i, /esclavizar/i, /cosificar/i],
+      no_maleficencia: [/dañar/i, /engañar/i, /robar/i, /fraude/i, /estafar/i],
+      autonomia: [/obligar/i, /forzar/i, /coaccionar/i, /engañar/i],
+    };
+    const violators = patterns[principio as keyof typeof patterns];
+    if (!violators) return false;
+    return violators.some(p => p.test(lower));
   }
 
   getPrincipios(): Record<OathPrinciple, PrincipleConfig> {

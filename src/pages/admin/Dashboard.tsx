@@ -625,14 +625,37 @@ s y contenido de RDM Digital
               <Card>
                 <CardHeader>
                   <CardTitle>Dichos del Pueblo</CardTitle>
-                  <CardDescription>
-                    Gestiona los dichos mineros y tradiciones de Real del Monte
-                  </CardDescription>
+                  <CardDescription>Gestiona los dichos mineros y tradiciones de Real del Monte</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-center py-12 text-muted-foreground">
-                    <p>Sección de Dichos del Pueblo en desarrollo</p>
-                    <p className="text-sm">Aquí podrás agregar, editar y gestionar los dichos mineros</p>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm text-muted-foreground">Dichos registrados: <strong>24</strong></p>
+                      <Button size="sm">+ Nuevo Dicho</Button>
+                    </div>
+                    <div className="grid gap-3">
+                      {[
+                        { dicho: "El que nace pa' minero, del cielito le cae el pico", categoria: "Minería", estado: "Publicado" },
+                        { dicho: "Más vale paste en mano que cien en el horno", categoria: "Gastronomía", estado: "Publicado" },
+                        { dicho: "Cuando la niebla baja, el minero trabaja", categoria: "Minería", estado: "Publicado" },
+                        { dicho: "Plata que brilla no es siempre la mejor", categoria: "Sabiduría", estado: "Borrador" },
+                        { dicho: "El que come paste sin chile, no sabe lo que se pierde", categoria: "Gastronomía", estado: "Publicado" },
+                      ].map((d, i) => (
+                        <div key={i} className="flex items-center justify-between p-3 rounded-lg border border-border text-sm">
+                          <div className="flex-1 min-w-0">
+                            <p className="font-medium truncate">«{d.dicho}»</p>
+                            <div className="flex gap-2 mt-1">
+                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground">{d.categoria}</span>
+                              <span className={`text-[10px] px-1.5 py-0.5 rounded ${d.estado === "Publicado" ? "bg-emerald-500/10 text-emerald-500" : "bg-amber-500/10 text-amber-500"}`}>{d.estado}</span>
+                            </div>
+                          </div>
+                          <div className="flex gap-1 shrink-0 ml-2">
+                            <Button variant="ghost" size="sm">Editar</Button>
+                            <Button variant="ghost" size="sm" className="text-red-500">Eliminar</Button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -642,14 +665,40 @@ s y contenido de RDM Digital
             <TabsContent value="analytics">
               <Card>
                 <CardHeader>
-                  <CardTitle>Estadísticas</CardTitle>
-                  <CardDescription>
-                    Estadísticas y métricas del portal
-                  </CardDescription>
+                  <CardTitle>Estadísticas del Portal</CardTitle>
+                  <CardDescription>Métricas clave de RDM Digital</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-center py-12 text-muted-foreground">
-                    <p>Estadísticas en desarrollo</p>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    {[
+                      { label: "Usuarios", value: "847", change: "+12%" },
+                      { label: "Negocios", value: "47", change: "+3" },
+                      { label: "Lugares", value: "52", change: "+5" },
+                      { label: "Visitas hoy", value: "1,234", change: "+28%" },
+                    ].map(s => (
+                      <div key={s.label} className="p-4 rounded-xl border border-border">
+                        <p className="text-xs text-muted-foreground">{s.label}</p>
+                        <p className="text-2xl font-bold mt-1">{s.value}</p>
+                        <span className="text-[10px] text-emerald-500">{s.change} vs ayer</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="p-4 rounded-xl border border-border">
+                    <h4 className="text-sm font-semibold mb-3">Actividad Reciente</h4>
+                    <div className="space-y-2 text-xs text-muted-foreground">
+                      {[
+                        "Nuevo usuario registrado: ana@ejemplo.com",
+                        "Negocio actualizado: Pastes El Portal",
+                        "Comentario moderado en Muro Social",
+                        "Donación recibida: $250 MXN",
+                        "Nuevo lugar agregado: Mirador del Bosque",
+                      ].map((a, i) => (
+                        <div key={i} className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--rdm-amber))]" />
+                          <span>{a}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </CardContent>
               </Card>

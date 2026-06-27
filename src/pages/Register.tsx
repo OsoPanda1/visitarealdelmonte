@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -9,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 import Header from "@/components/Header";
-import MatrixEffect from "@/components/TAMVtrixEffect";
+import MatrixEffect from "@/components/TAMVTrixEffect";
 import Logo from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

@@ -6,17 +6,20 @@ La música que encontrarás en esta playlist ha sido creada con el apoyo de herr
 
 Muchas de estas canciones nacieron de experiencias personales, momentos difíciles, pérdidas, amistades que se alejaron, sentimientos que nunca fueron expresados y pensamientos que permanecieron en silencio durante muchos años.
 
-Durante gran parte de mi vida jamás fui bueno para expresar lo que sentía. Muchas personas pensaron que estaba loco, obsesionado con algo imposible o persiguiendo sueños demasiado grandes para una sola persona. Algunas de esas personas se fueron alejando poco a poco, y aunque dolió, también me enseñó que hay emociones que solo encuentran su voz a través del arte.
-
-La música se convirtió en ese lugar seguro donde pude liberar toda esa carga.
-
 Cada canción es una pequeña parte de mi historia.
 
-Cada letra representa una conversación que nunca ocurrió, una despedida que nunca se dijo, un sueño que se negó a morir o un sentimiento que necesitaba salir.
+## Tracklist
 
-Hoy comparto esta música contigo con la esperanza de que puedas disfrutarla, que alguna canción te acompañe en un momento difícil, te inspire o simplemente te haga sentir algo.
+| # | Título | Artista | Duración | Descripción |
+|---|--------|---------|----------|-------------|
+| 1 | **Legado de Real del Monte** | RDM Digital | 3:20 | Tema principal del proyecto. Una travesía sonora por calles empedradas, niebla eterna y el latir minero del Pueblo Mágico. |
+| 2 | **Mirada de Plata** | RDM Digital | 4:00 | Melodía inspirada en las vetas de plata que forjaron la historia de la región. |
+| 3 | **Neblina en el Monte** | Isabella Villaseñor | 3:20 | Paisaje sonoro del bosque de niebla. El viento entre oyameles y la respiración profunda de la sierra. |
+| 4 | **Paste y Tradición** | RDM Digital | 2:40 | Ritmos cálidos que evocan la cocina tradicional. |
+| 5 | **Canto de las Antiguas** | Coro Comunitario | 5:00 | Canto ceremonial inspirado en las voces de las mujeres mineras. |
 
----
+> *La música es el alma del territorio. Cada nota es un homenaje a quienes construyeron este pueblo con manos de plata y corazón de piedra.*
+> — Isabella AI, Curadora Musical
 
 ## ❤️ Apoya este proyecto
 
@@ -24,23 +27,4 @@ Toda la música, así como el ecosistema tecnológico de **TAMV Online Network**
 
 Si esta música te ha gustado y deseas apoyar mi trabajo, puedes hacerlo mediante una donación económica.
 
-Tu apoyo ayuda a:
-
-* Mantener los servidores y la infraestructura del proyecto.
-* Continuar desarrollando nuevas herramientas y experiencias.
-* Financiar la investigación y el crecimiento de TAMV Online.
-* Permitir que proyectos como **Real del Monte Digital Hub**, **Isabella Villaseñor AI** y el resto del ecosistema sigan evolucionando.
-
-Cada donación, sin importar su tamaño, representa mucho más que un apoyo económico; es un voto de confianza para que este sueño siga creciendo.
-
----
-
-## Gracias por escuchar.
-
-Gracias por dedicar unos minutos de tu tiempo a esta música.
-
-Tal vez en alguna de estas canciones encuentres una parte de tu propia historia.
-
-**— Edwin Oswaldo Castillo Trejo**
-**Fundador y CEO de TAMV Online Network**
-**Arquitecto de Isabella Villaseñor AI y del Ecosistema TAMV**
+**Licencia:** Creative Commons Atribución-NoComercial 4.0 Internacional (CC BY-NC 4.0).

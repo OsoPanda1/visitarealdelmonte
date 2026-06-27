@@ -1,4 +1,3 @@
-// @ts-nocheck
 // ============================================================================
 // RDM Digital OS v3 — Componente: Quiénes Somos (Edición Soberanía)
 // "La tecnología es el puente entre el patrimonio y el futuro."

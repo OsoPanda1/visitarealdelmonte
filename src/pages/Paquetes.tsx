@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { RDMLayout } from "@/components/rdm/RDMLayout";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
@@ -8,6 +7,7 @@ import { PackageCard } from "@/components/packages/PackageCard";
 import { ElegantPagination } from "@/components/ElegantPagination";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
+import type { TourPackage } from "@/types/supabase";
 
 const TYPES = [
   { value: "all", label: "Todos" },
@@ -21,7 +21,7 @@ const TYPES = [
 const PAGE_SIZE = 6;
 
 export default function Paquetes() {
-  const [packages, setPackages] = useState<any[]>([]);
+  const [packages, setPackages] = useState<TourPackage[]>([]);
   const [type, setType] = useState("all");
   const [page, setPage] = useState(0);
   const [showIntro, setShowIntro] = useState(true);

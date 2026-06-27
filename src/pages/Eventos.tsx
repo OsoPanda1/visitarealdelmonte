@@ -1,14 +1,15 @@
-// @ts-nocheck
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Calendar, MapPin, Clock, Sparkles, Star, ArrowRight } from "lucide-react";
 import { RDMLayout } from "@/components/rdm/RDMLayout";
 import { SEOMeta } from "@/components/SEOMeta";
-import { EVENTOS_RDM, EVENT_CATEGORIES } from "@/data/rdm-events";
+import { EVENTOS_RDM, EVENT_CATEGORIES, type RDMEvent } from "@/data/rdm-events";
 import { IMAGE_MAP, RDM_IMAGES } from "@/data/rdm-images";
 
+type CategoryValue = RDMEvent["category"] | "all";
+
 export default function EventosPage() {
-  const [activeCategory, setActiveCategory] = useState("all");
+  const [activeCategory, setActiveCategory] = useState<CategoryValue>("all");
 
   const filteredEvents = useMemo(() => {
     if (activeCategory === "all") return EVENTOS_RDM;

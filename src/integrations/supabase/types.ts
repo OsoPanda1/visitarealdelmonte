@@ -320,6 +320,86 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+        }
+      }
+      businesses: {
+        Row: {
+          id: string; name: string; description: string | null; category: string
+          direccion: string | null; telefono: string | null; horario: string | null
+          image_url: string | null; rating: number | null; lat: number | null; lng: number | null
+          verified: boolean; status: string; created_at: string
+        }
+        Insert: {
+          id?: string; name: string; description?: string | null; category: string
+          direccion?: string | null; telefono?: string | null; horario?: string | null
+          image_url?: string | null; rating?: number | null; lat?: number | null; lng?: number | null
+          verified?: boolean; status?: string; created_at?: string
+        }
+        Update: {
+          id?: string; name?: string; description?: string | null; category?: string
+          direccion?: string | null; telefono?: string | null; horario?: string | null
+          image_url?: string | null; rating?: number | null; lat?: number | null; lng?: number | null
+          verified?: boolean; status?: string; created_at?: string
+        }
+        Relationships: []
+      }
+      packages: {
+        Row: {
+          id: string; name: string; description: string | null; type: string; duration: string
+          price: number; image_url: string | null; includes: string[]; available: boolean
+          status: string; created_at: string
+        }
+        Insert: {
+          id?: string; name: string; description?: string | null; type: string; duration: string
+          price: number; image_url?: string | null; includes?: string[]
+          available?: boolean; status?: string; created_at?: string
+        }
+        Update: {
+          id?: string; name?: string; description?: string | null; type?: string; duration?: string
+          price?: number; image_url?: string | null; includes?: string[]
+          available?: boolean; status?: string; created_at?: string
+        }
+        Relationships: []
+      }
+      shuttle_routes: {
+        Row: {
+          id: string; name: string; origin: string; destination: string
+          departure_time: string; return_time: string; price: number; duration: string
+          days_of_week: string[]; company_id: string | null; status: string
+          available: boolean; created_at: string
+          shuttle_companies: { name: string } | null
+        }
+        Insert: {
+          id?: string; name: string; origin: string; destination: string
+          departure_time: string; return_time: string; price: number; duration: string
+          days_of_week?: string[]; company_id?: string | null; status?: string
+          available?: boolean; created_at?: string
+        }
+        Update: {
+          id?: string; name?: string; origin?: string; destination?: string
+          departure_time?: string; return_time?: string; price?: number; duration?: string
+          days_of_week?: string[]; company_id?: string | null; status?: string
+          available?: boolean; created_at?: string
+        }
+        Relationships: []
+      }
+      transport_providers: {
+        Row: {
+          id: string; name: string; type: string; description: string | null
+          phone: string | null; schedule: string | null; image_url: string | null
+          verified: boolean; status: string; created_at: string
+        }
+        Insert: {
+          id?: string; name: string; type: string; description?: string | null
+          phone?: string | null; schedule?: string | null; image_url?: string | null
+          verified?: boolean; status?: string; created_at?: string
+        }
+        Update: {
+          id?: string; name?: string; type?: string; description?: string | null
+          phone?: string | null; schedule?: string | null; image_url?: string | null
+          verified?: boolean; status?: string; created_at?: string
+        }
+        Relationships: []
       }
     }
     Views: {
