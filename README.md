@@ -1,4 +1,5 @@
 # Real del Monte Digital Hub · TAMV MD-X4 · LTOS · LDTOCS · GEN-8.0
+**Orgullosamente Realmontenses**
 
 **Plataforma Territorial Soberana — Sistema Operativo de Inteligencia Territorial en Tiempo Real**
 
