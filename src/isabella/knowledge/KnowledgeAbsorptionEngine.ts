@@ -168,9 +168,7 @@ export class KnowledgeAbsorptionEngine {
 
   private generateSummary(content: string): string {
     const clean = content
-      .replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, "")
-      .replace(/<[^>]*on\w+\s*=[^>]*>/gi, "")
-      .replace(/<[^>]+>/g, "")
+      .replace(/<[^>]*>/g, "")
       .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, "")
       .replace(/\s+/g, " ")
       .trim();

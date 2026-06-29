@@ -1,25 +1,43 @@
-import { logger } from "@/lib/logger";
-
 export interface ValidationResult {
   valid: boolean;
   sanitized: string;
   errors: string[];
 }
 
-const SQL_INJECTION = /[;'"\\]|(--)|(\/\*)|(\*\/)|(%27)|(%22)|(%3B)/gi;
-const XSS_PATTERNS = /<script[\s>]|javascript:|onerror\s*=|onload\s*=|onclick\s*=|onmouseover\s*=|alert\s*\(|prompt\s*\(|confirm\s*\(/i;
-const COMMAND_INJECTION = /[|&;$`\\]|(\|\|)|(&&)|(>\s*)|(<\s*)/gi;
-const PATH_TRAVERSAL = /\.\.[\/\\]|~[\/\\]|%2e%2e[\/\\]?|%2e%2e%2f|%2e%2e%5c/i;
-
 const MAX_STRING_LENGTH = 10000;
 
-function escapeRegExp(s: string): string {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+function stripControlChars(s: string): string {
+  return s.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "");
+}
+
+function stripSqlMetacharacters(s: string): string {
+  return s.replace(/['";\\]/g, "").replace(/--/g, "").replace(/\/\*/g, "").replace(/\*\//g, "");
+}
+
+function stripHtml(s: string): string {
+  return s
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, "")
+    .replace(/<[^>]*>/g, "")
+    .replace(/[\s"'`]javascript\s*:/gi, " blocked:")
+    .replace(/[\s"'`]on\w+\s*=\s*(['"]?)[^'"&\s>]*\1?/gi, " ")
+    .replace(/formaction\s*=/gi, "disabled-");
+}
+
+function stripShellMetacharacters(s: string): string {
+  return s.replace(/[|&;$`\\]/g, "").replace(/\|\|/g, "").replace(/&&/g, "");
+}
+
+function stripPathTraversal(s: string): string {
+  return s
+    .replace(/\.\.[/\\]/g, "")
+    .replace(/~[/\\]/g, "")
+    .replace(/%2e%2e[/\\]?/gi, "")
+    .replace(/%2f/gi, "")
+    .replace(/%5c/gi, "");
 }
 
 export function sanitizeString(input: string, maxLength = MAX_STRING_LENGTH): ValidationResult {
   const errors: string[] = [];
-  let sanitized = input;
 
   if (typeof input !== "string") {
     return { valid: false, sanitized: "", errors: ["Input must be a string"] };
@@ -29,37 +47,17 @@ export function sanitizeString(input: string, maxLength = MAX_STRING_LENGTH): Va
     return { valid: true, sanitized: "", errors: [] };
   }
 
-  if (input.length > maxLength) {
+  let sanitized = input;
+
+  if (sanitized.length > maxLength) {
     sanitized = sanitized.slice(0, maxLength);
   }
 
-  if (SQL_INJECTION.test(sanitized)) {
-    errors.push("SQL injection pattern detected");
-    sanitized = sanitized.replace(SQL_INJECTION, "");
-  }
-
-  if (XSS_PATTERNS.test(sanitized)) {
-    errors.push("XSS pattern detected");
-    sanitized = sanitized.replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, "");
-    sanitized = sanitized.replace(/<script\b[^>]*\/?>/gi, "");
-    sanitized = sanitized.replace(/[\s"'`]javascript\s*:/gi, " blocked:");
-    sanitized = sanitized.replace(/[\s"'`]on\w+\s*=\s*(['"]?)[^'"&\s>]*\1?/gi, " ");
-    sanitized = sanitized.replace(/[\s"'`]on\w+\s*=\s*&[^;]+;/gi, " ");
-    sanitized = sanitized.replace(/formaction\s*=/gi, "disabled-");
-  }
-
-  if (COMMAND_INJECTION.test(sanitized)) {
-    errors.push("Command injection pattern detected");
-    sanitized = sanitized.replace(COMMAND_INJECTION, "");
-  }
-
-  if (PATH_TRAVERSAL.test(sanitized)) {
-    errors.push("Path traversal detected");
-    sanitized = sanitized.replace(/\.\.[\/\\]/g, "");
-    sanitized = sanitized.replace(/%2e%2e[\/\\]?/gi, "");
-    sanitized = sanitized.replace(/%2f/gi, "");
-    sanitized = sanitized.replace(/%5c/gi, "");
-  }
+  sanitized = stripControlChars(sanitized);
+  sanitized = stripSqlMetacharacters(sanitized);
+  sanitized = stripHtml(sanitized);
+  sanitized = stripShellMetacharacters(sanitized);
+  sanitized = stripPathTraversal(sanitized);
 
   const final = sanitized.trim();
 

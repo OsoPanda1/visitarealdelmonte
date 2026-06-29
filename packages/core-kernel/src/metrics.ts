@@ -580,10 +580,12 @@ export function getMetricsSnapshot(): MetricsSnapshot {
 
 function sanitizePrometheusValue(v: string): string {
   return String(v)
+    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "")
     .replace(/\\/g, "\\\\")
     .replace(/"/g, '\\"')
     .replace(/\n/g, "\\n")
     .replace(/\r/g, "\\r")
+    .replace(/\t/g, "\\t")
 }
 
 function sanitizePrometheusName(name: string): string {

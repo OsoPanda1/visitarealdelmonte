@@ -105,6 +105,14 @@ const AdminDashboard = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   
+  function safeImageUrl(url: string): string {
+    try {
+      const parsed = new URL(url);
+      if (parsed.protocol === "https:" || parsed.protocol === "http:") return url;
+    } catch { /* fall through */ }
+    return "/placeholder.svg";
+  }
+
   // Form state
   const [formData, setFormData] = useState({
     name: "",
@@ -807,7 +815,7 @@ s y contenido de RDM Digital
                     />
                     {formData.image_url && (
                       <div className="w-full h-16 rounded overflow-hidden">
-                        <img src={formData.image_url} alt="" loading="lazy" className="w-full h-full object-cover" />
+                        <img src={safeImageUrl(formData.image_url)} alt="" loading="lazy" className="w-full h-full object-cover" />
                       </div>
                     )}
                   </div>
@@ -820,7 +828,7 @@ s y contenido de RDM Digital
                     />
                       {formData.image_url2 && (
                       <div className="w-full h-16 rounded overflow-hidden">
-                        <img src={formData.image_url2} alt="" loading="lazy" className="w-full h-full object-cover" />
+                        <img src={safeImageUrl(formData.image_url2)} alt="" loading="lazy" className="w-full h-full object-cover" />
                       </div>
                     )}
                   </div>
@@ -833,7 +841,7 @@ s y contenido de RDM Digital
                     />
                     {formData.image_url3 && (
                       <div className="w-full h-16 rounded overflow-hidden">
-                        <img src={formData.image_url3} alt="" loading="lazy" className="w-full h-full object-cover" />
+                        <img src={safeImageUrl(formData.image_url3)} alt="" loading="lazy" className="w-full h-full object-cover" />
                       </div>
                     )}
                   </div>

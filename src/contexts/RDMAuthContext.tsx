@@ -107,10 +107,10 @@ export function RDMAuthProvider({ children }: { children: ReactNode }) {
       setSession(s)
       setUser(s?.user ?? null)
 
-      if (s?.user) {
-        // Defer DB calls para no bloquear el hilo principal.
+      const uid = s?.user?.id
+      if (uid) {
         setTimeout(() => {
-          void loadProfileAndRoles(s.user!.id)
+          void loadProfileAndRoles(uid)
         }, 0)
       } else {
         setProfile(null)
