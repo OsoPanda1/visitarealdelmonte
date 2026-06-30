@@ -115,46 +115,7 @@ jobs:
           fi
 
   #
-  # 3) SAST de alto nivel (CodeQL JS/TS) + cardinalidad controlada
-  #
-  codeql:
-    name: CodeQL JS/TS · SAST
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-    needs: [secrets, deps-audit]
-    permissions:
-      security-events: write
-      actions: read
-      contents: read
-    strategy:
-      fail-fast: false
-      matrix:
-        app:
-          - "apps/web"
-          - "services/*"
-          - "packages/*"
-    steps:
-      - name: Hardened checkout
-        uses: actions/checkout@v5
-        with:
-          fetch-depth: 1
-
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v4
-        with:
-          languages: javascript-typescript
-          queries: +security-and-quality
-
-      - name: Autobuild monorepo
-        uses: github/codeql-action/autobuild@v4
-
-      - name: Perform CodeQL Analysis (${{ matrix.app }})
-        uses: github/codeql-action/analyze@v4
-        with:
-          category: "/language:javascript-typescript/${{ matrix.app }}"
-
-  #
-  # 4) Policy-as-code / Zero‑trust de configuración (gitleaks.toml, .npmrc, vercel.json, supabase)
+  # 3) Policy-as-code / Zero‑trust de configuración (gitleaks.toml, .npmrc, vercel.json, supabase)
   #
   policy:
     name: Policy-as-Code · Config Hardening
@@ -180,13 +141,13 @@ jobs:
           ! rg "CF_ACCOUNT_ID" .    || true
 
   #
-  # 5) Telemetría y observabilidad del pipeline (cardinalidad controlada)
+  # 4) Telemetría y observabilidad del pipeline (cardinalidad controlada)
   #
   telemetry:
     name: Security Telemetry · Job Summary
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    needs: [secrets, deps-audit, codeql, policy]
+    needs: [secrets, deps-audit, policy]
     if: always()
     steps:
       - name: Emit security CI summary
@@ -195,7 +156,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "- Secrets scan: ${{ needs.secrets.result }}" >> $GITHUB_STEP_SUMMARY
           echo "- Dependencies audit: ${{ needs.deps-audit.result }}" >> $GITHUB_STEP_SUMMARY
-          echo "- CodeQL SAST: ${{ needs.codeql.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- CodeQL SAST (separate workflow): codeql.yml" >> $GITHUB_STEP_SUMMARY
           echo "- Policy-as-code: ${{ needs.policy.result }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "> All jobs are designed with bounded cardinality in logs and labels for Prometheus/OpenTelemetry." >> $GITHUB_STEP_SUMMARY
