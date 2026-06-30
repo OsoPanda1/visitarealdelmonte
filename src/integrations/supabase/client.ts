@@ -5,11 +5,15 @@ import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import type { Database } from './types'
 import { logger } from "@/lib/logger";
 
-// Variables de entorno (Vite expone solo vars con prefijo VITE_):
+// Variables de entorno (Vite expone solo vars con prefijo VITE_ al navegador):
 //   VITE_SUPABASE_URL         → URL del proyecto Supabase
 //   VITE_SUPABASE_ANON_KEY    → clave pública anónima (o publishable key)
 //
-// Fallbacks: también acepta NEXT_PUBLIC_ para compatibilidad multi-entorno.
+// Fallbacks:
+//   NEXT_PUBLIC_*            → compatibilidad Next.js multi-entorno
+//   DATABASE_SUPABASE_*      → Vercel Supabase integration (solo server-side;
+//                              en cliente Vite serán undefined; configurar
+//                              VITE_SUPABASE_* en Vercel env vars aparte)
 
 const SUPABASE_URL =
   import.meta.env.VITE_SUPABASE_URL ??
@@ -42,10 +46,19 @@ declare global {
 
 function createSupabaseClient(): SupabaseClient<Database> {
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-    throw new Error(
-      '[supabase] Configuración incompleta: define VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY ' +
-      'en .env.local o .env. Copia .env.example como .env y completa los valores.',
-    )
+    const MISSING_MSG =
+      '[supabase] Configuración incompleta. Define VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY ' +
+      'en .env.local, o configura DATABASE_SUPABASE_URL y DATABASE_SUPABASE_ANON_KEY ' +
+      'en las variables de entorno de Vercel (Supabase Integration).'
+
+    if (isDev) {
+      logger.error(MISSING_MSG)
+    }
+
+    // Stub client — no crashea la app, pero devuelve errores claros en auth.
+    return createClient<Database>('https://placeholder.supabase.co', 'placeholder-key', {
+      auth: { persistSession: false },
+    })
   }
 
   return createClient<Database>(SUPABASE_URL, SUPABASE_ANON_KEY, {
