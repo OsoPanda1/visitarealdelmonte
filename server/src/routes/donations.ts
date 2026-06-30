@@ -57,7 +57,7 @@ const stripe = config.stripeSecretKey
   : null;
 
 // Nota: la parte de seguridad post‑cuántica / híbrida se debe implementar en la capa TLS
-// (por ejemplo, Cloudflare con TLS 1.3 + X25519Kyber768Draft00) y no en el código de Stripe. [web:433][web:436]
+// (por ejemplo, Vercel con TLS 1.3 + X25519Kyber768Draft00) y no en el código de Stripe. [web:433][web:436]
 
 const donationsRouter = Router();
 

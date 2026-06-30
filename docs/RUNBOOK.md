@@ -40,13 +40,13 @@
 ## 6. Despliegue (happy path)
 
 1. PR → CI verde (lint, typecheck, test, build, security).
-2. Merge a `main` → Cloudflare Pages deploy preview.
+2. Merge a `main` → Vercel deploy preview automático (GitHub → Vercel).
 3. Smoke E2E contra preview.
-4. Promote a producción desde Cloudflare dashboard.
+4. Promote a producción desde Vercel dashboard (o automático si el pipeline es `--prod`).
 
 ## 7. Rollback
 
-- Cloudflare Pages → Deployments → "Rollback to this deployment".
+- Vercel → Deployments → "..." → "Rollback to this deployment".
 - Migraciones SQL: cada migración debe tener `down.sql` reversible.
 
 ## 8. Contactos

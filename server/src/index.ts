@@ -78,7 +78,7 @@ app.use((req, res, next) => {
   res.setHeader("Cross-Origin-Resource-Policy", "same-site");
 
   // CSP muy restrictivo para la API; la parte de frontend/HTML se sirve desde otro host
-  // El TLS (pre/híbrido/post‑Q) debe configurarse en el proxy (nginx, Cloudflare, etc.). [web:433][web:436]
+  // El TLS (pre/híbrido/post‑Q) debe configurarse en el proxy (nginx, Vercel, etc.). [web:433][web:436]
   res.setHeader(
     "Content-Security-Policy",
     [

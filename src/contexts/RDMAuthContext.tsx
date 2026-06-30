@@ -1,5 +1,5 @@
 // src/contexts/RDMAuthContext.tsx
-// Contexto de autenticación endurecido para RDM Digital Hub (Vite + Supabase + Lovable, despliegue en Cloudflare).
+// Contexto de autenticación endurecido para RDM Digital Hub (Vite + Supabase + Lovable, despliegue en Vercel).
 
 import {
   createContext,

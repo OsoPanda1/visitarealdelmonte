@@ -32,7 +32,7 @@
 - [x] D-07: Crear `docs/ROADMAP.md`
 - [ ] D-08: Documentar proceso de deploy Vercel
 - [ ] D-09: Documentar secrets requeridos en Vercel
-- [ ] D-10: Revisar `docs/ARCHITECTURE.md` por referencias a Cloudflare
+- [x] D-10: Revisar `docs/ARCHITECTURE.md` por referencias a Cloudflare
 - [ ] D-11: Documentar Edge Functions y sus variables de entorno
 - [ ] D-12: Documentar CSP actual y proceso de actualización
 - [ ] D-13: Documentar guía de onboarding para nuevos devs

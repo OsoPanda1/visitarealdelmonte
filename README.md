@@ -400,7 +400,7 @@ src/
 | **Frontend** | React 18, Vite 8 + Rolldown/Oxc, Radix UI, Tailwind CSS 3, shadcn/ui, Framer Motion 12, Lucide |
 | **Backend** | Node.js / TypeScript, Supabase Edge Functions, Next.js App Router |
 | **Base de datos** | Supabase (PostgreSQL + PostGIS), Auth, RLS, Storage, Edge Functions |
-| **Infraestructura** | Vercel (CI/CD, build), Cloudflare (DNS, CDN, DDoS), GitHub Actions (CI) |
+| **Infraestructura** | Vercel (CI/CD, build, DNS, CDN), GitHub Actions (CI) |
 | **IA y Conciencia** | Isabella AI (10 capas), MotorConciencia, KnowledgeAbsorptionEngine, Google Gemini |
 | **Seguridad** | PQC Kyber-1024, AES-256-GCM, SHA3-512, InputValidation anti-SQLi/XSS, CSP estricto |
 | **Blockchain** | Polygon, MSR (Minería Soberana Real), Ethereum, BSC |
@@ -515,7 +515,7 @@ GLOBAL:             ██████████████████░░
 - [x] Sitemap XML con rutas principales
 - [x] CodeQL: 0 alerts de alta/media severidad (InputValidation, randomness, DOM injection, Prometheus)
 - [x] PWA: Service Worker cache-first + network-first API + offline fallback
-- [x] CSP: Content Security Policy robusta (Sentry, PostHog, Google Fonts, Cloudflare)
+- [x] CSP: Content Security Policy robusta (Sentry, PostHog, Google Fonts)
 - [x] Vite 8 + Rolldown/Oxc: build exitoso, chunks vendor optimizados, Sentry/PostHog externalizados
 - [x] Fuentes: Google Fonts con font-display: swap + preconnect + carga diferida
 - [x] Imágenes: lazy-loading en 40+ componentes

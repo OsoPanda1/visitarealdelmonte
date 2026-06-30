@@ -27,8 +27,6 @@ export default defineConfig(({ mode }) => ({
       '@economy': path.resolve(__dirname, './services/economy/src'),
       '@analytics': path.resolve(__dirname, './services/analytics/src'),
       '@culture': path.resolve(__dirname, './services/culture/src'),
-      '@app-web': path.resolve(__dirname, './apps/web/src'),
-      '@app-admin': path.resolve(__dirname, './apps/admin/src'),
       '@infra/ai-provider': path.resolve(__dirname, './infra/ai-provider/src'),
       '@territorial-sensing': path.resolve(
         __dirname,
@@ -102,10 +100,6 @@ export default defineConfig(({ mode }) => ({
           // Supabase
           if (id.includes('node_modules/@supabase')) {
             return 'vendor-supabase'
-          }
-          // Google AI / GenAI SDK
-          if (id.includes('node_modules/@google/genai')) {
-            return 'vendor-ai'
           }
           // Date utils
           if (id.includes('node_modules/date-fns')) {

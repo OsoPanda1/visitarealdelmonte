@@ -75,12 +75,6 @@
       "@culture/*": [
         "./services/culture/src/*"
       ],
-      "@app-web/*": [
-        "./apps/web/src/*"
-      ],
-      "@app-admin/*": [
-        "./apps/admin/src/*"
-      ],
       "@infra/ai-provider": [
         "./infra/ai-provider/src/index.ts"
       ],
@@ -106,7 +100,6 @@
     "src",
     "packages/*/src",
     "services/*/src",
-    "apps/*/src",
     "infra/*/src"
   ],
   "exclude": [

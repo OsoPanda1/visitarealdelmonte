@@ -1,17 +1,20 @@
 # ROADMAP.md — Plan de Acción Post-Auditoría
 
-## Wave 1 — Eliminación Cloudflare (2 agent-hours)
-**Gate: CI verde sin Cloudflare**
+## Wave 1 — Eliminación Cloudflare ✅ COMPLETADA
+**Gate: CI verde sin Cloudflare ✅**
 
-| # | Tarea | Depende |
-|---|-------|---------|
-| 1 | Eliminar `wrangler.toml`, `public/_headers`, `public/_redirects` | — |
-| 2 | Migrar CSP+HSTS a `vercel.json` | — |
-| 3 | Limpiar `index.html` (preconnect CF) | — |
-| 4 | Actualizar CI: remover jobs CF, agregar Vercel deploy | — |
-| 5 | Actualizar docs con referencias a Vercel | — |
+| # | Tarea | Estado |
+|---|-------|--------|
+| 1 | Eliminar `wrangler.toml`, `public/_headers`, `public/_redirects` | ✅ |
+| 2 | Migrar CSP+HSTS a `vercel.json` | ✅ |
+| 3 | Limpiar `index.html` (preconnect CF) | ✅ |
+| 4 | Actualizar CI: remover jobs CF, agregar Vercel deploy | ✅ |
+| 5 | Actualizar docs con referencias a Vercel | ✅ |
+| 6 | Limpiar comentarios en código fuente (RDMAuthContext, logger, server/) | ✅ |
+| 7 | Eliminar artefactos y scripts huérfanos (apps/, audit_*, tools/*) | ✅ |
+| 8 | Eliminar dependencias no usadas (space-grotesk, google/genai, lovable/cloud-auth-js, esbuild) | ✅ |
 
-**Verificación**: `grep -ri cloudflare src/ .github/ docs/` → 0 resultados
+**Verificación**: `grep -ri cloudflare src/ .github/ docs/` → 0 resultados (salvo contenido informativo en Manuales.tsx y Despliegue.tsx)
 
 ---
 

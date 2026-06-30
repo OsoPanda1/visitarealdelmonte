@@ -1,7 +1,7 @@
 /**
  * Centralized structured logger.
  *
- * - JSON output in production (machine-parseable, Cloudflare/Sentry friendly).
+ * - JSON output in production (machine-parseable, Sentry friendly).
  * - Pretty output in dev.
  * - Forwards errors to Sentry if available on window/globalThis.
  *
