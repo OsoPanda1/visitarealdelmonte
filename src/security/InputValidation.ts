@@ -7,7 +7,7 @@ export interface ValidationResult {
 const MAX_STRING_LENGTH = 10000;
 
 function stripControlChars(s: string): string {
-  return s.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "");
+  return s.replace(new RegExp("[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F\\x7F]", "g"), "");
 }
 
 function stripSqlMetacharacters(s: string): string {

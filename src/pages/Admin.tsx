@@ -140,7 +140,7 @@ function RolesSection() {
     if (!email.trim()) return;
     // Look up profile by email pattern (display_name fallback)
     const { data: prof } = await supabase.from("profiles").select("user_id, display_name").ilike("display_name", email.trim()).limit(1);
-    let uid = prof?.[0]?.user_id;
+    const uid = prof?.[0]?.user_id;
     if (!uid) { toast.error("Usuario no encontrado por display_name. Pídeles que se registren y usa el ID."); return; }
     const { error } = await supabase.from("user_roles").insert({ user_id: uid, role });
     if (error) { toast.error(error.message); return; }

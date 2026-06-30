@@ -15,8 +15,8 @@ function ParticleField() {
     if (!ctx) return;
 
     const dpr = window.devicePixelRatio || 1;
-    let W = window.innerWidth;
-    let H = window.innerHeight;
+    const W = window.innerWidth;
+    const H = window.innerHeight;
     canvas.width = W * dpr;
     canvas.height = H * dpr;
     ctx.scale(dpr, dpr);

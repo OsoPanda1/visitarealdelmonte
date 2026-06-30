@@ -123,7 +123,7 @@ export function useMusicPlayer({ autoplay = false }: { autoplay?: boolean } = {}
   }, [tracks, pause]);
 
   useEffect(() => () => { cancelRAF(); audioRef.current?.pause(); audioRef.current = null; }, []);
-  useEffect(() => { if (autoplay && tracks.length) play(); /* eslint-disable-next-line */ }, [autoplay, tracks.length]);
+  useEffect(() => { if (autoplay && tracks.length) play(); }, [autoplay, tracks.length]);
 
   // simulated progress when no audio_url
   useEffect(() => {

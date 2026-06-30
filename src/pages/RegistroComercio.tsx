@@ -118,7 +118,7 @@ const RegistroComercio = () => {
       website: formData.website,
       status: "pending",
       is_active: false,
-      category: (giros.find(g => g.value === formData.giro)?.label ?? "OTROS").toUpperCase().replace(/[\s\/]/g, "_").slice(0, 20),
+      category: (giros.find(g => g.value === formData.giro)?.label ?? "OTROS").toUpperCase().replace(/[\s/]/g, "_").slice(0, 20),
     });
     setSaving(false);
     if (error) {

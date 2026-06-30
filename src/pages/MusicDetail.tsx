@@ -8,7 +8,7 @@ export default function MusicDetail() {
   const { slug = "" } = useParams();
   const p = useMusicPlayer();
 
-  useEffect(() => { if (slug) p.selectBySlug(slug); /* eslint-disable-next-line */ }, [slug]);
+  useEffect(() => { if (slug) p.selectBySlug(slug); }, [slug]);
 
   const t = p.tracks.find((x) => x.slug === slug);
   if (!t) return (
