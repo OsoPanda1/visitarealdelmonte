@@ -2,9 +2,9 @@ name: "CodeQL Advanced – RDM Digital Hub / TAMV Nodo Cero"
 
 on:
   push:
-    branches: [ "main", "develop" ]
+    branches: ["main", "develop"]
   pull_request:
-    branches: [ "main", "develop" ]
+    branches: ["main", "develop"]
   schedule:
     # Escaneo completo semanal (domingo 19:21 UTC)
     - cron: "21 19 * * 0"
@@ -30,9 +30,12 @@ jobs:
       contents: read
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
       - name: Set CodeQL languages matrix (auto-detect)
         id: set-matrix
@@ -59,12 +62,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
+          # fetch-depth: 0 recomendado para CodeQL (historial completo)
           fetch-depth: 0
 
+      # Setup específico para JS/TS (si aplica)
       - name: Setup Node.js
         if: matrix.language == 'javascript-typescript'
         uses: actions/setup-node@v4
         with:
+          # Usa la versión fijada en package.json, o ajusta según necesidad
           node-version-file: "package.json"
           cache: "npm"
 
@@ -72,6 +78,8 @@ jobs:
         uses: github/codeql-action/init@v4
         with:
           languages: ${{ matrix.language }}
+          # Si en el futuro necesitas build para lenguajes compilados,
+          # sustituye 'none' por 'autobuild' o configuración manual
           build-mode: ${{ matrix.build-mode || 'none' }}
           queries: "+security-extended,security-and-quality"
 
