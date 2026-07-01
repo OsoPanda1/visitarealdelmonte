@@ -9,20 +9,21 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { AnimatePresence } from 'framer-motion'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import { RouteErrorBoundary } from '@/components/RouteErrorBoundary'
-import { CinematicIntro } from '@/components/CinematicIntro'
-import MicroPageIntro from '@/components/MicroPageIntro'
-import RealitoChatLauncher from './components/RealitoChatLauncher'
-import AmbientLayer from '@/components/AmbientLayer'
-import LiveTelemetryBadge from '@/components/LiveTelemetryBadge'
-import SearchOverlay from '@/components/SearchOverlay'
-import SmartSidebar from '@/components/SmartSidebar'
-import GlobalPlayerBar from '@/components/GlobalPlayerBar'
 import { AudioPlayerProvider } from '@/contexts/AudioPlayerContext'
 import { RDMAuthProvider, useRDMAuth } from '@/contexts/RDMAuthContext'
-import { PostHogProvider } from '@/integrations/observability/posthog'
 import { NotificationProvider } from '@/components/NotificationSystem'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 import { Analytics } from '@vercel/analytics/react'
+
+// Componentes pesados: lazy loading para reducir bundle inicial (~126KB)
+const CinematicIntro = lazy(() => import('@/components/CinematicIntro'))
+const MicroPageIntro = lazy(() => import('@/components/MicroPageIntro'))
+const RealitoChatLauncher = lazy(() => import('./components/RealitoChatLauncher'))
+const AmbientLayer = lazy(() => import('@/components/AmbientLayer'))
+const LiveTelemetryBadge = lazy(() => import('@/components/LiveTelemetryBadge'))
+const SearchOverlay = lazy(() => import('@/components/SearchOverlay'))
+const SmartSidebar = lazy(() => import('@/components/SmartSidebar'))
+const GlobalPlayerBar = lazy(() => import('@/components/GlobalPlayerBar'))
 
 // ===== Mother repo pages =====
 const Index = lazy(() => import('./pages/Index'))
@@ -367,6 +368,17 @@ const AppInner = () => {
     setIntroComplete(true)
   }, [])
 
+  // Analytics post-pintado: se montan vía requestIdleCallback para no bloquear el main thread
+  const [analyticsReady, setAnalyticsReady] = useState(false)
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(() => setAnalyticsReady(true), { timeout: 4000 })
+    } else {
+      setTimeout(() => setAnalyticsReady(true), 3000)
+    }
+  }, [])
+
   // Arranque dinámico de Isabella AI — FusionEngine se importa bajo demanda
   useEffect(() => {
     const isBrowser = typeof window !== 'undefined'
@@ -382,6 +394,9 @@ const AppInner = () => {
       return false
     }
 
+    // Solo mostrar CinematicIntro en la landing page /
+    if (window.location.pathname !== '/') return false
+
     if (sessionStorage.getItem('rdm_intro_shown')) return false
     sessionStorage.setItem('rdm_intro_shown', 'true')
     return true
@@ -390,30 +405,39 @@ const AppInner = () => {
   return (
     <ErrorBoundary>
       <TooltipProvider>
-        <AmbientLayer />
+        <Suspense fallback={null}><AmbientLayer /></Suspense>
         {/* Banner global de estado de auth/Supabase */}
         <AuthStatusBanner />
         <Toaster />
         <Sonner />
         <AnimatePresence>
           {showIntro && !introComplete && (
-            <CinematicIntro onEnter={handleIntroComplete} />
+            <Suspense fallback={null}>
+              <CinematicIntro onEnter={handleIntroComplete} />
+            </Suspense>
           )}
         </AnimatePresence>
           {(!showIntro || introComplete) && (
             <>
               <AudioPlayerProvider>
-                <MicroPageIntro />
+                <Suspense fallback={null}><MicroPageIntro /></Suspense>
                 <AnimatedRoutes />
-                <GlobalPlayerBar />
-                <LiveTelemetryBadge />
-                <SearchOverlay />
+                <Suspense fallback={null}><GlobalPlayerBar /></Suspense>
+                <Suspense fallback={null}><LiveTelemetryBadge /></Suspense>
+                <Suspense fallback={null}><SearchOverlay /></Suspense>
                 {/* CompassNav disabled — RDMNavbar now covers all navigation */}
-                <SmartSidebar />
+                <Suspense fallback={null}><SmartSidebar /></Suspense>
               </AudioPlayerProvider>
             </>
           )}
-          <RealitoChatLauncher />
+          <Suspense fallback={null}><RealitoChatLauncher /></Suspense>
+          {/* SpeedInsights + Analytics: diferidos al primer idle del navegador */}
+          {analyticsReady && (
+            <Suspense fallback={null}>
+              <SpeedInsights />
+              <Analytics debug={import.meta.env.DEV} />
+            </Suspense>
+          )}
       </TooltipProvider>
     </ErrorBoundary>
   )
@@ -423,15 +447,11 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <PostHogProvider>
-          <RDMAuthProvider>
-            <NotificationProvider>
-              <AppInner />
-              <SpeedInsights />
-              <Analytics debug={import.meta.env.DEV} />
-            </NotificationProvider>
-          </RDMAuthProvider>
-        </PostHogProvider>
+        <RDMAuthProvider>
+          <NotificationProvider>
+            <AppInner />
+          </NotificationProvider>
+        </RDMAuthProvider>
       </BrowserRouter>
     </QueryClientProvider>
   )
