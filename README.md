@@ -9,24 +9,68 @@
 ## Índice
 
 1. [¿Qué es?](#1-qué-es)
-2. [Stack Tecnológico](#2-stack-tecnológico)
-3. [Estructura del Proyecto](#3-estructura-del-proyecto)
-4. [Catálogo de Páginas](#4-catálogo-de-páginas)
-5. [Componentes UI](#5-componentes-ui)
-6. [Módulos Funcionales](#6-módulos-funcionales)
-7. [Supabase: Base de Datos](#7-supabase-base-de-datos)
-8. [Supabase: Edge Functions](#8-supabase-edge-functions)
-9. [Seguridad](#9-seguridad)
-10. [Despliegue en Vercel](#10-despliegue-en-vercel)
-11. [Variables de Entorno](#11-variables-de-entorno)
-12. [Scripts](#12-scripts)
-13. [Roadmap](#13-roadmap)
+2. [Estructuración Arquitectónica: LDTOCS](#2-estructuración-arquitectónica-ldtocs)
+3. [Stack Tecnológico](#3-stack-tecnológico)
+4. [Estructura del Proyecto](#4-estructura-del-proyecto)
+5. [Catálogo de Páginas](#5-catálogo-de-páginas)
+6. [Componentes UI](#6-componentes-ui)
+7. [Módulos Funcionales](#7-módulos-funcionales)
+8. [Supabase: Base de Datos](#8-supabase-base-de-datos)
+9. [Supabase: Edge Functions](#9-supabase-edge-functions)
+10. [Seguridad](#10-seguridad)
+11. [Despliegue en Vercel](#11-despliegue-en-vercel)
+12. [Variables de Entorno](#12-variables-de-entorno)
+13. [Scripts](#13-scripts)
+14. [Roadmap](#14-roadmap)
 
 ---
 
 ## 1. ¿Qué es?
 
 Real del Monte Digital Hub es un **Sistema Operativo Territorial (LTOS)** de código abierto que unifica el patrimonio cultural, turístico, económico y social de Real del Monte en una plataforma digital viva. Más de **580 archivos TypeScript/TSX** distribuidos en frontend SPA, backend Express, edge functions serverless y orquestación Kubernetes.
+
+### 1.1. Estructuración Arquitectónica: LDTOCS
+
+El **Local Digital Territorial Operating Civilizatory System (LDTOCS)** es la infraestructura base diseñada para gestionar ecosistemas digitales soberanos. Su operatividad se sustenta bajo una **Estructuración y Organización Modular Heptafederada**, diseñada para garantizar escalabilidad, seguridad y eficiencia tecnológica.
+
+#### La Heptafederación (F1–F7)
+
+El sistema se divide en siete unidades macro funcionales:
+
+| Federación | Ámbito | Función |
+|------------|--------|---------|
+| **F1 — Gobernanza** | Normativo | Marco normativo y administración del ecosistema |
+| **F2 — Identidad y Acceso** | Auth | Gestión de usuarios y niveles de autenticación |
+| **F3 — Datos Territoriales** | Datos | Almacenamiento y gestión de información geográfica y local |
+| **F4 — Comercio y Monetización** | Economía | Protocolos de intercambio de valor y economía digital |
+| **F5 — IA y Automatización** | Inteligencia | IA aplicada y optimización de tareas |
+| **F6 — Comunidad y Contenido** | Social | Interacción social y gestión de activos digitales |
+| **F7 — Observabilidad y Seguridad** | Monitoreo | Monitoreo, integridad y resiliencia del sistema |
+
+#### Matriz de Arquitectura y Ejecución
+
+Cada federación opera bajo un modelo bidimensional compuesto por **Capas (L)** para la arquitectura y **Procesos (P)** para la ejecución técnica.
+
+**Arquitectura de Capas (L0–L5)** — Jerarquía de componentes:
+
+| Capa | Nombre | Propósito |
+|------|--------|-----------|
+| L0 | Núcleo (Core) | Kernel y fundamentos del sistema |
+| L1 | Servicios Base | Servicios esenciales del ecosistema |
+| L2 | Integraciones | APIs y conectores externos |
+| L3 | Automatizaciones | Procesos automatizados y pipelines |
+| L4 | Interfaces | Presentación y capa de usuario (UI/UX) |
+| L5 | Extensiones | Módulos avanzados y experimentales |
+
+**Clasificación de Procesos (P0–P4)** — Prioridad y naturaleza de ejecución:
+
+| Proceso | Nombre | Naturaleza |
+|---------|--------|------------|
+| P0 | Proceso Principal | Operación crítica del sistema |
+| P1 | Procesos Secundarios | Operaciones de rutina |
+| P2 | Proceso de Soporte | Mantenimiento y gestión |
+| P3 | Proceso Crítico | Seguridad y emergencia |
+| P4 | Proceso Experimental | Innovación y extensión |
 
 ### Funcionalidades principales
 
@@ -48,7 +92,7 @@ Real del Monte Digital Hub es un **Sistema Operativo Territorial (LTOS)** de có
 
 ---
 
-## 2. Stack Tecnológico
+## 3. Stack Tecnológico
 
 | Capa | Tecnología |
 |------|-----------|
@@ -77,7 +121,7 @@ Real del Monte Digital Hub es un **Sistema Operativo Territorial (LTOS)** de có
 
 ---
 
-## 3. Estructura del Proyecto
+## 4. Estructura del Proyecto
 
 ```
 /
@@ -149,9 +193,9 @@ Real del Monte Digital Hub es un **Sistema Operativo Territorial (LTOS)** de có
 
 ---
 
-## 4. Catálogo de Páginas
+## 5. Catálogo de Páginas
 
-### 4.1. Portal Turístico
+### 5.1. Portal Turístico
 
 | Ruta | Página | Descripción |
 |------|--------|-------------|
@@ -170,7 +214,7 @@ Real del Monte Digital Hub es un **Sistema Operativo Territorial (LTOS)** de có
 | `/recorridos` | Recorridos | Tours guiados |
 | `/ruta-del-paste` | RutaDelPaste | Ruta gastronómica del paste |
 
-### 4.2. Cultura y Patrimonio
+### 5.2. Cultura y Patrimonio
 
 | Ruta | Página | Descripción |
 |------|--------|-------------|
@@ -190,7 +234,7 @@ Real del Monte Digital Hub es un **Sistema Operativo Territorial (LTOS)** de có
 | `/patrimonio` | PatrimonioCultural | Patrimonio cultural |
 | `/enciclopedia` | EnciclopediaUniversal | Enciclopedia digital |
 
-### 4.3. Comercio y Economía
+### 5.3. Comercio y Economía
 
 | Ruta | Página | Descripción |
 |------|--------|-------------|
@@ -207,7 +251,7 @@ Real del Monte Digital Hub es un **Sistema Operativo Territorial (LTOS)** de có
 | `/premium` | PremiumPlans | Planes premium (4 tiers: 99/129/199/299 MXN) |
 | `/rewards` | (en GamePortal) | Catálogo de 18 premios canjeables con puntos |
 
-### 4.4. Isabella AI
+### 5.4. Isabella AI
 
 | Ruta | Página | Descripción |
 |------|--------|-------------|
@@ -220,7 +264,7 @@ Real del Monte Digital Hub es un **Sistema Operativo Territorial (LTOS)** de có
 | `/tamv-status` | TAMVStatus | Estado TAMV |
 | `/api-explorer` | TAMVApiExplorer | Explorador de API |
 
-### 4.5. Gobernanza y Documentación
+### 5.5. Gobernanza y Documentación
 
 | Ruta | Página | Descripción |
 |------|--------|-------------|
@@ -239,7 +283,7 @@ Real del Monte Digital Hub es un **Sistema Operativo Territorial (LTOS)** de có
 | `/rfcs` | RFCList | Sistema RFC modular (7 RFCs en 3 secciones) |
 | `/rfc/:id` | RFCDetail | Detalle de RFC individual |
 
-### 4.6. Comunidad y Social
+### 5.6. Comunidad y Social
 
 | Ruta | Página | Descripción |
 |------|--------|-------------|
@@ -250,7 +294,7 @@ Real del Monte Digital Hub es un **Sistema Operativo Territorial (LTOS)** de có
 | `/donar` | Donar | Donaciones |
 | `/apoya` | Apoya | Apoyo al proyecto |
 
-### 4.7. Juegos y Gamificación
+### 5.7. Juegos y Gamificación
 
 | Ruta | Página | Descripción |
 |------|--------|-------------|
@@ -260,7 +304,7 @@ Real del Monte Digital Hub es un **Sistema Operativo Territorial (LTOS)** de có
 | `/memoria` | (en Juegos) | Memory Game |
 | `/blockchain` | BlockchainMSR | Minería blockchain MSR |
 
-### 4.8. Música
+### 5.8. Música
 
 | Ruta | Página | Descripción |
 |------|--------|-------------|
@@ -269,7 +313,7 @@ Real del Monte Digital Hub es un **Sistema Operativo Territorial (LTOS)** de có
 | `/archivo-sonoro` | ArchivoSonoro | Archivo sonoro con donaciones |
 | `/music-detail` | MusicDetail | Detalle de canción |
 
-### 4.9. Observabilidad
+### 5.9. Observabilidad
 
 | Ruta | Página | Descripción |
 |------|--------|-------------|
@@ -282,7 +326,7 @@ Real del Monte Digital Hub es un **Sistema Operativo Territorial (LTOS)** de có
 | `/control` | ControlCenter | Centro de control |
 | `/guardian` | Guardian | Panel del guardian |
 
-### 4.10. Autenticación
+### 5.10. Autenticación
 
 | Ruta | Página | Descripción |
 |------|--------|-------------|
@@ -293,7 +337,7 @@ Real del Monte Digital Hub es un **Sistema Operativo Territorial (LTOS)** de có
 
 ---
 
-## 5. Componentes UI
+## 6. Componentes UI
 
 La carpeta `src/components/` contiene **191 componentes** agrupados en categorías:
 
@@ -331,7 +375,7 @@ La carpeta `src/components/` contiene **191 componentes** agrupados en categorí
 
 ---
 
-## 6. Módulos Funcionales
+## 7. Módulos Funcionales
 
 | Módulo | Ruta | Descripción |
 |--------|------|-------------|
@@ -371,7 +415,7 @@ La carpeta `src/components/` contiene **191 componentes** agrupados en categorí
 
 ---
 
-## 7. Supabase: Base de Datos
+## 8. Supabase: Base de Datos
 
 ### Tablas (35+)
 
@@ -437,7 +481,7 @@ La carpeta `src/components/` contiene **191 componentes** agrupados en categorí
 
 ---
 
-## 8. Supabase: Edge Functions
+## 9. Supabase: Edge Functions
 
 20 funciones serverless en Deno:
 
@@ -492,7 +536,7 @@ La carpeta `src/components/` contiene **191 componentes** agrupados en categorí
 
 ---
 
-## 9. Seguridad
+## 10. Seguridad
 
 | Componente | Archivo | Función |
 |-----------|---------|---------|
@@ -526,9 +570,9 @@ Los siguientes parches están documentados y listos para aplicar:
 
 ---
 
-## 10. Despliegue en Vercel
+## 11. Despliegue en Vercel
 
-### 10.1. Pipeline de CI/CD
+### 11.1. Pipeline de CI/CD
 
 ```
 Push a main
@@ -544,7 +588,7 @@ GitHub Actions: deploy-vercel (npm run build + vercel --prod)
 Vercel Edge Network: CDN + HTTPS + Runtime Node.js 24.x
 ```
 
-### 10.2. Archivo vercel.json
+### 11.2. Archivo vercel.json
 
 ```json
 {
@@ -590,26 +634,26 @@ Vercel Edge Network: CDN + HTTPS + Runtime Node.js 24.x
 }
 ```
 
-### 10.3. Orquestación Alternativa
+### 11.3. Orquestación Alternativa
 
 Además de Vercel, el proyecto incluye:
 
 - **Docker Compose:** `docker-compose.yml` con PostgreSQL 15 + app frontend
 - **Kubernetes:** `k8s/` con deployment, service, ingress, namespace, secrets template, kustomization
 
-### 10.4. Dominio
+### 11.4. Dominio
 
 - **Producción:** `www.visitarealdelmonte.online` (DNS en Vercel)
 - **Preview:** `https://real-del-monte-digital-hub-*.vercel.app` (automático por PR)
 
-### 10.5. Entorno de producción (Vercel)
+### 11.5. Entorno de producción (Vercel)
 
 - Node.js Runtime: 24.x
 - Región: `iad1` (us-east-1)
 
 ---
 
-## 11. Variables de Entorno
+## 12. Variables de Entorno
 
 ```env
 # Supabase
@@ -639,7 +683,7 @@ VERCEL_PROJECT_ID=  # GitHub Actions secret
 
 ---
 
-## 12. Scripts
+## 13. Scripts
 
 | Comando | Descripción |
 |---------|-------------|
@@ -657,7 +701,7 @@ VERCEL_PROJECT_ID=  # GitHub Actions secret
 
 ---
 
-## 13. Roadmap
+## 14. Roadmap
 
 ### ✅ COMPLETADO — Fase 0-4
 - [x] Kernel MD-X5 (Receive→Evaluate→Plan→Execute→Commit→Reconcile)
