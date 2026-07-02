@@ -85,8 +85,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   // Auth check
   const auth = await requireAuth(req as unknown as Request);
-  if (auth.error) {
-    return (auth.error as unknown as VercelResponse).status(401).json({ error: auth.error });
+  if (auth.errorResponse) {
+    return auth.errorResponse as unknown as VercelResponse;
   }
 
   // Rate limit

@@ -9,29 +9,30 @@ export interface AuthResult {
   email?: string;
   role?: string;
   supabase?: SupabaseClient;
-  error?: string;
+  errorMessage?: string;
+}
+
+export interface AuthResultWithResponse extends AuthResult {
+  errorResponse?: Response;
 }
 
 /**
  * Verifica la autenticación de un request.
- * Soporta:
- * - Bearer token (Supabase JWT o CRON_SECRET)
- * - Authorization header con token
  */
 export async function verifyAuth(request: Request): Promise<AuthResult> {
   const authHeader = request.headers.get("authorization");
 
   if (!authHeader) {
-    return { authenticated: false, error: "Missing Authorization header" };
+    return { authenticated: false, errorMessage: "Missing Authorization header" };
   }
 
   const [scheme, token] = authHeader.split(" ", 2);
 
   if (scheme !== "Bearer" || !token) {
-    return { authenticated: false, error: "Invalid Authorization scheme (use Bearer)" };
+    return { authenticated: false, errorMessage: "Invalid Authorization scheme (use Bearer)" };
   }
 
-  // 1) CRON_SECRET check (para cron jobs)
+  // 1) CRON_SECRET check
   const cronSecret = process.env.CRON_SECRET;
   if (cronSecret && token === cronSecret) {
     return { authenticated: true, role: "cron" };
@@ -42,7 +43,7 @@ export async function verifyAuth(request: Request): Promise<AuthResult> {
   const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
 
   if (!supabaseUrl || !supabaseAnonKey) {
-    return { authenticated: false, error: "Supabase not configured" };
+    return { authenticated: false, errorMessage: "Supabase not configured" };
   }
 
   try {
@@ -53,7 +54,7 @@ export async function verifyAuth(request: Request): Promise<AuthResult> {
     const { data: { user }, error } = await supabase.auth.getUser(token);
 
     if (error || !user) {
-      return { authenticated: false, error: error?.message || "Invalid token" };
+      return { authenticated: false, errorMessage: error?.message || "Invalid token" };
     }
 
     return {
@@ -66,23 +67,23 @@ export async function verifyAuth(request: Request): Promise<AuthResult> {
   } catch (err) {
     return {
       authenticated: false,
-      error: err instanceof Error ? err.message : "Auth verification failed",
+      errorMessage: err instanceof Error ? err.message : "Auth verification failed",
     };
   }
 }
 
 /**
- * Middleware helper: retorna Response 401 si no está autenticado.
- * Uso: const auth = await requireAuth(request); if (auth.error) return auth.error;
+ * Middleware helper: retorna AuthResultWithResponse.
+ * Si no está autenticado, errorResponse contiene la Response 401.
  */
-export async function requireAuth(request: Request): Promise<AuthResult & { error?: Response }> {
+export async function requireAuth(request: Request): Promise<AuthResultWithResponse> {
   const result = await verifyAuth(request);
 
   if (!result.authenticated) {
     return {
       ...result,
-      error: new Response(
-        JSON.stringify({ error: result.error || "Unauthorized" }),
+      errorResponse: new Response(
+        JSON.stringify({ error: result.errorMessage || "Unauthorized" }),
         {
           status: 401,
           headers: {
@@ -103,17 +104,17 @@ export async function requireAuth(request: Request): Promise<AuthResult & { erro
 export async function requireRole(
   request: Request,
   allowedRoles: string[],
-): Promise<AuthResult & { error?: Response }> {
+): Promise<AuthResultWithResponse> {
   const result = await requireAuth(request);
 
-  if (result.error) return result;
+  if (result.errorResponse) return result;
 
-  if (result.role === "cron") return result; // Cron bypass role check
+  if (result.role === "cron") return result;
 
   if (!result.role || !allowedRoles.includes(result.role)) {
     return {
       ...result,
-      error: new Response(
+      errorResponse: new Response(
         JSON.stringify({ error: "Insufficient permissions" }),
         {
           status: 403,
