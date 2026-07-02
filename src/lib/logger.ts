@@ -17,10 +17,16 @@ interface LogContext {
 
 const LEVEL_ORDER: Record<Level, number> = { debug: 10, info: 20, warn: 30, error: 40 };
 
-const MIN_LEVEL: Level = clientEnv.VITE_APP_ENV === "production" ? "info" : "debug";
+function getMinLevel(): Level {
+  try {
+    return clientEnv?.VITE_APP_ENV === "production" ? "info" : "debug";
+  } catch {
+    return "debug";
+  }
+}
 
 function shouldEmit(level: Level): boolean {
-  return LEVEL_ORDER[level] >= LEVEL_ORDER[MIN_LEVEL];
+  return LEVEL_ORDER[level] >= LEVEL_ORDER[getMinLevel()];
 }
 
 interface SentryLike {
