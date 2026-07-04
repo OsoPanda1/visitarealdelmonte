@@ -25,7 +25,7 @@ Deno.serve(async (req) => {
     const customerId = customers.data[0]?.id;
     if (!customerId) throw new Error("No tienes una suscripción activa todavía");
 
-    const origin = req.headers.get("origin") || "http://localhost:5173";
+    const origin = req.headers.get("origin") || Deno.env.get("PRODUCTION_ORIGIN") || "https://visitarealdelmonte.online";
     const portal = await stripe.billingPortal.sessions.create({
       customer: customerId,
       return_url: `${origin}/game`,

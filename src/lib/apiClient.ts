@@ -15,7 +15,7 @@ export const queryClient = new QueryClient({
 export { QueryClientProvider };
 
 // API Client with base configuration
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api/v1';
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api/v1';
 
 // Request timeout
 const TIMEOUT_MS = 30000;

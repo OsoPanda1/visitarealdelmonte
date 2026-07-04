@@ -142,7 +142,7 @@ Deno.serve(async (req) => {
       const track = track_id ? MUSIC_CATALOG[track_id] : null;
       const finalTrackTitle = track ? track.title : "Legado RDM Digital General";
 
-      const origin = req.headers.get("origin") || "http://localhost:5173";
+      const origin = req.headers.get("origin") || Deno.env.get("PRODUCTION_ORIGIN") || "https://visitarealdelmonte.online";
 
       // Creación de la sesión de pasarela inteligente
       const session = await stripe.checkout.sessions.create({

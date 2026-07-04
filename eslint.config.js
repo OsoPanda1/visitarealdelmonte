@@ -120,7 +120,6 @@ export default tseslint.config(
       "src/components/DichosSection.tsx",
       "src/components/ExplorerView.tsx",
       "src/components/Footer.tsx",
-      "src/components/InteractiveMap.tsx",
       "src/components/MapSection.tsx",
       "src/components/MerchantCatalog.tsx",
       "src/components/NotificationSystem.tsx",

@@ -44,7 +44,7 @@ Deno.serve(async (req) => {
       customerId = c.id;
     }
 
-    const origin = req.headers.get("origin") || "http://localhost:5173";
+    const origin = req.headers.get("origin") || Deno.env.get("PRODUCTION_ORIGIN") || "https://visitarealdelmonte.online";
 
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
