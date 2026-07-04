@@ -1,6 +1,6 @@
 // src/App.tsx
 
-import { useState, useCallback, useEffect, lazy, Suspense, Component, ErrorInfo, ReactNode } from 'react'
+import { useState, useCallback, useEffect, lazy, Suspense, Component, type ErrorInfo, type ReactNode } from 'react'
 import { Toaster } from '@/components/ui/toaster'
 import { Toaster as Sonner } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
@@ -14,8 +14,7 @@ import { RDMAuthProvider, useRDMAuth } from '@/contexts/RDMAuthContext'
 import { NotificationProvider } from '@/components/NotificationSystem'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 import { Analytics } from '@vercel/analytics/react'
-import { LoadingFallback } from '@/components/LoadingFallback'
-import { captureException } from '@/integrations/observability/sentry'
+import { logger } from '@/lib/logger'
 
 // Componentes pesados: lazy loading para reducir bundle inicial (~126KB)
 const CinematicIntro = lazy(() => import('@/components/CinematicIntro').then((m) => ({ default: m.CinematicIntro })))
@@ -255,7 +254,7 @@ class AppCrashBoundary extends Component<
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('AppCrashBoundary caught a bootstrap error:', { error, errorInfo })
+    logger.error('AppCrashBoundary caught a bootstrap error:', { error, errorInfo })
 
     if (typeof window !== 'undefined') {
       window.dispatchEvent(

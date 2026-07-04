@@ -5,24 +5,11 @@ import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import type { Database } from './types'
 import { logger } from "@/lib/logger";
 
-// Variables de entorno (Vite expone solo vars con prefijo VITE_ al navegador):
-//   VITE_SUPABASE_URL         → URL del proyecto Supabase
-//   VITE_SUPABASE_ANON_KEY    → clave pública anónima (o publishable key)
-//
-// Fallbacks:
-//   NEXT_PUBLIC_*            → compatibilidad Next.js multi-entorno
-//   DATABASE_SUPABASE_*      → Vercel Supabase integration (solo server-side;
-//                              en cliente Vite serán undefined; configurar
-//                              VITE_SUPABASE_* en Vercel env vars aparte)
+// Frontend (browser) env vars — Vite exposes only VITE_* prefixed vars.
+// Server-side (Edge Functions, cron) use SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY.
 
-const SUPABASE_URL =
-  import.meta.env.VITE_SUPABASE_URL ??
-  import.meta.env.VITE_NEXT_PUBLIC_SUPABASE_URL
-
-const SUPABASE_ANON_KEY =
-  import.meta.env.VITE_SUPABASE_ANON_KEY ??
-  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ??
-  import.meta.env.VITE_NEXT_PUBLIC_SUPABASE_ANON_KEY
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
 
 const isDev = import.meta.env.DEV
 const isProd = import.meta.env.PROD
@@ -49,8 +36,7 @@ function createSupabaseClient(): SupabaseClient<Database> {
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
     const MISSING_MSG =
       '[supabase] Configuración incompleta. Define VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY ' +
-      'en .env.local, o configura DATABASE_SUPABASE_URL y DATABASE_SUPABASE_ANON_KEY ' +
-      'en las variables de entorno de Vercel (Supabase Integration).'
+      'en .env.local o en las variables de entorno de Vercel.'
 
     if (isProd) {
       throw new Error(MISSING_MSG)
