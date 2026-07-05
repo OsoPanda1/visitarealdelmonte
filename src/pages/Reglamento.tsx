@@ -7,19 +7,23 @@ const Reglamento = () => {
     <RDMLayout>
       <SEOMeta title="Reglamento - Normas de la Comunidad" />
       
+      {/* Hero Banner */}
+      <div className="relative h-64 w-full overflow-hidden">
+        <img src="/images/streets-colonial.jpg" alt="Calles coloniales de Real del Monte" className="h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+        <div className="absolute bottom-8 left-8 text-white">
+          <h1 className="text-4xl font-bold mb-2">Reglamento de la Comunidad</h1>
+          <p className="text-lg text-white/80">Normas y políticas para una comunidad saludable</p>
+        </div>
+      </div>
+      
       <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 py-16">
         <div className="container mx-auto px-4 max-w-4xl">
           {/* Header */}
-          <div className="text-center mb-12">
+          <div className="text-center mb-12 hidden">
             <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full mb-6">
               <Shield className="w-10 h-10 text-white" />
             </div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              Reglamento de la Comunidad
-            </h1>
-            <p className="text-xl text-gray-600">
-              Normas y políticas para una comunidad saludable
-            </p>
           </div>
 
           {/* Content */}

@@ -243,9 +243,9 @@ const CategoryColumns: React.FC = () => {
   ];
 
   const concerts: ConcertItem[] = [
-    { id: '1', title: 'Sinfonía Cuántica', artist: 'DJ Nebula', thumbnail: 'https://picsum.photos/seed/concert1/400/200', isLive: true, viewers: 15420 },
-    { id: '2', title: 'Ecos del Metaverso', artist: 'Isabella Orchestra', thumbnail: 'https://picsum.photos/seed/concert2/400/200', isLive: false },
-    { id: '3', title: 'Noche de Creadores', artist: 'Various Artists', thumbnail: 'https://picsum.photos/seed/concert3/400/200', isLive: false },
+    { id: '1', title: 'Sinfonía Cuántica', artist: 'DJ Nebula', thumbnail: '/images/dia-muertos.jpg', isLive: true, viewers: 15420 },
+    { id: '2', title: 'Ecos del Metaverso', artist: 'Isabella Orchestra', thumbnail: '/images/penas-cargadas.jpg', isLive: false },
+    { id: '3', title: 'Noche de Creadores', artist: 'Various Artists', thumbnail: '/images/plaza-noche.jpg', isLive: false },
   ];
 
   return (

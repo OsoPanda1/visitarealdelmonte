@@ -55,7 +55,6 @@ const NegociosPortal = lazy(() => import('./pages/NegociosPortal'))
 const Dashboard = lazy(() => import('./pages/Dashboard'))
 const Comercios = lazy(() => import('./pages/Comercios'))
 const Paquetes = lazy(() => import('./pages/Paquetes'))
-const ComunidadPage = lazy(() => import('./pages/ComunidadPage'))
 const TransporteLocal = lazy(() => import('./pages/TransporteLocal'))
 const ShuttleCDMX = lazy(() => import('./pages/ShuttleCDMX'))
 
@@ -66,7 +65,6 @@ const GraciasDonativo = lazy(() => import('./pages/GraciasDonativo'))
 const ComerciosPanel = lazy(() => import('./pages/ComerciosPanel'))
 
 // ===== Elevated pages =====
-const MapaVivo = lazy(() => import('./pages/MapaVivo'))
 const RegistroComercio = lazy(() => import('./pages/RegistroComercio'))
 
 // ===== Citemesh / Wiki pages =====
@@ -85,7 +83,6 @@ const BiografiaCEO = lazy(() => import('./pages/BiografiaCEO'))
 const CasosDeUso = lazy(() => import('./pages/CasosDeUso'))
 const KitAPIs = lazy(() => import('./pages/KitAPIs'))
 const Estrategia = lazy(() => import('./pages/Estrategia'))
-const WikiTAMV = lazy(() => import('./pages/WikiTAMV'))
 const RedSocial = lazy(() => import('./pages/RedSocial'))
 const SeguridadTenochtitlan = lazy(() => import('./pages/SeguridadTenochtitlan'))
 const BlockchainMSR = lazy(() => import('./pages/BlockchainMSR'))
@@ -97,8 +94,6 @@ const IsabellaAI = lazy(() => import('./pages/IsabellaAI'))
 const ImpactoCivilizatorio = lazy(() => import('./pages/ImpactoCivilizatorio'))
 
 // ===== Genesis / TAMV pages =====
-const Documentation = lazy(() => import('./pages/Documentation'))
-const Membership = lazy(() => import('./pages/Membership'))
 const AuthCallback = lazy(() => import('./pages/AuthCallback'))
 const MetaverseHome = lazy(() => import('./pages/MetaverseHome'))
 const Register = lazy(() => import('./pages/Register'))
@@ -137,7 +132,6 @@ const LTOS = lazy(() => import('./pages/LTOS'))
 const Mitos = lazy(() => import('./pages/Mitos'))
 const MusicDetail = lazy(() => import('./pages/MusicDetail'))
 const Recorridos = lazy(() => import('./pages/Recorridos'))
-const RegistrarComercioPage = lazy(() => import('./pages/RegistrarComercio'))
 const RutaDelPaste = lazy(() => import('./pages/RutaDelPaste'))
 const AdminPanel = lazy(() => import('./pages/Admin'))
 const DemoChecklist = lazy(() => import('./pages/DemoChecklist'))
@@ -310,7 +304,6 @@ const AnimatedRoutes = () => {
           <Route path="/dashboard" element={<RouteErrorBoundary route="/dashboard"><Dashboard /></RouteErrorBoundary>} />
           <Route path="/comercios" element={<RouteErrorBoundary route="/comercios"><Comercios /></RouteErrorBoundary>} />
           <Route path="/paquetes" element={<RouteErrorBoundary route="/paquetes"><Paquetes /></RouteErrorBoundary>} />
-          <Route path="/comunidad-social" element={<RouteErrorBoundary route="/comunidad-social"><ComunidadPage /></RouteErrorBoundary>} />
           <Route path="/transporte-local" element={<RouteErrorBoundary route="/transporte-local"><TransporteLocal /></RouteErrorBoundary>} />
           <Route path="/shuttle-cdmx-rdm" element={<RouteErrorBoundary route="/shuttle-cdmx-rdm"><ShuttleCDMX /></RouteErrorBoundary>} />
           <Route path="/explorar" element={<RouteErrorBoundary route="/explorar"><Mapa /></RouteErrorBoundary>} />
@@ -324,9 +317,8 @@ const AnimatedRoutes = () => {
           <Route path="/donar" element={<RouteErrorBoundary route="/donar"><Donar /></RouteErrorBoundary>} />
           <Route path="/gracias-donativo" element={<RouteErrorBoundary route="/gracias-donativo"><GraciasDonativo /></RouteErrorBoundary>} />
           <Route path="/comercios/panel" element={<RouteErrorBoundary route="/comercios/panel"><ComerciosPanel /></RouteErrorBoundary>} />
-          <Route path="/mapa-vivo" element={<RouteErrorBoundary route="/mapa-vivo"><MapaVivo /></RouteErrorBoundary>} />
           <Route path="/registro-comercio" element={<RouteErrorBoundary route="/registro-comercio"><RegistroComercio /></RouteErrorBoundary>} />
-          <Route path="/gemelo" element={<Navigate to="/mapa-vivo" replace />} />
+          <Route path="/gemelo" element={<Navigate to="/mapa" replace />} />
           <Route path="/contacto" element={<Navigate to="/quienes-somos" replace />} />
           <Route path="/introduccion" element={<RouteErrorBoundary route="/introduccion"><Introduccion /></RouteErrorBoundary>} />
           <Route path="/filosofia" element={<RouteErrorBoundary route="/filosofia"><Filosofia /></RouteErrorBoundary>} />
@@ -343,7 +335,6 @@ const AnimatedRoutes = () => {
           <Route path="/casos-de-uso" element={<RouteErrorBoundary route="/casos-de-uso"><CasosDeUso /></RouteErrorBoundary>} />
           <Route path="/kit-apis" element={<RouteErrorBoundary route="/kit-apis"><KitAPIs /></RouteErrorBoundary>} />
           <Route path="/estrategia" element={<RouteErrorBoundary route="/estrategia"><Estrategia /></RouteErrorBoundary>} />
-          <Route path="/wikitamv" element={<RouteErrorBoundary route="/wikitamv"><WikiTAMV /></RouteErrorBoundary>} />
           <Route path="/red-social" element={<RouteErrorBoundary route="/red-social"><RedSocial /></RouteErrorBoundary>} />
           <Route path="/seguridad-tenochtitlan" element={<RouteErrorBoundary route="/seguridad-tenochtitlan"><SeguridadTenochtitlan /></RouteErrorBoundary>} />
           <Route path="/blockchain-msr" element={<RouteErrorBoundary route="/blockchain-msr"><BlockchainMSR /></RouteErrorBoundary>} />
@@ -354,8 +345,6 @@ const AnimatedRoutes = () => {
           <Route path="/isabella" element={<Navigate to="/isabella-ai" replace />} />
           <Route path="/isabella-ai" element={<RouteErrorBoundary route="/isabella-ai"><IsabellaAI /></RouteErrorBoundary>} />
           <Route path="/impacto-civilizatorio" element={<RouteErrorBoundary route="/impacto-civilizatorio"><ImpactoCivilizatorio /></RouteErrorBoundary>} />
-          <Route path="/documentation" element={<RouteErrorBoundary route="/documentation"><Documentation /></RouteErrorBoundary>} />
-          <Route path="/membership" element={<RouteErrorBoundary route="/membership"><Membership /></RouteErrorBoundary>} />
           <Route path="/metaverse" element={<RouteErrorBoundary route="/metaverse"><MetaverseHome /></RouteErrorBoundary>} />
           <Route path="/register" element={<RouteErrorBoundary route="/register"><Register /></RouteErrorBoundary>} />
           <Route path="/login" element={<RouteErrorBoundary route="/login"><Login /></RouteErrorBoundary>} />
@@ -389,7 +378,6 @@ const AnimatedRoutes = () => {
           <Route path="/mitos" element={<RouteErrorBoundary route="/mitos"><Mitos /></RouteErrorBoundary>} />
           <Route path="/musica/:slug" element={<RouteErrorBoundary route="/musica/:slug"><MusicDetail /></RouteErrorBoundary>} />
           <Route path="/recorridos" element={<RouteErrorBoundary route="/recorridos"><Recorridos /></RouteErrorBoundary>} />
-          <Route path="/registrar-comercio-v2" element={<RouteErrorBoundary route="/registrar-comercio-v2"><RegistrarComercioPage /></RouteErrorBoundary>} />
           <Route path="/ruta-del-paste" element={<RouteErrorBoundary route="/ruta-del-paste"><RutaDelPaste /></RouteErrorBoundary>} />
           <Route path="/admin-panel" element={<RouteErrorBoundary route="/admin-panel"><AdminPanel /></RouteErrorBoundary>} />
           <Route path="/demo-checklist" element={<RouteErrorBoundary route="/demo-checklist"><DemoChecklist /></RouteErrorBoundary>} />

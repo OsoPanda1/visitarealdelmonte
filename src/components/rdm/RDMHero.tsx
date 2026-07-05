@@ -1,18 +1,11 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { ChevronDown, Mountain, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroPrincipalBg from "@/assets/heroprincipal.png";
 
-/**
- * RDMHero — cinematic video background with gradient fallback.
- * To activate the video, place your file at /public/video/hero.mp4
- * (and optionally /public/video/hero.webm for better browser support).
- * The poster image at /public/images/rdm-hero.png is used while the video loads.
- */
 export function RDMHero() {
   const ref = useRef<HTMLDivElement>(null);
-  const [videoLoaded, setVideoLoaded] = useState(false);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
@@ -20,7 +13,6 @@ export function RDMHero() {
   return (
     <section ref={ref} className="relative h-[100vh] overflow-hidden">
       <motion.div style={{ y }} className="absolute inset-0">
-        {/* ── heroprincipal.png background at 45% opacity ── */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
@@ -29,7 +21,6 @@ export function RDMHero() {
           }}
         />
 
-        {/* ── Gradient fallback (always visible under the video) ── */}
         <div
           className="absolute inset-0"
           style={{
@@ -38,23 +29,6 @@ export function RDMHero() {
           }}
         />
 
-        {/* ── Cinematic video ── */}
-        <motion.video
-          src="/video/hero.mp4"
-          poster="/images/rdm-hero.png"
-          autoPlay
-          muted
-          loop
-          playsInline
-          onCanPlay={() => setVideoLoaded(true)}
-          className="absolute inset-0 h-full w-full object-cover"
-          style={{ opacity: videoLoaded ? 1 : 0 }}
-          animate={{ opacity: videoLoaded ? 1 : 0 }}
-          transition={{ duration: 1.4 }}
-          aria-hidden="true"
-        />
-
-        {/* ── Cinematic grading overlay ── */}
         <div
           className="absolute inset-0"
           style={{

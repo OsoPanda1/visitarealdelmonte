@@ -105,7 +105,7 @@ export default function ExperienceHub() {
       <div className="glass relative overflow-hidden rounded-[3rem] border border-white/10 p-12">
         <div className="pointer-events-none absolute right-0 top-0 h-full w-1/2 opacity-20">
           <div className="absolute inset-0 bg-gradient-to-l from-brand-amber/20 to-transparent" />
-          <img src="https://picsum.photos/seed/route/800/800" loading="lazy" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+          <img src="/images/mine-tunnel.jpg" loading="lazy" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
         </div>
 
         <div className="relative z-10 max-w-xl">

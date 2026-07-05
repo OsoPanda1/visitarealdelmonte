@@ -39,7 +39,16 @@ export default function Donar() {
   return (
     <div>
       <NavBar />
-      <main className="container mx-auto px-6 pt-28 pb-20">
+      {/* Hero Banner */}
+      <div className="relative h-56 w-full overflow-hidden">
+        <img src="/images/plaza-noche.jpg" alt="Plaza de Real del Monte de noche" className="h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
+        <div className="absolute bottom-8 left-8 text-white">
+          <h1 className="text-3xl font-bold">Apoya a Real del Monte</h1>
+          <p className="text-white/80 mt-1">Tu donativo fortalece el patrimonio cultural</p>
+        </div>
+      </div>
+      <main className="container mx-auto px-6 pt-8 pb-20">
         <section className="max-w-2xl mx-auto glass-surface-strong p-8 space-y-6">
           <h1 className="text-3xl font-bold">Asegura el brillo de nuestro legado</h1>
           <p className="text-muted-foreground">

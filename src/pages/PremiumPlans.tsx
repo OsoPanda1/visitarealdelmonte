@@ -179,6 +179,15 @@ export default function PremiumPlans() {
         title="Planes Premium · RDM Digital"
         description="Planes premium para usuarios y comercios en Real del Monte. Desde $99 MXN/mes."
       />
+      {/* Hero Banner */}
+      <div className="relative h-56 w-full overflow-hidden">
+        <img src="/images/artesanias-plata.jpg" alt="Artesanías de plata de Real del Monte" className="h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
+        <div className="absolute bottom-8 left-8 text-white">
+          <h1 className="text-3xl font-bold">Planes Premium</h1>
+          <p className="text-white/80 mt-1">Desbloquea experiencias exclusivas</p>
+        </div>
+      </div>
       <section className="pb-24 pt-8">
         <div className="container mx-auto max-w-6xl px-6">
           {/* Header */}

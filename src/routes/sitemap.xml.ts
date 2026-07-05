@@ -114,7 +114,6 @@ export async function GET(_ctx: APIContext): Promise<Response> {
     { path: "/dashboard", lastmod: now, changefreq: "weekly", priority: "0.7" },
     { path: "/comercios", lastmod: now, changefreq: "weekly", priority: "0.7" },
     { path: "/paquetes", lastmod: now, changefreq: "weekly", priority: "0.6" },
-    { path: "/comunidad-social", lastmod: now, changefreq: "weekly", priority: "0.6" },
     { path: "/transporte-local", lastmod: now, changefreq: "weekly", priority: "0.6" },
     { path: "/shuttle-cdmx-rdm", lastmod: now, changefreq: "weekly", priority: "0.6" },
 
@@ -125,7 +124,6 @@ export async function GET(_ctx: APIContext): Promise<Response> {
     { path: "/comercios/panel", lastmod: now, changefreq: "weekly", priority: "0.5" },
 
     // Elevated
-    { path: "/mapa-vivo", lastmod: now, changefreq: "daily", priority: "0.9" },
     { path: "/registro-comercio", lastmod: now, changefreq: "monthly", priority: "0.5" },
 
     // Citemesh / Wiki
@@ -143,7 +141,6 @@ export async function GET(_ctx: APIContext): Promise<Response> {
     { path: "/casos-de-uso", lastmod: now, changefreq: "monthly", priority: "0.5" },
     { path: "/kit-apis", lastmod: now, changefreq: "monthly", priority: "0.5" },
     { path: "/estrategia", lastmod: now, changefreq: "monthly", priority: "0.5" },
-    { path: "/wikitamv", lastmod: now, changefreq: "monthly", priority: "0.5" },
     { path: "/red-social", lastmod: now, changefreq: "weekly", priority: "0.6" },
     { path: "/seguridad-tenochtitlan", lastmod: now, changefreq: "monthly", priority: "0.4" },
     { path: "/blockchain-msr", lastmod: now, changefreq: "monthly", priority: "0.4" },
@@ -155,8 +152,6 @@ export async function GET(_ctx: APIContext): Promise<Response> {
     { path: "/impacto-civilizatorio", lastmod: now, changefreq: "monthly", priority: "0.4" },
 
     // Genesis / TAMV
-    { path: "/documentation", lastmod: now, changefreq: "monthly", priority: "0.5" },
-    { path: "/membership", lastmod: now, changefreq: "monthly", priority: "0.5" },
     { path: "/metaverse", lastmod: now, changefreq: "monthly", priority: "0.4" },
     { path: "/register", lastmod: now, changefreq: "monthly", priority: "0.3" },
     { path: "/login", lastmod: now, changefreq: "monthly", priority: "0.3" },
