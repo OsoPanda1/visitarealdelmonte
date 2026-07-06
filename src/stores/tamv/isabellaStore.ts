@@ -2,7 +2,7 @@
 // TAMV — Isabella AI NextGen™ Store (federated state)
 // Soberanía conceptual + legal + técnica (Triple Federado)
 // ============================================================================
-import create from "zustand";
+import { create } from "zustand";
 
 export type IsabellaStatus = "idle" | "thinking" | "guarding" | "creating" | "healing";
 export type SecurityProtocol =

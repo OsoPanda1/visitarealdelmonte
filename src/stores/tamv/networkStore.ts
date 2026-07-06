@@ -1,7 +1,7 @@
 // ============================================================================
 // TAMV — Network Store: nodos federados, MSR Bridge y cifrado cuántico
 // ============================================================================
-import create from "zustand";
+import { create } from "zustand";
 
 export type NetworkStatus = "online" | "offline" | "syncing" | "maintenance";
 export type NodeStatus = "active" | "idle" | "error";

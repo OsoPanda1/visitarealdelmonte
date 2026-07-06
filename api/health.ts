@@ -1,12 +1,4 @@
-interface VercelRequest {
-  method?: string;
-}
-
-interface VercelResponse {
-  setHeader(name: string, value: string): void;
-  status(code: number): VercelResponse;
-  json(body: unknown): void;
-}
+import type { VercelRequest, VercelResponse } from "@vercel/node";
 
 interface HealthStatus {
   status: 'healthy' | 'degraded' | 'critical';

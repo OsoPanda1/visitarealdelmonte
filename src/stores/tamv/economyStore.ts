@@ -1,7 +1,7 @@
 // ============================================================================
 // TAMV — Economy Store: TC, MSR, TAMV balances + 20/30/50 Phoenix rule
 // ============================================================================
-import create from "zustand";
+import { create } from "zustand";
 
 export type TxType = "credit" | "debit" | "stake" | "reward" | "donation";
 

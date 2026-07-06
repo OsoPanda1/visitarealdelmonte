@@ -15,6 +15,7 @@ import { NotificationProvider } from '@/components/NotificationSystem'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 import { Analytics } from '@vercel/analytics/react'
 import { logger } from '@/lib/logger'
+import { captureException } from '@/integrations/observability/sentry'
 
 // Componentes pesados: lazy loading para reducir bundle inicial (~126KB)
 const CinematicIntro = lazy(() => import('@/components/CinematicIntro').then((m) => ({ default: m.CinematicIntro })))

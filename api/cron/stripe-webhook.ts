@@ -1,24 +1,20 @@
-export const config = { runtime: "edge" };
-
+import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { getCorsHeaders } from "../_shared/cors";
 
-export default async function handler(req: Request): Promise<Response> {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") {
-    return new Response("Method not allowed", { status: 405 });
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const sig = req.headers.get("stripe-signature");
+  const sig = req.headers["stripe-signature"] as string | undefined;
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
   if (!sig || !webhookSecret) {
-    return new Response(JSON.stringify({ error: "missing_signature" }), {
-      status: 400,
-      headers: { "content-type": "application/json" },
-    });
+    return res.status(400).json({ error: "missing_signature" });
   }
 
   try {
-    const body = await req.text();
+    const body = typeof req.body === "string" ? req.body : JSON.stringify(req.body);
 
     const { verifyWebhookSignature } = await import("../_shared/stripe");
     const event = verifyWebhookSignature(body, sig, webhookSecret);
@@ -39,15 +35,9 @@ export default async function handler(req: Request): Promise<Response> {
         console.log("[stripe-webhook] unhandled event", event.type);
     }
 
-    return new Response(JSON.stringify({ received: true }), {
-      status: 200,
-      headers: { "content-type": "application/json" },
-    });
+    return res.status(200).json({ received: true });
   } catch (err) {
     console.error("[stripe-webhook] error", err);
-    return new Response(JSON.stringify({ error: "webhook_error" }), {
-      status: 400,
-      headers: { "content-type": "application/json" },
-    });
+    return res.status(400).json({ error: "webhook_error" });
   }
 }
