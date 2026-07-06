@@ -1,7 +1,6 @@
-import { type NextRequest, NextResponse } from 'next/server';
 import { healthService } from '@/lib/health';
 
-export async function GET(_req: NextRequest) {
+export async function GET() {
   try {
     const report = await healthService.getReport([
       {
@@ -51,9 +50,9 @@ export async function GET(_req: NextRequest) {
 
     const statusCode = report.status === 'healthy' || report.status === 'degraded' ? 200 : 503;
 
-    return NextResponse.json(report, { status: statusCode });
+    return Response.json(report, { status: statusCode });
   } catch (err) {
-    return NextResponse.json(
+    return Response.json(
       {
         status: 'unhealthy',
         timestamp: new Date().toISOString(),

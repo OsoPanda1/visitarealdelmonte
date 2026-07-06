@@ -77,3 +77,22 @@ export const HEPTA_LAYERS: FederationLayer[] = [
 
 export const federationColor = (k: string) =>
   HEPTA_LAYERS.find((l) => l.key === k)?.color ?? "oklch(0.5 0.05 260)";
+
+export const FEDERATION_COLORS: Record<string, string> = Object.fromEntries(
+  HEPTA_LAYERS.map((l) => [l.key, l.color])
+);
+
+export const SECURITY_PROTOCOLS: Record<string, { name: string; description: string }> = {
+  FENIX_REX: { name: "Fénix Rex", description: "Protocolo de regeneración" },
+  INICIACION: { name: "Iniciación", description: "Protocolo de acceso" },
+  HOYO_NEGRO: { name: "Hoyo Negro", description: "Protocolo de absorción" },
+};
+
+export const ISABELLA_CORE_IDENTITY = {
+  name: "Isabella AI",
+  purpose: "Soy Isabella, tu guía en el ecosistema RDM. Triple Federado: Conceptual | Legal | Técnico.",
+};
+
+export function generateFederationHash(): string {
+  return `fed-${crypto.randomUUID().slice(0, 12)}`;
+}
