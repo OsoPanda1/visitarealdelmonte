@@ -21,7 +21,11 @@ export function setSpanAttribute(span: SpanRecord, key: string, value: string | 
   span.attributes[key] = value;
 }
 
-export async function withSpan<T>(name: string, fn: () => Promise<T> | T, attributes: Record<string, string | number> = {}): Promise<T> {
+export async function withSpan<T>(
+  name: string,
+  fn: () => Promise<T> | T,
+  attributes: Record<string, string | number> = {},
+): Promise<T> {
   const span = startManualSpan(name);
   const fallbackTraceId = createTraceId();
 

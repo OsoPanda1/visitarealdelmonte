@@ -3,13 +3,22 @@
  * Grupos, Noticias, Hashtags/Lotería, Conciertos/Música
  */
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { 
-  Users, Newspaper, Hash, Ticket, Music, Radio, 
-  TrendingUp, MessageCircle, Flame, Crown, Zap
-} from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import React from "react";
+import { motion } from "framer-motion";
+import {
+  Users,
+  Newspaper,
+  Hash,
+  Ticket,
+  Music,
+  Radio,
+  TrendingUp,
+  MessageCircle,
+  Flame,
+  Crown,
+  Zap,
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 // Tipos de datos
 interface GroupItem {
@@ -67,18 +76,17 @@ const GroupsColumn: React.FC<{ groups: GroupItem[] }> = ({ groups }) => (
         whileHover={{ x: 5 }}
         className="flex items-center gap-3 p-2 rounded-lg bg-card/50 hover:bg-card cursor-pointer transition-colors"
       >
-        <img 
-          src={group.avatar} 
-          alt={group.name} 
-          loading="lazy" className="w-10 h-10 rounded-full ring-2 ring-cyan-400/30"
+        <img
+          src={group.avatar}
+          alt={group.name}
+          loading="lazy"
+          className="w-10 h-10 rounded-full ring-2 ring-cyan-400/30"
         />
         <div className="flex-1 min-w-0">
           <p className="font-medium text-sm truncate">{group.name}</p>
           <p className="text-xs text-muted-foreground">{group.members.toLocaleString()} miembros</p>
         </div>
-        {group.isActive && (
-          <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-        )}
+        {group.isActive && <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />}
       </motion.div>
     ))}
   </div>
@@ -107,7 +115,9 @@ const NewsColumn: React.FC<{ news: NewsItem[] }> = ({ news }) => (
               LIVE
             </Badge>
           )}
-          <Badge variant="secondary" className="text-[10px] shrink-0">{item.category}</Badge>
+          <Badge variant="secondary" className="text-[10px] shrink-0">
+            {item.category}
+          </Badge>
         </div>
         <p className="font-medium text-sm mt-2 line-clamp-2">{item.title}</p>
         <p className="text-xs text-muted-foreground mt-1">{item.timestamp}</p>
@@ -117,7 +127,10 @@ const NewsColumn: React.FC<{ news: NewsItem[] }> = ({ news }) => (
 );
 
 // Columna de Hashtags y Lotería
-const HashtagsLotteryColumn: React.FC<{ hashtags: HashtagItem[]; lottery: LotteryItem[] }> = ({ hashtags, lottery }) => (
+const HashtagsLotteryColumn: React.FC<{ hashtags: HashtagItem[]; lottery: LotteryItem[] }> = ({
+  hashtags,
+  lottery,
+}) => (
   <div className="space-y-6">
     {/* Hashtags */}
     <div>
@@ -134,12 +147,11 @@ const HashtagsLotteryColumn: React.FC<{ hashtags: HashtagItem[]; lottery: Lotter
             transition={{ delay: i * 0.05 }}
             whileHover={{ scale: 1.05 }}
           >
-            <Badge 
-              variant="outline" 
-              className={`cursor-pointer ${tag.trending ? 'border-pink-400 text-pink-400' : ''}`}
+            <Badge
+              variant="outline"
+              className={`cursor-pointer ${tag.trending ? "border-pink-400 text-pink-400" : ""}`}
             >
-              {tag.trending && <Flame className="w-3 h-3 mr-1" />}
-              #{tag.tag}
+              {tag.trending && <Flame className="w-3 h-3 mr-1" />}#{tag.tag}
               <span className="ml-1 text-muted-foreground">{tag.count}</span>
             </Badge>
           </motion.div>
@@ -192,10 +204,11 @@ const ConcertsColumn: React.FC<{ concerts: ConcertItem[] }> = ({ concerts }) => 
         whileHover={{ scale: 1.02 }}
         className="relative rounded-lg overflow-hidden cursor-pointer group"
       >
-        <img 
-          src={concert.thumbnail} 
+        <img
+          src={concert.thumbnail}
           alt={concert.title}
-          loading="lazy" className="w-full h-24 object-cover transition-transform duration-500 group-hover:scale-110"
+          loading="lazy"
+          className="w-full h-24 object-cover transition-transform duration-500 group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
         <div className="absolute bottom-2 left-2 right-2">
@@ -217,35 +230,96 @@ const ConcertsColumn: React.FC<{ concerts: ConcertItem[] }> = ({ concerts }) => 
 const CategoryColumns: React.FC = () => {
   // Datos de ejemplo
   const groups: GroupItem[] = [
-    { id: '1', name: 'TAMV Developers', avatar: 'https://api.dicebear.com/7.x/shapes/svg?seed=dev', members: 2450, isActive: true },
-    { id: '2', name: 'Creadores Elite', avatar: 'https://api.dicebear.com/7.x/shapes/svg?seed=elite', members: 8900, isActive: true },
-    { id: '3', name: 'XR Explorers', avatar: 'https://api.dicebear.com/7.x/shapes/svg?seed=xr', members: 5200, isActive: false },
-    { id: '4', name: 'Música Sensitiva', avatar: 'https://api.dicebear.com/7.x/shapes/svg?seed=music', members: 12000, isActive: true },
+    {
+      id: "1",
+      name: "TAMV Developers",
+      avatar: "https://api.dicebear.com/7.x/shapes/svg?seed=dev",
+      members: 2450,
+      isActive: true,
+    },
+    {
+      id: "2",
+      name: "Creadores Elite",
+      avatar: "https://api.dicebear.com/7.x/shapes/svg?seed=elite",
+      members: 8900,
+      isActive: true,
+    },
+    {
+      id: "3",
+      name: "XR Explorers",
+      avatar: "https://api.dicebear.com/7.x/shapes/svg?seed=xr",
+      members: 5200,
+      isActive: false,
+    },
+    {
+      id: "4",
+      name: "Música Sensitiva",
+      avatar: "https://api.dicebear.com/7.x/shapes/svg?seed=music",
+      members: 12000,
+      isActive: true,
+    },
   ];
 
   const news: NewsItem[] = [
-    { id: '1', title: 'TAMV lanza nuevo protocolo Fénix Rex 4.0', category: 'Tech', isLive: false, timestamp: 'hace 2h' },
-    { id: '2', title: 'Concierto sensorial rompe récord de asistencia', category: 'Eventos', isLive: true, timestamp: 'AHORA' },
-    { id: '3', title: 'Isabella AI alcanza 1M de conversaciones', category: 'IA', isLive: false, timestamp: 'hace 5h' },
+    {
+      id: "1",
+      title: "TAMV lanza nuevo protocolo Fénix Rex 4.0",
+      category: "Tech",
+      isLive: false,
+      timestamp: "hace 2h",
+    },
+    {
+      id: "2",
+      title: "Concierto sensorial rompe récord de asistencia",
+      category: "Eventos",
+      isLive: true,
+      timestamp: "AHORA",
+    },
+    {
+      id: "3",
+      title: "Isabella AI alcanza 1M de conversaciones",
+      category: "IA",
+      isLive: false,
+      timestamp: "hace 5h",
+    },
   ];
 
   const hashtags: HashtagItem[] = [
-    { id: '1', tag: 'TAMVOnline', count: 45000, trending: true },
-    { id: '2', tag: 'IsabellaAI', count: 23000, trending: true },
-    { id: '3', tag: 'DreamSpaces', count: 18000, trending: false },
-    { id: '4', tag: 'MetaversoDestructor', count: 12000, trending: true },
-    { id: '5', tag: 'CreadoresUnidos', count: 8500, trending: false },
+    { id: "1", tag: "TAMVOnline", count: 45000, trending: true },
+    { id: "2", tag: "IsabellaAI", count: 23000, trending: true },
+    { id: "3", tag: "DreamSpaces", count: 18000, trending: false },
+    { id: "4", tag: "MetaversoDestructor", count: 12000, trending: true },
+    { id: "5", tag: "CreadoresUnidos", count: 8500, trending: false },
   ];
 
   const lottery: LotteryItem[] = [
-    { id: '1', name: 'Sorteo Celestial', prize: '50,000 TAU', endsIn: '2h 30m' },
-    { id: '2', name: 'Rifa XR Premium', prize: 'DreamSpace VIP', endsIn: '1d 5h' },
+    { id: "1", name: "Sorteo Celestial", prize: "50,000 TAU", endsIn: "2h 30m" },
+    { id: "2", name: "Rifa XR Premium", prize: "DreamSpace VIP", endsIn: "1d 5h" },
   ];
 
   const concerts: ConcertItem[] = [
-    { id: '1', title: 'Sinfonía Cuántica', artist: 'DJ Nebula', thumbnail: '/images/dia-muertos.jpg', isLive: true, viewers: 15420 },
-    { id: '2', title: 'Ecos del Metaverso', artist: 'Isabella Orchestra', thumbnail: '/images/penas-cargadas.jpg', isLive: false },
-    { id: '3', title: 'Noche de Creadores', artist: 'Various Artists', thumbnail: '/images/plaza-noche.jpg', isLive: false },
+    {
+      id: "1",
+      title: "Sinfonía Cuántica",
+      artist: "DJ Nebula",
+      thumbnail: "/images/dia-muertos.jpg",
+      isLive: true,
+      viewers: 15420,
+    },
+    {
+      id: "2",
+      title: "Ecos del Metaverso",
+      artist: "Isabella Orchestra",
+      thumbnail: "/images/penas-cargadas.jpg",
+      isLive: false,
+    },
+    {
+      id: "3",
+      title: "Noche de Creadores",
+      artist: "Various Artists",
+      thumbnail: "/images/plaza-noche.jpg",
+      isLive: false,
+    },
   ];
 
   return (

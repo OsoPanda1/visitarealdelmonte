@@ -20,12 +20,19 @@ export default function POIDetailPanel({ poiId, onClose }: POIDetailPanelProps) 
   const lastFocusRef = useRef<HTMLElement | null>(null);
 
   const poi = useMemo<TerritoryPOI | null>(
-    () => (poiId ? RDM_TERRITORY_POIS.find((p) => p.id === poiId) ?? null : null),
+    () => (poiId ? (RDM_TERRITORY_POIS.find((p) => p.id === poiId) ?? null) : null),
     [poiId],
   );
 
   const relatedChapter = useMemo(
-    () => (poi ? chapters.find((c) => c.federationLayer === (poi as unknown as { federationLayer?: string }).federationLayer) ?? chapters[0] : null),
+    () =>
+      poi
+        ? (chapters.find(
+            (c) =>
+              c.federationLayer ===
+              (poi as unknown as { federationLayer?: string }).federationLayer,
+          ) ?? chapters[0])
+        : null,
     [poi],
   );
 
@@ -80,7 +87,10 @@ export default function POIDetailPanel({ poiId, onClose }: POIDetailPanelProps) 
 
           <div className="p-5 space-y-4">
             <div className="space-y-1">
-              <h2 id={`poi-title-${poi.id}`} className="font-display text-2xl leading-tight text-[hsl(var(--foreground))]">
+              <h2
+                id={`poi-title-${poi.id}`}
+                className="font-display text-2xl leading-tight text-[hsl(var(--foreground))]"
+              >
                 {poi.name}
               </h2>
               <p className="text-xs text-[hsl(var(--muted-foreground))] flex items-center gap-1.5">
@@ -94,12 +104,18 @@ export default function POIDetailPanel({ poiId, onClose }: POIDetailPanelProps) 
             </p>
 
             <blockquote className="relative rounded-xl border-l-2 border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)] px-4 py-3 text-sm italic text-[hsl(var(--foreground)/0.8)]">
-              <Quote className="absolute -top-2 -left-2 h-4 w-4 text-[hsl(var(--gold))]" aria-hidden />
+              <Quote
+                className="absolute -top-2 -left-2 h-4 w-4 text-[hsl(var(--gold))]"
+                aria-hidden
+              />
               {poi.significance}
             </blockquote>
 
             {relatedChapter && (
-              <section aria-labelledby="poi-chapter" className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--muted)/0.3)] p-4">
+              <section
+                aria-labelledby="poi-chapter"
+                className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--muted)/0.3)] p-4"
+              >
                 <span className="text-[10px] uppercase tracking-widest text-[hsl(var(--electric))]">
                   Capítulo asociado
                 </span>
@@ -113,7 +129,10 @@ export default function POIDetailPanel({ poiId, onClose }: POIDetailPanelProps) 
                   {relatedChapter.blurb}
                 </p>
                 <Link
-                  to={`/capitulos${relatedChapter.href}`.replace("/capitulos/capitulos", "/capitulos")}
+                  to={`/capitulos${relatedChapter.href}`.replace(
+                    "/capitulos/capitulos",
+                    "/capitulos",
+                  )}
                   className="mt-3 inline-flex items-center gap-1.5 text-xs uppercase tracking-widest text-[hsl(var(--gold))] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--electric))] rounded"
                 >
                   <BookOpen className="h-3.5 w-3.5" /> Profundizar en la guía
@@ -138,7 +157,8 @@ export default function POIDetailPanel({ poiId, onClose }: POIDetailPanelProps) 
             </div>
 
             <p className="text-[10px] uppercase tracking-widest text-[hsl(var(--muted-foreground))] pt-3">
-              Federación · {String((poi as unknown as { federationId?: string }).federationId ?? "—")}
+              Federación ·{" "}
+              {String((poi as unknown as { federationId?: string }).federationId ?? "—")}
             </p>
           </div>
         </motion.aside>

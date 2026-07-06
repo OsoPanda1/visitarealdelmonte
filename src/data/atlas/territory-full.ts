@@ -24,13 +24,7 @@ export type FederationLayer =
 export type ImportanceLevel = 1 | 2 | 3; // 1 = referencia, 3 = detalle
 
 export type TerritorialEntityKind =
-  | "chapter"
-  | "mine"
-  | "paste"
-  | "street"
-  | "legend"
-  | "route"
-  | "event";
+  "chapter" | "mine" | "paste" | "street" | "legend" | "route" | "event";
 
 export type TerritorialNodeId = string;
 

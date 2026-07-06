@@ -41,7 +41,9 @@ export class ExternalNetworksConnector {
     return this.credentials.has(network);
   }
 
-  async broadcast(message: Omit<NetworkMessage, "id" | "timestamp" | "status">): Promise<Record<ExternalNetwork, boolean>> {
+  async broadcast(
+    message: Omit<NetworkMessage, "id" | "timestamp" | "status">,
+  ): Promise<Record<ExternalNetwork, boolean>> {
     const results: Record<ExternalNetwork, boolean> = {
       TWITTER: false,
       DISCORD: false,
@@ -96,7 +98,7 @@ export class ExternalNetworksConnector {
 
   getSentMessages(network?: ExternalNetwork, limit = 10): NetworkMessage[] {
     let messages = this.sentMessages;
-    if (network) messages = messages.filter(m => m.network === network);
+    if (network) messages = messages.filter((m) => m.network === network);
     return messages.slice(-limit);
   }
 
@@ -105,10 +107,10 @@ export class ExternalNetworksConnector {
     const stats: Record<string, { sent: number; failed: number; configured: boolean }> = {};
 
     for (const network of networks) {
-      const networkMessages = this.sentMessages.filter(m => m.network === network);
+      const networkMessages = this.sentMessages.filter((m) => m.network === network);
       stats[network] = {
-        sent: networkMessages.filter(m => m.status === "SENT").length,
-        failed: networkMessages.filter(m => m.status === "FAILED").length,
+        sent: networkMessages.filter((m) => m.status === "SENT").length,
+        failed: networkMessages.filter((m) => m.status === "FAILED").length,
         configured: this.credentials.has(network),
       };
     }
@@ -150,9 +152,21 @@ export class ExternalNetworksConnector {
     }
 
     const enc = new TextEncoder();
-    const hmacKey = await crypto.subtle.importKey("raw", enc.encode(creds.apiSecret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
-    const sig = await crypto.subtle.sign("HMAC", hmacKey, enc.encode(JSON.stringify(payloads[network])));
-    const signature = Array.from(new Uint8Array(sig)).map((b) => b.toString(16).padStart(2, "0")).join("");
+    const hmacKey = await crypto.subtle.importKey(
+      "raw",
+      enc.encode(creds.apiSecret),
+      { name: "HMAC", hash: "SHA-256" },
+      false,
+      ["sign"],
+    );
+    const sig = await crypto.subtle.sign(
+      "HMAC",
+      hmacKey,
+      enc.encode(JSON.stringify(payloads[network])),
+    );
+    const signature = Array.from(new Uint8Array(sig))
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
     headers["X-TAMV-Signature"] = signature;
 
     const response = await fetch(endpoint, {

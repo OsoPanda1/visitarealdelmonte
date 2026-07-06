@@ -1,5 +1,10 @@
 import { describe, it, expect } from "vitest";
-import { secureRandomInt, secureRandomFloat, secureRandomId, secureRandomHex } from "../secure-random";
+import {
+  secureRandomInt,
+  secureRandomFloat,
+  secureRandomId,
+  secureRandomHex,
+} from "../secure-random";
 
 describe("secure-random", () => {
   it("secureRandomInt is bounded", () => {

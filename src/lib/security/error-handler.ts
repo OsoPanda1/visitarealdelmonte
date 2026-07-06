@@ -1,35 +1,35 @@
-import { logger } from '@/lib/logger';
+import { logger } from "@/lib/logger";
 
 export class ApiError extends Error {
   constructor(
     message: string,
     public statusCode: number = 500,
-    public code: string = 'INTERNAL_ERROR',
+    public code: string = "INTERNAL_ERROR",
     public details?: Record<string, unknown>,
   ) {
     super(message);
-    this.name = 'ApiError';
+    this.name = "ApiError";
   }
 }
 
 export function badRequest(message: string, details?: Record<string, unknown>): ApiError {
-  return new ApiError(message, 400, 'BAD_REQUEST', details);
+  return new ApiError(message, 400, "BAD_REQUEST", details);
 }
 
-export function unauthorized(message = 'No autorizado'): ApiError {
-  return new ApiError(message, 401, 'UNAUTHORIZED');
+export function unauthorized(message = "No autorizado"): ApiError {
+  return new ApiError(message, 401, "UNAUTHORIZED");
 }
 
-export function forbidden(message = 'Acceso denegado'): ApiError {
-  return new ApiError(message, 403, 'FORBIDDEN');
+export function forbidden(message = "Acceso denegado"): ApiError {
+  return new ApiError(message, 403, "FORBIDDEN");
 }
 
-export function notFound(message = 'Recurso no encontrado'): ApiError {
-  return new ApiError(message, 404, 'NOT_FOUND');
+export function notFound(message = "Recurso no encontrado"): ApiError {
+  return new ApiError(message, 404, "NOT_FOUND");
 }
 
-export function tooManyRequests(message = 'Demasiadas solicitudes'): ApiError {
-  return new ApiError(message, 429, 'RATE_LIMITED');
+export function tooManyRequests(message = "Demasiadas solicitudes"): ApiError {
+  return new ApiError(message, 429, "RATE_LIMITED");
 }
 
 export function handleApiError(error: unknown): Response {
@@ -45,11 +45,11 @@ export function handleApiError(error: unknown): Response {
     );
   }
 
-  const message = error instanceof Error ? error.message : 'Error interno del servidor';
-  logger.error('[API] Error no manejado', { error });
+  const message = error instanceof Error ? error.message : "Error interno del servidor";
+  logger.error("[API] Error no manejado", { error });
 
   return Response.json(
-    { success: false, error: 'Error interno del servidor', code: 'INTERNAL_ERROR' },
+    { success: false, error: "Error interno del servidor", code: "INTERNAL_ERROR" },
     { status: 500 },
   );
 }

@@ -14,13 +14,16 @@ export default function RutaDelPaste() {
             <div className="h-10 w-10 rounded-xl bg-gold/15 flex items-center justify-center">
               <Utensils className="h-5 w-5 text-gold" />
             </div>
-            <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-gold/70">Experiencia Gastronómica · Interactiva</p>
+            <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-gold/70">
+              Experiencia Gastronómica · Interactiva
+            </p>
           </div>
           <h1 className="text-5xl md:text-6xl font-display font-bold tracking-tight">
             La <span className="text-gradient-gold italic">Ruta del Paste</span>
           </h1>
           <p className="mt-3 text-base font-body text-muted-foreground max-w-2xl">
-            Un recorrido por el alma cornish-mexicana de Real del Monte. Arrastra el mapa, haz zoom y pulsa cada punto para descubrir su historia.
+            Un recorrido por el alma cornish-mexicana de Real del Monte. Arrastra el mapa, haz zoom
+            y pulsa cada punto para descubrir su historia.
           </p>
         </motion.div>
 
@@ -34,12 +37,15 @@ export default function RutaDelPaste() {
 
         <div className="glass-card rounded-2xl border border-gold/20 p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-gold/70">Mis valoraciones</p>
-            <p className="text-sm font-body text-muted-foreground">Exporta tu recorrido en PDF o comparte tu opinión con el municipio.</p>
+            <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-gold/70">
+              Mis valoraciones
+            </p>
+            <p className="text-sm font-body text-muted-foreground">
+              Exporta tu recorrido en PDF o comparte tu opinión con el municipio.
+            </p>
           </div>
           <ShareRatingsButton pois={pois} />
         </div>
-
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {[
@@ -48,7 +54,9 @@ export default function RutaDelPaste() {
             { label: "Paradas culinarias", value: "6 puntos" },
           ].map((s) => (
             <div key={s.label} className="glass-card rounded-2xl p-5 border border-gold/15">
-              <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-gold/70 flex items-center gap-2"><Compass className="h-3 w-3" /> {s.label}</p>
+              <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-gold/70 flex items-center gap-2">
+                <Compass className="h-3 w-3" /> {s.label}
+              </p>
               <p className="mt-2 text-3xl font-display text-platinum">{s.value}</p>
             </div>
           ))}

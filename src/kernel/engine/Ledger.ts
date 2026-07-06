@@ -13,7 +13,8 @@ class Ledger {
     federation: FederationId,
     decision: MDX5Decision,
   ): LedgerEntry {
-    const prevHash = this.entries.length > 0 ? this.entries[this.entries.length - 1].hash : "GENESIS";
+    const prevHash =
+      this.entries.length > 0 ? this.entries[this.entries.length - 1].hash : "GENESIS";
 
     const entry: LedgerEntry = {
       id: uuidv4(),
@@ -47,22 +48,30 @@ class Ledger {
   }
 
   getByIntentId(intentId: string): LedgerEntry[] {
-    return this.entries.filter(e => e.intentId === intentId);
+    return this.entries.filter((e) => e.intentId === intentId);
   }
 
   getByFederation(federation: FederationId): LedgerEntry[] {
-    return this.entries.filter(e => e.federation === federation);
+    return this.entries.filter((e) => e.federation === federation);
   }
 
   getByTraceId(traceId: string): LedgerEntry[] {
-    return this.entries.filter(e => e.traceId === traceId);
+    return this.entries.filter((e) => e.traceId === traceId);
   }
 
   getAll(): LedgerEntry[] {
     return [...this.entries];
   }
 
-  private computeHash(entry: { id: string; action: string; intentId: string; federation: FederationId; timestamp: Date; traceId: string; prevHash: string }): string {
+  private computeHash(entry: {
+    id: string;
+    action: string;
+    intentId: string;
+    federation: FederationId;
+    timestamp: Date;
+    traceId: string;
+    prevHash: string;
+  }): string {
     const data = `${entry.id}:${entry.action}:${entry.intentId}:${entry.federation}:${entry.timestamp.toISOString()}:${entry.traceId}:${entry.prevHash}`;
     return createHash("sha256").update(data).digest("hex");
   }
@@ -72,7 +81,11 @@ class Ledger {
       const prev = this.entries[i - 1];
       const curr = this.entries[i];
       if (curr.prevHash !== prev.hash) {
-        logger.error("[LEDGER] Cadena corrupta en entrada", { id: curr.id, expected: prev.hash, got: curr.prevHash });
+        logger.error("[LEDGER] Cadena corrupta en entrada", {
+          id: curr.id,
+          expected: prev.hash,
+          got: curr.prevHash,
+        });
         return false;
       }
     }

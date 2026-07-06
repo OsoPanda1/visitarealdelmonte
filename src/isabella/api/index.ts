@@ -57,15 +57,17 @@ export class IsabellaAPI {
     return memoriaEmocional.obtenerEstadisticas(usuarioId);
   }
 
-  private clasificarIntencion(texto: string): "crisis_existencial" | "terapeutico" | "cocreacion" | "general" {
+  private clasificarIntencion(
+    texto: string,
+  ): "crisis_existencial" | "terapeutico" | "cocreacion" | "general" {
     const crisisWords = ["suicidio", "morir", "terminar", "sin sentido", "no quiero vivir"];
     const terapeuticoWords = ["terapia", "ayuda", "problema", "sufro", "dolor", "ansiedad"];
     const cocreacionWords = ["sueño", "crear", "proyecto", "vision", "futuro", "meta"];
 
     const lower = texto.toLowerCase();
-    if (crisisWords.some(w => lower.includes(w))) return "crisis_existencial";
-    if (terapeuticoWords.some(w => lower.includes(w))) return "terapeutico";
-    if (cocreacionWords.some(w => lower.includes(w))) return "cocreacion";
+    if (crisisWords.some((w) => lower.includes(w))) return "crisis_existencial";
+    if (terapeuticoWords.some((w) => lower.includes(w))) return "terapeutico";
+    if (cocreacionWords.some((w) => lower.includes(w))) return "cocreacion";
     return "general";
   }
 }

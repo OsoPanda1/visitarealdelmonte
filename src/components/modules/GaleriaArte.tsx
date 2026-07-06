@@ -3,31 +3,31 @@
  * Triple Federado: Conceptual | Legal | Técnico
  */
 
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { 
-  Palette, 
-  Heart, 
-  Eye, 
+import { useState } from "react";
+import { motion } from "framer-motion";
+import {
+  Palette,
+  Heart,
+  Eye,
   ShoppingCart,
   Filter,
   Grid,
   List,
   Sparkles,
   Shield,
-  Image as ImageIcon
-} from 'lucide-react';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
+  Image as ImageIcon,
+} from "lucide-react";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 
 interface Artwork {
   id: string;
@@ -45,130 +45,129 @@ interface Artwork {
 
 const MOCK_ARTWORKS: Artwork[] = [
   {
-    id: '1',
-    title: 'Sueños Cósmicos',
-    artist: 'Luna Digital',
-    artistAvatar: '/placeholder.svg',
-    imageUrl: '/placeholder.svg',
+    id: "1",
+    title: "Sueños Cósmicos",
+    artist: "Luna Digital",
+    artistAvatar: "/placeholder.svg",
+    imageUrl: "/placeholder.svg",
     price: 450,
     likes: 1234,
     views: 5678,
-    category: 'Digital',
+    category: "Digital",
     isNFT: true,
-    federationHash: 'TF-ART001'
+    federationHash: "TF-ART001",
   },
   {
-    id: '2',
-    title: 'Metaverso Infinito',
-    artist: 'Anubis Art',
-    artistAvatar: '/placeholder.svg',
-    imageUrl: '/placeholder.svg',
+    id: "2",
+    title: "Metaverso Infinito",
+    artist: "Anubis Art",
+    artistAvatar: "/placeholder.svg",
+    imageUrl: "/placeholder.svg",
     price: 780,
     likes: 2345,
     views: 8901,
-    category: '3D',
+    category: "3D",
     isNFT: true,
-    federationHash: 'TF-ART002'
+    federationHash: "TF-ART002",
   },
   {
-    id: '3',
-    title: 'Aurora Boreal Digital',
-    artist: 'Pixel Dreams',
-    artistAvatar: '/placeholder.svg',
-    imageUrl: '/placeholder.svg',
+    id: "3",
+    title: "Aurora Boreal Digital",
+    artist: "Pixel Dreams",
+    artistAvatar: "/placeholder.svg",
+    imageUrl: "/placeholder.svg",
     price: 320,
     likes: 890,
     views: 3456,
-    category: 'Paisaje',
+    category: "Paisaje",
     isNFT: false,
-    federationHash: 'TF-ART003'
+    federationHash: "TF-ART003",
   },
   {
-    id: '4',
-    title: 'Ciudades del Futuro',
-    artist: 'Tech Visionary',
-    artistAvatar: '/placeholder.svg',
-    imageUrl: '/placeholder.svg',
+    id: "4",
+    title: "Ciudades del Futuro",
+    artist: "Tech Visionary",
+    artistAvatar: "/placeholder.svg",
+    imageUrl: "/placeholder.svg",
     price: 1200,
     likes: 3456,
     views: 12000,
-    category: 'Arquitectura',
+    category: "Arquitectura",
     isNFT: true,
-    federationHash: 'TF-ART004'
+    federationHash: "TF-ART004",
   },
   {
-    id: '5',
-    title: 'Isabella Portrait',
-    artist: 'TAMV Studios',
-    artistAvatar: '/placeholder.svg',
-    imageUrl: '/placeholder.svg',
+    id: "5",
+    title: "Isabella Portrait",
+    artist: "TAMV Studios",
+    artistAvatar: "/placeholder.svg",
+    imageUrl: "/placeholder.svg",
     price: 2500,
     likes: 5678,
     views: 25000,
-    category: 'Retrato',
+    category: "Retrato",
     isNFT: true,
-    federationHash: 'TF-ART005'
+    federationHash: "TF-ART005",
   },
   {
-    id: '6',
-    title: 'Ondas Cuánticas',
-    artist: 'Quantum Artist',
-    artistAvatar: '/placeholder.svg',
-    imageUrl: '/placeholder.svg',
+    id: "6",
+    title: "Ondas Cuánticas",
+    artist: "Quantum Artist",
+    artistAvatar: "/placeholder.svg",
+    imageUrl: "/placeholder.svg",
     price: 650,
     likes: 1567,
     views: 6789,
-    category: 'Abstracto',
+    category: "Abstracto",
     isNFT: false,
-    federationHash: 'TF-ART006'
-  }
+    federationHash: "TF-ART006",
+  },
 ];
 
-const CATEGORIES = ['Todos', 'Digital', '3D', 'Paisaje', 'Retrato', 'Abstracto', 'Arquitectura'];
+const CATEGORIES = ["Todos", "Digital", "3D", "Paisaje", "Retrato", "Abstracto", "Arquitectura"];
 
 const GaleriaArte = () => {
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [selectedCategory, setSelectedCategory] = useState('Todos');
-  const [sortBy, setSortBy] = useState('popular');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [selectedCategory, setSelectedCategory] = useState("Todos");
+  const [sortBy, setSortBy] = useState("popular");
+  const [searchQuery, setSearchQuery] = useState("");
   const [likedArtworks, setLikedArtworks] = useState<string[]>([]);
 
-  const filteredArtworks = MOCK_ARTWORKS
-    .filter(art => selectedCategory === 'Todos' || art.category === selectedCategory)
-    .filter(art => art.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                   art.artist.toLowerCase().includes(searchQuery.toLowerCase()));
+  const filteredArtworks = MOCK_ARTWORKS.filter(
+    (art) => selectedCategory === "Todos" || art.category === selectedCategory,
+  ).filter(
+    (art) =>
+      art.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      art.artist.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
 
   const toggleLike = (id: string) => {
-    setLikedArtworks(prev => 
-      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
-    );
+    setLikedArtworks((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
   };
 
   return (
     <div className="min-h-screen bg-background p-6">
       {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mb-8"
-      >
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
         <div className="flex items-center gap-4 mb-4">
           <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 border border-pink-500/30 flex items-center justify-center">
             <Palette className="w-8 h-8 text-pink-400" />
           </div>
           <div>
             <h1 className="text-3xl font-bold">Galería de Arte TAMV</h1>
-            <p className="text-muted-foreground">Descubre y colecciona arte digital · Triple Federado</p>
+            <p className="text-muted-foreground">
+              Descubre y colecciona arte digital · Triple Federado
+            </p>
           </div>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
           {[
-            { label: 'Obras disponibles', value: '12,500+' },
-            { label: 'Artistas activos', value: '3,200+' },
-            { label: 'NFTs creados', value: '45K+' },
-            { label: 'Volumen total', value: '2.5M TAU' }
+            { label: "Obras disponibles", value: "12,500+" },
+            { label: "Artistas activos", value: "3,200+" },
+            { label: "NFTs creados", value: "45K+" },
+            { label: "Volumen total", value: "2.5M TAU" },
           ].map((stat, index) => (
             <motion.div
               key={stat.label}
@@ -200,7 +199,7 @@ const GaleriaArte = () => {
           {CATEGORIES.map((category) => (
             <Button
               key={category}
-              variant={selectedCategory === category ? 'default' : 'outline'}
+              variant={selectedCategory === category ? "default" : "outline"}
               size="sm"
               onClick={() => setSelectedCategory(category)}
             >
@@ -224,16 +223,16 @@ const GaleriaArte = () => {
 
           <div className="flex border border-border rounded-md">
             <Button
-              variant={viewMode === 'grid' ? 'secondary' : 'ghost'}
+              variant={viewMode === "grid" ? "secondary" : "ghost"}
               size="sm"
-              onClick={() => setViewMode('grid')}
+              onClick={() => setViewMode("grid")}
             >
               <Grid className="w-4 h-4" />
             </Button>
             <Button
-              variant={viewMode === 'list' ? 'secondary' : 'ghost'}
+              variant={viewMode === "list" ? "secondary" : "ghost"}
               size="sm"
-              onClick={() => setViewMode('list')}
+              onClick={() => setViewMode("list")}
             >
               <List className="w-4 h-4" />
             </Button>
@@ -242,7 +241,9 @@ const GaleriaArte = () => {
       </div>
 
       {/* Gallery Grid */}
-      <div className={`grid gap-6 ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}>
+      <div
+        className={`grid gap-6 ${viewMode === "grid" ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"}`}
+      >
         {filteredArtworks.map((artwork, index) => (
           <motion.div
             key={artwork.id}
@@ -254,7 +255,7 @@ const GaleriaArte = () => {
               {/* Image */}
               <div className="relative aspect-square bg-gradient-to-br from-pink-500/10 to-purple-500/10 flex items-center justify-center overflow-hidden">
                 <ImageIcon className="w-20 h-20 text-muted-foreground/20" />
-                
+
                 {/* Overlay */}
                 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                   <Button size="sm" variant="secondary">
@@ -279,13 +280,15 @@ const GaleriaArte = () => {
                 <Button
                   size="sm"
                   variant="ghost"
-                  className={`absolute top-3 right-3 ${likedArtworks.includes(artwork.id) ? 'text-red-500' : 'text-white'}`}
+                  className={`absolute top-3 right-3 ${likedArtworks.includes(artwork.id) ? "text-red-500" : "text-white"}`}
                   onClick={(e) => {
                     e.stopPropagation();
                     toggleLike(artwork.id);
                   }}
                 >
-                  <Heart className={`w-5 h-5 ${likedArtworks.includes(artwork.id) ? 'fill-current' : ''}`} />
+                  <Heart
+                    className={`w-5 h-5 ${likedArtworks.includes(artwork.id) ? "fill-current" : ""}`}
+                  />
                 </Button>
               </div>
 

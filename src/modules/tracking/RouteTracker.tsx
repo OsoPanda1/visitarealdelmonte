@@ -9,7 +9,7 @@ function track(data: { event_type: string; route: string }) {
       body: JSON.stringify(data),
       keepalive: true,
     }).catch(() => {});
-  } catch {}
+  } catch { /* ignore */ }
 }
 
 export function RouteTracker() {

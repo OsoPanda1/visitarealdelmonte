@@ -1,11 +1,23 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Quote, Heart, Sparkles, Search, Filter, ChevronDown, Share2, BookOpen, ArrowLeft,
+  Quote,
+  Heart,
+  Sparkles,
+  Search,
+  Filter,
+  ChevronDown,
+  Share2,
+  BookOpen,
+  ArrowLeft,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
@@ -61,7 +73,10 @@ export function DichosSection({ onBack }: DichosSectionProps) {
           }
         }
 
-        const { data } = await supabase.from("dichos").select("*").order("likes", { ascending: false });
+        const { data } = await supabase
+          .from("dichos")
+          .select("*")
+          .order("likes", { ascending: false });
         if (data) setDichos(data as Dicho[]);
       } finally {
         setLoading(false);
@@ -85,7 +100,11 @@ export function DichosSection({ onBack }: DichosSectionProps) {
   const handleLike = (id: string) => {
     setLikedDichos((prev) => {
       const s = new Set(prev);
-      if (s.has(id)) { s.delete(id); } else { s.add(id); }
+      if (s.has(id)) {
+        s.delete(id);
+      } else {
+        s.add(id);
+      }
       return s;
     });
   };
@@ -107,9 +126,13 @@ export function DichosSection({ onBack }: DichosSectionProps) {
     >
       {/* Hero */}
       <div className="relative py-24 px-6 md:px-16 lg:px-24 overflow-hidden">
-        <div className="absolute inset-0" style={{
-          background: "radial-gradient(ellipse at top, hsl(var(--accent) / 0.35) 0%, transparent 50%)",
-        }} />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse at top, hsl(var(--accent) / 0.35) 0%, transparent 50%)",
+          }}
+        />
 
         <div className="relative z-10 max-w-5xl mx-auto">
           <button
@@ -120,18 +143,21 @@ export function DichosSection({ onBack }: DichosSectionProps) {
             Volver al inicio
           </button>
 
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
             <p className="text-xs tracking-[0.4em] uppercase text-accent font-body mb-4 flex items-center gap-2">
               <BookOpen className="w-3 h-3" />
               Archivo Histórico · Real del Monte
             </p>
             <h1 className="text-4xl md:text-7xl font-display font-bold mb-4 leading-[0.9]">
-              Callejón de los{" "}
-              <span className="text-accent">Dichos</span>
+              Callejón de los <span className="text-accent">Dichos</span>
             </h1>
             <p className="text-foreground/60 font-body max-w-xl text-lg leading-relaxed">
-              La identidad de nuestro Pueblo Mágico codificada en 47 expresiones atemporales.
-              Un ecosistema lingüístico preservado en alta fidelidad.
+              La identidad de nuestro Pueblo Mágico codificada en 47 expresiones atemporales. Un
+              ecosistema lingüístico preservado en alta fidelidad.
             </p>
           </motion.div>
         </div>
@@ -199,7 +225,10 @@ export function DichosSection({ onBack }: DichosSectionProps) {
                   }}
                 >
                   <div className="absolute top-3 right-3">
-                    <Badge variant="outline" className="text-[10px] border-accent/30 text-accent font-body">
+                    <Badge
+                      variant="outline"
+                      className="text-[10px] border-accent/30 text-accent font-body"
+                    >
                       #{i + 1}
                     </Badge>
                   </div>
@@ -252,7 +281,10 @@ export function DichosSection({ onBack }: DichosSectionProps) {
               ? "Directorio Completo"
               : `${CATEGORIES.find((c) => c.id === selectedCategory)?.icon} ${CATEGORIES.find((c) => c.id === selectedCategory)?.label}`}
           </h2>
-          <Badge variant="outline" className="text-xs font-body border-border/50 text-muted-foreground">
+          <Badge
+            variant="outline"
+            className="text-xs font-body border-border/50 text-muted-foreground"
+          >
             {filteredDichos.length} resultados
           </Badge>
         </div>
@@ -266,7 +298,9 @@ export function DichosSection({ onBack }: DichosSectionProps) {
         ) : filteredDichos.length === 0 ? (
           <div className="text-center py-20">
             <Quote className="w-8 h-8 text-muted-foreground mx-auto mb-3" />
-            <p className="text-sm text-muted-foreground font-body">No existen registros bajo esos parámetros.</p>
+            <p className="text-sm text-muted-foreground font-body">
+              No existen registros bajo esos parámetros.
+            </p>
           </div>
         ) : (
           <div className="space-y-2 pb-24">
@@ -316,13 +350,17 @@ export function DichosSection({ onBack }: DichosSectionProps) {
                               <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-body mb-1">
                                 Jerga Original
                               </p>
-                              <p className="text-xs text-foreground/80 font-body italic">{d.jerga_original}</p>
+                              <p className="text-xs text-foreground/80 font-body italic">
+                                {d.jerga_original}
+                              </p>
                             </div>
                             <div>
                               <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-body mb-1">
                                 Traducción
                               </p>
-                              <p className="text-xs text-foreground/80 font-body">{d.significado}</p>
+                              <p className="text-xs text-foreground/80 font-body">
+                                {d.significado}
+                              </p>
                             </div>
                           </div>
                         </motion.div>

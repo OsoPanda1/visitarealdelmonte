@@ -9,23 +9,129 @@ import RealitoBubble from "@/components/RealitoBubble";
 import aerialImg from "@/assets/aerial-realmont.jpg";
 
 interface POI {
-  id: string; name: string; description: string;
-  x: number; y: number;
+  id: string;
+  name: string;
+  description: string;
+  x: number;
+  y: number;
   category: "historia" | "gastronomia" | "arquitectura" | "naturaleza" | "comercio";
-  rating?: number; time?: string; energy?: string;
+  rating?: number;
+  time?: string;
+  energy?: string;
 }
 
 const allPois: POI[] = [
-  { id: "1", name: "Mina de Acosta", description: "Desciende 400 metros al corazón de la montaña. La experiencia más emblemática del pueblo.", x: 35, y: 40, category: "historia", rating: 4.9, time: "2h", energy: "Alta" },
-  { id: "2", name: "Panteón Inglés", description: "El único cementerio en México con tumbas que miran hacia Cornwall, Inglaterra.", x: 62, y: 28, category: "historia", rating: 4.8, time: "1h", energy: "Baja" },
-  { id: "3", name: "Pastes El Portal", description: "Los pastes más antiguos del pueblo. Receta familiar de 4 generaciones.", x: 48, y: 55, category: "gastronomia", rating: 4.8, time: "30min", energy: "Baja" },
-  { id: "4", name: "Parroquia de la Asunción", description: "Cantera labrada del siglo XVIII que desafía la niebla desde lo alto.", x: 45, y: 45, category: "arquitectura", rating: 4.7, time: "45min", energy: "Baja" },
-  { id: "5", name: "Peña del Cuervo", description: "El mirador más alto. Vista panorámica de 360° sobre el valle.", x: 78, y: 35, category: "naturaleza", rating: 4.6, time: "2.5h", energy: "Alta" },
-  { id: "6", name: "Museo de Medicina", description: "Historia de la salud en un pueblo donde la altitud dictaba las reglas.", x: 28, y: 60, category: "historia", rating: 4.3, time: "1h", energy: "Baja" },
-  { id: "7", name: "Platería La Veta", description: "Joyería artesanal en plata con diseños inspirados en la herencia minera.", x: 52, y: 50, category: "comercio", rating: 4.5, time: "30min", energy: "Baja" },
-  { id: "8", name: "Hotel Mina Real", description: "Boutique hotel en antigua casona minera con vista panorámica.", x: 40, y: 48, category: "comercio", rating: 4.9, time: "—", energy: "Baja" },
-  { id: "9", name: "Cascada Estanzuela", description: "Sendero entre oyameles que lleva a una cascada cristalina.", x: 85, y: 60, category: "naturaleza", rating: 4.5, time: "3h", energy: "Alta" },
-  { id: "10", name: "Centro Cultural", description: "Exposiciones temporales, talleres y eventos culturales.", x: 43, y: 42, category: "arquitectura", rating: 4.2, time: "1.5h", energy: "Baja" },
+  {
+    id: "1",
+    name: "Mina de Acosta",
+    description:
+      "Desciende 400 metros al corazón de la montaña. La experiencia más emblemática del pueblo.",
+    x: 35,
+    y: 40,
+    category: "historia",
+    rating: 4.9,
+    time: "2h",
+    energy: "Alta",
+  },
+  {
+    id: "2",
+    name: "Panteón Inglés",
+    description: "El único cementerio en México con tumbas que miran hacia Cornwall, Inglaterra.",
+    x: 62,
+    y: 28,
+    category: "historia",
+    rating: 4.8,
+    time: "1h",
+    energy: "Baja",
+  },
+  {
+    id: "3",
+    name: "Pastes El Portal",
+    description: "Los pastes más antiguos del pueblo. Receta familiar de 4 generaciones.",
+    x: 48,
+    y: 55,
+    category: "gastronomia",
+    rating: 4.8,
+    time: "30min",
+    energy: "Baja",
+  },
+  {
+    id: "4",
+    name: "Parroquia de la Asunción",
+    description: "Cantera labrada del siglo XVIII que desafía la niebla desde lo alto.",
+    x: 45,
+    y: 45,
+    category: "arquitectura",
+    rating: 4.7,
+    time: "45min",
+    energy: "Baja",
+  },
+  {
+    id: "5",
+    name: "Peña del Cuervo",
+    description: "El mirador más alto. Vista panorámica de 360° sobre el valle.",
+    x: 78,
+    y: 35,
+    category: "naturaleza",
+    rating: 4.6,
+    time: "2.5h",
+    energy: "Alta",
+  },
+  {
+    id: "6",
+    name: "Museo de Medicina",
+    description: "Historia de la salud en un pueblo donde la altitud dictaba las reglas.",
+    x: 28,
+    y: 60,
+    category: "historia",
+    rating: 4.3,
+    time: "1h",
+    energy: "Baja",
+  },
+  {
+    id: "7",
+    name: "Platería La Veta",
+    description: "Joyería artesanal en plata con diseños inspirados en la herencia minera.",
+    x: 52,
+    y: 50,
+    category: "comercio",
+    rating: 4.5,
+    time: "30min",
+    energy: "Baja",
+  },
+  {
+    id: "8",
+    name: "Hotel Mina Real",
+    description: "Boutique hotel en antigua casona minera con vista panorámica.",
+    x: 40,
+    y: 48,
+    category: "comercio",
+    rating: 4.9,
+    time: "—",
+    energy: "Baja",
+  },
+  {
+    id: "9",
+    name: "Cascada Estanzuela",
+    description: "Sendero entre oyameles que lleva a una cascada cristalina.",
+    x: 85,
+    y: 60,
+    category: "naturaleza",
+    rating: 4.5,
+    time: "3h",
+    energy: "Alta",
+  },
+  {
+    id: "10",
+    name: "Centro Cultural",
+    description: "Exposiciones temporales, talleres y eventos culturales.",
+    x: 43,
+    y: 42,
+    category: "arquitectura",
+    rating: 4.2,
+    time: "1.5h",
+    energy: "Baja",
+  },
 ];
 
 const categoryInfo: Record<string, { color: string; label: string }> = {
@@ -49,12 +155,12 @@ const MapaVivo = () => {
   useEffect(() => {
     navigator.geolocation?.getCurrentPosition(
       (pos) => {
-        const x = ((pos.coords.longitude - (-98.68)) / ((-98.64) - (-98.68))) * 100;
+        const x = ((pos.coords.longitude - -98.68) / (-98.64 - -98.68)) * 100;
         const y = ((20.15 - pos.coords.latitude) / (20.15 - 20.12)) * 100;
         if (x >= 0 && x <= 100 && y >= 0 && y <= 100) setUserLocation({ x, y });
       },
       () => {},
-      { enableHighAccuracy: true }
+      { enableHighAccuracy: true },
     );
   }, []);
 
@@ -82,7 +188,9 @@ const MapaVivo = () => {
     ctx.globalCompositeOperation = "source-over";
   }, []);
 
-  useEffect(() => { if (!fogCleared) drawFog(); }, [fogCleared, drawFog]);
+  useEffect(() => {
+    if (!fogCleared) drawFog();
+  }, [fogCleared, drawFog]);
 
   const clearFog = useCallback(() => {
     setFogCleared(true);
@@ -96,7 +204,7 @@ const MapaVivo = () => {
     drawFog();
   };
 
-  const filtered = allPois.filter(p => {
+  const filtered = allPois.filter((p) => {
     if (activeCategory && p.category !== activeCategory) return false;
     if (searchQuery && !p.name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
     return true;
@@ -110,9 +218,14 @@ const MapaVivo = () => {
       <div className="pt-20 flex flex-col h-screen">
         {/* Top bar */}
         <div className="flex items-center gap-4 px-6 py-3 glass-nav">
-          <Link to="/" className="flex items-center gap-2 text-muted-foreground hover:text-gold transition-colors">
+          <Link
+            to="/"
+            className="flex items-center gap-2 text-muted-foreground hover:text-gold transition-colors"
+          >
             <ArrowLeft className="w-4 h-4" />
-            <span className="font-body text-xs tracking-wider uppercase hidden sm:inline">Inicio</span>
+            <span className="font-body text-xs tracking-wider uppercase hidden sm:inline">
+              Inicio
+            </span>
           </Link>
           <div className="h-4 w-px bg-border" />
           <h1 className="font-display text-lg text-gradient-gold">Mapa Vivo</h1>
@@ -129,7 +242,9 @@ const MapaVivo = () => {
               className="bg-transparent font-body text-xs text-foreground placeholder:text-muted-foreground focus:outline-none w-full"
             />
             {searchQuery && (
-              <button onClick={() => setSearchQuery("")}><X className="w-3 h-3 text-muted-foreground" /></button>
+              <button onClick={() => setSearchQuery("")}>
+                <X className="w-3 h-3 text-muted-foreground" />
+              </button>
             )}
           </div>
 
@@ -149,7 +264,9 @@ const MapaVivo = () => {
           <button
             onClick={() => setActiveCategory(null)}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-body text-[10px] tracking-wider uppercase transition-all ${
-              !activeCategory ? "btn-premium !px-4 !py-1.5 !text-[10px]" : "glass text-muted-foreground hover:text-gold"
+              !activeCategory
+                ? "btn-premium !px-4 !py-1.5 !text-[10px]"
+                : "glass text-muted-foreground hover:text-gold"
             }`}
           >
             <Layers className="w-3 h-3" /> Todos
@@ -159,7 +276,9 @@ const MapaVivo = () => {
               key={key}
               onClick={() => setActiveCategory(activeCategory === key ? null : key)}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-body text-[10px] tracking-wider uppercase transition-all ${
-                activeCategory === key ? "glass border-gold/40 text-gold" : "glass text-muted-foreground hover:text-foreground"
+                activeCategory === key
+                  ? "glass border-gold/40 text-gold"
+                  : "glass text-muted-foreground hover:text-foreground"
               }`}
             >
               <div className="w-2 h-2 rounded-full" style={{ backgroundColor: info.color }} />
@@ -176,7 +295,11 @@ const MapaVivo = () => {
             onMouseMove={(e) => handleMove(e.clientX, e.clientY)}
             onTouchMove={(e) => handleMove(e.touches[0].clientX, e.touches[0].clientY)}
           >
-            <img src={aerialImg} alt="Mapa aéreo de Real del Monte" className="w-full h-full object-cover" />
+            <img
+              src={aerialImg}
+              alt="Mapa aéreo de Real del Monte"
+              className="w-full h-full object-cover"
+            />
 
             {/* Fog canvas */}
             <canvas
@@ -185,7 +308,9 @@ const MapaVivo = () => {
             />
 
             {/* POI Markers */}
-            <div className={`absolute inset-0 transition-opacity duration-700 ${fogCleared ? "opacity-100" : "opacity-0"}`}>
+            <div
+              className={`absolute inset-0 transition-opacity duration-700 ${fogCleared ? "opacity-100" : "opacity-0"}`}
+            >
               {filtered.map((poi) => (
                 <button
                   key={poi.id}
@@ -208,7 +333,9 @@ const MapaVivo = () => {
                   className="absolute w-5 h-5 rounded-full bg-electric pulse-electric transform -translate-x-1/2 -translate-y-1/2 z-20 border-2 border-background"
                   style={{ left: `${userLocation.x}%`, top: `${userLocation.y}%` }}
                 >
-                  <span className="absolute -top-6 left-1/2 -translate-x-1/2 font-body text-[9px] text-electric whitespace-nowrap font-medium">Tú estás aquí</span>
+                  <span className="absolute -top-6 left-1/2 -translate-x-1/2 font-body text-[9px] text-electric whitespace-nowrap font-medium">
+                    Tú estás aquí
+                  </span>
                 </div>
               )}
             </div>
@@ -216,10 +343,16 @@ const MapaVivo = () => {
             {/* Fog instruction */}
             {!fogCleared && (
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <motion.p animate={{ opacity: [0.3, 0.7, 0.3] }} transition={{ duration: 3, repeat: Infinity }}
-                  className="font-display text-xl md:text-3xl text-gold/50 italic text-center px-4">
-                  Desliza para limpiar la niebla<br />
-                  <span className="text-sm text-platinum/30 not-italic font-body">y descubrir los secretos del pueblo</span>
+                <motion.p
+                  animate={{ opacity: [0.3, 0.7, 0.3] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                  className="font-display text-xl md:text-3xl text-gold/50 italic text-center px-4"
+                >
+                  Desliza para limpiar la niebla
+                  <br />
+                  <span className="text-sm text-platinum/30 not-italic font-body">
+                    y descubrir los secretos del pueblo
+                  </span>
                 </motion.p>
                 <button
                   onClick={clearFog}
@@ -238,17 +371,28 @@ const MapaVivo = () => {
               animate={{ opacity: 1, x: 0 }}
               className="absolute top-4 right-4 w-72 glass rounded-xl p-5 z-30"
             >
-              <button onClick={() => setSelectedPOI(null)} className="absolute top-3 right-3 text-muted-foreground hover:text-foreground">
+              <button
+                onClick={() => setSelectedPOI(null)}
+                className="absolute top-3 right-3 text-muted-foreground hover:text-foreground"
+              >
                 <X className="w-4 h-4" />
               </button>
               <div className="flex items-center gap-2 mb-2">
-                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: categoryInfo[selectedPOI.category]?.color }} />
-                <span className="font-body text-[9px] tracking-[0.2em] uppercase" style={{ color: categoryInfo[selectedPOI.category]?.color }}>
+                <div
+                  className="w-3 h-3 rounded-full"
+                  style={{ backgroundColor: categoryInfo[selectedPOI.category]?.color }}
+                />
+                <span
+                  className="font-body text-[9px] tracking-[0.2em] uppercase"
+                  style={{ color: categoryInfo[selectedPOI.category]?.color }}
+                >
                   {categoryInfo[selectedPOI.category]?.label}
                 </span>
               </div>
               <h3 className="font-display text-xl text-foreground mb-2">{selectedPOI.name}</h3>
-              <p className="font-body text-xs text-muted-foreground leading-relaxed mb-3">{selectedPOI.description}</p>
+              <p className="font-body text-xs text-muted-foreground leading-relaxed mb-3">
+                {selectedPOI.description}
+              </p>
               <div className="flex items-center gap-4 text-muted-foreground">
                 {selectedPOI.rating && (
                   <span className="flex items-center gap-1 font-body text-[10px]">
@@ -276,7 +420,9 @@ const MapaVivo = () => {
                 {Object.entries(categoryInfo).map(([key, info]) => (
                   <div key={key} className="flex items-center gap-1.5">
                     <div className="w-2 h-2 rounded-full" style={{ backgroundColor: info.color }} />
-                    <span className="font-body text-[9px] text-muted-foreground uppercase tracking-wider">{info.label}</span>
+                    <span className="font-body text-[9px] text-muted-foreground uppercase tracking-wider">
+                      {info.label}
+                    </span>
                   </div>
                 ))}
               </div>

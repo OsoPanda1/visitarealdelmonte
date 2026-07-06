@@ -11,9 +11,10 @@ export function TerritorialMap() {
   const highlightedSiteId = useMemo(() => {
     if (!decision) return null;
 
-    const nearest = REAL_DEL_MONTE_SITES
-      .map((site) => ({ site, distance: fastDistance(decision.coords, { lat: site.lat, lng: site.lng }) }))
-      .sort((a, b) => a.distance - b.distance)[0];
+    const nearest = REAL_DEL_MONTE_SITES.map((site) => ({
+      site,
+      distance: fastDistance(decision.coords, { lat: site.lat, lng: site.lng }),
+    })).sort((a, b) => a.distance - b.distance)[0];
 
     return nearest?.site.id ?? null;
   }, [decision]);
@@ -48,7 +49,9 @@ export function TerritorialMap() {
               >
                 <p className="text-sm font-medium">{site.name}</p>
                 <p className="text-xs text-muted-foreground">{site.category}</p>
-                {isFocused && <p className="text-xs text-accent mt-1">Foco activo por decisión GEN-7</p>}
+                {isFocused && (
+                  <p className="text-xs text-accent mt-1">Foco activo por decisión GEN-7</p>
+                )}
               </article>
             );
           })}

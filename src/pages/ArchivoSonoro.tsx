@@ -63,9 +63,9 @@ export const ArchivoSonoro: React.FC = () => {
           Archivo Sonoro · Real del Monte
         </h1>
         <p className="mt-2 text-sm text-zinc-400 max-w-2xl">
-          Conservemos viva la memoria de Real del Monte. Cada canción forma parte
-          de un esfuerzo independiente para preservar, documentar y difundir la
-          identidad cultural de nuestro pueblo.
+          Conservemos viva la memoria de Real del Monte. Cada canción forma parte de un esfuerzo
+          independiente para preservar, documentar y difundir la identidad cultural de nuestro
+          pueblo.
         </p>
       </header>
 
@@ -77,7 +77,13 @@ export const ArchivoSonoro: React.FC = () => {
               return (
                 <button
                   key={track.slug}
-                  onClick={() => { if (isActive) { togglePlay(); } else { play(); } }}
+                  onClick={() => {
+                    if (isActive) {
+                      togglePlay();
+                    } else {
+                      play();
+                    }
+                  }}
                   className={`flex items-start gap-3 p-3 rounded-lg border text-left transition
                     ${
                       isActive
@@ -91,12 +97,8 @@ export const ArchivoSonoro: React.FC = () => {
                     className="w-14 h-14 rounded-md object-cover border border-zinc-700"
                   />
                   <div className="flex flex-col">
-                    <span className="text-sm text-zinc-50 font-semibold">
-                      {track.title}
-                    </span>
-                    <span className="text-[11px] text-zinc-400">
-                      {track.artist}
-                    </span>
+                    <span className="text-sm text-zinc-50 font-semibold">{track.title}</span>
+                    <span className="text-[11px] text-zinc-400">{track.artist}</span>
                     {isActive && (
                       <span className="mt-1 text-[10px] text-emerald-300 font-mono uppercase tracking-[0.18em]">
                         {isPlaying ? "Reproduciendo…" : "Pausado"}
@@ -120,8 +122,8 @@ export const ArchivoSonoro: React.FC = () => {
               Conservemos viva la memoria de Real del Monte
             </h2>
             <p className="mt-2 text-[12px] text-zinc-400">
-              RDM Digital es financiado actualmente por su fundador y equipo de
-              desarrollo. Tu aportación nos ayuda a cubrir:
+              RDM Digital es financiado actualmente por su fundador y equipo de desarrollo. Tu
+              aportación nos ayuda a cubrir:
             </p>
             <ul className="mt-2 text-[12px] text-zinc-400 list-disc list-inside space-y-1">
               <li>Infraestructura tecnológica y servidores.</li>
@@ -136,9 +138,7 @@ export const ArchivoSonoro: React.FC = () => {
           </div>
 
           <div className="p-4 rounded-lg border border-emerald-600/60 bg-emerald-950/20">
-            <h3 className="text-sm font-semibold text-emerald-300">
-              Donar al Archivo Sonoro
-            </h3>
+            <h3 className="text-sm font-semibold text-emerald-300">Donar al Archivo Sonoro</h3>
             <div className="mt-3 grid grid-cols-3 gap-2">
               {DONATION_OPTIONS.map((opt) => (
                 <button

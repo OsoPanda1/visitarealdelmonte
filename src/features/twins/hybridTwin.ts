@@ -38,7 +38,10 @@ const sourceNames: Record<TwinSource, string> = {
 };
 
 function seededValue(seed: string, min: number, max: number) {
-  const hash = Array.from(seed).reduce((acc, char, index) => acc + char.charCodeAt(0) * (index + 3), 0);
+  const hash = Array.from(seed).reduce(
+    (acc, char, index) => acc + char.charCodeAt(0) * (index + 3),
+    0,
+  );
   const ratio = (Math.sin(hash) + 1) / 2;
   return min + ratio * (max - min);
 }
@@ -56,17 +59,21 @@ export function synthesizeTwinSignals(markers: MapMarkerData[]): TwinSignal[] {
   return markers.flatMap((marker) =>
     sources.map((source) => {
       const latencyMs = Math.round(seededValue(`${source}-${marker.id}-latency`, 45, 340));
-      const throughputPerMinute = Math.round(seededValue(`${source}-${marker.id}-throughput`, 12, marker.isPremium ? 145 : 84));
-      const confidence = Number(seededValue(`${source}-${marker.id}-confidence`, 0.72, 0.98).toFixed(2));
+      const throughputPerMinute = Math.round(
+        seededValue(`${source}-${marker.id}-throughput`, 12, marker.isPremium ? 145 : 84),
+      );
+      const confidence = Number(
+        seededValue(`${source}-${marker.id}-confidence`, 0.72, 0.98).toFixed(2),
+      );
       const health: TwinSignal["health"] =
-        latencyMs < 120 && confidence > 0.85
-          ? "healthy"
-          : latencyMs < 240
-            ? "degraded"
-            : "offline";
+        latencyMs < 120 && confidence > 0.85 ? "healthy" : latencyMs < 240 ? "degraded" : "offline";
 
       const mode: TwinSignal["mode"] =
-        source === "underrun-sim" ? "simulated" : source === "awesome-digital-twins" ? "historical" : "realtime";
+        source === "underrun-sim"
+          ? "simulated"
+          : source === "awesome-digital-twins"
+            ? "historical"
+            : "realtime";
 
       return {
         source,
@@ -91,7 +98,9 @@ export function buildTwinOverlaySummary(signals: TwinSignal[]): TwinOverlaySumma
 
   return Array.from(grouped.entries()).map(([source, items]) => {
     const throughputPerMinute = items.reduce((total, item) => total + item.throughputPerMinute, 0);
-    const avgLatencyMs = Math.round(items.reduce((total, item) => total + item.latencyMs, 0) / Math.max(1, items.length));
+    const avgLatencyMs = Math.round(
+      items.reduce((total, item) => total + item.latencyMs, 0) / Math.max(1, items.length),
+    );
     const incidents = items.filter((item) => item.health !== "healthy").length;
     const healthScore = Math.max(0, 100 - incidents * 8 - Math.round(avgLatencyMs / 20));
 

@@ -1,10 +1,28 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { 
-  Search, Bell, Wallet, Globe, User, Settings, CreditCard, 
-  ShoppingBag, Shield, Home, Users, Music, Sparkles, 
-  GraduationCap, Image, Gavel, Bot,
-  TrendingUp, Award, Ticket, MessageCircle, Video
+import {
+  Search,
+  Bell,
+  Wallet,
+  Globe,
+  User,
+  Settings,
+  CreditCard,
+  ShoppingBag,
+  Shield,
+  Home,
+  Users,
+  Music,
+  Sparkles,
+  GraduationCap,
+  Image,
+  Gavel,
+  Bot,
+  TrendingUp,
+  Award,
+  Ticket,
+  MessageCircle,
+  Video,
 } from "lucide-react";
 import Matrix3DEffect from "@/components/metaverse/Matrix3DEffect";
 import RetractableToolbar from "@/components/metaverse/RetractableToolbar";
@@ -53,14 +71,24 @@ const MetaverseHome: React.FC = () => {
 
   // Mock data
   const rdmThumbs = [
-    '/images/dia-muertos.jpg', '/images/penas-cargadas.jpg', '/images/plaza-noche.jpg',
-    '/images/mine-entrance.jpg', '/images/calles-coloridas.jpg', '/images/waterfall-forest.jpg',
-    '/images/panteon-ingles.jpg', '/images/iglesia.jpg', '/images/artesanias.jpg',
-    '/images/mirador-sunset.jpg', '/images/landscape-fog.jpg',
+    "/images/dia-muertos.jpg",
+    "/images/penas-cargadas.jpg",
+    "/images/plaza-noche.jpg",
+    "/images/mine-entrance.jpg",
+    "/images/calles-coloridas.jpg",
+    "/images/waterfall-forest.jpg",
+    "/images/panteon-ingles.jpg",
+    "/images/iglesia.jpg",
+    "/images/artesanias.jpg",
+    "/images/mirador-sunset.jpg",
+    "/images/landscape-fog.jpg",
   ];
   const rdmAvatars = [
-    '/images/ceo-tamv.jpg', '/images/pueblo.jpg', '/images/centro.jpg',
-    '/images/niebla.jpg', '/images/ecoturismo.jpg',
+    "/images/ceo-tamv.jpg",
+    "/images/pueblo.jpg",
+    "/images/centro.jpg",
+    "/images/niebla.jpg",
+    "/images/ecoturismo.jpg",
   ];
 
   const mockStories = Array.from({ length: 12 }, (_, i) => ({
@@ -78,7 +106,7 @@ const MetaverseHome: React.FC = () => {
     creatorAvatar: rdmAvatars[i % rdmAvatars.length],
     views: Math.floor(Math.random() * 100000),
     likes: Math.floor(Math.random() * 10000),
-    duration: `${Math.floor(Math.random() * 20) + 1}:${String(Math.floor(Math.random() * 60)).padStart(2, '0')}`,
+    duration: `${Math.floor(Math.random() * 20) + 1}:${String(Math.floor(Math.random() * 60)).padStart(2, "0")}`,
     isLive: i === 0,
   }));
 
@@ -91,8 +119,10 @@ const MetaverseHome: React.FC = () => {
       avatar: rdmAvatars[i % rdmAvatars.length],
       verified: i < 3,
     },
-    content: "Explorando las infinitas posibilidades del metaverso TAMV. ¡El futuro de las redes sociales está aquí! 🚀✨",
-    media: i % 2 === 0 ? [{ type: "image" as const, url: rdmThumbs[i % rdmThumbs.length] }] : undefined,
+    content:
+      "Explorando las infinitas posibilidades del metaverso TAMV. ¡El futuro de las redes sociales está aquí! 🚀✨",
+    media:
+      i % 2 === 0 ? [{ type: "image" as const, url: rdmThumbs[i % rdmThumbs.length] }] : undefined,
     likes: Math.floor(Math.random() * 5000),
     comments: Math.floor(Math.random() * 500),
     shares: Math.floor(Math.random() * 200),
@@ -107,7 +137,11 @@ const MetaverseHome: React.FC = () => {
       <Matrix3DEffect />
 
       {/* 4 Retractable Toolbars */}
-      <RetractableToolbar position="top" items={topBarItems} notificationType={activeNotification as any} />
+      <RetractableToolbar
+        position="top"
+        items={topBarItems}
+        notificationType={activeNotification as any}
+      />
       <RetractableToolbar position="left" items={leftBarItems} />
       <RetractableToolbar position="right" items={rightBarItems} />
       <RetractableToolbar position="bottom" items={bottomBarItems} />
@@ -120,20 +154,22 @@ const MetaverseHome: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center py-16"
         >
-          <h1 className="text-5xl md:text-7xl font-black mb-4"
+          <h1
+            className="text-5xl md:text-7xl font-black mb-4"
             style={{
               background: "linear-gradient(180deg, #fff 0%, #00f0ff 50%, #0066ff 100%)",
               backgroundClip: "text",
               WebkitBackgroundClip: "text",
               color: "transparent",
-              textShadow: "0 0 40px rgba(0, 240, 255, 0.5)"
+              textShadow: "0 0 40px rgba(0, 240, 255, 0.5)",
             }}
           >
             TAMV ONLINE
           </h1>
           <p className="text-xl text-red-400 tracking-[0.2em] font-bold">EL METAVERSO DESTRUCTOR</p>
           <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
-            Redefiniendo el futuro de las redes sociales. Donde los creadores son los verdaderos héroes.
+            Redefiniendo el futuro de las redes sociales. Donde los creadores son los verdaderos
+            héroes.
           </p>
         </motion.section>
 

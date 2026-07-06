@@ -81,9 +81,7 @@ const RetractableToolbar: React.FC<RetractableToolbarProps> = ({
   };
 
   const styles = getPositionStyles();
-  const notificationColor = notificationType
-    ? NOTIFICATION_COLORS[notificationType]
-    : undefined;
+  const notificationColor = notificationType ? NOTIFICATION_COLORS[notificationType] : undefined;
 
   const handleItemClick = (item: ToolbarItem) => {
     if (item.children && item.children.length > 0) {
@@ -96,11 +94,7 @@ const RetractableToolbar: React.FC<RetractableToolbarProps> = ({
 
   return (
     <motion.div
-      className={cn(
-        styles.container,
-        isExpanded ? styles.expanded : styles.collapsed,
-        className
-      )}
+      className={cn(styles.container, isExpanded ? styles.expanded : styles.collapsed, className)}
       onMouseEnter={() => setIsExpanded(true)}
       onMouseLeave={() => {
         setIsExpanded(false);
@@ -136,10 +130,10 @@ const RetractableToolbar: React.FC<RetractableToolbarProps> = ({
                 position === "top"
                   ? `linear-gradient(to bottom, ${notificationColor}33, transparent)`
                   : position === "bottom"
-                  ? `linear-gradient(to top, ${notificationColor}33, transparent)`
-                  : position === "left"
-                  ? `linear-gradient(to right, ${notificationColor}33, transparent)`
-                  : `linear-gradient(to left, ${notificationColor}33, transparent)`,
+                    ? `linear-gradient(to top, ${notificationColor}33, transparent)`
+                    : position === "left"
+                      ? `linear-gradient(to right, ${notificationColor}33, transparent)`
+                      : `linear-gradient(to left, ${notificationColor}33, transparent)`,
             }}
           />
         )}
@@ -151,16 +145,14 @@ const RetractableToolbar: React.FC<RetractableToolbarProps> = ({
           "relative z-10 flex h-full w-full",
           styles.layout === "flex-col"
             ? "flex-col items-stretch justify-between px-2 py-2"
-            : "flex-row items-center justify-between px-2 py-1.5"
+            : "flex-row items-center justify-between px-2 py-1.5",
         )}
       >
         {/* items */}
         <div
           className={cn(
             "flex gap-1",
-            styles.layout === "flex-col"
-              ? "flex-col items-stretch"
-              : "flex-row items-center"
+            styles.layout === "flex-col" ? "flex-col items-stretch" : "flex-row items-center",
           )}
         >
           {items.map((item) => (
@@ -175,7 +167,7 @@ const RetractableToolbar: React.FC<RetractableToolbarProps> = ({
                   "bg-slate-900/40 hover:bg-slate-800/60",
                   "border border-slate-500/40 hover:border-cyan-300/50",
                   activeSubmenu === item.id &&
-                    "bg-slate-900/70 border-cyan-300/60 shadow-[0_0_18px_rgba(59,245,255,0.7)]"
+                    "bg-slate-900/70 border-cyan-300/60 shadow-[0_0_18px_rgba(59,245,255,0.7)]",
                 )}
               >
                 <span className="relative flex items-center justify-center text-cyan-200 drop-shadow-[0_0_8px_rgba(59,245,255,0.6)]">
@@ -202,7 +194,7 @@ const RetractableToolbar: React.FC<RetractableToolbarProps> = ({
                     className={cn(
                       "absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1",
                       "flex items-center justify-center rounded-full",
-                      "bg-rose-500 text-white text-[10px] font-semibold shadow-[0_0_10px_rgba(248,113,113,0.9)]"
+                      "bg-rose-500 text-white text-[10px] font-semibold shadow-[0_0_10px_rgba(248,113,113,0.9)]",
                     )}
                   >
                     {item.badge > 99 ? "99+" : item.badge}
@@ -223,10 +215,10 @@ const RetractableToolbar: React.FC<RetractableToolbarProps> = ({
                       position === "top"
                         ? "top-full mt-2 left-0"
                         : position === "bottom"
-                        ? "bottom-full mb-2 left-0"
-                        : position === "left"
-                        ? "left-full ml-2 top-0"
-                        : "right-full mr-2 top-0"
+                          ? "bottom-full mb-2 left-0"
+                          : position === "left"
+                            ? "left-full ml-2 top-0"
+                            : "right-full mr-2 top-0",
                     )}
                   >
                     <div className="pointer-events-none absolute inset-[1px] rounded-[0.9rem] border border-transparent bg-[conic-gradient(from_150deg,rgba(59,245,255,0.35),rgba(192,132,252,0.35),rgba(59,245,255,0.35))] opacity-40 mix-blend-soft-light" />
@@ -264,7 +256,7 @@ const RetractableToolbar: React.FC<RetractableToolbarProps> = ({
             "flex items-center justify-center",
             styles.layout === "flex-col"
               ? "mt-2 pt-2 border-t border-slate-700/40"
-              : "ml-2 pl-2 border-l border-slate-700/40"
+              : "ml-2 pl-2 border-l border-slate-700/40",
           )}
         >
           <motion.div
@@ -275,31 +267,22 @@ const RetractableToolbar: React.FC<RetractableToolbarProps> = ({
                     ? 180
                     : 0
                   : position === "bottom"
-                  ? isExpanded
-                    ? 0
-                    : 180
-                  : position === "left"
-                  ? isExpanded
-                    ? 90
-                    : -90
-                  : isExpanded
-                  ? -90
-                  : 90,
+                    ? isExpanded
+                      ? 0
+                      : 180
+                    : position === "left"
+                      ? isExpanded
+                        ? 90
+                        : -90
+                      : isExpanded
+                        ? -90
+                        : 90,
             }}
             transition={{ duration: 0.25, ease: "easeOut" }}
             className="flex h-5 w-5 items-center justify-center text-cyan-200"
           >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.8"
-            >
-              <path
-                d="M9 18l6-6-6-6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+              <path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </motion.div>
         </motion.div>

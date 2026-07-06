@@ -3,12 +3,12 @@
  * Se transforma de globo a barra de búsqueda
  */
 
-import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Search, MapPin, X, Sparkles, Users, Music, Calendar, ShoppingBag } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import React, { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Search, MapPin, X, Sparkles, Users, Music, Calendar, ShoppingBag } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 interface GlobeSearchProps {
   onSearch?: (query: string, location?: string) => void;
@@ -16,7 +16,7 @@ interface GlobeSearchProps {
 
 const GlobeSearch: React.FC<GlobeSearchProps> = ({ onSearch }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -24,11 +24,11 @@ const GlobeSearch: React.FC<GlobeSearchProps> = ({ onSearch }) => {
   // Dibujar globo 3D simplificado
   useEffect(() => {
     if (isExpanded) return;
-    
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     canvas.width = 300;
@@ -39,19 +39,23 @@ const GlobeSearch: React.FC<GlobeSearchProps> = ({ onSearch }) => {
 
     const drawGlobe = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
+
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2;
       const radius = 100;
 
       // Gradiente del globo
       const gradient = ctx.createRadialGradient(
-        centerX - 30, centerY - 30, 10,
-        centerX, centerY, radius
+        centerX - 30,
+        centerY - 30,
+        10,
+        centerX,
+        centerY,
+        radius,
       );
-      gradient.addColorStop(0, 'rgba(0, 240, 255, 0.3)');
-      gradient.addColorStop(0.5, 'rgba(0, 100, 200, 0.2)');
-      gradient.addColorStop(1, 'rgba(20, 20, 50, 0.5)');
+      gradient.addColorStop(0, "rgba(0, 240, 255, 0.3)");
+      gradient.addColorStop(0.5, "rgba(0, 100, 200, 0.2)");
+      gradient.addColorStop(1, "rgba(20, 20, 50, 0.5)");
 
       // Dibujar esfera
       ctx.beginPath();
@@ -60,10 +64,10 @@ const GlobeSearch: React.FC<GlobeSearchProps> = ({ onSearch }) => {
       ctx.fill();
 
       // Líneas de longitud
-      ctx.strokeStyle = 'rgba(0, 240, 255, 0.3)';
+      ctx.strokeStyle = "rgba(0, 240, 255, 0.3)";
       ctx.lineWidth = 0.5;
       for (let i = 0; i < 12; i++) {
-        const angle = (i * 30 + rotation) * Math.PI / 180;
+        const angle = ((i * 30 + rotation) * Math.PI) / 180;
         ctx.beginPath();
         ctx.ellipse(
           centerX,
@@ -72,14 +76,14 @@ const GlobeSearch: React.FC<GlobeSearchProps> = ({ onSearch }) => {
           radius,
           0,
           0,
-          Math.PI * 2
+          Math.PI * 2,
         );
         ctx.stroke();
       }
 
       // Líneas de latitud
       for (let i = 1; i < 6; i++) {
-        const y = centerY - radius + (i * radius * 2 / 6);
+        const y = centerY - radius + (i * radius * 2) / 6;
         const latRadius = Math.sqrt(radius * radius - Math.pow(y - centerY, 2));
         ctx.beginPath();
         ctx.ellipse(centerX, y, latRadius, latRadius * 0.2, 0, 0, Math.PI * 2);
@@ -95,26 +99,26 @@ const GlobeSearch: React.FC<GlobeSearchProps> = ({ onSearch }) => {
         { x: 0.8, y: 0.5 },
       ];
 
-      cities.forEach(city => {
+      cities.forEach((city) => {
         const cx = centerX + (city.x - 0.5) * radius * 2 * Math.cos(rotation * 0.02);
         const cy = centerY + (city.y - 0.5) * radius * 1.5;
-        
+
         ctx.beginPath();
         ctx.arc(cx, cy, 3, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(0, 240, 255, 0.8)';
+        ctx.fillStyle = "rgba(0, 240, 255, 0.8)";
         ctx.fill();
-        
+
         // Glow
         ctx.beginPath();
         ctx.arc(cx, cy, 6, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(0, 240, 255, 0.2)';
+        ctx.fillStyle = "rgba(0, 240, 255, 0.2)";
         ctx.fill();
       });
 
       // Borde brillante
       ctx.beginPath();
       ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(0, 240, 255, 0.5)';
+      ctx.strokeStyle = "rgba(0, 240, 255, 0.5)";
       ctx.lineWidth = 2;
       ctx.stroke();
 
@@ -142,7 +146,7 @@ const GlobeSearch: React.FC<GlobeSearchProps> = ({ onSearch }) => {
 
   const handleClose = () => {
     setIsExpanded(false);
-    setQuery('');
+    setQuery("");
     setSelectedLocation(null);
   };
 
@@ -151,10 +155,10 @@ const GlobeSearch: React.FC<GlobeSearchProps> = ({ onSearch }) => {
   };
 
   const quickFilters = [
-    { icon: Users, label: 'Grupos', color: 'text-cyan-400' },
-    { icon: Music, label: 'Música', color: 'text-green-400' },
-    { icon: Calendar, label: 'Eventos', color: 'text-purple-400' },
-    { icon: ShoppingBag, label: 'Marketplace', color: 'text-amber-400' },
+    { icon: Users, label: "Grupos", color: "text-cyan-400" },
+    { icon: Music, label: "Música", color: "text-green-400" },
+    { icon: Calendar, label: "Eventos", color: "text-purple-400" },
+    { icon: ShoppingBag, label: "Marketplace", color: "text-amber-400" },
   ];
 
   return (
@@ -171,7 +175,7 @@ const GlobeSearch: React.FC<GlobeSearchProps> = ({ onSearch }) => {
             onClick={handleGlobeClick}
           >
             <canvas ref={canvasRef} className="w-[300px] h-[300px]" />
-            
+
             {/* Hover effect */}
             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
               <div className="bg-background/80 backdrop-blur-sm px-4 py-2 rounded-full flex items-center gap-2">
@@ -188,7 +192,7 @@ const GlobeSearch: React.FC<GlobeSearchProps> = ({ onSearch }) => {
           <motion.div
             key="searchbar"
             initial={{ opacity: 0, width: 300 }}
-            animate={{ opacity: 1, width: '100%' }}
+            animate={{ opacity: 1, width: "100%" }}
             exit={{ opacity: 0, width: 300 }}
             className="w-full max-w-4xl"
           >
@@ -201,12 +205,13 @@ const GlobeSearch: React.FC<GlobeSearchProps> = ({ onSearch }) => {
                     ref={inputRef}
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    placeholder={selectedLocation 
-                      ? `Buscar en ${selectedLocation}...` 
-                      : 'Buscar temas, grupos, eventos o locaciones...'
+                    placeholder={
+                      selectedLocation
+                        ? `Buscar en ${selectedLocation}...`
+                        : "Buscar temas, grupos, eventos o locaciones..."
                     }
                     className="border-0 bg-transparent focus-visible:ring-0 text-lg"
-                    onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                    onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                   />
                 </div>
 
@@ -228,12 +233,7 @@ const GlobeSearch: React.FC<GlobeSearchProps> = ({ onSearch }) => {
                   Buscar
                 </Button>
 
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={handleClose}
-                  className="shrink-0"
-                >
+                <Button variant="ghost" size="icon" onClick={handleClose} className="shrink-0">
                   <X className="w-5 h-5" />
                 </Button>
               </div>
@@ -255,7 +255,7 @@ const GlobeSearch: React.FC<GlobeSearchProps> = ({ onSearch }) => {
 
               {/* Ubicaciones sugeridas */}
               <div className="flex items-center gap-2 mt-3 justify-center flex-wrap">
-                {['CDMX', 'New York', 'Tokyo', 'Londres', 'São Paulo'].map((city) => (
+                {["CDMX", "New York", "Tokyo", "Londres", "São Paulo"].map((city) => (
                   <Badge
                     key={city}
                     variant="outline"
@@ -278,10 +278,9 @@ const GlobeSearch: React.FC<GlobeSearchProps> = ({ onSearch }) => {
         animate={{ opacity: 1 }}
         className="text-center text-muted-foreground mt-4"
       >
-        {isExpanded 
-          ? 'Encuentra cualquier cosa en el metaverso TAMV'
-          : 'Haz clic en el globo para explorar el mundo'
-        }
+        {isExpanded
+          ? "Encuentra cualquier cosa en el metaverso TAMV"
+          : "Haz clic en el globo para explorar el mundo"}
       </motion.p>
     </section>
   );

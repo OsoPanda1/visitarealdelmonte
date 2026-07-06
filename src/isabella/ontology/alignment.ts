@@ -35,10 +35,22 @@ export function evaluateAlignment(n: AlignmentInput): AlignmentResult {
   const themeScore = THEME_WEIGHTS[n.themeId];
 
   if (federationScore === 0) {
-    return { index, federationScore, themeScore, passed: false, blockedBy: `Federación ${n.federationId} no tiene peso asignado` };
+    return {
+      index,
+      federationScore,
+      themeScore,
+      passed: false,
+      blockedBy: `Federación ${n.federationId} no tiene peso asignado`,
+    };
   }
   if (themeScore === 0) {
-    return { index, federationScore, themeScore, passed: false, blockedBy: `Eje temático ${n.themeId} no tiene peso asignado` };
+    return {
+      index,
+      federationScore,
+      themeScore,
+      passed: false,
+      blockedBy: `Eje temático ${n.themeId} no tiene peso asignado`,
+    };
   }
 
   const threshold = 0.01;
@@ -49,6 +61,8 @@ export function evaluateAlignment(n: AlignmentInput): AlignmentResult {
     federationScore,
     themeScore,
     passed,
-    blockedBy: passed ? null : `Índice de alineación ${index.toFixed(4)} por debajo del umbral ${threshold}`,
+    blockedBy: passed
+      ? null
+      : `Índice de alineación ${index.toFixed(4)} por debajo del umbral ${threshold}`,
   };
 }

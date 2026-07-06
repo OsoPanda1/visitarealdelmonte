@@ -25,12 +25,12 @@ interface FederationData {
 
 /**
  * FederationBadge - Sistema de Triple Federado TAMV
- * 
+ *
  * Muestra el estado de verificación triple federado de cualquier entidad:
  * - Conceptual: Validación filosófica y de visión
  * - Legal: Validación de cumplimiento y derechos
  * - Técnico: Validación de integridad y seguridad
- * 
+ *
  * Triple Federado = Conceptual | Legal | Técnico
  */
 export default function FederationBadge({
@@ -38,7 +38,7 @@ export default function FederationBadge({
   entityId,
   hash,
   className,
-  showDetails = false
+  showDetails = false,
 }: FederationBadgeProps) {
   const [data, setData] = useState<FederationData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -50,7 +50,7 @@ export default function FederationBadge({
         // Check local registry (conceptual layer)
         // Check continental registry (legal layer)
         // Check metachain registry (technical layer)
-        
+
         // For demo purposes, simulate verification
         const isVerified = hash.length > 8;
         const now = new Date().toISOString();
@@ -63,7 +63,7 @@ export default function FederationBadge({
           conceptual_signer: isVerified ? "TAMV_GENESIS_NODE" : undefined,
           legal_signer: isVerified ? "DEKATEOTL_DAO" : undefined,
           technical_signer: isVerified ? "ANUBIS_SENTINEL" : undefined,
-          metachain_tx: isVerified ? `0x${hash.slice(0, 16)}...${hash.slice(-8)}` : undefined
+          metachain_tx: isVerified ? `0x${hash.slice(0, 16)}...${hash.slice(-8)}` : undefined,
         });
       } catch (err) {
         logger.error("Federation check error:", err);
@@ -80,13 +80,13 @@ export default function FederationBadge({
 
   if (loading) {
     return (
-      <motion.span 
+      <motion.span
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className={cn(
           "inline-flex items-center gap-1.5 px-2 py-1 text-xs rounded-full",
           "bg-muted/50 backdrop-blur-sm animate-pulse",
-          className
+          className,
         )}
       >
         <Shield className="w-3 h-3" />
@@ -100,41 +100,35 @@ export default function FederationBadge({
   }
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       className={cn("inline-flex flex-col gap-1", className)}
     >
       {/* Main Badge */}
-      <motion.span 
+      <motion.span
         whileHover={{ scale: 1.02 }}
         className={cn(
           "inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full",
           "transition-all duration-300 cursor-default",
           data.verified
             ? "bg-gradient-to-r from-emerald-500/20 via-cyan-500/20 to-blue-500/20 text-emerald-400 border border-emerald-500/30"
-            : "bg-destructive/20 text-destructive border border-destructive/30"
+            : "bg-destructive/20 text-destructive border border-destructive/30",
         )}
         style={{
-          boxShadow: data.verified 
+          boxShadow: data.verified
             ? "0 0 20px rgba(16, 185, 129, 0.2), inset 0 0 20px rgba(16, 185, 129, 0.1)"
-            : undefined
+            : undefined,
         }}
       >
-        {data.verified ? (
-          <ShieldCheck className="w-4 h-4" />
-        ) : (
-          <ShieldX className="w-4 h-4" />
-        )}
-        
+        {data.verified ? <ShieldCheck className="w-4 h-4" /> : <ShieldX className="w-4 h-4" />}
+
         <span className="font-semibold">
           {data.verified ? "TRIPLE FEDERADO" : "Sin Federación"}
         </span>
 
         {/* Hash Preview */}
-        <span className="opacity-70 font-mono text-[10px] ml-1">
-          {hash.slice(0, 8)}...
-        </span>
+        <span className="opacity-70 font-mono text-[10px] ml-1">{hash.slice(0, 8)}...</span>
 
         {/* Verification Dots */}
         {data.verified && (
@@ -148,7 +142,7 @@ export default function FederationBadge({
 
       {/* Details Panel */}
       {showDetails && data.verified && (
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: "auto" }}
           className="mt-2 p-3 rounded-lg bg-card/50 backdrop-blur-sm border border-border/30 space-y-2"
@@ -160,7 +154,7 @@ export default function FederationBadge({
               <span className="text-purple-400 font-semibold mb-1">CONCEPTUAL</span>
               <Clock className="w-2.5 h-2.5 text-muted-foreground mb-0.5" />
               <span className="text-muted-foreground">
-                {data.conceptual_at ? new Date(data.conceptual_at).toLocaleDateString() : 'N/A'}
+                {data.conceptual_at ? new Date(data.conceptual_at).toLocaleDateString() : "N/A"}
               </span>
             </div>
 
@@ -169,7 +163,7 @@ export default function FederationBadge({
               <span className="text-blue-400 font-semibold mb-1">LEGAL</span>
               <Clock className="w-2.5 h-2.5 text-muted-foreground mb-0.5" />
               <span className="text-muted-foreground">
-                {data.legal_at ? new Date(data.legal_at).toLocaleDateString() : 'N/A'}
+                {data.legal_at ? new Date(data.legal_at).toLocaleDateString() : "N/A"}
               </span>
             </div>
 
@@ -178,7 +172,7 @@ export default function FederationBadge({
               <span className="text-cyan-400 font-semibold mb-1">TÉCNICO</span>
               <Clock className="w-2.5 h-2.5 text-muted-foreground mb-0.5" />
               <span className="text-muted-foreground">
-                {data.technical_at ? new Date(data.technical_at).toLocaleDateString() : 'N/A'}
+                {data.technical_at ? new Date(data.technical_at).toLocaleDateString() : "N/A"}
               </span>
             </div>
           </div>

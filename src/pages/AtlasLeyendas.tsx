@@ -22,7 +22,9 @@ export default function AtlasLeyendas() {
             <article key={l.title} className="grid gap-8 md:grid-cols-12">
               <div className="md:col-span-3">
                 <div className="font-mono text-xs text-muted-foreground">0{i + 1}</div>
-                <div className="text-xs uppercase tracking-[0.3em] text-primary/80 mt-2">{l.era}</div>
+                <div className="text-xs uppercase tracking-[0.3em] text-primary/80 mt-2">
+                  {l.era}
+                </div>
               </div>
               <div className="md:col-span-9">
                 <h2 className="font-serif text-4xl font-bold text-balance">{l.title}</h2>

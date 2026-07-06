@@ -15,7 +15,9 @@ export default function EcosistemaLTOS() {
     >
       <Tabs defaultValue="platforms" className="w-full">
         <TabsList>
-          <TabsTrigger value="platforms">Plataformas ({platforms.platforms?.length ?? 0})</TabsTrigger>
+          <TabsTrigger value="platforms">
+            Plataformas ({platforms.platforms?.length ?? 0})
+          </TabsTrigger>
           <TabsTrigger value="repos">Repositorios ({repos.length})</TabsTrigger>
         </TabsList>
         <TabsContent value="platforms" className="grid gap-4 md:grid-cols-2 mt-4">
@@ -30,12 +32,16 @@ export default function EcosistemaLTOS() {
                   {p.federation && <Badge variant="secondary">{p.federation}</Badge>}
                   {p.files != null && <Badge variant="outline">{p.files} archivos</Badge>}
                   {p.pages != null && <Badge variant="outline">{p.pages} páginas</Badge>}
-                  {p.migrations != null && <Badge variant="outline">{p.migrations} migraciones</Badge>}
+                  {p.migrations != null && (
+                    <Badge variant="outline">{p.migrations} migraciones</Badge>
+                  )}
                 </div>
                 {p.highlights && (
                   <div className="flex flex-wrap gap-1">
                     {p.highlights.map((h: string) => (
-                      <span key={h} className="text-xs px-2 py-0.5 rounded bg-muted">{h}</span>
+                      <span key={h} className="text-xs px-2 py-0.5 rounded bg-muted">
+                        {h}
+                      </span>
                     ))}
                   </div>
                 )}
@@ -45,11 +51,19 @@ export default function EcosistemaLTOS() {
         </TabsContent>
         <TabsContent value="repos" className="grid gap-3 md:grid-cols-2 lg:grid-cols-3 mt-4">
           {repos.map((r: any) => (
-            <a key={r.name} href={r.url} target="_blank" rel="noopener noreferrer" className="block">
+            <a
+              key={r.name}
+              href={r.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block"
+            >
               <Card className="hover:border-primary transition-colors h-full">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm">{r.name}</CardTitle>
-                  <CardDescription className="text-xs line-clamp-2">{r.description || "—"}</CardDescription>
+                  <CardDescription className="text-xs line-clamp-2">
+                    {r.description || "—"}
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="flex gap-2 text-xs text-muted-foreground">
                   <Badge variant="outline">{r.language}</Badge>

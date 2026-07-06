@@ -3,10 +3,7 @@ import { logger } from "@/lib/logger";
 // Contexto: Real del Monte, turismo de alta densidad, clima complejo, eventos culturales.
 
 export interface QueryableDb {
-  query: (
-    sql: string,
-    params?: unknown[],
-  ) => Promise<{ rows: Array<Record<string, unknown>> }>;
+  query: (sql: string, params?: unknown[]) => Promise<{ rows: Array<Record<string, unknown>> }>;
 }
 
 export interface PublishClient {
@@ -14,10 +11,7 @@ export interface PublishClient {
 }
 
 /** Condiciones contextuales del territorio en un instante dado. */
-export type Clima =
-  | "despejado"
-  | "lluvia"
-  | "niebla_densa";
+export type Clima = "despejado" | "lluvia" | "niebla_densa";
 
 export interface ContextoCivilizatorio {
   clima: Clima;
@@ -93,9 +87,7 @@ export class ChronusEngine {
 
     const multiplicadorClima = this.calcularMultiplicadorClima(contexto.clima);
     const tensorEventos = this.calcularTensorEventos(contexto.eventos_activos);
-    const tensorConcurrencia = this.calcularTensorConcurrencia(
-      contexto.turistas_concurrentes,
-    );
+    const tensorConcurrencia = this.calcularTensorConcurrencia(contexto.turistas_concurrentes);
 
     const cargaBase = densidadFisica * multiplicadorClima;
     const cargaFinal = cargaBase + tensorEventos + tensorConcurrencia;
@@ -173,7 +165,7 @@ export class ChronusEngine {
 
     // Cada evento agrega 0.05 hasta un máximo de 0.20.
     const base = eventos.length * 0.05;
-    return Math.min(0.20, base);
+    return Math.min(0.2, base);
   }
 
   /** Aumenta presión según turistas concurrentes en todo el sistema. */
@@ -182,7 +174,7 @@ export class ChronusEngine {
 
     // 10K turistas → 0.25 de presión adicional, con tope en 0.30.
     const ratio = turistas_concurrentes / 10_000;
-    return Math.min(0.30, ratio * 0.25);
+    return Math.min(0.3, ratio * 0.25);
   }
 
   private clamp(value: number, min: number, max: number): number {
@@ -195,10 +187,12 @@ export class ChronusEngine {
     const { polygonId, presion, componentes, timestamp } = resultado;
 
     // Logging estructurado, idealmente reemplazable por tu capa de observabilidad.
-    logger.warn(
-      "[CHRONUS] ALERTA: Saturación crítica",
-      { polygonId, presion, componentes, timestamp },
-    );
+    logger.warn("[CHRONUS] ALERTA: Saturación crítica", {
+      polygonId,
+      presion,
+      componentes,
+      timestamp,
+    });
 
     const payload = JSON.stringify({
       zona_saturada: polygonId,

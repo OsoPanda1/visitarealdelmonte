@@ -119,9 +119,7 @@ export default function GamePortal() {
       if (!user) return null;
       const { data, error } = await supabase
         .from("profiles")
-        .select(
-          "user_id, total_minerals, level, xp, xp_to_next, streak_days, last_mine_at",
-        )
+        .select("user_id, total_minerals, level, xp, xp_to_next, streak_days, last_mine_at")
         .eq("user_id", user.id)
         .maybeSingle();
       if (error) {
@@ -210,10 +208,7 @@ export default function GamePortal() {
   const xpToNext = profile?.xp_to_next ?? 100;
   const streak = profile?.streak_days ?? 0;
 
-  const rank = useMemo(
-    () => getRank(level, totalMinerals),
-    [level, totalMinerals],
-  );
+  const rank = useMemo(() => getRank(level, totalMinerals), [level, totalMinerals]);
 
   // ---------- PREMIUM HANDLERS ----------
   const [selectedTier, setSelectedTier] = useState<"99" | "129">("99");
@@ -248,8 +243,7 @@ export default function GamePortal() {
         toast.error("No se recibió una URL válida de checkout");
       }
     } catch (e: unknown) {
-      const message =
-        e instanceof Error ? e.message : "No se pudo iniciar el pago";
+      const message = e instanceof Error ? e.message : "No se pudo iniciar el pago";
       toast.error(message);
     } finally {
       setBusyTier(null);
@@ -277,8 +271,7 @@ export default function GamePortal() {
         toast.error("No se recibió una URL válida de portal");
       }
     } catch (e: unknown) {
-      const message =
-        e instanceof Error ? e.message : "No se pudo abrir el portal";
+      const message = e instanceof Error ? e.message : "No se pudo abrir el portal";
       toast.error(message);
     }
   };
@@ -338,8 +331,7 @@ export default function GamePortal() {
       }
 
       // Harden: validar que data tenga code
-      const code =
-        (data as { code?: string } | null)?.code ?? "sin código visible";
+      const code = (data as { code?: string } | null)?.code ?? "sin código visible";
       toast.success(`¡Canjeado! Código: ${code}`);
 
       const { error: updateError } = await supabase
@@ -354,8 +346,7 @@ export default function GamePortal() {
         toast.error("Premio canjeado, pero no se pudo actualizar tus minerales");
       }
     } catch (e: unknown) {
-      const message =
-        e instanceof Error ? e.message : "Error inesperado al canjear";
+      const message = e instanceof Error ? e.message : "Error inesperado al canjear";
       toast.error(message);
     }
   };
@@ -371,12 +362,10 @@ export default function GamePortal() {
         </p>
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h1 className="text-4xl font-display font-bold tracking-tight">
-              Veta Soberana
-            </h1>
+            <h1 className="text-4xl font-display font-bold tracking-tight">Veta Soberana</h1>
             <p className="mt-1 text-sm font-body text-muted-foreground max-w-xl">
-              Mina minerales digitales recorriendo Real del Monte, sube de nivel
-              y canjéalos por experiencias reales en comercios federados.
+              Mina minerales digitales recorriendo Real del Monte, sube de nivel y canjéalos por
+              experiencias reales en comercios federados.
             </p>
           </div>
           {user && (
@@ -385,14 +374,7 @@ export default function GamePortal() {
                 <p className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground">
                   Rango
                 </p>
-                <p
-                  className={cn(
-                    "text-sm font-display font-semibold",
-                    rank.color,
-                  )}
-                >
-                  {rank.name}
-                </p>
+                <p className={cn("text-sm font-display font-semibold", rank.color)}>{rank.name}</p>
               </div>
               <div
                 className={cn(
@@ -469,14 +451,9 @@ export default function GamePortal() {
                 Racha diaria
               </p>
               <p className="text-2xl font-display font-bold">
-                {streak}{" "}
-                <span className="text-[11px] font-mono text-muted-foreground">
-                  días
-                </span>
+                {streak} <span className="text-[11px] font-mono text-muted-foreground">días</span>
               </p>
-              <p className="text-[11px] text-muted-foreground">
-                Mantén la racha para bonus de XP.
-              </p>
+              <p className="text-[11px] text-muted-foreground">Mantén la racha para bonus de XP.</p>
             </div>
           </div>
 
@@ -493,22 +470,14 @@ export default function GamePortal() {
                 isPremium ? "bg-gold/30" : "bg-secondary/40",
               )}
             >
-              <Crown
-                className={cn(
-                  "h-6 w-6",
-                  isPremium ? "text-gold" : "text-muted-foreground",
-                )}
-              />
+              <Crown className={cn("h-6 w-6", isPremium ? "text-gold" : "text-muted-foreground")} />
             </div>
             <div className="flex-1">
               <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
                 Estado
               </p>
               <p
-                className={cn(
-                  "text-lg font-display font-bold",
-                  isPremium && "text-gradient-gold",
-                )}
+                className={cn("text-lg font-display font-bold", isPremium && "text-gradient-gold")}
               >
                 {isPremium ? "Premium activo" : "Cuenta básica"}
               </p>
@@ -545,17 +514,14 @@ export default function GamePortal() {
           <div
             className="absolute inset-0 -z-10 opacity-25"
             style={{
-              background:
-                "radial-gradient(circle at 50% 10%, hsl(43 80% 55%), transparent 60%)",
+              background: "radial-gradient(circle at 50% 10%, hsl(43 80% 55%), transparent 60%)",
             }}
           />
           <Lock className="mx-auto mb-4 h-12 w-12 text-gold" />
-          <h3 className="text-3xl font-display font-bold">
-            Activa Veta Soberana Premium
-          </h3>
+          <h3 className="text-3xl font-display font-bold">Activa Veta Soberana Premium</h3>
           <p className="mt-3 mx-auto max-w-2xl text-sm font-body text-muted-foreground">
-            Elige tu plan y desbloquea minería digital, multiplicadores y acceso
-            completo a la bolsa de premios.
+            Elige tu plan y desbloquea minería digital, multiplicadores y acceso completo a la bolsa
+            de premios.
           </p>
 
           {/* Tier selector */}
@@ -572,7 +538,12 @@ export default function GamePortal() {
                 name: "Minero",
                 price: "$129",
                 highlight: true,
-                features: ["Multiplicador x2", "Minería remota", "Premios de alto valor", "Insignia exclusiva"],
+                features: [
+                  "Multiplicador x2",
+                  "Minería remota",
+                  "Premios de alto valor",
+                  "Insignia exclusiva",
+                ],
               },
             ].map((t) => (
               <button
@@ -589,15 +560,11 @@ export default function GamePortal() {
                   <span className="text-xs font-mono uppercase tracking-widest text-muted-foreground">
                     {t.name}
                   </span>
-                  {selectedTier === t.id && (
-                    <Check className="h-4 w-4 text-gold" />
-                  )}
+                  {selectedTier === t.id && <Check className="h-4 w-4 text-gold" />}
                 </div>
                 <p className="text-3xl font-display font-bold text-gradient-gold">
                   {t.price}
-                  <span className="text-xs font-mono text-muted-foreground">
-                    /mes
-                  </span>
+                  <span className="text-xs font-mono text-muted-foreground">/mes</span>
                 </p>
                 <ul className="mt-3 space-y-1">
                   {t.features.map((f) => (
@@ -623,10 +590,8 @@ export default function GamePortal() {
             {busyTier === selectedTier
               ? "Procesando..."
               : user
-              ? `Activar ${
-                  selectedTier === "129" ? "Minero" : "Básico"
-                }`
-              : "Iniciar sesión y activar"}
+                ? `Activar ${selectedTier === "129" ? "Minero" : "Básico"}`
+                : "Iniciar sesión y activar"}
           </button>
           <p className="mt-3 text-[10px] font-mono text-muted-foreground">
             Pago seguro con Stripe · Cancela cuando quieras ·{" "}
@@ -652,21 +617,15 @@ export default function GamePortal() {
             <div className="flex items-center gap-2">
               <Pickaxe className="h-5 w-5 text-gold" />
               <div>
-                <h2 className="text-lg font-display font-bold">
-                  Misiones activas
-                </h2>
+                <h2 className="text-lg font-display font-bold">Misiones activas</h2>
                 <p className="text-[12px] font-body text-muted-foreground">
-                  Completa misiones diarias y semanales para ganar XP y
-                  minerales extra.
+                  Completa misiones diarias y semanales para ganar XP y minerales extra.
                 </p>
               </div>
             </div>
             <div className="grid gap-3 md:grid-cols-2">
               {(missions || []).map((m) => {
-                const progressPct = Math.min(
-                  100,
-                  Math.round((m.progress / m.goal) * 100),
-                );
+                const progressPct = Math.min(100, Math.round((m.progress / m.goal) * 100));
                 return (
                   <div
                     key={m.id}
@@ -690,12 +649,8 @@ export default function GamePortal() {
                         +{m.points} ⚒️
                       </span>
                     </div>
-                    <h3 className="text-sm font-display font-semibold">
-                      {m.title}
-                    </h3>
-                    <p className="text-[12px] font-body text-muted-foreground">
-                      {m.description}
-                    </p>
+                    <h3 className="text-sm font-display font-semibold">{m.title}</h3>
+                    <p className="text-[12px] font-body text-muted-foreground">{m.description}</p>
                     <div>
                       <div className="flex justify-between text-[10px] font-mono text-muted-foreground">
                         <span>Progreso</span>
@@ -735,9 +690,7 @@ export default function GamePortal() {
             <div className="flex items-center gap-2">
               <Medal className="h-5 w-5 text-gold" />
               <div>
-                <h2 className="text-lg font-display font-bold">
-                  Logros recientes
-                </h2>
+                <h2 className="text-lg font-display font-bold">Logros recientes</h2>
                 <p className="text-[12px] font-body text-muted-foreground">
                   Hitos que has desbloqueado en la veta digital.
                 </p>
@@ -749,10 +702,10 @@ export default function GamePortal() {
                   a.icon === "trophy"
                     ? Trophy
                     : a.icon === "flame"
-                    ? Flame
-                    : a.icon === "swords"
-                    ? Swords
-                    : Medal;
+                      ? Flame
+                      : a.icon === "swords"
+                        ? Swords
+                        : Medal;
                 return (
                   <div
                     key={a.id}
@@ -762,20 +715,16 @@ export default function GamePortal() {
                       <Icon className="h-4 w-4 text-gold" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-[13px] font-display font-semibold">
-                        {a.title}
-                      </p>
-                      <p className="text-[11px] font-body text-muted-foreground">
-                        {a.description}
-                      </p>
+                      <p className="text-[13px] font-display font-semibold">{a.title}</p>
+                      <p className="text-[11px] font-body text-muted-foreground">{a.description}</p>
                     </div>
                   </div>
                 );
               })}
               {!achievements?.length && (
                 <p className="text-[12px] font-body text-muted-foreground">
-                  Aún no tienes logros. Completa misiones y canjea premios para
-                  empezar a desbloquearlos.
+                  Aún no tienes logros. Completa misiones y canjea premios para empezar a
+                  desbloquearlos.
                 </p>
               )}
             </div>
@@ -785,12 +734,9 @@ export default function GamePortal() {
                   <Users className="h-4 w-4 text-teal" />
                 </div>
                 <div>
-                  <p className="text-[12px] font-display font-semibold">
-                    Comunidad federada
-                  </p>
+                  <p className="text-[12px] font-display font-semibold">Comunidad federada</p>
                   <p className="text-[11px] font-body text-muted-foreground">
-                    Los premios provienen de comercios reales que sostienen la
-                    economía local.
+                    Los premios provienen de comercios reales que sostienen la economía local.
                   </p>
                 </div>
               </div>
@@ -836,8 +782,8 @@ export default function GamePortal() {
                       r.type === "experiencia"
                         ? "bg-gold/15 text-gold"
                         : r.type === "producto"
-                        ? "bg-teal/15 text-teal"
-                        : "bg-electric/15 text-electric",
+                          ? "bg-teal/15 text-teal"
+                          : "bg-electric/15 text-electric",
                     )}
                   >
                     {r.type}
@@ -857,9 +803,7 @@ export default function GamePortal() {
                 )}
                 <div className="mt-4 flex items-center justify-between">
                   <div>
-                    <p className="text-[10px] font-mono text-muted-foreground">
-                      Costo
-                    </p>
+                    <p className="text-[10px] font-mono text-muted-foreground">Costo</p>
                     <p className="text-lg font-display font-bold text-gradient-gold">
                       {r.points_cost.toLocaleString()} ⚒️
                     </p>
@@ -882,12 +826,12 @@ export default function GamePortal() {
                   {!user
                     ? "Inicia sesión"
                     : !isPremium
-                    ? "Requiere Premium"
-                    : totalMinerals < r.points_cost
-                    ? "Faltan minerales"
-                    : r.stock <= 0
-                    ? "Sin stock"
-                    : "Canjear"}
+                      ? "Requiere Premium"
+                      : totalMinerals < r.points_cost
+                        ? "Faltan minerales"
+                        : r.stock <= 0
+                          ? "Sin stock"
+                          : "Canjear"}
                 </button>
               </motion.div>
             );
@@ -907,11 +851,10 @@ export default function GamePortal() {
           Fórmula de sostenibilidad
         </h3>
         <p className="mt-2 text-[12px] font-body text-muted-foreground leading-relaxed">
-          Cada premio tiene un{" "}
-          <span className="font-mono text-gold">points_cost</span> asociado que
-          refleja su valor dentro de la economía federada. Al recorrer Real del
-          Monte, ganar minerales y canjearlos en la bolsa de premios, impulsas
-          comercios locales y activas una red de turismo sostenible.
+          Cada premio tiene un <span className="font-mono text-gold">points_cost</span> asociado que
+          refleja su valor dentro de la economía federada. Al recorrer Real del Monte, ganar
+          minerales y canjearlos en la bolsa de premios, impulsas comercios locales y activas una
+          red de turismo sostenible.
         </p>
       </motion.div>
     </div>

@@ -34,34 +34,154 @@ interface Image {
 
 const galleryImages: Image[] = [
   // Historia
-  { id: "1", src: minaImg, title: "Mina de Acosta", category: "Historia", description: "Descenso a 460 metros bajo tierra — la mina más famosa del pueblo" },
-  { id: "2", src: panteonImg, title: "Panteón Inglés", category: "Historia", description: "El cementerio anglicano más alto del mundo a 2,700 msnm" },
-  { id: "3", src: callesImg, title: "Calles Coloniales", category: "Historia", description: "Arquitectura del siglo XIX con influencia victoriana inglesa" },
-  { id: "4", src: heroImg, title: "Vista Panorámica", category: "Historia", description: "Real del Monte envuelto en su neblina característica" },
-  { id: "5", src: rdm01, title: "Centro Histórico", category: "Historia", description: "12 manzanas protegidas por el INAH" },
-  { id: "6", src: rdm02, title: "Parroquia de la Asunción", category: "Historia", description: "Templo barroco del siglo XVIII en la Plaza Principal" },
-  
+  {
+    id: "1",
+    src: minaImg,
+    title: "Mina de Acosta",
+    category: "Historia",
+    description: "Descenso a 460 metros bajo tierra — la mina más famosa del pueblo",
+  },
+  {
+    id: "2",
+    src: panteonImg,
+    title: "Panteón Inglés",
+    category: "Historia",
+    description: "El cementerio anglicano más alto del mundo a 2,700 msnm",
+  },
+  {
+    id: "3",
+    src: callesImg,
+    title: "Calles Coloniales",
+    category: "Historia",
+    description: "Arquitectura del siglo XIX con influencia victoriana inglesa",
+  },
+  {
+    id: "4",
+    src: heroImg,
+    title: "Vista Panorámica",
+    category: "Historia",
+    description: "Real del Monte envuelto en su neblina característica",
+  },
+  {
+    id: "5",
+    src: rdm01,
+    title: "Centro Histórico",
+    category: "Historia",
+    description: "12 manzanas protegidas por el INAH",
+  },
+  {
+    id: "6",
+    src: rdm02,
+    title: "Parroquia de la Asunción",
+    category: "Historia",
+    description: "Templo barroco del siglo XVIII en la Plaza Principal",
+  },
+
   // Cultura
-  { id: "7", src: pasteImg, title: "Paste Tradicional", category: "Cultura", description: "Herencia culinaria de los mineros cornish desde 1824" },
-  { id: "8", src: rdm1, title: "Portal del Comercio", category: "Cultura", description: "Tradición comercial en el centro del pueblo" },
-  { id: "9", src: rdm2, title: "Arquitectura Cornish", category: "Cultura", description: "Techos de dos aguas y chimeneas estilo inglés" },
-  { id: "10", src: rdm03, title: "Casa de la Cultura", category: "Cultura", description: "Eventos culturales y exposiciones permanentes" },
-  { id: "11", src: rdm04, title: "Festival del Paste", category: "Cultura", description: "Celebración anual en octubre con 50,000+ visitantes" },
-  
+  {
+    id: "7",
+    src: pasteImg,
+    title: "Paste Tradicional",
+    category: "Cultura",
+    description: "Herencia culinaria de los mineros cornish desde 1824",
+  },
+  {
+    id: "8",
+    src: rdm1,
+    title: "Portal del Comercio",
+    category: "Cultura",
+    description: "Tradición comercial en el centro del pueblo",
+  },
+  {
+    id: "9",
+    src: rdm2,
+    title: "Arquitectura Cornish",
+    category: "Cultura",
+    description: "Techos de dos aguas y chimeneas estilo inglés",
+  },
+  {
+    id: "10",
+    src: rdm03,
+    title: "Casa de la Cultura",
+    category: "Cultura",
+    description: "Eventos culturales y exposiciones permanentes",
+  },
+  {
+    id: "11",
+    src: rdm04,
+    title: "Festival del Paste",
+    category: "Cultura",
+    description: "Celebración anual en octubre con 50,000+ visitantes",
+  },
+
   // Naturaleza
-  { id: "12", src: penasImg, title: "Peñas Cargadas", category: "Naturaleza", description: "Formaciones rocosas gigantes en equilibrio imposible" },
-  { id: "13", src: rdm05, title: "Bosque de Oyamel", category: "Naturaleza", description: "Flora nativa de la Sierra de Pachuca" },
-  { id: "14", src: rdm06, title: "Mirador del Valle", category: "Naturaleza", description: "Vistas panorámicas desde 2,700 metros" },
-  { id: "15", src: rdm7, title: "Niebla Matutina", category: "Naturaleza", description: "180+ días de neblina al año crean una atmósfera mágica" },
-  { id: "16", src: rdm07, title: "Sierra de Pachuca", category: "Naturaleza", description: "Bosques de pinos y encinos rodean el pueblo" },
-  
+  {
+    id: "12",
+    src: penasImg,
+    title: "Peñas Cargadas",
+    category: "Naturaleza",
+    description: "Formaciones rocosas gigantes en equilibrio imposible",
+  },
+  {
+    id: "13",
+    src: rdm05,
+    title: "Bosque de Oyamel",
+    category: "Naturaleza",
+    description: "Flora nativa de la Sierra de Pachuca",
+  },
+  {
+    id: "14",
+    src: rdm06,
+    title: "Mirador del Valle",
+    category: "Naturaleza",
+    description: "Vistas panorámicas desde 2,700 metros",
+  },
+  {
+    id: "15",
+    src: rdm7,
+    title: "Niebla Matutina",
+    category: "Naturaleza",
+    description: "180+ días de neblina al año crean una atmósfera mágica",
+  },
+  {
+    id: "16",
+    src: rdm07,
+    title: "Sierra de Pachuca",
+    category: "Naturaleza",
+    description: "Bosques de pinos y encinos rodean el pueblo",
+  },
+
   // Gastronomía
-  { id: "17", src: rdm08, title: "Café de Altura", category: "Gastronomía", description: "Cafeterías artesanales con vista a las montañas" },
-  { id: "18", src: rmd5, title: "Restaurante Vista", category: "Gastronomía", description: "Comida típica con panorámica del valle" },
-  { id: "19", src: rmd6, title: "Barbacoa Estilo Hidalgo", category: "Gastronomía", description: "Tradición dominical en horno de tierra" },
-  
+  {
+    id: "17",
+    src: rdm08,
+    title: "Café de Altura",
+    category: "Gastronomía",
+    description: "Cafeterías artesanales con vista a las montañas",
+  },
+  {
+    id: "18",
+    src: rmd5,
+    title: "Restaurante Vista",
+    category: "Gastronomía",
+    description: "Comida típica con panorámica del valle",
+  },
+  {
+    id: "19",
+    src: rmd6,
+    title: "Barbacoa Estilo Hidalgo",
+    category: "Gastronomía",
+    description: "Tradición dominical en horno de tierra",
+  },
+
   // Arte y Mapas
-  { id: "20", src: mapaRdm, title: "Mapa Turístico", category: "Arte", description: "Mapa ilustrado de los principales atractivos" },
+  {
+    id: "20",
+    src: mapaRdm,
+    title: "Mapa Turístico",
+    category: "Arte",
+    description: "Mapa ilustrado de los principales atractivos",
+  },
 ];
 
 const categories = ["Todas", "Historia", "Cultura", "Naturaleza", "Gastronomía", "Arte"];
@@ -71,9 +191,10 @@ export const ImageGallery = () => {
   const [selectedImage, setSelectedImage] = useState<Image | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const filteredImages = selectedCategory === "Todas" 
-    ? galleryImages 
-    : galleryImages.filter(img => img.category === selectedCategory);
+  const filteredImages =
+    selectedCategory === "Todas"
+      ? galleryImages
+      : galleryImages.filter((img) => img.category === selectedCategory);
 
   const openLightbox = (image: Image, index: number) => {
     setSelectedImage(image);
@@ -81,17 +202,19 @@ export const ImageGallery = () => {
   };
 
   const navigate = (direction: "prev" | "next") => {
-    const newIndex = direction === "prev" 
-      ? (currentIndex - 1 + filteredImages.length) % filteredImages.length
-      : (currentIndex + 1) % filteredImages.length;
+    const newIndex =
+      direction === "prev"
+        ? (currentIndex - 1 + filteredImages.length) % filteredImages.length
+        : (currentIndex + 1) % filteredImages.length;
     setCurrentIndex(newIndex);
     setSelectedImage(filteredImages[newIndex]);
   };
 
   return (
-    <section className="py-20"
+    <section
+      className="py-20"
       style={{
-        background: 'linear-gradient(135deg, hsl(var(--crystal-clear)/0.2), transparent 60%)',
+        background: "linear-gradient(135deg, hsl(var(--crystal-clear)/0.2), transparent 60%)",
       }}
     >
       <div className="container mx-auto px-4 md:px-8">
@@ -127,7 +250,7 @@ export const ImageGallery = () => {
               {category}
               {category !== "Todas" && (
                 <span className="ml-1 text-xs opacity-60">
-                  ({galleryImages.filter(i => i.category === category).length})
+                  ({galleryImages.filter((i) => i.category === category).length})
                 </span>
               )}
             </button>
@@ -155,7 +278,7 @@ export const ImageGallery = () => {
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                
+
                 <div className="absolute inset-0 flex flex-col justify-end p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <span className="text-[10px] uppercase tracking-wider text-amber-400 mb-1">
                     {image.category}
@@ -191,13 +314,19 @@ export const ImageGallery = () => {
             </button>
 
             <button
-              onClick={(e) => { e.stopPropagation(); navigate("prev"); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate("prev");
+              }}
               className="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition-colors z-10"
             >
               <ChevronLeft className="w-6 h-6 text-white" />
             </button>
             <button
-              onClick={(e) => { e.stopPropagation(); navigate("next"); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate("next");
+              }}
               className="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition-colors z-10"
             >
               <ChevronRight className="w-6 h-6 text-white" />
@@ -214,9 +343,10 @@ export const ImageGallery = () => {
               <img
                 src={selectedImage.src}
                 alt={selectedImage.title}
-                loading="lazy" className="max-w-full max-h-[80vh] object-contain rounded-lg"
+                loading="lazy"
+                className="max-w-full max-h-[80vh] object-contain rounded-lg"
               />
-              
+
               <div className="absolute -bottom-20 left-0 right-0 text-center">
                 <span className="text-amber-400 text-sm uppercase tracking-wider">
                   {selectedImage.category}

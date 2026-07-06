@@ -84,7 +84,9 @@ const NavBar = () => {
   }, [location.pathname]);
 
   const isActive = (path: string) =>
-    path === "/" ? location.pathname === "/" : location.pathname.startsWith(path.split("#")[0]) && path !== "/#mapa";
+    path === "/"
+      ? location.pathname === "/"
+      : location.pathname.startsWith(path.split("#")[0]) && path !== "/#mapa";
 
   return (
     <>
@@ -105,11 +107,19 @@ const NavBar = () => {
           <div className="flex items-center justify-between gap-4">
             <Link to="/" className="group flex items-center gap-3">
               <div className="relative h-11 w-11 overflow-hidden rounded-full ring-1 ring-amber-300/30 shadow-[0_0_18px_-4px_hsla(43,80%,55%,0.55)] transition-transform group-hover:scale-105">
-                <img src={rdmLogo} alt="Logo oficial RDM Digital Nexus" className="h-full w-full object-cover" />
+                <img
+                  src={rdmLogo}
+                  alt="Logo oficial RDM Digital Nexus"
+                  className="h-full w-full object-cover"
+                />
               </div>
               <div>
-                <span className="block font-display text-lg leading-none text-white/95">RDM Digital Nexus</span>
-                <span className="block font-body text-[10px] tracking-[0.28em] uppercase text-cyan-100/55">LTOS Territorial</span>
+                <span className="block font-display text-lg leading-none text-white/95">
+                  RDM Digital Nexus
+                </span>
+                <span className="block font-body text-[10px] tracking-[0.28em] uppercase text-cyan-100/55">
+                  LTOS Territorial
+                </span>
               </div>
             </Link>
 
@@ -131,7 +141,9 @@ const NavBar = () => {
                       }`}
                     >
                       {plano.title}
-                      <ChevronDown className={`h-3 w-3 transition-transform ${open ? "rotate-180" : ""}`} />
+                      <ChevronDown
+                        className={`h-3 w-3 transition-transform ${open ? "rotate-180" : ""}`}
+                      />
                     </button>
 
                     <AnimatePresence>

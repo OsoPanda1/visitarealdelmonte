@@ -17,7 +17,7 @@ const EnciclopediaUniversal = () => (
     subtitle="Base de Conocimiento Integrada — 6 Fuentes, Grafo Cuántico, Síntesis IA"
   >
     <InfoBox type="info" title="Conocimiento Unificado">
-      La Enciclopedia Universal integra múltiples fuentes de conocimiento en un grafo cuántico que 
+      La Enciclopedia Universal integra múltiples fuentes de conocimiento en un grafo cuántico que
       permite búsquedas semánticas, síntesis inteligente y rutas de aprendizaje personalizadas.
     </InfoBox>
 
@@ -38,11 +38,17 @@ const EnciclopediaUniversal = () => (
     <Section title="Motor de Síntesis" icon={Brain}>
       <div className="rounded-lg border border-border/50 bg-card/30 p-4 font-mono text-xs space-y-2">
         <div className="text-muted-foreground"># UniversalEncyclopedia Pipeline</div>
-        <div>1. <span className="text-primary">search_universal</span>(query)</div>
+        <div>
+          1. <span className="text-primary">search_universal</span>(query)
+        </div>
         <div className="pl-4">→ Búsqueda paralela en 6 fuentes</div>
-        <div>2. <span className="text-primary">knowledge_graph</span>.synthesize(results)</div>
+        <div>
+          2. <span className="text-primary">knowledge_graph</span>.synthesize(results)
+        </div>
         <div className="pl-4">→ Grafo cuántico de relaciones semánticas</div>
-        <div>3. <span className="text-primary">rank_and_explain</span>(synthesized)</div>
+        <div>
+          3. <span className="text-primary">rank_and_explain</span>(synthesized)
+        </div>
         <div className="pl-4">→ Resultados rankeados con explicaciones XAI</div>
       </div>
     </Section>
@@ -56,7 +62,10 @@ const EnciclopediaUniversal = () => (
           "Colaboración global con expertos conectados",
           "Innovación emergente por conexiones inesperadas",
         ].map((item) => (
-          <div key={item} className="flex items-center gap-3 rounded-md border border-border/50 bg-muted/20 px-3 py-2">
+          <div
+            key={item}
+            className="flex items-center gap-3 rounded-md border border-border/50 bg-muted/20 px-3 py-2"
+          >
             <span className="text-primary">◆</span>
             <span className="text-sm text-muted-foreground">{item}</span>
           </div>

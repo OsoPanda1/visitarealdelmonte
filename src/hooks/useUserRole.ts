@@ -11,33 +11,57 @@ export function useUserRole() {
   useEffect(() => {
     let cancel = false;
     const load = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (cancel) return;
       setUserId(user?.id ?? null);
-      if (!user) { setRoles([]); setLoading(false); return; }
+      if (!user) {
+        setRoles([]);
+        setLoading(false);
+        return;
+      }
       const { data } = await supabase.from("user_roles").select("role").eq("user_id", user.id);
       if (cancel) return;
-      setRoles(((data ?? []).map((r) => r.role)) as AppRole[]);
+      setRoles((data ?? []).map((r) => r.role) as AppRole[]);
       setLoading(false);
     };
     load();
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => load());
-    return () => { cancel = true; subscription.unsubscribe(); };
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(() => load());
+    return () => {
+      cancel = true;
+      subscription.unsubscribe();
+    };
   }, []);
 
   const has = (r: AppRole) => roles.includes(r);
-  return { roles, userId, loading, isAdmin: has("admin"), isOperador: has("operador"), isLector: has("lector"), has };
+  return {
+    roles,
+    userId,
+    loading,
+    isAdmin: has("admin"),
+    isOperador: has("operador"),
+    isLector: has("lector"),
+    has,
+  };
 }
 
 export async function logAudit(action: string, resource: string, detail?: unknown) {
   try {
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) return;
     await supabase.from("audit_log").insert({
       actor_id: user.id,
       actor_email: user.email ?? null,
-      action, resource,
+      action,
+      resource,
       detail: (detail ?? null) as never,
     });
-  } catch { /* swallow */ }
+  } catch {
+    /* swallow */
+  }
 }

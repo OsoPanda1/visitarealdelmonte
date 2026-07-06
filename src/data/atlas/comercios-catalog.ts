@@ -5,14 +5,7 @@
 // recomendador Isabella y futuros pagos vía Cattleya Pay.
 
 export type ComercioCategoria =
-  | "paste"
-  | "cafe"
-  | "restaurante"
-  | "hospedaje"
-  | "artesania"
-  | "guia"
-  | "experiencia"
-  | "mercado";
+  "paste" | "cafe" | "restaurante" | "hospedaje" | "artesania" | "guia" | "experiencia" | "mercado";
 
 export type ComercioMembresia = "comunidad" | "raiz" | "guardian";
 

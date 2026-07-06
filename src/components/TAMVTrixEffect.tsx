@@ -12,9 +12,9 @@ interface TAMVTrixEffectProps {
 
 type Column = {
   y: number;
-  depth: number;   // 0 = muy cerca, 1 = muy lejos
-  scale: number;   // escala de fuente
-  drift: number;   // deriva horizontal
+  depth: number; // 0 = muy cerca, 1 = muy lejos
+  scale: number; // escala de fuente
+  drift: number; // deriva horizontal
   opacity: number; // intensidad general de la columna
   wordIndex: number;
   charIndex: number;
@@ -91,9 +91,7 @@ const TAMVTrixEffect: React.FC<TAMVTrixEffectProps> = ({
         const depth = col.depth;
         const z = 1 - depth; // 1 cerca, 0 lejos
 
-        const fontSize =
-          minFontSize +
-          (maxFontSize - minFontSize) * col.scale * (0.4 + 0.6 * z);
+        const fontSize = minFontSize + (maxFontSize - minFontSize) * col.scale * (0.4 + 0.6 * z);
 
         const velocity = speed * (0.3 + 0.9 * z); // más cerca = más rápido
 
@@ -102,28 +100,18 @@ const TAMVTrixEffect: React.FC<TAMVTrixEffectProps> = ({
         const y = col.y;
 
         const word = words[col.wordIndex] || "TAMVONLINE";
-        const coreLetter =
-          CORE_LETTERS[Math.floor(Math.random() * CORE_LETTERS.length)];
+        const coreLetter = CORE_LETTERS[Math.floor(Math.random() * CORE_LETTERS.length)];
         const wordLetter = word[col.charIndex % word.length];
 
         // profundo → más algoritmo (letras sueltas), cerca → más palabra legible
         const letter = depth > 0.5 ? coreLetter : wordLetter;
 
         // gradiente vertical con cabeza brillante y cola suave
-        const gradient = ctx.createLinearGradient(
-          x,
-          y - fontSize * 5,
-          x,
-          y + fontSize
-        );
+        const gradient = ctx.createLinearGradient(x, y - fontSize * 5, x, y + fontSize);
 
         const headColor = baseColor;
-        const haloColor = `rgba(59, 245, 255, ${
-          0.35 * col.opacity + 0.25 * z
-        })`;
-        const tailColor = `rgba(0, 160, 255, ${
-          0.15 * col.opacity + 0.1 * z
-        })`;
+        const haloColor = `rgba(59, 245, 255, ${0.35 * col.opacity + 0.25 * z})`;
+        const tailColor = `rgba(0, 160, 255, ${0.15 * col.opacity + 0.1 * z})`;
 
         gradient.addColorStop(0, "rgba(0, 0, 0, 0)");
         gradient.addColorStop(0.35, tailColor);
@@ -176,13 +164,7 @@ const TAMVTrixEffect: React.FC<TAMVTrixEffectProps> = ({
     };
   }, [baseColor, minFontSize, maxFontSize, speed, density, words]);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      className={`matrix-canvas ${className ?? ""}`}
-    />
-  );
+  return <canvas ref={canvasRef} className={`matrix-canvas ${className ?? ""}`} />;
 };
 
 export default TAMVTrixEffect;
-

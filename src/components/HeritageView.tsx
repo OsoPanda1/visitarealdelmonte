@@ -5,25 +5,29 @@ const HERITAGE_ITEMS = [
   {
     era: "Siglo XVI",
     title: "Fundación Minera",
-    description: "Los primeros yacimientos de plata son descubiertos en la Sierra de Pachuca. Real del Monte nace como real de minas bajo la Corona Española.",
+    description:
+      "Los primeros yacimientos de plata son descubiertos en la Sierra de Pachuca. Real del Monte nace como real de minas bajo la Corona Española.",
     icon: Pickaxe,
   },
   {
     era: "Siglo XVIII",
     title: "Apogeo de la Plata",
-    description: "La Mina de Acosta y la Veta Vizcaína producen toneladas de plata. El pueblo se convierte en uno de los centros mineros más ricos de la Nueva España.",
+    description:
+      "La Mina de Acosta y la Veta Vizcaína producen toneladas de plata. El pueblo se convierte en uno de los centros mineros más ricos de la Nueva España.",
     icon: Crown,
   },
   {
     era: "1824",
     title: "Llegada de los Cornish",
-    description: "Mineros británicos de Cornwall llegan con tecnología de vapor y traen consigo el paste, el fútbol y el cementerio inglés. Una fusión cultural irrepetible.",
+    description:
+      "Mineros británicos de Cornwall llegan con tecnología de vapor y traen consigo el paste, el fútbol y el cementerio inglés. Una fusión cultural irrepetible.",
     icon: BookOpen,
   },
   {
     era: "Siglo XX",
     title: "Patrimonio Cultural",
-    description: "Real del Monte es declarado Pueblo Mágico. Sus minas, arquitectura y tradiciones son reconocidas como patrimonio cultural de México.",
+    description:
+      "Real del Monte es declarado Pueblo Mágico. Sus minas, arquitectura y tradiciones son reconocidas como patrimonio cultural de México.",
     icon: Church,
   },
 ];
@@ -54,9 +58,13 @@ export function HeritageView() {
                 <item.icon className="w-3 h-3 text-accent-foreground" />
               </div>
               <div className="bg-card border border-border rounded-xl p-5">
-                <span className="text-[10px] font-mono text-accent uppercase tracking-wider">{item.era}</span>
+                <span className="text-[10px] font-mono text-accent uppercase tracking-wider">
+                  {item.era}
+                </span>
                 <h3 className="font-display font-semibold text-base mt-1">{item.title}</h3>
-                <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{item.description}</p>
+                <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
+                  {item.description}
+                </p>
               </div>
             </motion.div>
           ))}
@@ -71,7 +79,8 @@ export function HeritageView() {
         className="bg-primary text-primary-foreground rounded-xl p-6 text-center"
       >
         <p className="font-display text-lg italic leading-relaxed">
-          "Real del Monte no compite contra apps. Compite contra el abandono tecnológico de territorios completos."
+          "Real del Monte no compite contra apps. Compite contra el abandono tecnológico de
+          territorios completos."
         </p>
         <p className="text-xs mt-3 opacity-60">— Filosofía RDM Digital OS</p>
       </motion.div>

@@ -159,7 +159,8 @@ export default function SearchOverlay() {
             >
               {hits.length === 0 && (
                 <div className="px-6 py-10 text-center text-sm text-[hsl(var(--muted-foreground))]">
-                  Sin resultados para «{query}». Prueba con <em>paste</em>, <em>Acosta</em> o <em>panteón</em>.
+                  Sin resultados para «{query}». Prueba con <em>paste</em>, <em>Acosta</em> o{" "}
+                  <em>panteón</em>.
                 </div>
               )}
               {hits.map((hit, i) => {

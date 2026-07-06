@@ -2,12 +2,47 @@ import { motion } from "framer-motion";
 import { Store, Star, ExternalLink } from "lucide-react";
 
 const BUSINESSES = [
-  { id: "1", name: "Pastes El Portal", type: "Restaurante", rating: 4.7, status: "Abierto", revenue: "+12%" },
-  { id: "2", name: "Hotel Mina Real", type: "Hospedaje", rating: 4.5, status: "Abierto", revenue: "+8%" },
-  { id: "3", name: "Artesanías del Monte", type: "Tienda", rating: 4.3, status: "Abierto", revenue: "+15%" },
+  {
+    id: "1",
+    name: "Pastes El Portal",
+    type: "Restaurante",
+    rating: 4.7,
+    status: "Abierto",
+    revenue: "+12%",
+  },
+  {
+    id: "2",
+    name: "Hotel Mina Real",
+    type: "Hospedaje",
+    rating: 4.5,
+    status: "Abierto",
+    revenue: "+8%",
+  },
+  {
+    id: "3",
+    name: "Artesanías del Monte",
+    type: "Tienda",
+    rating: 4.3,
+    status: "Abierto",
+    revenue: "+15%",
+  },
   { id: "4", name: "Café La Bruma", type: "Café", rating: 4.6, status: "Abierto", revenue: "+22%" },
-  { id: "5", name: "Tours Mineros RDM", type: "Turismo", rating: 4.8, status: "Abierto", revenue: "+18%" },
-  { id: "6", name: "Pulquería El Chato", type: "Bar", rating: 4.2, status: "Cerrado", revenue: "+5%" },
+  {
+    id: "5",
+    name: "Tours Mineros RDM",
+    type: "Turismo",
+    rating: 4.8,
+    status: "Abierto",
+    revenue: "+18%",
+  },
+  {
+    id: "6",
+    name: "Pulquería El Chato",
+    type: "Bar",
+    rating: 4.2,
+    status: "Cerrado",
+    revenue: "+5%",
+  },
 ];
 
 export function CommerceView() {
@@ -45,11 +80,21 @@ export function CommerceView() {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-border bg-muted/50">
-              <th className="text-left px-4 py-3 text-xs text-muted-foreground font-medium">Negocio</th>
-              <th className="text-left px-4 py-3 text-xs text-muted-foreground font-medium">Tipo</th>
-              <th className="text-left px-4 py-3 text-xs text-muted-foreground font-medium">Rating</th>
-              <th className="text-left px-4 py-3 text-xs text-muted-foreground font-medium">Estado</th>
-              <th className="text-left px-4 py-3 text-xs text-muted-foreground font-medium">Tendencia</th>
+              <th className="text-left px-4 py-3 text-xs text-muted-foreground font-medium">
+                Negocio
+              </th>
+              <th className="text-left px-4 py-3 text-xs text-muted-foreground font-medium">
+                Tipo
+              </th>
+              <th className="text-left px-4 py-3 text-xs text-muted-foreground font-medium">
+                Rating
+              </th>
+              <th className="text-left px-4 py-3 text-xs text-muted-foreground font-medium">
+                Estado
+              </th>
+              <th className="text-left px-4 py-3 text-xs text-muted-foreground font-medium">
+                Tendencia
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -68,9 +113,13 @@ export function CommerceView() {
                 <td className="px-4 py-3 text-muted-foreground">{biz.type}</td>
                 <td className="px-4 py-3 text-accent">★ {biz.rating}</td>
                 <td className="px-4 py-3">
-                  <span className={`text-xs px-2 py-0.5 rounded-full ${
-                    biz.status === "Abierto" ? "bg-success/10 text-success" : "bg-muted text-muted-foreground"
-                  }`}>
+                  <span
+                    className={`text-xs px-2 py-0.5 rounded-full ${
+                      biz.status === "Abierto"
+                        ? "bg-success/10 text-success"
+                        : "bg-muted text-muted-foreground"
+                    }`}
+                  >
                     {biz.status}
                   </span>
                 </td>

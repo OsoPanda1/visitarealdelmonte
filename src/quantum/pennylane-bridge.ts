@@ -2,25 +2,25 @@
 // Connects to PennyLane REST API server for quantum circuit execution
 
 type QuantumCircuit = {
-  qubits: number
-  depth: number
-  gates: Array<{ name: string; qubits: number[]; params?: number[] }>
-}
+  qubits: number;
+  depth: number;
+  gates: Array<{ name: string; qubits: number[]; params?: number[] }>;
+};
 
 type QuantumResult = {
-  statevector?: number[]
-  probabilities?: number[]
-  expectationValue?: number
-  samples?: number[][]
-  executionTimeMs: number
-}
+  statevector?: number[];
+  probabilities?: number[];
+  expectationValue?: number;
+  samples?: number[][];
+  executionTimeMs: number;
+};
 
 type PennylaneConfig = {
-  endpoint: string
-  apiKey?: string
-  timeoutMs: number
-  device: "default.qubit" | "lightning.qubit" | "qiskit.aer" | "cirq.simulator"
-}
+  endpoint: string;
+  apiKey?: string;
+  timeoutMs: number;
+  device: "default.qubit" | "lightning.qubit" | "qiskit.aer" | "cirq.simulator";
+};
 
 // Circuit templates for Isabella use cases
 const CIRCUIT_TEMPLATES = {
@@ -67,13 +67,13 @@ const CIRCUIT_TEMPLATES = {
       { name: "Measure", qubits: [0, 1, 2] },
     ],
   },
-}
+};
 
-export type CircuitTemplateName = keyof typeof CIRCUIT_TEMPLATES
+export type CircuitTemplateName = keyof typeof CIRCUIT_TEMPLATES;
 
 export class PennylaneBridge {
-  private config: PennylaneConfig
-  private circuitCache = new Map<string, QuantumResult>()
+  private config: PennylaneConfig;
+  private circuitCache = new Map<string, QuantumResult>();
 
   constructor(config?: Partial<PennylaneConfig>) {
     this.config = {
@@ -81,29 +81,29 @@ export class PennylaneBridge {
       apiKey: config?.apiKey,
       timeoutMs: config?.timeoutMs ?? 30000,
       device: config?.device ?? "default.qubit",
-    }
+    };
   }
 
   get endpoint(): string {
-    return this.config.endpoint
+    return this.config.endpoint;
   }
 
   set endpoint(url: string) {
-    this.config.endpoint = url
+    this.config.endpoint = url;
   }
 
   // Execute a quantum circuit against the PennyLane REST API
   async execute(circuit: QuantumCircuit): Promise<QuantumResult> {
-    const cacheKey = JSON.stringify(circuit)
-    const cached = this.circuitCache.get(cacheKey)
-    if (cached) return cached
+    const cacheKey = JSON.stringify(circuit);
+    const cached = this.circuitCache.get(cacheKey);
+    if (cached) return cached;
 
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
-    }
-    if (this.config.apiKey) headers["Authorization"] = `Bearer ${this.config.apiKey}`
+    };
+    if (this.config.apiKey) headers["Authorization"] = `Bearer ${this.config.apiKey}`;
 
-    const startTime = performance.now()
+    const startTime = performance.now();
 
     try {
       const response = await fetch(this.config.endpoint, {
@@ -115,67 +115,67 @@ export class PennylaneBridge {
           shots: 1024,
         }),
         signal: AbortSignal.timeout(this.config.timeoutMs),
-      })
+      });
 
       if (!response.ok) {
-        const errorText = await response.text()
-        throw new Error(`PennyLane API error (${response.status}): ${errorText}`)
+        const errorText = await response.text();
+        throw new Error(`PennyLane API error (${response.status}): ${errorText}`);
       }
 
-      const result: QuantumResult = await response.json()
-      result.executionTimeMs = performance.now() - startTime
-      this.circuitCache.set(cacheKey, result)
-      return result
+      const result: QuantumResult = await response.json();
+      result.executionTimeMs = performance.now() - startTime;
+      this.circuitCache.set(cacheKey, result);
+      return result;
     } catch (err) {
       if (err instanceof DOMException && err.name === "TimeoutError") {
-        throw new Error("PennyLane API request timed out")
+        throw new Error("PennyLane API request timed out");
       }
-      throw err
+      throw err;
     }
   }
 
   // Get a predefined circuit template
   getTemplate(name: CircuitTemplateName): QuantumCircuit {
-    const template = CIRCUIT_TEMPLATES[name]
-    if (!template) throw new Error(`Unknown circuit template: ${name}`)
-    return template
+    const template = CIRCUIT_TEMPLATES[name];
+    if (!template) throw new Error(`Unknown circuit template: ${name}`);
+    return template;
   }
 
   // Execute a template circuit
   async executeTemplate(name: CircuitTemplateName, params?: number[]): Promise<QuantumResult> {
-    const circuit = this.getTemplate(name)
+    const circuit = this.getTemplate(name);
     if (params && circuit.gates) {
-      const paramGates = circuit.gates.filter((g) => g.name.startsWith("R"))
+      const paramGates = circuit.gates.filter((g) => g.name.startsWith("R"));
       paramGates.forEach((gate, i) => {
-        if (params[i] !== undefined) gate.params = [params[i]]
-      })
+        if (params[i] !== undefined) gate.params = [params[i]];
+      });
     }
-    return this.execute(circuit)
+    return this.execute(circuit);
   }
 
   // Clear execution cache
   clearCache(): void {
-    this.circuitCache.clear()
+    this.circuitCache.clear();
   }
 
   // Check if the PennyLane REST API is reachable
   async healthCheck(): Promise<boolean> {
     try {
-      const baseUrl = this.config.endpoint.replace(/\/quantum.*$/, "")
+      const baseUrl = this.config.endpoint.replace(/\/quantum.*$/, "");
       const response = await fetch(`${baseUrl}/health`, {
         signal: AbortSignal.timeout(5000),
-      })
-      return response.ok
+      });
+      return response.ok;
     } catch {
-      return false
+      return false;
     }
   }
 }
 
 // Singleton instance for Isabella
-let bridgeInstance: PennylaneBridge | null = null
+let bridgeInstance: PennylaneBridge | null = null;
 
 export function getPennylaneBridge(config?: Partial<PennylaneConfig>): PennylaneBridge {
-  if (!bridgeInstance) bridgeInstance = new PennylaneBridge(config)
-  return bridgeInstance
+  if (!bridgeInstance) bridgeInstance = new PennylaneBridge(config);
+  return bridgeInstance;
 }

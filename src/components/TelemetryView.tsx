@@ -38,9 +38,19 @@ export function TelemetryView() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {[
           { label: "Requests/min", value: data.requests, icon: BarChart3, color: "text-accent" },
-          { label: "Latencia Avg", value: `${data.avgLatency}ms`, icon: Activity, color: "text-success" },
+          {
+            label: "Latencia Avg",
+            value: `${data.avgLatency}ms`,
+            icon: Activity,
+            color: "text-success",
+          },
           { label: "CPU", value: `${data.cpuUsage}%`, icon: Cpu, color: "text-secondary" },
-          { label: "Memoria", value: `${data.memoryUsage}%`, icon: HardDrive, color: "text-accent" },
+          {
+            label: "Memoria",
+            value: `${data.memoryUsage}%`,
+            icon: HardDrive,
+            color: "text-accent",
+          },
         ].map((item, i) => (
           <motion.div
             key={item.label}
@@ -69,12 +79,18 @@ export function TelemetryView() {
             const isOnline = i < data.meshOnline;
             return (
               <div key={i} className="flex flex-col items-center gap-1">
-                <div className={`w-10 h-10 rounded-lg border ${
-                  isOnline ? "bg-success/10 border-success/30" : "bg-muted border-border"
-                } flex items-center justify-center`}>
-                  <Wifi className={`w-4 h-4 ${isOnline ? "text-success" : "text-muted-foreground"}`} />
+                <div
+                  className={`w-10 h-10 rounded-lg border ${
+                    isOnline ? "bg-success/10 border-success/30" : "bg-muted border-border"
+                  } flex items-center justify-center`}
+                >
+                  <Wifi
+                    className={`w-4 h-4 ${isOnline ? "text-success" : "text-muted-foreground"}`}
+                  />
                 </div>
-                <span className="text-[10px] text-muted-foreground font-mono">N-{String(i + 1).padStart(2, "0")}</span>
+                <span className="text-[10px] text-muted-foreground font-mono">
+                  N-{String(i + 1).padStart(2, "0")}
+                </span>
               </div>
             );
           })}
@@ -96,7 +112,9 @@ export function TelemetryView() {
             `[${new Date().toISOString()}] cache.hit → places_index (TTL: 300s)`,
             `[${new Date().toISOString()}] kernel.narrative → generated (cultura)`,
           ].map((log, i) => (
-            <p key={i} className="opacity-80">{log}</p>
+            <p key={i} className="opacity-80">
+              {log}
+            </p>
           ))}
         </div>
       </div>

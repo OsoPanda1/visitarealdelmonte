@@ -9,11 +9,7 @@
  * - Operación como grafo (cells que se componen entre sí).
  */
 
-import {
-  FederationDomain,
-  KernelLayer,
-  RdmExperiencePlane,
-} from "./federation.types";
+import { FederationDomain, KernelLayer, RdmExperiencePlane } from "./federation.types";
 
 // ============================================================================
 // ENUMS BÁSICOS
@@ -46,11 +42,7 @@ export type CellLifecycle = "draft" | "active" | "deprecated" | "archived";
 /**
  * Nivel de criticidad operacional.
  */
-export type CellCriticality =
-  | "low"
-  | "medium"
-  | "high"
-  | "mission_critical";
+export type CellCriticality = "low" | "medium" | "high" | "mission_critical";
 
 /**
  * Nivel de estabilidad de la API de la célula.
@@ -280,11 +272,7 @@ export interface KnowledgeCell {
 // KNOWLEDGE REPOSITORY (GRAFO DE CÉLULAS)
 // ============================================================================
 
-export type CellRelationType =
-  | "requires"
-  | "extends"
-  | "composes"
-  | "consumes";
+export type CellRelationType = "requires" | "extends" | "composes" | "consumes";
 
 /**
  * Relación entre células (grafos de conocimiento / pipelines).

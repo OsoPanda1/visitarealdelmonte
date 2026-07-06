@@ -73,23 +73,37 @@ export default function MemoryGame() {
     setFlipped((f) => [...f, i]);
   };
 
-  const reset = () => { setDeck(buildDeck()); setFlipped([]); setMoves(0); setSeconds(0); setDone(false); setPointsAwarded(false); };
+  const reset = () => {
+    setDeck(buildDeck());
+    setFlipped([]);
+    setMoves(0);
+    setSeconds(0);
+    setDone(false);
+    setPointsAwarded(false);
+  };
   const score = useMemo(() => Math.max(0, 1000 - moves * 20 - seconds * 5), [moves, seconds]);
 
   return (
     <div className="glass-card rounded-2xl p-6 border border-border/20">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-4 text-[11px] font-mono uppercase tracking-wider">
-          <span className="flex items-center gap-1 text-electric"><Timer className="h-3 w-3" />{seconds}s</span>
+          <span className="flex items-center gap-1 text-electric">
+            <Timer className="h-3 w-3" />
+            {seconds}s
+          </span>
           <span className="text-muted-foreground">Movs: {moves}</span>
           {done && (
             <span className="flex items-center gap-2 text-gold">
-              <Trophy className="h-3 w-3" />Score {score}
+              <Trophy className="h-3 w-3" />
+              Score {score}
               {pointsAwarded && <Sparkles className="h-3 w-3 text-emerald" />}
             </span>
           )}
         </div>
-        <button onClick={reset} className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[11px] font-body glass hover:text-gold transition">
+        <button
+          onClick={reset}
+          className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[11px] font-body glass hover:text-gold transition"
+        >
           <RotateCcw className="h-3 w-3" /> Reiniciar
         </button>
       </div>
@@ -100,12 +114,14 @@ export default function MemoryGame() {
             onClick={() => click(i)}
             whileHover={{ scale: c.matched ? 1 : 1.04 }}
             className={`aspect-square rounded-xl flex items-center justify-center text-2xl font-display transition ${
-              c.matched ? "bg-emerald-500/20 border border-emerald-500/40" :
-              c.flipped ? "bg-gold/20 border border-gold/40" :
-              "bg-secondary/30 border border-border/20 hover:border-gold/30"
+              c.matched
+                ? "bg-emerald-500/20 border border-emerald-500/40"
+                : c.flipped
+                  ? "bg-gold/20 border border-gold/40"
+                  : "bg-secondary/30 border border-border/20 hover:border-gold/30"
             }`}
           >
-            {(c.flipped || c.matched) ? c.sym : ""}
+            {c.flipped || c.matched ? c.sym : ""}
           </motion.button>
         ))}
       </div>

@@ -1,8 +1,16 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
-  User, Trophy, Star, Shield, Flame, TrendingUp, Award,
-  Calendar, Zap, Target
+  User,
+  Trophy,
+  Star,
+  Shield,
+  Flame,
+  TrendingUp,
+  Award,
+  Calendar,
+  Zap,
+  Target,
 } from "lucide-react";
 import { getPlayerProfile } from "../api";
 import type {
@@ -15,36 +23,38 @@ import type {
 import { calculateLevel, levelProgress, xpForNextLevel } from "../engine";
 
 const TRACK_CONFIG: Record<XpTrack, { label: string; color: string; icon: typeof Target }> = {
-  cultura: { label: 'Cultura', color: 'hsl(43, 80%, 55%)', icon: Star },
-  comunidad: { label: 'Comunidad', color: 'hsl(152, 60%, 45%)', icon: Shield },
-  juego: { label: 'Juego', color: 'hsl(210, 100%, 55%)', icon: Zap },
+  cultura: { label: "Cultura", color: "hsl(43, 80%, 55%)", icon: Star },
+  comunidad: { label: "Comunidad", color: "hsl(152, 60%, 45%)", icon: Shield },
+  juego: { label: "Juego", color: "hsl(210, 100%, 55%)", icon: Zap },
 };
 
 const RARITY_STYLES = {
-  common: 'border-white/10 bg-white/5',
-  rare: 'border-blue-500/30 bg-blue-500/5',
-  epic: 'border-purple-500/30 bg-purple-500/5',
-  legendary: 'border-amber-500/30 bg-amber-500/5',
+  common: "border-white/10 bg-white/5",
+  rare: "border-blue-500/30 bg-blue-500/5",
+  epic: "border-purple-500/30 bg-purple-500/5",
+  legendary: "border-amber-500/30 bg-amber-500/5",
 };
 
 const RARITY_LABELS = {
-  common: 'Comun',
-  rare: 'Raro',
-  epic: 'Epico',
-  legendary: 'Legendario',
+  common: "Comun",
+  rare: "Raro",
+  epic: "Epico",
+  legendary: "Legendario",
 };
 
 const ROLE_LABELS: Record<string, string> = {
-  aprendiz_minero: 'Aprendiz Minero',
-  minero_local: 'Minero Local',
-  guardian_patrimonio: 'Guardian del Patrimonio',
-  maestro_hub: 'Maestro del Hub',
-  arquitecto_territorial: 'Arquitecto Territorial',
+  aprendiz_minero: "Aprendiz Minero",
+  minero_local: "Minero Local",
+  guardian_patrimonio: "Guardian del Patrimonio",
+  maestro_hub: "Maestro del Hub",
+  arquitecto_territorial: "Arquitecto Territorial",
 };
 
 export function PlayerProfile() {
   const [player, setPlayer] = useState<GamificationPlayer | null>(null);
-  const [badges, setBadges] = useState<(GamificationPlayerBadge & { badge: GamificationBadge })[]>([]);
+  const [badges, setBadges] = useState<(GamificationPlayerBadge & { badge: GamificationBadge })[]>(
+    [],
+  );
   const [season, setSeason] = useState<GamificationSeason | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -77,8 +87,8 @@ export function PlayerProfile() {
   const level = calculateLevel(player.total_xp);
   const progress = levelProgress(player.total_xp);
   const nextLevelXp = xpForNextLevel(level);
-  const earnedBadges = badges.filter(b => b.earned_at);
-  const currentRole = player.roles[player.roles.length - 1] ?? 'aprendiz_minero';
+  const earnedBadges = badges.filter((b) => b.earned_at);
+  const currentRole = player.roles[player.roles.length - 1] ?? "aprendiz_minero";
 
   return (
     <div className="rdm-glass rounded-2xl overflow-hidden">
@@ -92,7 +102,11 @@ export function PlayerProfile() {
           <div className="relative">
             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[hsl(var(--rdm-amber)/0.4)] to-[hsl(var(--rdm-terracotta)/0.4)] flex items-center justify-center ring-2 ring-[hsl(var(--rdm-amber)/0.3)]">
               {player.avatar_url ? (
-                <img src={player.avatar_url} alt="" className="w-full h-full rounded-full object-cover" />
+                <img
+                  src={player.avatar_url}
+                  alt=""
+                  className="w-full h-full rounded-full object-cover"
+                />
               ) : (
                 <User className="w-7 h-7 text-white" />
               )}
@@ -104,7 +118,7 @@ export function PlayerProfile() {
 
           <div className="flex-1">
             <h3 className="text-lg font-bold" style={{ fontFamily: "var(--font-display)" }}>
-              {player.display_name || 'Jugador'}
+              {player.display_name || "Jugador"}
             </h3>
             <div className="flex items-center gap-2 mb-2">
               <span className="px-2 py-0.5 rounded-full bg-[hsl(var(--rdm-amber)/0.15)] text-[10px] font-medium text-[hsl(var(--rdm-amber))]">
@@ -141,12 +155,15 @@ export function PlayerProfile() {
       {/* XP Tracks */}
       <div className="px-6 pb-4">
         <div className="grid grid-cols-3 gap-3">
-          {(Object.keys(TRACK_CONFIG) as XpTrack[]).map(track => {
+          {(Object.keys(TRACK_CONFIG) as XpTrack[]).map((track) => {
             const config = TRACK_CONFIG[track];
             const Icon = config.icon;
-            const xp = track === 'cultura' ? player.xp_cultura
-              : track === 'comunidad' ? player.xp_comunidad
-              : player.xp_juego;
+            const xp =
+              track === "cultura"
+                ? player.xp_cultura
+                : track === "comunidad"
+                  ? player.xp_comunidad
+                  : player.xp_juego;
             const trackLevel = calculateLevel(xp);
 
             return (
@@ -162,12 +179,13 @@ export function PlayerProfile() {
                     {config.label}
                   </span>
                 </div>
-                <p className="text-lg font-bold" style={{ fontFamily: "var(--font-display)", color: config.color }}>
+                <p
+                  className="text-lg font-bold"
+                  style={{ fontFamily: "var(--font-display)", color: config.color }}
+                >
                   {xp.toLocaleString()}
                 </p>
-                <p className="text-[9px] text-[hsl(var(--muted-foreground))]">
-                  Nivel {trackLevel}
-                </p>
+                <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Nivel {trackLevel}</p>
               </motion.div>
             );
           })}
@@ -178,10 +196,20 @@ export function PlayerProfile() {
       <div className="px-6 pb-4">
         <div className="grid grid-cols-4 gap-2">
           {[
-            { icon: Flame, label: 'Combos', value: player.combos_total, color: 'text-orange-400' },
-            { icon: Calendar, label: 'Racha', value: `${player.streak_days}d`, color: 'text-emerald-400' },
-            { icon: Trophy, label: 'Badges', value: earnedBadges.length, color: 'text-purple-400' },
-            { icon: TrendingUp, label: 'Total XP', value: player.total_xp.toLocaleString(), color: 'text-[hsl(var(--rdm-amber))]' },
+            { icon: Flame, label: "Combos", value: player.combos_total, color: "text-orange-400" },
+            {
+              icon: Calendar,
+              label: "Racha",
+              value: `${player.streak_days}d`,
+              color: "text-emerald-400",
+            },
+            { icon: Trophy, label: "Badges", value: earnedBadges.length, color: "text-purple-400" },
+            {
+              icon: TrendingUp,
+              label: "Total XP",
+              value: player.total_xp.toLocaleString(),
+              color: "text-[hsl(var(--rdm-amber))]",
+            },
           ].map((stat, i) => (
             <div key={i} className="text-center p-2 rounded-lg bg-white/[0.02]">
               <stat.icon className={`w-4 h-4 mx-auto mb-1 ${stat.color}`} />
@@ -197,7 +225,9 @@ export function PlayerProfile() {
         <div className="px-6 pb-6">
           <div className="flex items-center gap-2 mb-3">
             <Award className="w-4 h-4 text-[hsl(var(--rdm-amber))]" />
-            <span className="text-xs font-medium text-[hsl(var(--muted-foreground))]">Insignias</span>
+            <span className="text-xs font-medium text-[hsl(var(--muted-foreground))]">
+              Insignias
+            </span>
           </div>
           <div className="flex flex-wrap gap-2">
             {earnedBadges.map((pb) => (
@@ -225,7 +255,10 @@ export function PlayerProfile() {
                 {season.name}
               </span>
               <span className="text-[10px] text-[hsl(var(--muted-foreground))]">
-                {new Date(season.end_date).toLocaleDateString('es-MX', { month: 'short', day: 'numeric' })}
+                {new Date(season.end_date).toLocaleDateString("es-MX", {
+                  month: "short",
+                  day: "numeric",
+                })}
               </span>
             </div>
             {season.global_goal && (
@@ -233,7 +266,9 @@ export function PlayerProfile() {
                 <motion.div
                   className="h-full rounded-full bg-gradient-to-r from-[hsl(var(--rdm-amber))] to-[hsl(var(--rdm-terracotta))]"
                   initial={{ width: 0 }}
-                  animate={{ width: `${(season.global_goal.current / season.global_goal.target) * 100}%` }}
+                  animate={{
+                    width: `${(season.global_goal.current / season.global_goal.target) * 100}%`,
+                  }}
                   transition={{ duration: 1.5, ease: "easeOut" }}
                 />
               </div>

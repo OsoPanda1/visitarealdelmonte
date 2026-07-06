@@ -6,9 +6,16 @@ export const Route = createFileRoute("/historia")({
   head: () => ({
     meta: [
       { title: "Historia · RDM Digital LTOS" },
-      { name: "description", content: "Cronología minera y cultural de Real del Monte: Cornwall, plata, paste, Geoparque." },
+      {
+        name: "description",
+        content:
+          "Cronología minera y cultural de Real del Monte: Cornwall, plata, paste, Geoparque.",
+      },
       { property: "og:title", content: "Historia · Real del Monte" },
-      { property: "og:description", content: "Hitos mineros, intercambio cornish y memoria patrimonial viva." },
+      {
+        property: "og:description",
+        content: "Hitos mineros, intercambio cornish y memoria patrimonial viva.",
+      },
     ],
   }),
   component: HistoriaPage,

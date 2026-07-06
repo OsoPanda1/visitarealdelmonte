@@ -24,9 +24,10 @@ export function DonationButton({
   const label = trackTitle?.trim() || "RDM Music";
 
   const presets = useMemo(
-    () => [minAmount, 50, 100, 250, 500].filter(
-      (v, idx, arr) => v >= minAmount && arr.indexOf(v) === idx,
-    ),
+    () =>
+      [minAmount, 50, 100, 250, 500].filter(
+        (v, idx, arr) => v >= minAmount && arr.indexOf(v) === idx,
+      ),
     [minAmount],
   );
 
@@ -35,13 +36,10 @@ export function DonationButton({
     [amount, minAmount],
   );
 
-  const handleAmountChange = useCallback(
-    (value: number) => {
-      if (!Number.isFinite(value)) return;
-      setAmount(value);
-    },
-    [],
-  );
+  const handleAmountChange = useCallback((value: number) => {
+    if (!Number.isFinite(value)) return;
+    setAmount(value);
+  }, []);
 
   const donate = useCallback(async () => {
     if (!validAmount) {
@@ -55,16 +53,13 @@ export function DonationButton({
 
     setLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke(
-        "create-music-donation",
-        {
-          body: {
-            amount_mxn: amount,
-            track_id: trackId,
-            track_title: label,
-          },
+      const { data, error } = await supabase.functions.invoke("create-music-donation", {
+        body: {
+          amount_mxn: amount,
+          track_id: trackId,
+          track_title: label,
         },
-      );
+      });
 
       if (error) throw error;
       if (data?.url) {
@@ -74,10 +69,7 @@ export function DonationButton({
       }
     } catch (error) {
       logger.error("Error initiating donation", { error });
-      const message =
-        error instanceof Error
-          ? error.message
-          : "No se pudo iniciar la donación";
+      const message = error instanceof Error ? error.message : "No se pudo iniciar la donación";
       toast.error(message);
     } finally {
       setLoading(false);
@@ -106,8 +98,8 @@ export function DonationButton({
         Apoya RDM Music
       </p>
       <p className="text-xs font-body text-muted-foreground">
-        Esta música sostiene el proyecto RDM Digital. Cada donación ayuda a
-        cubrir infraestructura y producción. Monto mínimo: {minAmount} MXN.
+        Esta música sostiene el proyecto RDM Digital. Cada donación ayuda a cubrir infraestructura y
+        producción. Monto mínimo: {minAmount} MXN.
       </p>
 
       <div className="flex flex-wrap gap-2">
@@ -136,15 +128,11 @@ export function DonationButton({
           type="number"
           min={minAmount}
           value={amount}
-          onChange={(event) =>
-            handleAmountChange(Number(event.target.value || minAmount))
-          }
+          onChange={(event) => handleAmountChange(Number(event.target.value || minAmount))}
           className="w-full rounded-xl border border-border/30 bg-background/60 px-4 py-2.5 text-sm font-body outline-none focus:border-gold/50"
         />
         {!validAmount && (
-          <p className="text-[10px] text-red-400">
-            El monto debe ser al menos {minAmount} MXN.
-          </p>
+          <p className="text-[10px] text-red-400">El monto debe ser al menos {minAmount} MXN.</p>
         )}
       </div>
 
@@ -160,9 +148,7 @@ export function DonationButton({
           ) : (
             <Heart className="h-3.5 w-3.5" />
           )}
-          {validAmount
-            ? `Donar $${amount} MXN`
-            : `Donar desde $${minAmount} MXN`}
+          {validAmount ? `Donar $${amount} MXN` : `Donar desde $${minAmount} MXN`}
         </button>
         <button
           type="button"
@@ -175,8 +161,7 @@ export function DonationButton({
       </div>
 
       <p className="text-[10px] text-muted-foreground">
-        Donación asociada a:{" "}
-        <span className="font-mono text-foreground">{label}</span>
+        Donación asociada a: <span className="font-mono text-foreground">{label}</span>
       </p>
     </div>
   );

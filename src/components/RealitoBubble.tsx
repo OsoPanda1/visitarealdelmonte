@@ -41,98 +41,119 @@ const RealitoBubble = () => {
     }
   }, [open]);
 
-  const playSound = useCallback((freq: number) => {
-    if (!soundEnabled) return;
-    try {
-      const ctx = new AudioContext();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.frequency.setValueAtTime(freq, ctx.currentTime);
-      gain.gain.setValueAtTime(0.04, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.4);
-      osc.connect(gain).connect(ctx.destination);
-      osc.start();
-      osc.stop(ctx.currentTime + 0.4);
-    } catch { /* audio context may not be available */ }
-  }, [soundEnabled]);
-
-  const handleSend = useCallback(async (text: string) => {
-    if (!text.trim() || isTyping) return;
-    playSound(440);
-
-    const userMsg: Message = { id: crypto.randomUUID(), role: "user", content: text, timestamp: new Date() };
-    const allMessages = [...messages, userMsg];
-    setMessages(allMessages);
-    setInput("");
-    setIsTyping(true);
-
-    const assistantId = crypto.randomUUID();
-    let assistantContent = "";
-
-    try {
-      const resp = await fetch(CHAT_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
-        body: JSON.stringify({
-          messages: allMessages.map(m => ({ role: m.role, content: m.content })),
-        }),
-      });
-
-      if (!resp.ok || !resp.body) {
-        const errorData = await resp.json().catch(() => ({}));
-        throw new Error(errorData.error || "Error de conexión");
+  const playSound = useCallback(
+    (freq: number) => {
+      if (!soundEnabled) return;
+      try {
+        const ctx = new AudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        gain.gain.setValueAtTime(0.04, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.4);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.4);
+      } catch {
+        /* audio context may not be available */
       }
+    },
+    [soundEnabled],
+  );
 
-      // Add empty assistant message
-      setMessages(prev => [...prev, { id: assistantId, role: "assistant", content: "", timestamp: new Date() }]);
+  const handleSend = useCallback(
+    async (text: string) => {
+      if (!text.trim() || isTyping) return;
+      playSound(440);
 
-      const reader = resp.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = "";
+      const userMsg: Message = {
+        id: crypto.randomUUID(),
+        role: "user",
+        content: text,
+        timestamp: new Date(),
+      };
+      const allMessages = [...messages, userMsg];
+      setMessages(allMessages);
+      setInput("");
+      setIsTyping(true);
 
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        buffer += decoder.decode(value, { stream: true });
+      const assistantId = crypto.randomUUID();
+      let assistantContent = "";
 
-        let newlineIdx: number;
-        while ((newlineIdx = buffer.indexOf("\n")) !== -1) {
-          let line = buffer.slice(0, newlineIdx);
-          buffer = buffer.slice(newlineIdx + 1);
-          if (line.endsWith("\r")) line = line.slice(0, -1);
-          if (!line.startsWith("data: ")) continue;
-          const jsonStr = line.slice(6).trim();
-          if (jsonStr === "[DONE]") break;
-          try {
-            const parsed = JSON.parse(jsonStr);
-            const content = parsed.choices?.[0]?.delta?.content;
-            if (content) {
-              assistantContent += content;
-              const finalContent = assistantContent;
-              setMessages(prev => prev.map(m => m.id === assistantId ? { ...m, content: finalContent } : m));
+      try {
+        const resp = await fetch(CHAT_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+          body: JSON.stringify({
+            messages: allMessages.map((m) => ({ role: m.role, content: m.content })),
+          }),
+        });
+
+        if (!resp.ok || !resp.body) {
+          const errorData = await resp.json().catch(() => ({}));
+          throw new Error(errorData.error || "Error de conexión");
+        }
+
+        // Add empty assistant message
+        setMessages((prev) => [
+          ...prev,
+          { id: assistantId, role: "assistant", content: "", timestamp: new Date() },
+        ]);
+
+        const reader = resp.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+
+          let newlineIdx: number;
+          while ((newlineIdx = buffer.indexOf("\n")) !== -1) {
+            let line = buffer.slice(0, newlineIdx);
+            buffer = buffer.slice(newlineIdx + 1);
+            if (line.endsWith("\r")) line = line.slice(0, -1);
+            if (!line.startsWith("data: ")) continue;
+            const jsonStr = line.slice(6).trim();
+            if (jsonStr === "[DONE]") break;
+            try {
+              const parsed = JSON.parse(jsonStr);
+              const content = parsed.choices?.[0]?.delta?.content;
+              if (content) {
+                assistantContent += content;
+                const finalContent = assistantContent;
+                setMessages((prev) =>
+                  prev.map((m) => (m.id === assistantId ? { ...m, content: finalContent } : m)),
+                );
+              }
+            } catch {
+              buffer = line + "\n" + buffer;
+              break;
             }
-          } catch {
-            buffer = line + "\n" + buffer;
-            break;
           }
         }
-      }
 
-      playSound(880);
-    } catch (err: unknown) {
-      setMessages(prev => [...prev, {
-        id: assistantId,
-        role: "assistant",
-        content: `Lo siento, hubo un error: ${err instanceof Error ? err.message : 'desconocido'}. Intenta de nuevo.`,
-        timestamp: new Date(),
-      }]);
-    } finally {
-      setIsTyping(false);
-    }
-  }, [messages, isTyping, playSound]);
+        playSound(880);
+      } catch (err: unknown) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: assistantId,
+            role: "assistant",
+            content: `Lo siento, hubo un error: ${err instanceof Error ? err.message : "desconocido"}. Intenta de nuevo.`,
+            timestamp: new Date(),
+          },
+        ]);
+      } finally {
+        setIsTyping(false);
+      }
+    },
+    [messages, isTyping, playSound],
+  );
 
   return (
     <>
@@ -171,17 +192,31 @@ const RealitoBubble = () => {
             transition={{ duration: 0.3 }}
             className="fixed bottom-24 right-6 z-50 w-[340px] md:w-[400px] rounded-2xl overflow-hidden"
             style={{
-              background: "linear-gradient(135deg, hsla(220, 25%, 10%, 0.97), hsla(220, 30%, 7%, 0.99))",
+              background:
+                "linear-gradient(135deg, hsla(220, 25%, 10%, 0.97), hsla(220, 30%, 7%, 0.99))",
               backdropFilter: "blur(30px)",
               border: "1px solid hsla(43, 80%, 55%, 0.15)",
-              boxShadow: "0 20px 60px -15px hsla(0, 0%, 0%, 0.7), 0 0 40px -10px hsla(43, 80%, 55%, 0.1)",
+              boxShadow:
+                "0 20px 60px -15px hsla(0, 0%, 0%, 0.7), 0 0 40px -10px hsla(43, 80%, 55%, 0.1)",
             }}
           >
             {/* Header */}
-            <div className="px-5 py-4 flex items-center gap-3" style={{ borderBottom: "1px solid hsla(43, 80%, 55%, 0.1)" }}>
-              <div className="w-9 h-9 rounded-full flex items-center justify-center pulse-gold overflow-hidden"
-                style={{ background: "radial-gradient(circle, hsl(43, 80%, 55%), hsl(43, 60%, 35%))" }}>
-                <img src={logoImg} alt="Realito" loading="lazy" className="w-6 h-6 object-contain" />
+            <div
+              className="px-5 py-4 flex items-center gap-3"
+              style={{ borderBottom: "1px solid hsla(43, 80%, 55%, 0.1)" }}
+            >
+              <div
+                className="w-9 h-9 rounded-full flex items-center justify-center pulse-gold overflow-hidden"
+                style={{
+                  background: "radial-gradient(circle, hsl(43, 80%, 55%), hsl(43, 60%, 35%))",
+                }}
+              >
+                <img
+                  src={logoImg}
+                  alt="Realito"
+                  loading="lazy"
+                  className="w-6 h-6 object-contain"
+                />
               </div>
               <div className="flex-1">
                 <h4 className="font-display text-sm text-foreground flex items-center gap-1.5">
@@ -196,17 +231,26 @@ const RealitoBubble = () => {
                 onClick={() => setSoundEnabled(!soundEnabled)}
                 className="p-1.5 rounded-full glass text-muted-foreground hover:text-gold transition-colors"
               >
-                {soundEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
+                {soundEnabled ? (
+                  <Volume2 className="w-3.5 h-3.5" />
+                ) : (
+                  <VolumeX className="w-3.5 h-3.5" />
+                )}
               </button>
             </div>
 
             {/* Messages */}
-            <div ref={scrollRef} className="p-4 min-h-[250px] max-h-[350px] overflow-y-auto space-y-3">
+            <div
+              ref={scrollRef}
+              className="p-4 min-h-[250px] max-h-[350px] overflow-y-auto space-y-3"
+            >
               {messages.length === 0 && (
                 <>
                   <div className="glass-card rounded-xl p-4">
                     <p className="font-body text-sm text-foreground/90 leading-relaxed">
-                      ¡Hola! Soy <span className="text-gradient-gold font-semibold">Realito</span>, tu guía inteligente de Real del Monte. Pregúntame lo que sea sobre el Pueblo Mágico. 🏔️
+                      ¡Hola! Soy <span className="text-gradient-gold font-semibold">Realito</span>,
+                      tu guía inteligente de Real del Monte. Pregúntame lo que sea sobre el Pueblo
+                      Mágico. 🏔️
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -224,17 +268,22 @@ const RealitoBubble = () => {
               )}
 
               {messages.map((m) => (
-                <div key={m.id} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
-                  <div className={`max-w-[85%] rounded-xl px-4 py-3 ${
-                    m.role === "user"
-                      ? "bg-gold/15 border border-gold/20"
-                      : "glass-card"
-                  }`}>
+                <div
+                  key={m.id}
+                  className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
+                >
+                  <div
+                    className={`max-w-[85%] rounded-xl px-4 py-3 ${
+                      m.role === "user" ? "bg-gold/15 border border-gold/20" : "glass-card"
+                    }`}
+                  >
                     {m.role === "assistant" ? (
-                      <div className="font-body text-sm text-foreground/90 leading-relaxed prose prose-sm prose-invert max-w-none
+                      <div
+                        className="font-body text-sm text-foreground/90 leading-relaxed prose prose-sm prose-invert max-w-none
                         [&_h1]:font-display [&_h2]:font-display [&_h3]:font-display
                         [&_h3]:text-gold [&_strong]:text-gold [&_em]:text-platinum/70
-                        [&_li]:text-foreground/80 [&_p]:text-foreground/90">
+                        [&_li]:text-foreground/80 [&_p]:text-foreground/90"
+                      >
                         <ReactMarkdown>{m.content || "..."}</ReactMarkdown>
                       </div>
                     ) : (
@@ -254,7 +303,13 @@ const RealitoBubble = () => {
 
             {/* Input */}
             <div className="px-4 pb-4">
-              <form onSubmit={(e) => { e.preventDefault(); handleSend(input); }} className="flex gap-2">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSend(input);
+                }}
+                className="flex gap-2"
+              >
                 <input
                   ref={inputRef}
                   type="text"
@@ -269,7 +324,11 @@ const RealitoBubble = () => {
                   disabled={isTyping || !input.trim()}
                   className="w-10 h-10 rounded-full flex items-center justify-center btn-premium !p-0 disabled:opacity-50"
                 >
-                  {isTyping ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                  {isTyping ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Send className="w-4 h-4" />
+                  )}
                 </button>
               </form>
             </div>

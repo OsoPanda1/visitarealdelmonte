@@ -17,14 +17,73 @@ import rdm1 from "@/assets/rdm1.jpeg";
 import rdm2 from "@/assets/rdm2.jpeg";
 
 const businesses = [
-  { name: "Pastes El Portal", category: "Pastes", description: "Los pastes mas tradicionales desde 1985. Sabores clasicos y nuevas creaciones.", image: pasteriasImg, isPremium: true, rating: 4.9, phone: "771 123 4567" },
-  { name: "Hotel Real de Minas", category: "Hospedaje", description: "Hotel boutique en casona colonial restaurada con vista a la montana.", image: callesImg, isPremium: true, rating: 4.7, phone: "771 234 5678" },
-  { name: "Tours Mineros RDM", category: "Tours", description: "Recorridos guiados por las minas historicas con expertos en historia local.", image: minaImg, isPremium: false, rating: 4.5 },
-  { name: "Cafe La Neblina", category: "Restaurante", description: "Cafe artesanal de altura con los mejores postres y vista al bosque.", image: rdm1, isPremium: false, rating: 4.4 },
-  { name: "Artesanias del Monte", category: "Souvenir", description: "Artesanias locales, textiles y recuerdos autenticos hechos a mano.", image: artesaniasImg, isPremium: true, rating: 4.6, phone: "771 345 6789" },
-  { name: "Platerías Artesanales", category: "Souvenir", description: "Joyería artesanal en plata, herencia minera de Real del Monte.", image: plateriasImg, isPremium: false, rating: 4.3 },
-  { name: "Servicios Turísticos", category: "Tours", description: "Información turística, sanitarios y puntos de asistencia al visitante.", image: sanitariosImg, isPremium: false, rating: 4.2 },
-  { name: "Restaurant Los Murmullos", category: "Restaurante", description: "Comida tradicional hidalguense con ingredientes locales frescos.", image: rdm2, isPremium: true, rating: 4.5 },
+  {
+    name: "Pastes El Portal",
+    category: "Pastes",
+    description: "Los pastes mas tradicionales desde 1985. Sabores clasicos y nuevas creaciones.",
+    image: pasteriasImg,
+    isPremium: true,
+    rating: 4.9,
+    phone: "771 123 4567",
+  },
+  {
+    name: "Hotel Real de Minas",
+    category: "Hospedaje",
+    description: "Hotel boutique en casona colonial restaurada con vista a la montana.",
+    image: callesImg,
+    isPremium: true,
+    rating: 4.7,
+    phone: "771 234 5678",
+  },
+  {
+    name: "Tours Mineros RDM",
+    category: "Tours",
+    description: "Recorridos guiados por las minas historicas con expertos en historia local.",
+    image: minaImg,
+    isPremium: false,
+    rating: 4.5,
+  },
+  {
+    name: "Cafe La Neblina",
+    category: "Restaurante",
+    description: "Cafe artesanal de altura con los mejores postres y vista al bosque.",
+    image: rdm1,
+    isPremium: false,
+    rating: 4.4,
+  },
+  {
+    name: "Artesanias del Monte",
+    category: "Souvenir",
+    description: "Artesanias locales, textiles y recuerdos autenticos hechos a mano.",
+    image: artesaniasImg,
+    isPremium: true,
+    rating: 4.6,
+    phone: "771 345 6789",
+  },
+  {
+    name: "Platerías Artesanales",
+    category: "Souvenir",
+    description: "Joyería artesanal en plata, herencia minera de Real del Monte.",
+    image: plateriasImg,
+    isPremium: false,
+    rating: 4.3,
+  },
+  {
+    name: "Servicios Turísticos",
+    category: "Tours",
+    description: "Información turística, sanitarios y puntos de asistencia al visitante.",
+    image: sanitariosImg,
+    isPremium: false,
+    rating: 4.2,
+  },
+  {
+    name: "Restaurant Los Murmullos",
+    category: "Restaurante",
+    description: "Comida tradicional hidalguense con ingredientes locales frescos.",
+    image: rdm2,
+    isPremium: true,
+    rating: 4.5,
+  },
 ];
 
 const categories = ["Todos", "Pastes", "Hospedaje", "Restaurante", "Tours", "Souvenir"];
@@ -35,7 +94,8 @@ const DirectorioPage = () => {
 
   const filteredBusinesses = useMemo(() => {
     return businesses.filter((biz) => {
-      const matchesSearch = searchQuery === "" ||
+      const matchesSearch =
+        searchQuery === "" ||
         biz.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         biz.description.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesCategory = activeCategory === "Todos" || biz.category === activeCategory;
@@ -45,12 +105,19 @@ const DirectorioPage = () => {
 
   return (
     <RDMLayout>
-      <SEOMeta {...(PAGE_SEO.directorio ?? { title: "Directorio de Negocios | RDM Digital", description: "Comercios, hoteles, restaurantes y servicios de Real del Monte." })} />
+      <SEOMeta
+        {...(PAGE_SEO.directorio ?? {
+          title: "Directorio de Negocios | RDM Digital",
+          description: "Comercios, hoteles, restaurantes y servicios de Real del Monte.",
+        })}
+      />
       <div className="min-h-screen bg-background">
-
         {/* Immersive Hero */}
         <section className="relative overflow-hidden pt-24 pb-16">
-          <div className="absolute inset-0 bg-cover bg-center opacity-15" style={{ backgroundImage: `url(${callesImg})` }} />
+          <div
+            className="absolute inset-0 bg-cover bg-center opacity-15"
+            style={{ backgroundImage: `url(${callesImg})` }}
+          />
           <div className="absolute inset-0 bg-gradient-to-b from-night-900/80 via-night-900/70 to-night-900" />
           <AuroraBackground />
           <div className="dust-particles" />
@@ -71,7 +138,8 @@ const DirectorioPage = () => {
                 <span
                   className="block animate-gradient-text text-glow-gold"
                   style={{
-                    backgroundImage: "linear-gradient(135deg, hsl(43,80%,55%) 0%, hsl(35,70%,65%) 25%, hsl(43,80%,55%) 50%, hsl(25,60%,50%) 75%, hsl(43,80%,55%) 100%)",
+                    backgroundImage:
+                      "linear-gradient(135deg, hsl(43,80%,55%) 0%, hsl(35,70%,65%) 25%, hsl(43,80%,55%) 50%, hsl(25,60%,50%) 75%, hsl(43,80%,55%) 100%)",
                     backgroundSize: "200% 200%",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
@@ -82,7 +150,8 @@ const DirectorioPage = () => {
                 </span>
               </h1>
               <p className="max-w-2xl text-base text-silver-400 md:text-lg leading-relaxed">
-                Comercios, hoteles, restaurantes y servicios recomendados por la comunidad de Real del Monte.
+                Comercios, hoteles, restaurantes y servicios recomendados por la comunidad de Real
+                del Monte.
               </p>
             </motion.div>
           </div>
@@ -136,14 +205,19 @@ const DirectorioPage = () => {
           {/* Results count */}
           <div className="flex items-center gap-2 mb-6 text-sm text-silver-500">
             <Sparkles className="h-3.5 w-3.5 text-gold-400/60" />
-            <span>{filteredBusinesses.length} negocio{filteredBusinesses.length !== 1 ? "s" : ""} encontrado{filteredBusinesses.length !== 1 ? "s" : ""}</span>
+            <span>
+              {filteredBusinesses.length} negocio{filteredBusinesses.length !== 1 ? "s" : ""}{" "}
+              encontrado{filteredBusinesses.length !== 1 ? "s" : ""}
+            </span>
           </div>
 
           {filteredBusinesses.length === 0 ? (
             <div className="text-center py-16 rounded-2xl border border-white/10 bg-white/5">
               <Store className="h-12 w-12 text-silver-500 mx-auto mb-4" />
               <p className="text-silver-400 text-lg">No se encontraron negocios.</p>
-              <p className="text-silver-500 text-sm mt-2">Intenta con otros terminos de busqueda o categoria.</p>
+              <p className="text-silver-500 text-sm mt-2">
+                Intenta con otros terminos de busqueda o categoria.
+              </p>
             </div>
           ) : (
             <div className="grid md:grid-cols-2 gap-4">
@@ -153,7 +227,6 @@ const DirectorioPage = () => {
             </div>
           )}
         </section>
-
       </div>
     </RDMLayout>
   );

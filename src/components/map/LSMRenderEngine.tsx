@@ -1,26 +1,26 @@
-import { useEffect, useMemo, useState } from "react"
-import { useWebSocketSubscription } from "../../hooks/useWebSocket"
+import { useEffect, useMemo, useState } from "react";
+import { useWebSocketSubscription } from "../../hooks/useWebSocket";
 
 export interface LSMRenderProps {
-  capaActiva: "turismo" | "economia" | "plateria" | "movilidad"
+  capaActiva: "turismo" | "economia" | "plateria" | "movilidad";
   initialViewState: {
-    longitude: number
-    latitude: number
-    zoom: number
-    pitch?: number
-    bearing?: number
-  }
+    longitude: number;
+    latitude: number;
+    zoom: number;
+    pitch?: number;
+    bearing?: number;
+  };
 }
 
 interface LSMNodeEvent {
-  capa: LSMRenderProps["capaActiva"]
+  capa: LSMRenderProps["capaActiva"];
   data: {
-    id: string
-    lat: number
-    lng: number
-    intensidadSaturacion?: number
-    ofertaActiva?: boolean
-  }
+    id: string;
+    lat: number;
+    lng: number;
+    intensidadSaturacion?: number;
+    ofertaActiva?: boolean;
+  };
 }
 
 const MAP_BOUNDS = {
@@ -28,15 +28,15 @@ const MAP_BOUNDS = {
   maxLat: 20.16,
   minLng: -98.69,
   maxLng: -98.65,
-}
+};
 
 // Configuración cromática y semántica de la infraestructura LTOS
 const CAPA_THEME_MAP: Record<
   LSMRenderProps["capaActiva"],
   {
-    colorNodo: string
-    shadow: string
-    pulseColor: string
+    colorNodo: string;
+    shadow: string;
+    pulseColor: string;
   }
 > = {
   turismo: {
@@ -59,72 +59,56 @@ const CAPA_THEME_MAP: Record<
     shadow: "0 0 4px rgba(225,29,72,0.2), 0 0 16px rgba(244,63,94,0.6)",
     pulseColor: "bg-rose-400",
   },
-}
+};
 
 const projectPoint = (lat: number, lng: number) => {
-  const x =
-    ((lng - MAP_BOUNDS.minLng) /
-      (MAP_BOUNDS.maxLng - MAP_BOUNDS.minLng || 1e-6)) *
-    100
+  const x = ((lng - MAP_BOUNDS.minLng) / (MAP_BOUNDS.maxLng - MAP_BOUNDS.minLng || 1e-6)) * 100;
   const y =
-    100 -
-    ((lat - MAP_BOUNDS.minLat) /
-      (MAP_BOUNDS.maxLat - MAP_BOUNDS.minLat || 1e-6)) *
-      100
+    100 - ((lat - MAP_BOUNDS.minLat) / (MAP_BOUNDS.maxLat - MAP_BOUNDS.minLat || 1e-6)) * 100;
 
   return {
     x: Math.max(0, Math.min(100, x)),
     y: Math.max(0, Math.min(100, y)),
-  }
-}
+  };
+};
 
-export const LSMRenderEngine = ({
-  capaActiva,
-  initialViewState,
-}: LSMRenderProps) => {
-  const [nodosLSM, setNodosLSM] = useState<LSMNodeEvent["data"][]>([])
-  const lastEvent = useWebSocketSubscription<LSMNodeEvent>(
-    "LSM_REALTIME_STREAM",
-  )
+export const LSMRenderEngine = ({ capaActiva, initialViewState }: LSMRenderProps) => {
+  const [nodosLSM, setNodosLSM] = useState<LSMNodeEvent["data"][]>([]);
+  const lastEvent = useWebSocketSubscription<LSMNodeEvent>("LSM_REALTIME_STREAM");
 
   // Aislamiento de Capas: evita persistencia de nodos fantasma al conmutar vector operativo
   useEffect(() => {
-    setNodosLSM([])
-  }, [capaActiva])
+    setNodosLSM([]);
+  }, [capaActiva]);
 
   // Consumo e inserción limpia de flujos en tiempo real
   useEffect(() => {
-    if (!lastEvent || lastEvent.capa !== capaActiva) return
+    if (!lastEvent || lastEvent.capa !== capaActiva) return;
 
     setNodosLSM((prev) => {
-      const filtrados = prev.filter((n) => n.id !== lastEvent.data.id)
-      const nuevos = [...filtrados, lastEvent.data]
+      const filtrados = prev.filter((n) => n.id !== lastEvent.data.id);
+      const nuevos = [...filtrados, lastEvent.data];
       // Límite de seguridad para evitar tormentas de renders en sesiones largas
-      return nuevos.slice(-500)
-    })
-  }, [lastEvent, capaActiva])
+      return nuevos.slice(-500);
+    });
+  }, [lastEvent, capaActiva]);
 
   // Procesamiento y proyección matemática de coordenadas analíticas
   const nodosVisuales = useMemo(() => {
     return nodosLSM.map((nodo) => {
-      const point = projectPoint(nodo.lat, nodo.lng)
-      const saturacion = nodo.intensidadSaturacion ?? 0
-      const scale =
-        capaActiva === "movilidad"
-          ? 0.6 + saturacion
-          : nodo.ofertaActiva
-          ? 1.1
-          : 0.8
+      const point = projectPoint(nodo.lat, nodo.lng);
+      const saturacion = nodo.intensidadSaturacion ?? 0;
+      const scale = capaActiva === "movilidad" ? 0.6 + saturacion : nodo.ofertaActiva ? 1.1 : 0.8;
 
       return {
         ...nodo,
         ...point,
         scale,
-      }
-    })
-  }, [nodosLSM, capaActiva])
+      };
+    });
+  }, [nodosLSM, capaActiva]);
 
-  const currentTheme = CAPA_THEME_MAP[capaActiva]
+  const currentTheme = CAPA_THEME_MAP[capaActiva];
 
   return (
     <div
@@ -138,7 +122,7 @@ export const LSMRenderEngine = ({
       {/* Contenedor de Capas de Red optimizado para GPU mediante sub-capa compuesta */}
       <div className="absolute inset-0 pointer-events-none contain-strict">
         {nodosVisuales.map((nodo) => {
-          const isOferta = nodo.ofertaActiva && capaActiva !== "movilidad"
+          const isOferta = nodo.ofertaActiva && capaActiva !== "movilidad";
 
           return (
             <div
@@ -151,9 +135,7 @@ export const LSMRenderEngine = ({
                 top: `${nodo.y}%`,
                 willChange: "transform",
                 transform: `translate(-50%, -50%) scale(${nodo.scale})`,
-                background: isOferta
-                  ? "rgba(238, 242, 255, 0.95)"
-                  : currentTheme.colorNodo,
+                background: isOferta ? "rgba(238, 242, 255, 0.95)" : currentTheme.colorNodo,
                 boxShadow: isOferta
                   ? "0 0 0 4px rgba(238,242,255,0.2), 0 0 24px rgba(238,242,255,0.85)"
                   : currentTheme.shadow,
@@ -162,7 +144,7 @@ export const LSMRenderEngine = ({
               }}
               title={`${nodo.id} · Vector: ${capaActiva}`}
             />
-          )
+          );
         })}
       </div>
 
@@ -172,14 +154,12 @@ export const LSMRenderEngine = ({
           Estatus LSM
         </span>
         <div className="flex items-center gap-2">
-          <div
-            className={`h-2 w-2 animate-pulse rounded-full ${currentTheme.pulseColor}`}
-          />
+          <div className={`h-2 w-2 animate-pulse rounded-full ${currentTheme.pulseColor}`} />
           <span className="font-sans text-xs font-bold capitalize tracking-wide text-slate-200">
             {capaActiva}
           </span>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

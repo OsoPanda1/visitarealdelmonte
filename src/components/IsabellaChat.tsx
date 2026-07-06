@@ -13,7 +13,11 @@ export function IsabellaChat() {
   const voice = useIsabellaVoice();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([
-    { role: "assistant", content: "¡Hola! Soy **Isabella Villaseñor AI**, la IA contextual del ecosistema TAMV MD‑X4™. ¿En qué puedo ayudarte?" },
+    {
+      role: "assistant",
+      content:
+        "¡Hola! Soy **Isabella Villaseñor AI**, la IA contextual del ecosistema TAMV MD‑X4™. ¿En qué puedo ayudarte?",
+    },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -35,7 +39,9 @@ export function IsabellaChat() {
 
     try {
       const { supabase } = await import("@/integrations/supabase/client");
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       const token = session?.access_token ?? import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
       const resp = await fetch(CHAT_URL, {
         method: "POST",
@@ -76,7 +82,9 @@ export function IsabellaChat() {
               setMessages((prev) => {
                 const last = prev[prev.length - 1];
                 if (last?.role === "assistant" && prev.length > 1) {
-                  return prev.map((m, i) => (i === prev.length - 1 ? { ...m, content: assistantSoFar } : m));
+                  return prev.map((m, i) =>
+                    i === prev.length - 1 ? { ...m, content: assistantSoFar } : m,
+                  );
                 }
                 return [...prev, { role: "assistant", content: assistantSoFar }];
               });
@@ -91,7 +99,10 @@ export function IsabellaChat() {
       logger.error(e);
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: "Lo siento, hubo un error al procesar tu consulta. Intenta de nuevo." },
+        {
+          role: "assistant",
+          content: "Lo siento, hubo un error al procesar tu consulta. Intenta de nuevo.",
+        },
       ]);
     } finally {
       setLoading(false);
@@ -140,16 +151,26 @@ export function IsabellaChat() {
               <div className="flex items-center gap-1">
                 <button
                   onClick={() => {
-                    if (voice.isSpeaking) { voice.cancelAll(); return; }
+                    if (voice.isSpeaking) {
+                      voice.cancelAll();
+                      return;
+                    }
                     const last = messages.filter((m) => m.role === "assistant").pop();
                     if (last) voice.speak(last.content);
                   }}
                   className="text-muted-foreground hover:text-foreground p-1"
                   title="Leer última respuesta"
                 >
-                  {voice.isSpeaking ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+                  {voice.isSpeaking ? (
+                    <VolumeX className="h-4 w-4" />
+                  ) : (
+                    <Volume2 className="h-4 w-4" />
+                  )}
                 </button>
-                <button onClick={() => setOpen(false)} className="text-muted-foreground hover:text-foreground">
+                <button
+                  onClick={() => setOpen(false)}
+                  className="text-muted-foreground hover:text-foreground"
+                >
                   <X className="h-4 w-4" />
                 </button>
               </div>
@@ -158,7 +179,10 @@ export function IsabellaChat() {
             {/* Messages */}
             <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3">
               {messages.map((m, i) => (
-                <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+                <div
+                  key={i}
+                  className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
+                >
                   <div
                     className={`max-w-[85%] rounded-lg px-3 py-2 text-sm leading-relaxed ${
                       m.role === "user"
@@ -195,7 +219,12 @@ export function IsabellaChat() {
                   className="flex-1 bg-muted/30 border border-border/50 rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
                   disabled={loading}
                 />
-                <Button type="submit" size="icon" disabled={loading || !input.trim()} className="shrink-0">
+                <Button
+                  type="submit"
+                  size="icon"
+                  disabled={loading || !input.trim()}
+                  className="shrink-0"
+                >
                   <Send className="h-4 w-4" />
                 </Button>
               </form>

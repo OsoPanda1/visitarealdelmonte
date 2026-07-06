@@ -19,29 +19,53 @@ const TIPO_LABEL: Record<string, string> = {
 };
 
 const CONSEJOS = [
-  { icon: Clock, title: "Horarios pico", desc: "Sábados y domingos 11:00–15:00 son los horarios de mayor afluencia. Recomendamos llegar temprano." },
-  { icon: Navigation, title: "Acceso principal", desc: "La Av. Juárez es la entrada principal al pueblo. El Estacionamiento Mayor (EST-03) es el más accesible." },
-  { icon: AlertCircle, title: "Contingencia / Ferias", desc: "Durante eventos especiales, se habilitan zonas de desahogo en Tezoantla y la periferia del Barrio Viento." },
+  {
+    icon: Clock,
+    title: "Horarios pico",
+    desc: "Sábados y domingos 11:00–15:00 son los horarios de mayor afluencia. Recomendamos llegar temprano.",
+  },
+  {
+    icon: Navigation,
+    title: "Acceso principal",
+    desc: "La Av. Juárez es la entrada principal al pueblo. El Estacionamiento Mayor (EST-03) es el más accesible.",
+  },
+  {
+    icon: AlertCircle,
+    title: "Contingencia / Ferias",
+    desc: "Durante eventos especiales, se habilitan zonas de desahogo en Tezoantla y la periferia del Barrio Viento.",
+  },
 ];
 
 export default function EstacionamientosPage() {
   return (
     <RDMLayout>
-      <SEOMeta title="Dónde Estacionar — Real del Monte" description="Guía completa de estacionamientos en Real del Monte. Ubicaciones, capacidad y consejos de movilidad para tu visita." />
+      <SEOMeta
+        title="Dónde Estacionar — Real del Monte"
+        description="Guía completa de estacionamientos en Real del Monte. Ubicaciones, capacidad y consejos de movilidad para tu visita."
+      />
 
       {/* Hero */}
       <section className="pt-24 pb-12 px-6 md:px-16 lg:px-24">
         <div className="max-w-5xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <p className="text-sm tracking-[0.3em] uppercase text-[hsl(var(--rdm-amber))] mb-3" style={{ fontFamily: "var(--font-body)" }}>
+            <p
+              className="text-sm tracking-[0.3em] uppercase text-[hsl(var(--rdm-amber))] mb-3"
+              style={{ fontFamily: "var(--font-body)" }}
+            >
               Movilidad y Logística
             </p>
-            <h1 className="text-4xl md:text-6xl font-bold mb-4" style={{ fontFamily: "var(--font-display)" }}>
+            <h1
+              className="text-4xl md:text-6xl font-bold mb-4"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
               Dónde <span className="text-[hsl(var(--rdm-amber))]">estacionar</span>
             </h1>
-            <p className="text-[hsl(var(--muted-foreground))] max-w-2xl text-lg leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
-              Real del Monte cuenta con 7 estacionamientos principales distribuidos estratégicamente.
-              Encuentra el más cercano a tu destino.
+            <p
+              className="text-[hsl(var(--muted-foreground))] max-w-2xl text-lg leading-relaxed"
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              Real del Monte cuenta con 7 estacionamientos principales distribuidos
+              estratégicamente. Encuentra el más cercano a tu destino.
             </p>
           </motion.div>
         </div>
@@ -67,7 +91,9 @@ export default function EstacionamientosPage() {
                   >
                     <Car className="w-4 h-4" style={{ color: TIPO_COLOR[est.tipo] }} />
                   </div>
-                  <span className="text-[10px] font-mono text-[hsl(var(--muted-foreground))]">{est.id}</span>
+                  <span className="text-[10px] font-mono text-[hsl(var(--muted-foreground))]">
+                    {est.id}
+                  </span>
                 </div>
                 <span
                   className="px-2 py-0.5 rounded-full text-[10px] font-medium text-white"
@@ -77,12 +103,23 @@ export default function EstacionamientosPage() {
                 </span>
               </div>
 
-              <h3 className="font-semibold text-base mb-1" style={{ fontFamily: "var(--font-display)" }}>{est.nombre}</h3>
-              <p className="text-xs text-[hsl(var(--muted-foreground))] mb-2" style={{ fontFamily: "var(--font-body)" }}>
+              <h3
+                className="font-semibold text-base mb-1"
+                style={{ fontFamily: "var(--font-display)" }}
+              >
+                {est.nombre}
+              </h3>
+              <p
+                className="text-xs text-[hsl(var(--muted-foreground))] mb-2"
+                style={{ fontFamily: "var(--font-body)" }}
+              >
                 <MapPin className="w-3 h-3 inline mr-1" />
                 {est.ubicacion}
               </p>
-              <p className="text-xs text-[hsl(var(--muted-foreground))]" style={{ fontFamily: "var(--font-body)" }}>
+              <p
+                className="text-xs text-[hsl(var(--muted-foreground))]"
+                style={{ fontFamily: "var(--font-body)" }}
+              >
                 {est.capacidad}
               </p>
 
@@ -103,7 +140,10 @@ export default function EstacionamientosPage() {
       {/* Consejos */}
       <section className="py-16 px-6 md:px-16 lg:px-24 bg-[hsl(var(--muted)/0.3)]">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-10" style={{ fontFamily: "var(--font-display)" }}>
+          <h2
+            className="text-2xl md:text-3xl font-bold text-center mb-10"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
             Consejos de movilidad
           </h2>
           <div className="grid sm:grid-cols-3 gap-6">
@@ -119,8 +159,18 @@ export default function EstacionamientosPage() {
                 <div className="w-12 h-12 rounded-xl bg-[hsl(var(--rdm-amber)/0.1)] flex items-center justify-center mx-auto mb-3">
                   <c.icon className="w-5 h-5 text-[hsl(var(--rdm-amber))]" />
                 </div>
-                <h3 className="font-semibold text-sm mb-2" style={{ fontFamily: "var(--font-display)" }}>{c.title}</h3>
-                <p className="text-xs text-[hsl(var(--muted-foreground))] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{c.desc}</p>
+                <h3
+                  className="font-semibold text-sm mb-2"
+                  style={{ fontFamily: "var(--font-display)" }}
+                >
+                  {c.title}
+                </h3>
+                <p
+                  className="text-xs text-[hsl(var(--muted-foreground))] leading-relaxed"
+                  style={{ fontFamily: "var(--font-body)" }}
+                >
+                  {c.desc}
+                </p>
               </motion.div>
             ))}
           </div>

@@ -15,7 +15,13 @@ interface SovereignPageShellProps {
   children?: ReactNode;
 }
 
-export function SovereignPageShell({ eyebrow, title, description, bullets, children }: SovereignPageShellProps) {
+export function SovereignPageShell({
+  eyebrow,
+  title,
+  description,
+  bullets,
+  children,
+}: SovereignPageShellProps) {
   const [showTrailer, setShowTrailer] = useState(true);
 
   return (
@@ -50,10 +56,15 @@ export function SovereignPageShell({ eyebrow, title, description, bullets, child
               transition={{ duration: 0.6 }}
               className="relative z-10 max-w-4xl"
             >
-              <Badge variant="outline" className="mb-5 tracking-[0.22em] uppercase text-[10px] border-foreground/20 text-foreground/80">
+              <Badge
+                variant="outline"
+                className="mb-5 tracking-[0.22em] uppercase text-[10px] border-foreground/20 text-foreground/80"
+              >
                 {eyebrow}
               </Badge>
-              <h1 className="text-4xl md:text-6xl font-display font-semibold leading-[0.95] text-foreground">{title}</h1>
+              <h1 className="text-4xl md:text-6xl font-display font-semibold leading-[0.95] text-foreground">
+                {title}
+              </h1>
               <p className="mt-5 text-lg text-foreground/70 max-w-2xl">{description}</p>
             </motion.div>
           </section>
@@ -68,7 +79,9 @@ export function SovereignPageShell({ eyebrow, title, description, bullets, child
               >
                 <Card className="glass border-border/60 h-full">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm tracking-[0.14em] uppercase text-foreground/75">Módulo {index + 1}</CardTitle>
+                    <CardTitle className="text-sm tracking-[0.14em] uppercase text-foreground/75">
+                      Módulo {index + 1}
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <p className="text-sm text-foreground/75 leading-relaxed">{bullet}</p>
@@ -78,7 +91,9 @@ export function SovereignPageShell({ eyebrow, title, description, bullets, child
             ))}
           </section>
 
-          {children && <section className="container mx-auto px-4 md:px-8 mt-8">{children}</section>}
+          {children && (
+            <section className="container mx-auto px-4 md:px-8 mt-8">{children}</section>
+          )}
         </main>
 
         <Footer />

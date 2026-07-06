@@ -21,7 +21,12 @@ const AmbientAudio = () => {
     const onPref = async (e: Event) => {
       const want = (e as CustomEvent).detail as boolean;
       if (want) {
-        try { await audio.play(); setPlaying(true); } catch { setPlaying(false); }
+        try {
+          await audio.play();
+          setPlaying(true);
+        } catch {
+          setPlaying(false);
+        }
       } else {
         audio.pause();
         setPlaying(false);
@@ -61,7 +66,9 @@ const AmbientAudio = () => {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 1.2, duration: 0.6 }}
-      aria-label={playing ? "Silenciar sonido ambiental" : "Activar sonido ambiental de Real del Monte"}
+      aria-label={
+        playing ? "Silenciar sonido ambiental" : "Activar sonido ambiental de Real del Monte"
+      }
       title={playing ? "Silenciar ambiente" : "Sonido inmersivo"}
       className="fixed bottom-6 left-6 z-50 flex h-12 w-12 items-center justify-center rounded-full glass border border-[hsl(var(--gold))]/25 text-[hsl(var(--gold))] shadow-lg transition-all hover:scale-105 hover:border-[hsl(var(--gold))]/60"
     >

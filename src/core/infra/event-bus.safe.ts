@@ -45,7 +45,6 @@ export class SafeEventBus {
     return true;
   }
 
-
   getDroppedCount() {
     return this.dropped;
   }

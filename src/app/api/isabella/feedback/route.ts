@@ -1,6 +1,6 @@
 import { consentEvents, reviews, reviewsScore } from "@/infra/metrics/prometheus";
-import { validate, feedbackSchema } from '@/lib/validation';
-import { handleApiError, apiResponse } from '@/lib/security/error-handler';
+import { validate, feedbackSchema } from "@/lib/validation";
+import { handleApiError, apiResponse } from "@/lib/security/error-handler";
 
 export async function POST(req: Request) {
   try {

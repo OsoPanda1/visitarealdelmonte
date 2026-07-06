@@ -8,10 +8,10 @@ const WikiTAMV = () => (
     subtitle="Documento Maestro Unificado — Arquitectura Conceptual, Narrativa, Operativa y Tecnológica"
   >
     <InfoBox type="info" title="Declaración de Consolidación">
-      Este documento integra y estructura de manera coherente todos los componentes del proyecto TAMV:
-      reportaje institucional, marco estratégico, introducción cinematográfica, lógica operativa,
-      script técnico de ingeniería avanzada, arquitectura audiovisual digital, dimensión humana
-      y proyección nacional e internacional.
+      Este documento integra y estructura de manera coherente todos los componentes del proyecto
+      TAMV: reportaje institucional, marco estratégico, introducción cinematográfica, lógica
+      operativa, script técnico de ingeniería avanzada, arquitectura audiovisual digital, dimensión
+      humana y proyección nacional e internacional.
     </InfoBox>
 
     {/* Sección 1: Naturaleza del Proyecto */}
@@ -37,7 +37,11 @@ const WikiTAMV = () => (
         </ul>
         <p className="text-muted-foreground leading-relaxed">
           No se presenta como startup tradicional ni como plataforma comercial masiva, sino como
-          <strong className="text-foreground"> proyecto arquitectónico de largo plazo con identidad propia</strong>.
+          <strong className="text-foreground">
+            {" "}
+            proyecto arquitectónico de largo plazo con identidad propia
+          </strong>
+          .
         </p>
       </div>
     </Section>
@@ -48,9 +52,9 @@ const WikiTAMV = () => (
         <div>
           <h3 className="text-lg font-semibold text-foreground mb-3">Contexto</h3>
           <p className="text-muted-foreground leading-relaxed">
-            En un entorno donde la inteligencia artificial redefine economías, la soberanía tecnológica
-            es un eje geopolítico, y las grandes corporaciones concentran infraestructura digital,
-            TAMV propone una alternativa independiente.
+            En un entorno donde la inteligencia artificial redefine economías, la soberanía
+            tecnológica es un eje geopolítico, y las grandes corporaciones concentran
+            infraestructura digital, TAMV propone una alternativa independiente.
           </p>
         </div>
 
@@ -61,13 +65,19 @@ const WikiTAMV = () => (
               <thead className="bg-muted/50">
                 <tr>
                   <th className="px-4 py-2 text-left text-foreground font-medium">Aspecto</th>
-                  <th className="px-4 py-2 text-left text-muted-foreground">Corporativo Tradicional</th>
+                  <th className="px-4 py-2 text-left text-muted-foreground">
+                    Corporativo Tradicional
+                  </th>
                   <th className="px-4 py-2 text-left text-primary font-medium">TAMV</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border/50">
                 {[
-                  { aspect: "Financiamiento", corp: "Fondos y capital privado", tamv: "Independiente" },
+                  {
+                    aspect: "Financiamiento",
+                    corp: "Fondos y capital privado",
+                    tamv: "Independiente",
+                  },
                   { aspect: "Gobernanza", corp: "Centralizada", tamv: "Conceptualmente abierta" },
                   { aspect: "Identidad", corp: "Comercial", tamv: "Civilizatoria" },
                   { aspect: "Narrativa", corp: "Producto", tamv: "Infraestructura" },
@@ -87,7 +97,13 @@ const WikiTAMV = () => (
           <div className="rounded-lg border border-border/50 bg-card/30 p-4">
             <h4 className="font-semibold text-foreground mb-2">Fortalezas</h4>
             <ul className="space-y-1.5 text-sm text-muted-foreground">
-              {["Visión coherente", "Arquitectura conceptual clara", "Independencia estratégica", "Capacidad de adaptación", "Identidad narrativa fuerte"].map((item) => (
+              {[
+                "Visión coherente",
+                "Arquitectura conceptual clara",
+                "Independencia estratégica",
+                "Capacidad de adaptación",
+                "Identidad narrativa fuerte",
+              ].map((item) => (
                 <li key={item} className="flex items-center gap-2">
                   <span className="text-primary">+</span> {item}
                 </li>
@@ -97,7 +113,12 @@ const WikiTAMV = () => (
           <div className="rounded-lg border border-border/50 bg-card/30 p-4">
             <h4 className="font-semibold text-foreground mb-2">Limitaciones Reales</h4>
             <ul className="space-y-1.5 text-sm text-muted-foreground">
-              {["Falta de padrinazgo empresarial", "Recursos financieros limitados", "Ausencia de validación institucional formal", "Crecimiento orgánico"].map((item) => (
+              {[
+                "Falta de padrinazgo empresarial",
+                "Recursos financieros limitados",
+                "Ausencia de validación institucional formal",
+                "Crecimiento orgánico",
+              ].map((item) => (
                 <li key={item} className="flex items-center gap-2">
                   <span className="text-destructive">−</span> {item}
                 </li>
@@ -112,8 +133,9 @@ const WikiTAMV = () => (
     <Section title="WikiTAMV — Naturaleza y Función" icon={FileText}>
       <div className="space-y-4">
         <p className="text-muted-foreground leading-relaxed">
-          WikiTAMV es el <strong className="text-foreground">sistema documental oficial</strong> del ecosistema TAMV.
-          Funciona como bitácora estructural, registro histórico, documento de legitimación y archivo técnico evolutivo.
+          WikiTAMV es el <strong className="text-foreground">sistema documental oficial</strong> del
+          ecosistema TAMV. Funciona como bitácora estructural, registro histórico, documento de
+          legitimación y archivo técnico evolutivo.
         </p>
 
         <h4 className="font-semibold text-foreground">Capas Operativas</h4>
@@ -125,8 +147,13 @@ const WikiTAMV = () => (
             { num: "04", title: "Proyección estratégica" },
             { num: "05", title: "Ecosistema comunitario" },
           ].map((capa) => (
-            <div key={capa.num} className="flex items-center gap-3 rounded-md border border-border/50 bg-muted/20 px-3 py-2">
-              <span className="text-xs font-mono font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded">{capa.num}</span>
+            <div
+              key={capa.num}
+              className="flex items-center gap-3 rounded-md border border-border/50 bg-muted/20 px-3 py-2"
+            >
+              <span className="text-xs font-mono font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded">
+                {capa.num}
+              </span>
               <span className="text-sm text-muted-foreground">{capa.title}</span>
             </div>
           ))}
@@ -186,21 +213,43 @@ const WikiTAMV = () => (
         <div>
           <h4 className="font-semibold text-foreground mb-3">Máquina de Estados</h4>
           <div className="rounded-lg border border-border/50 bg-muted/20 p-3 font-mono text-xs space-y-1">
-            <div><span className="text-primary">S0:</span> Idle</div>
-            <div><span className="text-primary">S1:</span> Activation</div>
-            <div><span className="text-primary">S2:</span> Origin_Render</div>
-            <div><span className="text-primary">S3:</span> Infrastructure_Projection</div>
-            <div><span className="text-primary">S4:</span> Dedication_Anchor</div>
-            <div><span className="text-primary">S5:</span> Global_Expansion</div>
-            <div><span className="text-primary">S6:</span> Transition_To_Core</div>
+            <div>
+              <span className="text-primary">S0:</span> Idle
+            </div>
+            <div>
+              <span className="text-primary">S1:</span> Activation
+            </div>
+            <div>
+              <span className="text-primary">S2:</span> Origin_Render
+            </div>
+            <div>
+              <span className="text-primary">S3:</span> Infrastructure_Projection
+            </div>
+            <div>
+              <span className="text-primary">S4:</span> Dedication_Anchor
+            </div>
+            <div>
+              <span className="text-primary">S5:</span> Global_Expansion
+            </div>
+            <div>
+              <span className="text-primary">S6:</span> Transition_To_Core
+            </div>
           </div>
-          <p className="text-xs text-muted-foreground mt-2 font-mono">Flujo: S0 → S1 → S2 → S3 → S4 → S5 → S6</p>
+          <p className="text-xs text-muted-foreground mt-2 font-mono">
+            Flujo: S0 → S1 → S2 → S3 → S4 → S5 → S6
+          </p>
         </div>
 
         <div>
           <h4 className="font-semibold text-foreground mb-3">Motor Visual</h4>
           <ul className="space-y-1.5 text-sm text-muted-foreground">
-            {["WebGL / Three.js", "Grafo dinámico tipo force-directed", "Sistema de partículas", "Shaders personalizados", "Render 60 FPS"].map((item) => (
+            {[
+              "WebGL / Three.js",
+              "Grafo dinámico tipo force-directed",
+              "Sistema de partículas",
+              "Shaders personalizados",
+              "Render 60 FPS",
+            ].map((item) => (
               <li key={item} className="flex items-center gap-2">
                 <span className="w-1 h-1 rounded-full bg-secondary shrink-0" />
                 {item}
@@ -231,9 +280,9 @@ const WikiTAMV = () => (
     {/* Sección 6: Dimensión Humana */}
     <Section title="Dimensión Humana" icon={Heart}>
       <InfoBox type="success">
-        La dedicatoria no es ornamental. Cumple función de humanización, anclaje emocional,
-        blindaje narrativo y diferenciación frente a estructuras corporativas impersonales.
-        Reconoce origen, sacrificio y resiliencia.
+        La dedicatoria no es ornamental. Cumple función de humanización, anclaje emocional, blindaje
+        narrativo y diferenciación frente a estructuras corporativas impersonales. Reconoce origen,
+        sacrificio y resiliencia.
       </InfoBox>
     </Section>
 
@@ -250,7 +299,10 @@ const WikiTAMV = () => (
             "Plataforma educativa tecnológica",
             "Marco colaborativo independiente",
           ].map((item) => (
-            <div key={item} className="flex items-center gap-3 rounded-md border border-border/50 bg-muted/20 px-3 py-2">
+            <div
+              key={item}
+              className="flex items-center gap-3 rounded-md border border-border/50 bg-muted/20 px-3 py-2"
+            >
               <span className="text-primary">◆</span>
               <span className="text-sm text-muted-foreground">{item}</span>
             </div>
@@ -266,7 +318,9 @@ const WikiTAMV = () => (
             "Integración público-privada híbrida",
           ].map((escenario, idx) => (
             <div key={escenario} className="flex items-center gap-3">
-              <span className="text-xs font-mono font-bold text-primary bg-primary/10 px-2 py-0.5 rounded">E{idx + 1}</span>
+              <span className="text-xs font-mono font-bold text-primary bg-primary/10 px-2 py-0.5 rounded">
+                E{idx + 1}
+              </span>
               <span className="text-sm text-muted-foreground">{escenario}</span>
             </div>
           ))}
@@ -291,7 +345,12 @@ const WikiTAMV = () => (
           <div>
             <h4 className="font-semibold text-primary mb-3">TAMV ES:</h4>
             <ul className="space-y-1.5 text-sm text-muted-foreground">
-              {["Proyecto estructural independiente", "Sistema documental vivo", "Arquitectura conceptual soberana", "Intento de construcción civilizatoria desde periferia tecnológica"].map((item) => (
+              {[
+                "Proyecto estructural independiente",
+                "Sistema documental vivo",
+                "Arquitectura conceptual soberana",
+                "Intento de construcción civilizatoria desde periferia tecnológica",
+              ].map((item) => (
                 <li key={item} className="flex items-center gap-2">
                   <span className="text-primary">✓</span> {item}
                 </li>
@@ -306,7 +365,10 @@ const WikiTAMV = () => (
     <Section title="Conclusión Final">
       <div className="space-y-4">
         <p className="text-muted-foreground leading-relaxed">
-          Este documento consolida: <strong className="text-foreground">Narrativa, Estrategia, Ingeniería, Arquitectura, Posicionamiento y Dimensión humana.</strong>
+          Este documento consolida:{" "}
+          <strong className="text-foreground">
+            Narrativa, Estrategia, Ingeniería, Arquitectura, Posicionamiento y Dimensión humana.
+          </strong>
         </p>
 
         <InfoBox type="success">
@@ -324,7 +386,8 @@ const WikiTAMV = () => (
             La WikiTAMV representa el núcleo de legitimación del proyecto.
           </p>
           <p className="text-sm text-muted-foreground">
-            No como espectáculo. No como marketing.<br />
+            No como espectáculo. No como marketing.
+            <br />
             <strong className="text-primary">Sino como archivo estructural en evolución.</strong>
           </p>
         </div>

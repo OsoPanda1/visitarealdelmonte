@@ -33,11 +33,7 @@ export function TwinNode({ data }: { data: TwinVisualizerData }) {
   });
 
   return (
-    <mesh
-      ref={meshRef}
-      position={[data.x, 0.18, data.z]}
-      castShadow
-    >
+    <mesh ref={meshRef} position={[data.x, 0.18, data.z]} castShadow>
       <sphereGeometry args={[0.16, 24, 24]} />
       <meshStandardMaterial
         ref={materialRef}

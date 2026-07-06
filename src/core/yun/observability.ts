@@ -5,7 +5,7 @@
  * Provides: structured logging, metric collection, distributed tracing.
  */
 
-import type { YunMetric, YunLogEntry, YunTraceSpan } from './types';
+import type { YunMetric, YunLogEntry, YunTraceSpan } from "./types";
 
 // ============================================================================
 // METRICS
@@ -37,10 +37,7 @@ export function recordMetric(
 /**
  * Increments a counter metric.
  */
-export function incrementCounter(
-  name: string,
-  labels: Record<string, string> = {},
-): void {
+export function incrementCounter(name: string, labels: Record<string, string> = {}): void {
   const existing = metrics.find(
     (m) => m.name === name && JSON.stringify(m.labels) === JSON.stringify(labels),
   );
@@ -103,13 +100,13 @@ export function getMetrics(): string {
     for (const m of metricList) {
       const labels = Object.entries(m.labels)
         .map(([k, v]) => `${k}="${v}"`)
-        .join(',');
-      const labelStr = labels ? `{${labels}}` : '';
+        .join(",");
+      const labelStr = labels ? `{${labels}}` : "";
       lines.push(`${name}${labelStr} ${m.value}`);
     }
   }
 
-  return lines.join('\n');
+  return lines.join("\n");
 }
 
 /**
@@ -127,7 +124,7 @@ const logs: YunLogEntry[] = [];
 const MAX_LOGS = 50_000;
 
 function createLogEntry(
-  level: YunLogEntry['level'],
+  level: YunLogEntry["level"],
   message: string,
   context: Record<string, unknown> = {},
   traceId?: string,
@@ -148,10 +145,10 @@ function createLogEntry(
   }
 
   // Console output in development
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     const prefix = `[YUN ${level.toUpperCase()}]`;
-    const contextStr = Object.keys(context).length ? JSON.stringify(context) : '';
-    console[level === 'error' ? 'error' : level === 'warn' ? 'warn' : 'log'](
+    const contextStr = Object.keys(context).length ? JSON.stringify(context) : "";
+    console[level === "error" ? "error" : level === "warn" ? "warn" : "log"](
       `${prefix} ${message} ${contextStr}`,
     );
   }
@@ -161,25 +158,27 @@ function createLogEntry(
 
 export const yunLogger = {
   debug: (message: string, context?: Record<string, unknown>, traceId?: string, spanId?: string) =>
-    createLogEntry('debug', message, context, traceId, spanId),
+    createLogEntry("debug", message, context, traceId, spanId),
   info: (message: string, context?: Record<string, unknown>, traceId?: string, spanId?: string) =>
-    createLogEntry('info', message, context, traceId, spanId),
+    createLogEntry("info", message, context, traceId, spanId),
   warn: (message: string, context?: Record<string, unknown>, traceId?: string, spanId?: string) =>
-    createLogEntry('warn', message, context, traceId, spanId),
+    createLogEntry("warn", message, context, traceId, spanId),
   error: (message: string, context?: Record<string, unknown>, traceId?: string, spanId?: string) =>
-    createLogEntry('error', message, context, traceId, spanId),
+    createLogEntry("error", message, context, traceId, spanId),
   fatal: (message: string, context?: Record<string, unknown>, traceId?: string, spanId?: string) =>
-    createLogEntry('fatal', message, context, traceId, spanId),
+    createLogEntry("fatal", message, context, traceId, spanId),
 };
 
 /**
  * Returns logs filtered by level and/or trace ID.
  */
-export function getLogs(options: {
-  level?: YunLogEntry['level'];
-  traceId?: string;
-  limit?: number;
-} = {}): YunLogEntry[] {
+export function getLogs(
+  options: {
+    level?: YunLogEntry["level"];
+    traceId?: string;
+    limit?: number;
+  } = {},
+): YunLogEntry[] {
   let result = [...logs];
 
   if (options.level) {
@@ -207,18 +206,14 @@ const MAX_TRACES = 10_000;
 /**
  * Creates a new trace span.
  */
-export function startSpan(
-  name: string,
-  traceId?: string,
-  parentSpanId?: string,
-): YunTraceSpan {
+export function startSpan(name: string, traceId?: string, parentSpanId?: string): YunTraceSpan {
   const span: YunTraceSpan = {
     trace_id: traceId ?? `trc_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
     span_id: `spn_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
     parent_span_id: parentSpanId,
     name,
     start_time: new Date().toISOString(),
-    status: 'ok',
+    status: "ok",
     attributes: {},
   };
 
@@ -235,7 +230,7 @@ export function startSpan(
  */
 export function finishSpan(
   spanId: string,
-  status: YunTraceSpan['status'] = 'ok',
+  status: YunTraceSpan["status"] = "ok",
   attributes: Record<string, string> = {},
 ): void {
   const span = traces.find((s) => s.span_id === spanId);
@@ -258,10 +253,10 @@ export async function traced<T>(
 
   try {
     const result = await fn(span);
-    finishSpan(span.span_id, 'ok');
+    finishSpan(span.span_id, "ok");
     return result;
   } catch (error) {
-    finishSpan(span.span_id, 'error', {
+    finishSpan(span.span_id, "error", {
       error: error instanceof Error ? error.message : String(error),
     });
     throw error;
@@ -287,10 +282,10 @@ export function getRecentTraces(limit = 50): YunTraceSpan[] {
 // ============================================================================
 
 export interface HealthCheckResult {
-  status: 'healthy' | 'degraded' | 'critical';
+  status: "healthy" | "degraded" | "critical";
   checks: {
     name: string;
-    status: 'ok' | 'warn' | 'error';
+    status: "ok" | "warn" | "error";
     message: string;
     latencyMs?: number;
   }[];
@@ -301,49 +296,49 @@ export interface HealthCheckResult {
  * Runs a comprehensive health check.
  */
 export async function runHealthCheck(): Promise<HealthCheckResult> {
-  const checks: HealthCheckResult['checks'] = [];
+  const checks: HealthCheckResult["checks"] = [];
   const startTime = Date.now();
 
   // Check: Event bus
   checks.push({
-    name: 'event_bus',
-    status: 'ok',
-    message: 'Event bus operational',
+    name: "event_bus",
+    status: "ok",
+    message: "Event bus operational",
   });
 
   // Check: Rate limiter
   checks.push({
-    name: 'rate_limiter',
-    status: 'ok',
-    message: 'Rate limiter operational',
+    name: "rate_limiter",
+    status: "ok",
+    message: "Rate limiter operational",
   });
 
   // Check: Circuit breakers
   checks.push({
-    name: 'circuit_breakers',
-    status: 'ok',
-    message: 'Circuit breakers operational',
+    name: "circuit_breakers",
+    status: "ok",
+    message: "Circuit breakers operational",
   });
 
   // Check: Log buffer
   const recentErrors = logs.filter(
-    (l) => l.level === 'error' && Date.now() - new Date(l.timestamp).getTime() < 60_000,
+    (l) => l.level === "error" && Date.now() - new Date(l.timestamp).getTime() < 60_000,
   );
   checks.push({
-    name: 'log_buffer',
-    status: recentErrors.length > 10 ? 'warn' : 'ok',
+    name: "log_buffer",
+    status: recentErrors.length > 10 ? "warn" : "ok",
     message: `${recentErrors.length} errors in last minute`,
   });
 
   // Determine overall status
-  const hasError = checks.some((c) => c.status === 'error');
-  const hasWarn = checks.some((c) => c.status === 'warn');
+  const hasError = checks.some((c) => c.status === "error");
+  const hasWarn = checks.some((c) => c.status === "warn");
 
-  const status: HealthCheckResult['status'] = hasError
-    ? 'critical'
+  const status: HealthCheckResult["status"] = hasError
+    ? "critical"
     : hasWarn
-      ? 'degraded'
-      : 'healthy';
+      ? "degraded"
+      : "healthy";
 
   return {
     status,

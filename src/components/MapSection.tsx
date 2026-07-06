@@ -77,15 +77,123 @@ function immersionBadge(level: string): string {
 
 // Fallback twins when API is unavailable
 const fallbackTwins: TwinNode[] = [
-  { id: "twin-centro", modelType: "PLACE_TWIN", sourceId: "centro-historico", name: "Centro Histórico", lat: 20.1407, lng: -98.6725, tags: ["HISTORIA"], immersionLevel: 0.7, popularityScore: 0.9, telemetry: { crowdLevel: 0.45, openStatus: true }, properties: { type: "HISTORIC", immersion: "L2" } },
-  { id: "twin-mina", modelType: "PLACE_TWIN", sourceId: "mina-acosta", name: "Mina de Acosta", lat: 20.1448, lng: -98.6653, tags: ["MUSEO"], immersionLevel: 0.9, popularityScore: 0.95, telemetry: { crowdLevel: 0.3, openStatus: true }, properties: { type: "MUSEUM", immersion: "L3" } },
-  { id: "twin-panteon", modelType: "PLACE_TWIN", sourceId: "panteon-ingles", name: "Panteón Inglés", lat: 20.1397, lng: -98.6769, tags: ["HISTORIA"], immersionLevel: 0.8, popularityScore: 0.85, telemetry: { crowdLevel: 0.15, openStatus: true }, properties: { type: "HISTORIC", immersion: "L2" } },
-  { id: "twin-cristo", modelType: "PLACE_TWIN", sourceId: "cristo-rey", name: "Cristo Rey", lat: 20.1460, lng: -98.6690, tags: ["MIRADOR"], immersionLevel: 0.7, popularityScore: 0.8, telemetry: { crowdLevel: 0.25, openStatus: true }, properties: { type: "VIEWPOINT", immersion: "L2" } },
-  { id: "twin-bosque", modelType: "PLACE_TWIN", sourceId: "bosque-pinos", name: "Bosque de Pinos", lat: 20.1556, lng: -98.6856, tags: ["NATURALEZA"], immersionLevel: 0.6, popularityScore: 0.65, telemetry: { crowdLevel: 0.08, openStatus: true }, properties: { type: "NATURE", immersion: "L1" } },
-  { id: "twin-paste", modelType: "MERCHANT_TWIN", sourceId: "pasteria-portal", name: "Pastería El Portal", lat: 20.1409, lng: -98.6723, tags: ["GASTRONOMIA"], immersionLevel: 0.7, popularityScore: 0.9, telemetry: { crowdLevel: 0.6, openStatus: true }, properties: { type: "FOOD", immersion: "L2" } },
-  { id: "twin-coffee", modelType: "MERCHANT_TWIN", sourceId: "mina-coffee", name: "Mina Coffee House", lat: 20.1391, lng: -98.6752, tags: ["CAFE"], immersionLevel: 0.6, popularityScore: 0.7, telemetry: { crowdLevel: 0.4, openStatus: true }, properties: { type: "FOOD", immersion: "L2" } },
-  { id: "twin-hotel", modelType: "MERCHANT_TWIN", sourceId: "hotel-real", name: "Hotel Real del Monte", lat: 20.1456, lng: -98.6800, tags: ["HOSPEDAJE"], immersionLevel: 0.8, popularityScore: 0.75, telemetry: { crowdLevel: 0.3, openStatus: true }, properties: { type: "LODGING", immersion: "L3" } },
-  { id: "twin-eco", modelType: "MERCHANT_TWIN", sourceId: "eco-aventuras", name: "Eco Aventuras RDM", lat: 20.1500, lng: -98.6820, tags: ["AVENTURA"], immersionLevel: 0.9, popularityScore: 0.7, telemetry: { crowdLevel: 0.15, openStatus: true }, properties: { type: "ACTIVITY", immersion: "L3" } },
+  {
+    id: "twin-centro",
+    modelType: "PLACE_TWIN",
+    sourceId: "centro-historico",
+    name: "Centro Histórico",
+    lat: 20.1407,
+    lng: -98.6725,
+    tags: ["HISTORIA"],
+    immersionLevel: 0.7,
+    popularityScore: 0.9,
+    telemetry: { crowdLevel: 0.45, openStatus: true },
+    properties: { type: "HISTORIC", immersion: "L2" },
+  },
+  {
+    id: "twin-mina",
+    modelType: "PLACE_TWIN",
+    sourceId: "mina-acosta",
+    name: "Mina de Acosta",
+    lat: 20.1448,
+    lng: -98.6653,
+    tags: ["MUSEO"],
+    immersionLevel: 0.9,
+    popularityScore: 0.95,
+    telemetry: { crowdLevel: 0.3, openStatus: true },
+    properties: { type: "MUSEUM", immersion: "L3" },
+  },
+  {
+    id: "twin-panteon",
+    modelType: "PLACE_TWIN",
+    sourceId: "panteon-ingles",
+    name: "Panteón Inglés",
+    lat: 20.1397,
+    lng: -98.6769,
+    tags: ["HISTORIA"],
+    immersionLevel: 0.8,
+    popularityScore: 0.85,
+    telemetry: { crowdLevel: 0.15, openStatus: true },
+    properties: { type: "HISTORIC", immersion: "L2" },
+  },
+  {
+    id: "twin-cristo",
+    modelType: "PLACE_TWIN",
+    sourceId: "cristo-rey",
+    name: "Cristo Rey",
+    lat: 20.146,
+    lng: -98.669,
+    tags: ["MIRADOR"],
+    immersionLevel: 0.7,
+    popularityScore: 0.8,
+    telemetry: { crowdLevel: 0.25, openStatus: true },
+    properties: { type: "VIEWPOINT", immersion: "L2" },
+  },
+  {
+    id: "twin-bosque",
+    modelType: "PLACE_TWIN",
+    sourceId: "bosque-pinos",
+    name: "Bosque de Pinos",
+    lat: 20.1556,
+    lng: -98.6856,
+    tags: ["NATURALEZA"],
+    immersionLevel: 0.6,
+    popularityScore: 0.65,
+    telemetry: { crowdLevel: 0.08, openStatus: true },
+    properties: { type: "NATURE", immersion: "L1" },
+  },
+  {
+    id: "twin-paste",
+    modelType: "MERCHANT_TWIN",
+    sourceId: "pasteria-portal",
+    name: "Pastería El Portal",
+    lat: 20.1409,
+    lng: -98.6723,
+    tags: ["GASTRONOMIA"],
+    immersionLevel: 0.7,
+    popularityScore: 0.9,
+    telemetry: { crowdLevel: 0.6, openStatus: true },
+    properties: { type: "FOOD", immersion: "L2" },
+  },
+  {
+    id: "twin-coffee",
+    modelType: "MERCHANT_TWIN",
+    sourceId: "mina-coffee",
+    name: "Mina Coffee House",
+    lat: 20.1391,
+    lng: -98.6752,
+    tags: ["CAFE"],
+    immersionLevel: 0.6,
+    popularityScore: 0.7,
+    telemetry: { crowdLevel: 0.4, openStatus: true },
+    properties: { type: "FOOD", immersion: "L2" },
+  },
+  {
+    id: "twin-hotel",
+    modelType: "MERCHANT_TWIN",
+    sourceId: "hotel-real",
+    name: "Hotel Real del Monte",
+    lat: 20.1456,
+    lng: -98.68,
+    tags: ["HOSPEDAJE"],
+    immersionLevel: 0.8,
+    popularityScore: 0.75,
+    telemetry: { crowdLevel: 0.3, openStatus: true },
+    properties: { type: "LODGING", immersion: "L3" },
+  },
+  {
+    id: "twin-eco",
+    modelType: "MERCHANT_TWIN",
+    sourceId: "eco-aventuras",
+    name: "Eco Aventuras RDM",
+    lat: 20.15,
+    lng: -98.682,
+    tags: ["AVENTURA"],
+    immersionLevel: 0.9,
+    popularityScore: 0.7,
+    telemetry: { crowdLevel: 0.15, openStatus: true },
+    properties: { type: "ACTIVITY", immersion: "L3" },
+  },
 ];
 
 const MapSection = () => {
@@ -97,9 +205,12 @@ const MapSection = () => {
   const twins = twinsResponse?.twins ?? fallbackTwins;
 
   // Stats from telemetry
-  const avgCrowd = twins.length > 0
-    ? Math.round((twins.reduce((a, t) => a + (t.telemetry.crowdLevel ?? 0), 0) / twins.length) * 100)
-    : 0;
+  const avgCrowd =
+    twins.length > 0
+      ? Math.round(
+          (twins.reduce((a, t) => a + (t.telemetry.crowdLevel ?? 0), 0) / twins.length) * 100,
+        )
+      : 0;
   const placesCount = twins.filter((t) => t.modelType === "PLACE_TWIN").length;
   const merchantsCount = twins.filter((t) => t.modelType === "MERCHANT_TWIN").length;
 
@@ -113,7 +224,7 @@ const MapSection = () => {
     }
 
     const map = L.map(mapRef.current, {
-      center: [20.1410, -98.6735],
+      center: [20.141, -98.6735],
       zoom: 15,
       zoomControl: false,
       attributionControl: false,
@@ -216,8 +327,8 @@ const MapSection = () => {
             Mapa <span className="text-gradient-cyan">en Tiempo Real</span>
           </h2>
           <p className="mt-4 text-muted-foreground max-w-lg">
-            Cada nodo representa un punto activo del gemelo digital con telemetría de aforo,
-            nivel de inmersión y estado operativo. Los nodos más brillantes tienen menor saturación.
+            Cada nodo representa un punto activo del gemelo digital con telemetría de aforo, nivel
+            de inmersión y estado operativo. Los nodos más brillantes tienen menor saturación.
           </p>
         </motion.div>
 
@@ -276,8 +387,7 @@ const MapSection = () => {
           className="mt-8 flex flex-wrap gap-8 font-mono text-xs uppercase tracking-widest text-muted-foreground"
         >
           <span>
-            Nodos Activos:{" "}
-            <span className="text-primary">{twins.length}</span>
+            Nodos Activos: <span className="text-primary">{twins.length}</span>
           </span>
           <span>
             Lugares: <span className="text-foreground">{placesCount}</span>
@@ -286,7 +396,8 @@ const MapSection = () => {
             Comercios: <span className="text-secondary">{merchantsCount}</span>
           </span>
           <span>
-            Ocupación Promedio: <span className={avgCrowd > 50 ? "text-secondary" : "text-primary"}>{avgCrowd}%</span>
+            Ocupación Promedio:{" "}
+            <span className={avgCrowd > 50 ? "text-secondary" : "text-primary"}>{avgCrowd}%</span>
           </span>
           <span>
             Altitud: <span className="text-foreground">2,700m</span>

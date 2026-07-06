@@ -14,14 +14,14 @@ export function bootstrapCoreEvents() {
   if (initialized) return;
   initialized = true;
 
-  subscribe("rdm.system.overload.v1", event => {
+  subscribe("rdm.system.overload.v1", (event) => {
     const metrics = event.payload as { metrics: SystemMetrics };
     const result = updateSystemMode(metrics.metrics);
 
     auditEvent(
       "SYSTEM_OVERLOAD_HANDLED",
       { metrics: metrics.metrics, newMode: result.currentMode, aiDecision: result.aiDecision },
-      "system"
+      "system",
     );
 
     publish({

@@ -1,14 +1,14 @@
-import { z } from 'zod';
+import { z } from "zod";
 import { createTraceId } from "@/core/context/trace";
 import { getLastDecision } from "@/lib/isabella";
 import { runRealitoKernel } from "@/lib/kernel";
 import { withSpan } from "@/instrumentation.node";
-import { validate } from '@/lib/validation';
-import { handleApiError, apiResponse } from '@/lib/security/error-handler';
+import { validate } from "@/lib/validation";
+import { handleApiError, apiResponse } from "@/lib/security/error-handler";
 
 const recSchema = z.object({
-  query: z.string().max(500).default(''),
-  territory: z.string().max(50).default('RDM'),
+  query: z.string().max(500).default(""),
+  territory: z.string().max(50).default("RDM"),
   traceId: z.string().optional(),
 });
 

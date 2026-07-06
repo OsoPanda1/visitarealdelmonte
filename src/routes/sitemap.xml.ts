@@ -11,14 +11,7 @@ interface APIContext {
 
 const BASE_URL = "https://www.visitarealdelmonte.online";
 
-type Changefreq =
-  | "always"
-  | "hourly"
-  | "daily"
-  | "weekly"
-  | "monthly"
-  | "yearly"
-  | "never";
+type Changefreq = "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";
 
 interface SitemapEntry {
   path: string;

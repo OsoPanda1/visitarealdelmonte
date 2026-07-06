@@ -9,7 +9,13 @@ interface SectionHeaderProps {
   align?: "center" | "left";
 }
 
-const SectionHeader = ({ label, title, subtitle, accent = "gold", align = "center" }: SectionHeaderProps) => {
+const SectionHeader = ({
+  label,
+  title,
+  subtitle,
+  accent = "gold",
+  align = "center",
+}: SectionHeaderProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 

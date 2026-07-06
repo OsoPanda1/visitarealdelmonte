@@ -4,7 +4,7 @@
  * Integrates with Isabella's consciousness pipeline for contextual voice responses.
  */
 
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect } from "react";
 
 export interface VoiceClip {
   id: string;
@@ -46,9 +46,9 @@ function getEmotionParams(emotion?: string): { rate: number; pitch: number; volu
 
 function selectSpanishVoice(voices: SpeechSynthesisVoice[]): SpeechSynthesisVoice | null {
   // Prefer Mexican Spanish, then any Spanish
-  const mexican = voices.find(v => v.lang === 'es-MX');
+  const mexican = voices.find((v) => v.lang === "es-MX");
   if (mexican) return mexican;
-  const spanish = voices.find(v => v.lang.startsWith('es'));
+  const spanish = voices.find((v) => v.lang.startsWith("es"));
   if (spanish) return spanish;
   return voices[0] ?? null;
 }
@@ -59,7 +59,7 @@ export function useIsabellaVoiceEngine() {
     paused: false,
     queue: [],
     currentClip: null,
-    supported: typeof window !== 'undefined' && 'speechSynthesis' in window,
+    supported: typeof window !== "undefined" && "speechSynthesis" in window,
     voices: [],
   });
 
@@ -73,7 +73,7 @@ export function useIsabellaVoiceEngine() {
 
     const loadVoices = () => {
       const voices = window.speechSynthesis.getVoices();
-      setState(prev => ({ ...prev, voices }));
+      setState((prev) => ({ ...prev, voices }));
     };
 
     loadVoices();
@@ -90,7 +90,7 @@ export function useIsabellaVoiceEngine() {
     const clip = queueRef.current[0]!;
     currentClipRef.current = clip;
 
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       speaking: true,
       paused: false,
@@ -101,7 +101,7 @@ export function useIsabellaVoiceEngine() {
     const utterance = new SpeechSynthesisUtterance(clip.text);
     const voice = selectSpanishVoice(state.voices);
     if (voice) utterance.voice = voice;
-    utterance.lang = clip.lang ?? 'es-MX';
+    utterance.lang = clip.lang ?? "es-MX";
 
     const params = getEmotionParams(clip.emotion);
     utterance.rate = clip.rate ?? params.rate;
@@ -114,7 +114,7 @@ export function useIsabellaVoiceEngine() {
       currentClipRef.current = null;
       processingRef.current = false;
 
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         speaking: queueRef.current.length > 0,
         currentClip: null,
@@ -128,13 +128,13 @@ export function useIsabellaVoiceEngine() {
     };
 
     utterance.onerror = (event) => {
-      console.error('[Isabella Voice] Error:', event.error);
+      console.error("[Isabella Voice] Error:", event.error);
       clip.onEnd?.();
       queueRef.current = queueRef.current.slice(1);
       currentClipRef.current = null;
       processingRef.current = false;
 
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         speaking: false,
         currentClip: null,
@@ -149,42 +149,48 @@ export function useIsabellaVoiceEngine() {
     window.speechSynthesis.speak(utterance);
   }, [state.voices]);
 
-  const speak = useCallback((text: string, options: { emotion?: string; rate?: number; pitch?: number } = {}) => {
-    if (!state.supported) return;
+  const speak = useCallback(
+    (text: string, options: { emotion?: string; rate?: number; pitch?: number } = {}) => {
+      if (!state.supported) return;
 
-    const clip: VoiceClip = {
-      id: `clip_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
-      text,
-      emotion: options.emotion,
-      rate: options.rate,
-      pitch: options.pitch,
-    };
+      const clip: VoiceClip = {
+        id: `clip_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+        text,
+        emotion: options.emotion,
+        rate: options.rate,
+        pitch: options.pitch,
+      };
 
-    // Stop current speech and clear queue
-    window.speechSynthesis.cancel();
-    queueRef.current = [clip];
-    processingRef.current = false;
+      // Stop current speech and clear queue
+      window.speechSynthesis.cancel();
+      queueRef.current = [clip];
+      processingRef.current = false;
 
-    setState(prev => ({
-      ...prev,
-      queue: [clip],
-      currentClip: null,
-    }));
+      setState((prev) => ({
+        ...prev,
+        queue: [clip],
+        currentClip: null,
+      }));
 
-    setTimeout(processQueue, 50);
-  }, [state.supported, processQueue]);
+      setTimeout(processQueue, 50);
+    },
+    [state.supported, processQueue],
+  );
 
-  const enqueue = useCallback((clip: VoiceClip) => {
-    if (!state.supported) return;
-    queueRef.current.push(clip);
-    setState(prev => ({
-      ...prev,
-      queue: [...queueRef.current],
-    }));
-    if (!processingRef.current) {
-      processQueue();
-    }
-  }, [state.supported, processQueue]);
+  const enqueue = useCallback(
+    (clip: VoiceClip) => {
+      if (!state.supported) return;
+      queueRef.current.push(clip);
+      setState((prev) => ({
+        ...prev,
+        queue: [...queueRef.current],
+      }));
+      if (!processingRef.current) {
+        processQueue();
+      }
+    },
+    [state.supported, processQueue],
+  );
 
   const stop = useCallback(() => {
     if (!state.supported) return;
@@ -192,7 +198,7 @@ export function useIsabellaVoiceEngine() {
     queueRef.current = [];
     processingRef.current = false;
     currentClipRef.current = null;
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       speaking: false,
       paused: false,
@@ -204,18 +210,18 @@ export function useIsabellaVoiceEngine() {
   const pause = useCallback(() => {
     if (!state.supported) return;
     window.speechSynthesis.pause();
-    setState(prev => ({ ...prev, paused: true }));
+    setState((prev) => ({ ...prev, paused: true }));
   }, [state.supported]);
 
   const resume = useCallback(() => {
     if (!state.supported) return;
     window.speechSynthesis.resume();
-    setState(prev => ({ ...prev, paused: false }));
+    setState((prev) => ({ ...prev, paused: false }));
   }, [state.supported]);
 
   const removeFromQueue = useCallback((clipId: string) => {
-    queueRef.current = queueRef.current.filter(c => c.id !== clipId);
-    setState(prev => ({
+    queueRef.current = queueRef.current.filter((c) => c.id !== clipId);
+    setState((prev) => ({
       ...prev,
       queue: [...queueRef.current],
     }));

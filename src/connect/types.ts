@@ -1,7 +1,7 @@
 export type ConnectSubject =
-  | { type: 'app' }
-  | { type: 'user'; id: string; issuer?: string }
-  | { type: 'jwt-bearer'; sub: string; iss?: string; aud?: string };
+  | { type: "app" }
+  | { type: "user"; id: string; issuer?: string }
+  | { type: "jwt-bearer"; sub: string; iss?: string; aud?: string };
 
 export interface ConnectTokenRequest {
   connectorUid: string;
@@ -20,7 +20,7 @@ export interface ConnectTokenResponse {
   tenantId?: string;
 }
 
-export type ConnectorType = 'slack' | 'github' | 'oauth' | 'api-key' | 'custom';
+export type ConnectorType = "slack" | "github" | "oauth" | "api-key" | "custom";
 
 export interface ConnectorConfig {
   uid: string;

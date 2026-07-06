@@ -35,7 +35,9 @@ export default function LiveTelemetryBadge() {
       <span className="opacity-50">·</span>
       <span>Heptafed</span>
       <span className="opacity-50">·</span>
-      <span className="text-[hsl(var(--electric))]">{hh}:{mm}:{ss}</span>
+      <span className="text-[hsl(var(--electric))]">
+        {hh}:{mm}:{ss}
+      </span>
     </div>
   );
 }

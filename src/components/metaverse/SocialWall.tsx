@@ -1,6 +1,15 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, Globe, Users, Lock } from "lucide-react";
+import {
+  Heart,
+  MessageCircle,
+  Share2,
+  Bookmark,
+  MoreHorizontal,
+  Globe,
+  Users,
+  Lock,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import FederationBadge from "./FederationBadge";
 
@@ -38,12 +47,12 @@ interface SocialWallProps {
   onShare?: (postId: string) => void;
 }
 
-const PostCard: React.FC<{ post: Post; onLike?: () => void; onComment?: () => void; onShare?: () => void }> = ({
-  post,
-  onLike,
-  onComment,
-  onShare
-}) => {
+const PostCard: React.FC<{
+  post: Post;
+  onLike?: () => void;
+  onComment?: () => void;
+  onShare?: () => void;
+}> = ({ post, onLike, onComment, onShare }) => {
   const formatNumber = (num: number) => {
     if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
     if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;
@@ -53,7 +62,7 @@ const PostCard: React.FC<{ post: Post; onLike?: () => void; onComment?: () => vo
   const visibilityIcons = {
     public: Globe,
     friends: Users,
-    private: Lock
+    private: Lock,
   };
   const VisibilityIcon = visibilityIcons[post.visibility];
 
@@ -68,11 +77,11 @@ const PostCard: React.FC<{ post: Post; onLike?: () => void; onComment?: () => vo
       <div className="p-4 flex items-start justify-between">
         <div className="flex items-center gap-3">
           {/* Avatar */}
-          <motion.div 
+          <motion.div
             whileHover={{ scale: 1.05 }}
             className="w-12 h-12 rounded-full bg-gradient-to-br from-accent to-primary p-0.5"
           >
-            <div 
+            <div
               className="w-full h-full rounded-full bg-cover bg-center border-2 border-card"
               style={{ backgroundImage: `url(${post.author.avatar})` }}
             />
@@ -110,29 +119,35 @@ const PostCard: React.FC<{ post: Post; onLike?: () => void; onComment?: () => vo
 
       {/* Media */}
       {post.media && post.media.length > 0 && (
-        <div className={cn(
-          "grid gap-1",
-          post.media.length === 1 && "grid-cols-1",
-          post.media.length === 2 && "grid-cols-2",
-          post.media.length >= 3 && "grid-cols-2"
-        )}>
+        <div
+          className={cn(
+            "grid gap-1",
+            post.media.length === 1 && "grid-cols-1",
+            post.media.length === 2 && "grid-cols-2",
+            post.media.length >= 3 && "grid-cols-2",
+          )}
+        >
           {post.media.slice(0, 4).map((media, index) => (
             <motion.div
               key={index}
               whileHover={{ scale: 1.02 }}
               className={cn(
                 "relative aspect-video bg-muted overflow-hidden cursor-pointer",
-                post.media!.length === 3 && index === 0 && "row-span-2"
+                post.media!.length === 3 && index === 0 && "row-span-2",
               )}
             >
-              <div 
+              <div
                 className="absolute inset-0 bg-cover bg-center"
                 style={{ backgroundImage: `url(${media.thumbnail || media.url})` }}
               />
               {media.type === "video" && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/30">
                   <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                    <svg className="w-6 h-6 text-white ml-1" viewBox="0 0 24 24" fill="currentColor">
+                    <svg
+                      className="w-6 h-6 text-white ml-1"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
                       <path d="M8 5v14l11-7z" />
                     </svg>
                   </div>
@@ -151,11 +166,7 @@ const PostCard: React.FC<{ post: Post; onLike?: () => void; onComment?: () => vo
       {/* Federation Badge */}
       {post.federationHash && (
         <div className="px-4 pt-3">
-          <FederationBadge
-            entityType="post"
-            entityId={post.id}
-            hash={post.federationHash}
-          />
+          <FederationBadge entityType="post" entityId={post.id} hash={post.federationHash} />
         </div>
       )}
 
@@ -211,7 +222,7 @@ const SocialWall: React.FC<SocialWallProps> = ({
   onPostClick,
   onLike,
   onComment,
-  onShare
+  onShare,
 }) => {
   return (
     <section className="space-y-4">

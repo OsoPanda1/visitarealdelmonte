@@ -24,8 +24,12 @@ export function ShuttleRouteCard({ route, onBook }: { route: ShuttleRoute; onBoo
             <Bus className="h-5 w-5 text-accent" />
           </div>
           <div className="flex-1">
-            <h3 className="font-display text-base text-foreground">{route.origin} → {route.destination}</h3>
-            {route.company_name && <p className="text-xs text-muted-foreground">{route.company_name}</p>}
+            <h3 className="font-display text-base text-foreground">
+              {route.origin} → {route.destination}
+            </h3>
+            {route.company_name && (
+              <p className="text-xs text-muted-foreground">{route.company_name}</p>
+            )}
           </div>
           {route.price_per_person != null && (
             <Badge className="bg-accent/10 text-accent text-sm font-semibold">
@@ -36,30 +40,47 @@ export function ShuttleRouteCard({ route, onBook }: { route: ShuttleRoute; onBoo
 
         <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
           {route.departure_time && (
-            <span className="inline-flex items-center gap-1"><Clock className="h-3 w-3" />Sale: {route.departure_time}</span>
+            <span className="inline-flex items-center gap-1">
+              <Clock className="h-3 w-3" />
+              Sale: {route.departure_time}
+            </span>
           )}
           {route.return_time && (
-            <span className="inline-flex items-center gap-1"><Clock className="h-3 w-3" />Regresa: {route.return_time}</span>
+            <span className="inline-flex items-center gap-1">
+              <Clock className="h-3 w-3" />
+              Regresa: {route.return_time}
+            </span>
           )}
           {route.capacity && (
-            <span className="inline-flex items-center gap-1"><Users className="h-3 w-3" />{route.capacity} lugares</span>
+            <span className="inline-flex items-center gap-1">
+              <Users className="h-3 w-3" />
+              {route.capacity} lugares
+            </span>
           )}
         </div>
 
         {route.days_of_week && route.days_of_week.length > 0 && (
           <div className="flex gap-1">
-            {["lun","mar","mie","jue","vie","sab","dom"].map(day => (
-              <span key={day} className={`px-2 py-0.5 rounded-full text-[10px] uppercase tracking-wider ${
-                route.days_of_week?.includes(day)
-                  ? "bg-primary/10 text-primary font-medium"
-                  : "bg-muted/50 text-muted-foreground/40"
-              }`}>{day}</span>
+            {["lun", "mar", "mie", "jue", "vie", "sab", "dom"].map((day) => (
+              <span
+                key={day}
+                className={`px-2 py-0.5 rounded-full text-[10px] uppercase tracking-wider ${
+                  route.days_of_week?.includes(day)
+                    ? "bg-primary/10 text-primary font-medium"
+                    : "bg-muted/50 text-muted-foreground/40"
+                }`}
+              >
+                {day}
+              </span>
             ))}
           </div>
         )}
 
         {onBook && (
-          <Button onClick={onBook} className="w-full bg-accent hover:bg-accent/90 text-accent-foreground rounded-xl">
+          <Button
+            onClick={onBook}
+            className="w-full bg-accent hover:bg-accent/90 text-accent-foreground rounded-xl"
+          >
             Reservar Lugar
           </Button>
         )}

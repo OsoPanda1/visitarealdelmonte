@@ -1,11 +1,11 @@
-import { renderHook } from '@testing-library/react';
-import { waitFor } from '@testing-library/dom';
-import { describe, it, expect, beforeEach, vi, type Mock } from 'vitest';
-import { useAuth } from '@/hooks/useAuth';
-import { supabase } from '@/integrations/supabase/client';
-import { Session, User } from '@supabase/supabase-js';
+import { renderHook } from "@testing-library/react";
+import { waitFor } from "@testing-library/dom";
+import { describe, it, expect, beforeEach, vi, type Mock } from "vitest";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { Session, User } from "@supabase/supabase-js";
 
-vi.mock('@/integrations/supabase/client', () => ({
+vi.mock("@/integrations/supabase/client", () => ({
   supabase: {
     auth: {
       onAuthStateChange: vi.fn(() => ({
@@ -16,7 +16,7 @@ vi.mock('@/integrations/supabase/client', () => ({
   },
 }));
 
-describe('useAuth', () => {
+describe("useAuth", () => {
   const mockUnsubscribe = vi.fn();
 
   beforeEach(() => {
@@ -26,8 +26,11 @@ describe('useAuth', () => {
     }));
   });
 
-  it('should return initial loading state', () => {
-    (supabase.auth.getSession as Mock).mockResolvedValueOnce({ data: { session: null }, error: null });
+  it("should return initial loading state", () => {
+    (supabase.auth.getSession as Mock).mockResolvedValueOnce({
+      data: { session: null },
+      error: null,
+    });
 
     const { result } = renderHook(() => useAuth());
 
@@ -36,16 +39,19 @@ describe('useAuth', () => {
     expect(result.current.user).toBeNull();
   });
 
-  it('should set user when session exists', async () => {
+  it("should set user when session exists", async () => {
     const mockSession: Session = {
-      access_token: 'test-token',
-      token_type: 'bearer',
+      access_token: "test-token",
+      token_type: "bearer",
       expires_in: 3600,
-      refresh_token: 'refresh-token',
-      user: { id: 'user123', email: 'test@example.com' } as User,
+      refresh_token: "refresh-token",
+      user: { id: "user123", email: "test@example.com" } as User,
       expires_at: Date.now() / 1000 + 3600,
     };
-    (supabase.auth.getSession as Mock).mockResolvedValueOnce({ data: { session: mockSession }, error: null });
+    (supabase.auth.getSession as Mock).mockResolvedValueOnce({
+      data: { session: mockSession },
+      error: null,
+    });
 
     const { result } = renderHook(() => useAuth());
     await waitFor(() => expect(result.current.loading).toBe(false));
@@ -55,8 +61,11 @@ describe('useAuth', () => {
     expect(result.current.user).toEqual(mockSession.user);
   });
 
-  it('should clean up subscription on unmount', () => {
-    (supabase.auth.getSession as Mock).mockResolvedValueOnce({ data: { session: null }, error: null });
+  it("should clean up subscription on unmount", () => {
+    (supabase.auth.getSession as Mock).mockResolvedValueOnce({
+      data: { session: null },
+      error: null,
+    });
 
     const { unmount } = renderHook(() => useAuth());
     unmount();

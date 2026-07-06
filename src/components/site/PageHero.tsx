@@ -19,8 +19,7 @@ export function PageHero({
       <div className="container mx-auto px-6">
         <div className="font-mono text-[10px] tracking-sovereign text-accent mb-3">{eyebrow}</div>
         <h1 className="font-display text-5xl md:text-7xl text-ink leading-[0.95] max-w-4xl">
-          {title}{" "}
-          {highlight && <span className="text-gradient-copper italic">{highlight}</span>}
+          {title} {highlight && <span className="text-gradient-copper italic">{highlight}</span>}
         </h1>
         {description && (
           <p className="mt-5 max-w-2xl text-muted-foreground text-lg">{description}</p>

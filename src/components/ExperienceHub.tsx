@@ -10,7 +10,8 @@ const experiences = [
     title: "Pasterías del Monte",
     category: "Gastronomía",
     image: pasteriasImg,
-    description: "Los pastes más auténticos con receta inglesa de 1824. Sabores clásicos y nuevas creaciones.",
+    description:
+      "Los pastes más auténticos con receta inglesa de 1824. Sabores clásicos y nuevas creaciones.",
     rating: 5.0,
   },
   {
@@ -42,8 +43,8 @@ export default function ExperienceHub() {
         <div className="max-w-2xl">
           <h2 className="mb-4 font-serif text-5xl font-light italic">Experience Hub</h2>
           <p className="leading-relaxed text-gray-400">
-            Explora Real del Monte a través de experiencias curadas por la red RDM Digital. Desde las profundidades
-            de las minas hasta los sabores más auténticos.
+            Explora Real del Monte a través de experiencias curadas por la red RDM Digital. Desde
+            las profundidades de las minas hasta los sabores más auténticos.
           </p>
         </div>
         <div className="flex gap-2">
@@ -71,7 +72,8 @@ export default function ExperienceHub() {
             <img
               src={exp.image}
               alt={exp.title}
-              loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-60 transition-transform duration-700 group-hover:scale-110"
+              loading="lazy"
+              className="absolute inset-0 h-full w-full object-cover opacity-60 transition-transform duration-700 group-hover:scale-110"
               referrerPolicy="no-referrer"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
@@ -88,7 +90,9 @@ export default function ExperienceHub() {
               </div>
 
               <div>
-                <h3 className="mb-2 text-xl font-bold transition-colors group-hover:text-brand-amber">{exp.title}</h3>
+                <h3 className="mb-2 text-xl font-bold transition-colors group-hover:text-brand-amber">
+                  {exp.title}
+                </h3>
                 <p className="mb-4 line-clamp-2 text-xs text-gray-300 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                   {exp.description}
                 </p>
@@ -105,7 +109,12 @@ export default function ExperienceHub() {
       <div className="glass relative overflow-hidden rounded-[3rem] border border-white/10 p-12">
         <div className="pointer-events-none absolute right-0 top-0 h-full w-1/2 opacity-20">
           <div className="absolute inset-0 bg-gradient-to-l from-brand-amber/20 to-transparent" />
-          <img src="/images/mine-tunnel.jpg" loading="lazy" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+          <img
+            src="/images/mine-tunnel.jpg"
+            loading="lazy"
+            className="h-full w-full object-cover"
+            referrerPolicy="no-referrer"
+          />
         </div>
 
         <div className="relative z-10 max-w-xl">
@@ -113,12 +122,14 @@ export default function ExperienceHub() {
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-amber">
               <MapPin className="h-6 w-6 text-black" />
             </div>
-            <span className="text-xs font-bold uppercase tracking-widest text-brand-amber">Ruta Destacada</span>
+            <span className="text-xs font-bold uppercase tracking-widest text-brand-amber">
+              Ruta Destacada
+            </span>
           </div>
           <h3 className="mb-6 text-4xl font-bold">Senda de los Mineros</h3>
           <p className="mb-8 leading-relaxed text-gray-400">
-            Una travesía digitalmente guiada que conecta los puntos más emblemáticos de la herencia minera. Sincroniza
-            tu dispositivo con el Gemelo Digital para una experiencia inmersiva.
+            Una travesía digitalmente guiada que conecta los puntos más emblemáticos de la herencia
+            minera. Sincroniza tu dispositivo con el Gemelo Digital para una experiencia inmersiva.
           </p>
           <div className="flex gap-4">
             <button className="flex items-center gap-2 rounded-xl bg-brand-amber px-8 py-4 font-bold text-black transition-all hover:bg-amber-400">

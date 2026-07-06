@@ -14,17 +14,16 @@ export function updateSystemMode(metrics: SystemMetrics) {
   const aiDecision = isabellaGuardian(metrics);
   const ruleDecision = decideMode(metrics);
 
-  const newMode: SystemMode =
-    aiDecision.mode === "EMERGENCY" ? "EMERGENCY" : ruleDecision;
+  const newMode: SystemMode = aiDecision.mode === "EMERGENCY" ? "EMERGENCY" : ruleDecision;
 
   if (newMode !== currentMode) {
     auditEvent(
       "SYSTEM_MODE_CHANGE",
       { from: currentMode, to: newMode, metrics, aiDecision },
-      "system"
+      "system",
     );
     currentMode = newMode;
-    modeListeners.forEach(fn => fn(currentMode, metrics));
+    modeListeners.forEach((fn) => fn(currentMode, metrics));
   }
 
   return { currentMode, aiDecision };

@@ -20,18 +20,15 @@ import { Progress } from "@/components/ui/progress";
 import { TAMV_THESIS } from "@/data/tamv-thesis";
 
 const STATUS_STYLE: Record<string, string> = {
-  operativa:
-    "border-[hsl(var(--gold))]/40 bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold))]",
+  operativa: "border-[hsl(var(--gold))]/40 bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold))]",
   construccion:
     "border-[hsl(var(--electric))]/40 bg-[hsl(var(--electric))]/10 text-[hsl(var(--electric-light))]",
   planeada:
     "border-[hsl(var(--platinum))]/30 bg-[hsl(var(--platinum))]/5 text-[hsl(var(--platinum))]",
-  ratified:
-    "border-[hsl(var(--gold))]/40 bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold))]",
+  ratified: "border-[hsl(var(--gold))]/40 bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold))]",
   review:
     "border-[hsl(var(--electric))]/40 bg-[hsl(var(--electric))]/10 text-[hsl(var(--electric-light))]",
-  draft:
-    "border-[hsl(var(--platinum))]/30 bg-[hsl(var(--platinum))]/5 text-[hsl(var(--platinum))]",
+  draft: "border-[hsl(var(--platinum))]/30 bg-[hsl(var(--platinum))]/5 text-[hsl(var(--platinum))]",
 };
 
 const TAMVThesis = () => {

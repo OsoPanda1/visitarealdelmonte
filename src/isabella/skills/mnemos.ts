@@ -1,20 +1,27 @@
-import type { SkillContext, CanonicalEntry, Evidence, KnowledgeGraph, Artifact, Relation } from './types';
+import type {
+  SkillContext,
+  CanonicalEntry,
+  Evidence,
+  KnowledgeGraph,
+  Artifact,
+  Relation,
+} from "./types";
 
 function simpleHash(input: string): string {
   let hash = 0;
   for (let i = 0; i < input.length; i++) {
     const char = input.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
+    hash = (hash << 5) - hash + char;
     hash = hash & hash;
   }
-  return Math.abs(hash).toString(16).padStart(8, '0');
+  return Math.abs(hash).toString(16).padStart(8, "0");
 }
 
 interface MnemosRecordInput {
   event: Record<string, unknown>;
-  category: 'patrimonio' | 'politica_publica' | 'innovacion' | 'memoria_comunitaria';
+  category: "patrimonio" | "politica_publica" | "innovacion" | "memoria_comunitaria";
   evidence: Array<{ type: string; content: string }>;
-  retentionPolicy: 'permanente' | 'largo_plazo' | 'rotativa';
+  retentionPolicy: "permanente" | "largo_plazo" | "rotativa";
 }
 
 class MnemosEngine {
@@ -22,7 +29,14 @@ class MnemosEngine {
   private callCount = 0;
   private totalDurationMs = 0;
 
-  async record(input: MnemosRecordInput, ctx: SkillContext): Promise<{ recordId: string; canonicalEntry: CanonicalEntry; traceGraph: { relatedRecords: string[] } }> {
+  async record(
+    input: MnemosRecordInput,
+    ctx: SkillContext,
+  ): Promise<{
+    recordId: string;
+    canonicalEntry: CanonicalEntry;
+    traceGraph: { relatedRecords: string[] };
+  }> {
     const start = performance.now();
     this.callCount++;
 
@@ -30,7 +44,7 @@ class MnemosEngine {
 
     const evidence: Evidence[] = input.evidence.map((e, i) => ({
       evidenceId: `ev-${recordId}-${i}`,
-      type: e.type as Evidence['type'],
+      type: e.type as Evidence["type"],
       content: e.content,
       hash: simpleHash(e.content),
       verifiedAt: ctx.timestamp,
@@ -38,14 +52,16 @@ class MnemosEngine {
 
     const entry: CanonicalEntry = {
       recordId,
-      title: (input.event as { title?: string })?.title ?? `Registro ${input.category} - ${ctx.timestamp.toISOString().slice(0, 10)}`,
+      title:
+        (input.event as { title?: string })?.title ??
+        `Registro ${input.category} - ${ctx.timestamp.toISOString().slice(0, 10)}`,
       category: input.category,
       event: input.event,
       evidence,
       timestamp: ctx.timestamp,
       authorId: ctx.userId,
       retentionPolicy: input.retentionPolicy,
-      immutable: input.retentionPolicy === 'permanente',
+      immutable: input.retentionPolicy === "permanente",
     };
 
     this.entries.set(recordId, entry);
@@ -76,7 +92,7 @@ class MnemosEngine {
         artifactId: id,
         title: entry.title,
         summary: `Registro categoría: ${entry.category}, evidencias: ${entry.evidence.length}`,
-        source: 'mnemos',
+        source: "mnemos",
         confidenceScore: 0.95,
         timestamp: entry.timestamp,
         tags: [entry.category, entry.retentionPolicy],
@@ -96,9 +112,9 @@ class MnemosEngine {
           edges.push({
             sourceId: ids[i],
             targetId: ids[j],
-            type: 'misma_categoria',
+            type: "misma_categoria",
             strength: 0.7,
-            direction: 'bidirectional',
+            direction: "bidirectional",
           });
         }
       }
@@ -110,7 +126,10 @@ class MnemosEngine {
       metadata: {
         totalNodes: nodes.length,
         totalEdges: edges.length,
-        density: nodes.length > 0 ? Math.round((edges.length / (nodes.length * (nodes.length - 1) / 2)) * 1000) / 1000 : 0,
+        density:
+          nodes.length > 0
+            ? Math.round((edges.length / ((nodes.length * (nodes.length - 1)) / 2)) * 1000) / 1000
+            : 0,
       },
     };
   }
@@ -120,7 +139,7 @@ class MnemosEngine {
       totalEntries: this.entries.size,
       totalCalls: this.callCount,
       avgResponseMs: this.callCount > 0 ? Math.round(this.totalDurationMs / this.callCount) : 0,
-      categories: Array.from(new Set(Array.from(this.entries.values()).map(e => e.category))),
+      categories: Array.from(new Set(Array.from(this.entries.values()).map((e) => e.category))),
     };
   }
 }

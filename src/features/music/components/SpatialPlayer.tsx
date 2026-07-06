@@ -155,7 +155,11 @@ export function SpatialPlayer({
         <div className="absolute bottom-2 left-4 right-4 flex items-end justify-between">
           <div className="min-w-0">
             <p className="text-[10px] uppercase tracking-[0.2em] text-[#A7F300]/70">
-              {spatialMode === "archivo" ? "Lossless" : spatialMode === "espacio" ? "Espacial" : "Metaverso XR"}
+              {spatialMode === "archivo"
+                ? "Lossless"
+                : spatialMode === "espacio"
+                  ? "Espacial"
+                  : "Metaverso XR"}
             </p>
             <p className="text-xs text-white font-semibold truncate">{track.title}</p>
           </div>

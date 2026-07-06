@@ -1,13 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import {
-  Heart,
-  Star,
-  Crown,
-  Sparkles,
-  ExternalLink,
-  Check,
-} from "lucide-react";
+import { Heart, Star, Crown, Sparkles, ExternalLink, Check } from "lucide-react";
 import type { MecenasTier } from "../types";
 import { postDonation } from "../api";
 
@@ -110,14 +103,15 @@ export function MecenasPanel({ currentTier = "oyente", onDonationComplete }: Mec
       <div className="grid grid-cols-3 gap-2">
         {TIERS.map((t) => {
           const Icon = t.icon;
-          const isActive = currentTier === t.tier || (currentTier === "productor" && t.tier === "mecenas") || (currentTier === "mecenas" && t.tier === "oyente");
+          const isActive =
+            currentTier === t.tier ||
+            (currentTier === "productor" && t.tier === "mecenas") ||
+            (currentTier === "mecenas" && t.tier === "oyente");
           return (
             <div
               key={t.tier}
               className={`rounded-xl p-3 border transition-all ${
-                isActive
-                  ? "border-current shadow-inner"
-                  : "border-[#E5E7EB] opacity-60"
+                isActive ? "border-current shadow-inner" : "border-[#E5E7EB] opacity-60"
               }`}
               style={{
                 backgroundColor: t.bg,

@@ -23,7 +23,11 @@ const VisualContext = createContext<VisualContextValue | null>(null);
 const weatherToFamily = (condition?: string): "clear" | "cloudy" | "rain" => {
   if (!condition) return "clear";
   const normalized = condition.toLowerCase();
-  if (normalized.includes("rain") || normalized.includes("storm") || normalized.includes("drizzle")) {
+  if (
+    normalized.includes("rain") ||
+    normalized.includes("storm") ||
+    normalized.includes("drizzle")
+  ) {
     return "rain";
   }
   if (normalized.includes("cloud") || normalized.includes("mist") || normalized.includes("fog")) {
@@ -37,9 +41,12 @@ export function VisualProvider({ children }: { children: React.ReactNode }) {
   const weather = useWeather();
 
   useEffect(() => {
-    const interval = window.setInterval(() => {
-      setTimeTheme(computeTimeTheme());
-    }, 5 * 60 * 1000);
+    const interval = window.setInterval(
+      () => {
+        setTimeTheme(computeTimeTheme());
+      },
+      5 * 60 * 1000,
+    );
 
     return () => window.clearInterval(interval);
   }, []);
@@ -52,7 +59,9 @@ export function VisualProvider({ children }: { children: React.ReactNode }) {
     return `${family}_night` as VisualState;
   }, [timeTheme, weather?.condition]);
 
-  return <VisualContext.Provider value={{ timeTheme, visualState }}>{children}</VisualContext.Provider>;
+  return (
+    <VisualContext.Provider value={{ timeTheme, visualState }}>{children}</VisualContext.Provider>
+  );
 }
 
 export function useVisual() {

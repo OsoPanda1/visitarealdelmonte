@@ -12,7 +12,7 @@ import type {
   YunDomain,
   YunFederation,
   DataClassification,
-} from './types';
+} from "./types";
 
 // ============================================================================
 // EVENT BUS STATE
@@ -61,12 +61,12 @@ export function createEvent<T>(
     timestamp: new Date().toISOString(),
     data,
     metadata: {
-      version: '1.0.0',
+      version: "1.0.0",
       correlationId: options.correlationId,
       causationId: options.causationId,
       federation: options.federation,
       domain: options.domain,
-      classification: options.classification ?? 'internal',
+      classification: options.classification ?? "internal",
     },
   };
 
@@ -120,7 +120,7 @@ export async function publish<T>(event: YunEventEnvelope<T>): Promise<void> {
   );
 
   // Check for failures
-  const failures = results.filter((r) => r.status === 'rejected');
+  const failures = results.filter((r) => r.status === "rejected");
   if (failures.length > 0) {
     console.warn(
       `[YUN EventBus] ${failures.length}/${results.length} handlers failed for ${event.type}`,
@@ -141,11 +141,7 @@ export async function publish<T>(event: YunEventEnvelope<T>): Promise<void> {
  * @param once - If true, automatically unsubscribe after first call
  * @returns Unsubscribe function
  */
-export function subscribe(
-  eventType: string,
-  handler: EventHandler,
-  once = false,
-): () => void {
+export function subscribe(eventType: string, handler: EventHandler, once = false): () => void {
   const id = `sub_${++subscriptionCounter}`;
 
   const subscription: Subscription = {
@@ -171,10 +167,7 @@ export function subscribe(
 /**
  * Subscribes to an event type, automatically unsubscribing after first invocation.
  */
-export function subscribeOnce(
-  eventType: string,
-  handler: EventHandler,
-): () => void {
+export function subscribeOnce(eventType: string, handler: EventHandler): () => void {
   return subscribe(eventType, handler, true);
 }
 
@@ -233,8 +226,8 @@ function getMatchingHandlers(eventType: string): Subscription[] {
   // Wildcard match (e.g., 'yun.commerce.*' matches 'yun.commerce.business.created')
   for (const [pattern, subs] of subscriptions.entries()) {
     if (pattern === eventType) continue; // Already included exact matches
-    if (pattern.includes('*')) {
-      const regex = new RegExp('^' + pattern.replace(/\./g, '\\.').replace(/\*/g, '[^.]+') + '$');
+    if (pattern.includes("*")) {
+      const regex = new RegExp("^" + pattern.replace(/\./g, "\\.").replace(/\*/g, "[^.]+") + "$");
       if (regex.test(eventType)) {
         handlers.push(...subs);
       }
@@ -257,10 +250,10 @@ function getMatchingHandlers(eventType: string): Subscription[] {
 
 function isCriticalEvent(type: YunEventType): boolean {
   return (
-    type.includes('system.overload') ||
-    type.includes('system.mode-changed') ||
-    type.includes('federation.degraded') ||
-    type.includes('federation.recovered')
+    type.includes("system.overload") ||
+    type.includes("system.mode-changed") ||
+    type.includes("federation.degraded") ||
+    type.includes("federation.recovered")
   );
 }
 
@@ -300,26 +293,20 @@ export const YunEvents = {
    * Publish a system health event
    */
   health(data: { status: string; score: number; details?: string }, source: string) {
-    return publish(
-      createEvent('yun.system.health', source, data, { domain: 'telemetry' }),
-    );
+    return publish(createEvent("yun.system.health", source, data, { domain: "telemetry" }));
   },
 
   /**
    * Publish a federation degraded event
    */
   federationDegraded(federation: YunFederation, data: unknown, source: string) {
-    return publish(
-      createEvent('yun.federation.degraded', source, data, { federation }),
-    );
+    return publish(createEvent("yun.federation.degraded", source, data, { federation }));
   },
 
   /**
    * Publish a federation recovered event
    */
   federationRecovered(federation: YunFederation, data: unknown, source: string) {
-    return publish(
-      createEvent('yun.federation.recovered', source, data, { federation }),
-    );
+    return publish(createEvent("yun.federation.recovered", source, data, { federation }));
   },
 };

@@ -10,26 +10,26 @@
 // ENTITIES
 // ============================================================================
 
-export type XpTrack = 'cultura' | 'comunidad' | 'juego';
-export type QuestType = 'puzzle' | 'narrative' | 'territorial' | 'community';
-export type QuestDifficulty = 'easy' | 'medium' | 'hard' | 'legendary';
-export type QuestStatus = 'active' | 'paused' | 'completed' | 'archived';
-export type PlayerQuestStatus = 'in_progress' | 'completed' | 'failed' | 'expired';
-export type BadgeRarity = 'common' | 'rare' | 'epic' | 'legendary';
-export type BadgeCategory = 'cultural' | 'community' | 'gameplay' | 'territorial';
-export type RewardType = 'voucher' | 'discount' | 'access' | 'physical' | 'xp_boost';
-export type RewardStatus = 'active' | 'paused' | 'expired' | 'redeemed';
-export type PlayerRewardStatus = 'claimed' | 'redeemed' | 'expired' | 'cancelled';
-export type SeasonStatus = 'upcoming' | 'active' | 'completed' | 'cancelled';
+export type XpTrack = "cultura" | "comunidad" | "juego";
+export type QuestType = "puzzle" | "narrative" | "territorial" | "community";
+export type QuestDifficulty = "easy" | "medium" | "hard" | "legendary";
+export type QuestStatus = "active" | "paused" | "completed" | "archived";
+export type PlayerQuestStatus = "in_progress" | "completed" | "failed" | "expired";
+export type BadgeRarity = "common" | "rare" | "epic" | "legendary";
+export type BadgeCategory = "cultural" | "community" | "gameplay" | "territorial";
+export type RewardType = "voucher" | "discount" | "access" | "physical" | "xp_boost";
+export type RewardStatus = "active" | "paused" | "expired" | "redeemed";
+export type PlayerRewardStatus = "claimed" | "redeemed" | "expired" | "cancelled";
+export type SeasonStatus = "upcoming" | "active" | "completed" | "cancelled";
 export type GameEventType =
-  | 'combo'
-  | 'quest_complete'
-  | 'level_up'
-  | 'badge_earned'
-  | 'voucher_redeemed'
-  | 'score'
-  | 'page_visit'
-  | 'community_action';
+  | "combo"
+  | "quest_complete"
+  | "level_up"
+  | "badge_earned"
+  | "voucher_redeemed"
+  | "score"
+  | "page_visit"
+  | "community_action";
 
 // ============================================================================
 // PLAYER
@@ -121,7 +121,7 @@ export interface GamificationEvent {
   id: string;
   player_id: string | null;
   event_type: GameEventType;
-  source: 'construct3' | 'hub' | 'api' | 'webhook';
+  source: "construct3" | "hub" | "api" | "webhook";
   payload_json: Record<string, unknown>;
   xp_earned: number;
   xp_track: XpTrack | null;
@@ -145,7 +145,7 @@ export interface GamificationBadge {
   criteria_json: Record<string, unknown>;
   xp_bonus: number;
   max_earners: number;
-  status: 'active' | 'hidden' | 'retired';
+  status: "active" | "hidden" | "retired";
   metadata: Record<string, unknown>;
   created_at: string;
 }
@@ -226,7 +226,7 @@ export interface GamificationTerritorialEvent {
   event_code: string;
   name: string;
   description: string;
-  event_type: 'festival' | 'cultural' | 'seasonal' | 'community';
+  event_type: "festival" | "cultural" | "seasonal" | "community";
   season_id: string | null;
   location_name: string | null;
   location_lat: number | null;
@@ -237,7 +237,7 @@ export interface GamificationTerritorialEvent {
     special_quests?: string[];
     bonus_rewards?: string[];
   };
-  status: 'upcoming' | 'active' | 'completed';
+  status: "upcoming" | "active" | "completed";
   metadata: Record<string, unknown>;
   created_at: string;
 }
@@ -266,7 +266,7 @@ export interface LeaderboardEntry {
 
 export interface PostGameEventRequest {
   event_type: GameEventType;
-  source: 'construct3' | 'hub' | 'api';
+  source: "construct3" | "hub" | "api";
   payload: Record<string, unknown>;
 }
 

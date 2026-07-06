@@ -144,7 +144,9 @@ export default function CompassNav() {
               key={q.key}
               onClick={() => setActive((p) => (p === q.key ? null : q.key))}
               className={`relative flex-1 flex flex-col items-center justify-center py-2.5 px-2 transition-colors ${
-                isActive ? "text-[hsl(var(--navy-dark))]" : "text-[hsl(var(--foreground)/0.8)] hover:text-[hsl(var(--foreground))]"
+                isActive
+                  ? "text-[hsl(var(--navy-dark))]"
+                  : "text-[hsl(var(--foreground)/0.8)] hover:text-[hsl(var(--foreground))]"
               } ${i > 0 ? "border-l border-[hsl(var(--border))]" : ""}`}
               aria-pressed={isActive}
               aria-label={q.label}

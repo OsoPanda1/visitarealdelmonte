@@ -1,13 +1,13 @@
 export interface HealthComponent {
   name: string;
-  status: 'healthy' | 'degraded' | 'unhealthy';
+  status: "healthy" | "degraded" | "unhealthy";
   latency?: number;
   error?: string;
   details?: Record<string, unknown>;
 }
 
 export interface HealthReport {
-  status: 'healthy' | 'degraded' | 'unhealthy';
+  status: "healthy" | "degraded" | "unhealthy";
   timestamp: string;
   uptime: number;
   components: HealthComponent[];
@@ -26,20 +26,20 @@ export class HealthService {
       const result = await Promise.race([
         check(),
         new Promise<boolean>((_, reject) =>
-          setTimeout(() => reject(new Error('timeout')), timeout),
+          setTimeout(() => reject(new Error("timeout")), timeout),
         ),
       ]);
       return {
         name,
-        status: result ? 'healthy' : 'degraded',
+        status: result ? "healthy" : "degraded",
         latency: Date.now() - start,
       };
     } catch (err) {
       return {
         name,
-        status: 'unhealthy',
+        status: "unhealthy",
         latency: Date.now() - start,
-        error: err instanceof Error ? err.message : 'unknown',
+        error: err instanceof Error ? err.message : "unknown",
       };
     }
   }
@@ -49,15 +49,13 @@ export class HealthService {
   ): Promise<HealthReport> {
     const checks = customChecks ?? [];
 
-    const results = await Promise.all(
-      checks.map((c) => this.checkComponent(c.name, c.check)),
-    );
+    const results = await Promise.all(checks.map((c) => this.checkComponent(c.name, c.check)));
 
-    const status: HealthReport['status'] = results.some((r) => r.status === 'unhealthy')
-      ? 'unhealthy'
-      : results.some((r) => r.status === 'degraded')
-        ? 'degraded'
-        : 'healthy';
+    const status: HealthReport["status"] = results.some((r) => r.status === "unhealthy")
+      ? "unhealthy"
+      : results.some((r) => r.status === "degraded")
+        ? "degraded"
+        : "healthy";
 
     return {
       status,

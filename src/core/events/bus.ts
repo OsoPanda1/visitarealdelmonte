@@ -20,7 +20,7 @@ const listeners: Partial<Record<EventName, Array<(e: RDMEvent) => void>>> = {};
 
 export function publish<T>(event: RDMEvent<T>) {
   const ls = listeners[event.name] || [];
-  ls.forEach(fn => fn(event as RDMEvent));
+  ls.forEach((fn) => fn(event as RDMEvent));
 }
 
 export function subscribe(name: EventName, fn: (e: RDMEvent) => void): () => void {

@@ -1,15 +1,19 @@
-import { logger } from '@/lib/logger';
-import { territorialCollector } from './TerritorialDataCollector';
-import { territorialFederationBridge } from '@/federaciones/territorial-federation-bridge';
-import { consciousnessPipeline } from '@/isabella/pipeline/IsabellaConsciousnessPipeline';
-import { federationInputPort, territorialInputPort, federationOutputPort } from '@/isabella/pipeline/ports';
-import { isabellaTerritorialMind } from '@/isabella/territorial/IsabellaTerritorialMind';
-import { territorialGeofencer, initializeRDMZones } from './TerritorialGeofencer';
-import { federationBus } from '@/federaciones/FederationBus';
-import { knowledgeEngine } from '@/isabella/knowledge/KnowledgeAbsorptionEngine';
-import { awakeningProtocol } from '@/isabella/protocols/IsabellaAwakeningProtocol';
-import type { UserContribution } from './types';
-import type { Coordenadas, FederationId } from '@/core/models';
+import { logger } from "@/lib/logger";
+import { territorialCollector } from "./TerritorialDataCollector";
+import { territorialFederationBridge } from "@/federaciones/territorial-federation-bridge";
+import { consciousnessPipeline } from "@/isabella/pipeline/IsabellaConsciousnessPipeline";
+import {
+  federationInputPort,
+  territorialInputPort,
+  federationOutputPort,
+} from "@/isabella/pipeline/ports";
+import { isabellaTerritorialMind } from "@/isabella/territorial/IsabellaTerritorialMind";
+import { territorialGeofencer, initializeRDMZones } from "./TerritorialGeofencer";
+import { federationBus } from "@/federaciones/FederationBus";
+import { knowledgeEngine } from "@/isabella/knowledge/KnowledgeAbsorptionEngine";
+import { awakeningProtocol } from "@/isabella/protocols/IsabellaAwakeningProtocol";
+import type { UserContribution } from "./types";
+import type { Coordenadas, FederationId } from "@/core/models";
 
 export interface FusionEngineState {
   active: boolean;
@@ -42,15 +46,15 @@ export class TerritorialFusionEngine {
     territorialCollector.subscribe((contribution: UserContribution) => {
       territorialFederationBridge.routeContribution(contribution);
       consciousnessPipeline.processInput({
-        type: 'territorial_contribution',
+        type: "territorial_contribution",
         contribution,
       });
     });
 
     // Subscribe to Federation Bus territorial events
-    federationBus.on('TERRITORIAL_EVENT', (event) => {
+    federationBus.on("TERRITORIAL_EVENT", (event) => {
       consciousnessPipeline.processInput({
-        type: 'federation_event',
+        type: "federation_event",
         event,
       });
     });
@@ -58,21 +62,21 @@ export class TerritorialFusionEngine {
     // Subscribe geofencer zone events
     territorialGeofencer.subscribe((zoneEvent) => {
       consciousnessPipeline.processInput({
-        type: 'zone_event',
+        type: "zone_event",
         event: zoneEvent,
       });
 
       territorialFederationBridge.routeContribution({
         id: `zone-${zoneEvent.timestamp.getTime()}`,
         userId: zoneEvent.userId,
-        type: 'checkin',
-        status: 'verified',
+        type: "checkin",
+        status: "verified",
         coords: { lat: zoneEvent.coords.lat, lng: zoneEvent.coords.lng },
-        territorio: 'RDM',
+        territorio: "RDM",
         payload: {
-          type: 'checkin',
+          type: "checkin",
           poiName: zoneEvent.zoneName,
-          mood: 'exploring',
+          mood: "exploring",
         },
         reputationWeight: 1,
         createdAt: zoneEvent.timestamp,
@@ -87,16 +91,16 @@ export class TerritorialFusionEngine {
     territorialFederationBridge.subscribeToFederationEvents();
     knowledgeEngine.startAbsorptionCycle(300000);
 
-    logger.info('[FusionEngine] TERRITORIAL FUSION ENGINE ACTIVADO');
-    logger.info('[FusionEngine] Sistemas conectados', {
+    logger.info("[FusionEngine] TERRITORIAL FUSION ENGINE ACTIVADO");
+    logger.info("[FusionEngine] Sistemas conectados", {
       systems: [
-        'ConsciousnessPipeline',
-        'TerritorialCollector',
-        'FederationBus',
-        'Geofencer',
-        'IsabellaTerritorialMind',
-        'KnowledgeAbsorption',
-        'AwakeningProtocol',
+        "ConsciousnessPipeline",
+        "TerritorialCollector",
+        "FederationBus",
+        "Geofencer",
+        "IsabellaTerritorialMind",
+        "KnowledgeAbsorption",
+        "AwakeningProtocol",
       ],
     });
   }
@@ -107,19 +111,23 @@ export class TerritorialFusionEngine {
     territorialGeofencer.stop();
     isabellaTerritorialMind.stop();
     knowledgeEngine.stop();
-    logger.info('[FusionEngine] TERRITORIAL FUSION ENGINE DETENIDO');
+    logger.info("[FusionEngine] TERRITORIAL FUSION ENGINE DETENIDO");
   }
 
   async processQuery(text: string, userId: string, coords?: Coordenadas): Promise<unknown> {
     return consciousnessPipeline.processInput({
-      type: 'user_query',
+      type: "user_query",
       query: text,
       userId,
       coords,
     });
   }
 
-  async triggerFederationEvent(source: FederationId, type: string, payload: unknown): Promise<void> {
+  async triggerFederationEvent(
+    source: FederationId,
+    type: string,
+    payload: unknown,
+  ): Promise<void> {
     federationBus.emit({ type, source, payload, traceId: crypto.randomUUID() });
   }
 
@@ -138,7 +146,9 @@ export class TerritorialFusionEngine {
       awakeningPhase: awakeningState.currentPhase,
       territorialHeat: stats.territoryHealth,
       avgPipelineLatencyMs: Math.round(pipelineStats.avgLatencyMs),
-      uptimeSeconds: this.startTime ? Math.round((Date.now() - this.startTime.getTime()) / 1000) : 0,
+      uptimeSeconds: this.startTime
+        ? Math.round((Date.now() - this.startTime.getTime()) / 1000)
+        : 0,
     };
   }
 }

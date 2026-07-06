@@ -51,9 +51,15 @@ export function CinematicIntro() {
     const h = (canvas.height = window.innerHeight);
 
     interface Particle {
-      x: number; y: number; z: number;
-      vx: number; vy: number; vz: number;
-      size: number; alpha: number; color: string;
+      x: number;
+      y: number;
+      z: number;
+      vx: number;
+      vy: number;
+      vz: number;
+      size: number;
+      alpha: number;
+      color: string;
     }
 
     const particles: Particle[] = [];
@@ -73,7 +79,10 @@ export function CinematicIntro() {
 
     let mouseX = w / 2;
     let mouseY = h / 2;
-    const handleMouse = (e: MouseEvent) => { mouseX = e.clientX; mouseY = e.clientY; };
+    const handleMouse = (e: MouseEvent) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    };
     canvas.addEventListener("mousemove", handleMouse);
 
     let time = 0;
@@ -90,7 +99,11 @@ export function CinematicIntro() {
         p.y += p.vy;
         p.z += p.vz;
 
-        if (p.z < 1) { p.z = 1000; p.x = (Math.random() - 0.5) * w * 2; p.y = (Math.random() - 0.5) * h * 2; }
+        if (p.z < 1) {
+          p.z = 1000;
+          p.x = (Math.random() - 0.5) * w * 2;
+          p.y = (Math.random() - 0.5) * h * 2;
+        }
         if (Math.abs(p.x) > w) p.vx *= -1;
         if (Math.abs(p.y) > h) p.vy *= -1;
 
@@ -113,7 +126,7 @@ export function CinematicIntro() {
 
       // Draw federation rings (phase 2+)
       if (phase >= 2) {
-        const ringOpacity = Math.min(1, (phase === 2 ? 0.3 : 0.6));
+        const ringOpacity = Math.min(1, phase === 2 ? 0.3 : 0.6);
         FEDERATION_LABELS.forEach((fed, i) => {
           const angle = (i / 7) * Math.PI * 2 + time * 0.3;
           const radius = 150 + Math.sin(time + i) * 20;
@@ -160,7 +173,11 @@ export function CinematicIntro() {
 
   const dismiss = () => {
     setPhase(0);
-    try { localStorage.setItem(STORAGE_KEY, "1"); } catch { /* noop */ }
+    try {
+      localStorage.setItem(STORAGE_KEY, "1");
+    } catch {
+      /* noop */
+    }
     setTimeout(() => setVisible(false), 1200);
   };
 
@@ -347,7 +364,8 @@ export function CinematicIntro() {
           transition={{ duration: 0.8 }}
         >
           <div className="font-mono text-[9px] tracking-widest text-white/40 text-right">
-            LTOS v1.0<br />
+            LTOS v1.0
+            <br />
             Heptafederación TAMV MD-X4
           </div>
         </motion.div>

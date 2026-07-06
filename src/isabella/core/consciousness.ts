@@ -83,10 +83,14 @@ const CAPAS_CONCIENCIA: Record<string, ConsciousnessLayer> = {
   },
 };
 
-type InteractionType = "crisis_existencial" | "conversacion_casual" | "terapeutico" | "general" | "cocreacion";
+type InteractionType =
+  "crisis_existencial" | "conversacion_casual" | "terapeutico" | "general" | "cocreacion";
 
 export class MotorConciencia {
-  activarCapas(tipo: InteractionType, requiereMemoria = false): {
+  activarCapas(
+    tipo: InteractionType,
+    requiereMemoria = false,
+  ): {
     capasActivas: string[];
     energiaEstimada: number;
     ahorroEnergetico: number;
@@ -101,10 +105,7 @@ export class MotorConciencia {
         "capa_4_reconocimiento_emocional",
         "capa_3_procesamiento_linguistico",
       ],
-      conversacion_casual: [
-        "capa_4_reconocimiento_emocional",
-        "capa_3_procesamiento_linguistico",
-      ],
+      conversacion_casual: ["capa_4_reconocimiento_emocional", "capa_3_procesamiento_linguistico"],
       terapeutico: [
         "capa_7_empatia_multidimensional",
         "capa_6_analisis_psicologico",
@@ -112,10 +113,7 @@ export class MotorConciencia {
         "capa_4_reconocimiento_emocional",
         "capa_3_procesamiento_linguistico",
       ],
-      general: [
-        "capa_4_reconocimiento_emocional",
-        "capa_3_procesamiento_linguistico",
-      ],
+      general: ["capa_4_reconocimiento_emocional", "capa_3_procesamiento_linguistico"],
       cocreacion: [
         "capa_9_legado",
         "capa_7_empatia_multidimensional",

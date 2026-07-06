@@ -25,16 +25,28 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 
 function Dashboard() {
   const { user } = Route.useRouteContext() as { user: { email?: string; id: string } };
-  const navigate = (globalThis as { __TanStackNavigate?: (opts: { to: string }) => void }).__TanStackNavigate;
-  const [profile, setProfile] = useState<{ display_name?: string | null; federation?: string | null } | null>(null);
+  const navigate = (globalThis as { __TanStackNavigate?: (opts: { to: string }) => void })
+    .__TanStackNavigate;
+  const [profile, setProfile] = useState<{
+    display_name?: string | null;
+    federation?: string | null;
+  } | null>(null);
   const [fed, setFed] = useState<string>("MDD_TAMV");
   const [saving, setSaving] = useState(false);
   const { profile: gamification, loading: gamLoading, loadAll } = useGamification();
 
   useEffect(() => {
-    supabase.from("profiles").select("display_name, federation").eq("id", user.id).maybeSingle().then(({ data }) => {
-      if (data) { setProfile(data); if (data.federation) setFed(data.federation); }
-    });
+    supabase
+      .from("profiles")
+      .select("display_name, federation")
+      .eq("id", user.id)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data) {
+          setProfile(data);
+          if (data.federation) setFed(data.federation);
+        }
+      });
     loadAll(user.id);
   }, [user.id, loadAll]);
 
@@ -62,21 +74,35 @@ function Dashboard() {
         <div className="lg:col-span-2 space-y-6">
           {/* Federation selector */}
           <div className="rounded-2xl border-hairline bg-card p-7">
-            <div className="font-mono text-[10px] tracking-sovereign text-accent mb-2">Capa federada</div>
+            <div className="font-mono text-[10px] tracking-sovereign text-accent mb-2">
+              Capa federada
+            </div>
             <h2 className="font-display text-2xl text-ink mb-5">Selecciona tu pertenencia</h2>
             <div className="grid sm:grid-cols-2 gap-2">
               {HEPTA_LAYERS.map((l) => (
-                <button key={l.key} onClick={() => setFed(l.key)} className={`text-left rounded-xl border p-4 transition-all ${fed === l.key ? "border-accent shadow-card" : "border-hairline hover:bg-secondary"}`}>
+                <button
+                  key={l.key}
+                  onClick={() => setFed(l.key)}
+                  className={`text-left rounded-xl border p-4 transition-all ${fed === l.key ? "border-accent shadow-card" : "border-hairline hover:bg-secondary"}`}
+                >
                   <div className="flex items-center justify-between">
-                    <span className="text-2xl" style={{ color: l.color }}>{l.glyph}</span>
-                    <span className="font-mono text-[9px] tracking-sovereign text-muted-foreground">{l.key}</span>
+                    <span className="text-2xl" style={{ color: l.color }}>
+                      {l.glyph}
+                    </span>
+                    <span className="font-mono text-[9px] tracking-sovereign text-muted-foreground">
+                      {l.key}
+                    </span>
                   </div>
                   <div className="font-display text-lg text-ink mt-2">{l.name}</div>
                   <p className="text-[11px] text-muted-foreground mt-1">{l.domain}</p>
                 </button>
               ))}
             </div>
-            <button onClick={saveFed} disabled={saving} className="mt-5 rounded-full bg-foreground text-background px-5 py-2.5 text-sm disabled:opacity-50">
+            <button
+              onClick={saveFed}
+              disabled={saving}
+              className="mt-5 rounded-full bg-foreground text-background px-5 py-2.5 text-sm disabled:opacity-50"
+            >
               {saving ? "Guardando…" : "Guardar capa federada"}
             </button>
           </div>
@@ -86,10 +112,15 @@ function Dashboard() {
             <div className="rounded-2xl border-hairline bg-card p-7">
               <div className="flex items-center justify-between mb-5">
                 <div>
-                  <div className="font-mono text-[10px] tracking-sovereign text-accent mb-1">Gamificación</div>
+                  <div className="font-mono text-[10px] tracking-sovereign text-accent mb-1">
+                    Gamificación
+                  </div>
                   <h2 className="font-display text-2xl text-ink">Tu Progreso Territorial</h2>
                 </div>
-                <Link to="/rdm-quest" className="text-xs text-accent hover:underline inline-flex items-center gap-1">
+                <Link
+                  to="/rdm-quest"
+                  className="text-xs text-accent hover:underline inline-flex items-center gap-1"
+                >
                   Ver Quest <ChevronRight className="w-3 h-3" />
                 </Link>
               </div>
@@ -100,8 +131,12 @@ function Dashboard() {
                     <Flame className="w-5 h-5 text-accent" />
                   </div>
                   <div>
-                    <div className="font-display text-xl text-ink">{gamification.points.toLocaleString()}</div>
-                    <div className="font-mono text-[9px] tracking-sovereign text-muted-foreground">XP</div>
+                    <div className="font-display text-xl text-ink">
+                      {gamification.points.toLocaleString()}
+                    </div>
+                    <div className="font-mono text-[9px] tracking-sovereign text-muted-foreground">
+                      XP
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -110,7 +145,9 @@ function Dashboard() {
                   </div>
                   <div>
                     <div className="font-display text-xl text-ink">Nv. {gamification.level}</div>
-                    <div className="font-mono text-[9px] tracking-sovereign text-muted-foreground">{tier?.name ?? "Aprendiz"}</div>
+                    <div className="font-mono text-[9px] tracking-sovereign text-muted-foreground">
+                      {tier?.name ?? "Aprendiz"}
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -118,8 +155,12 @@ function Dashboard() {
                     <Medal className="w-5 h-5 text-accent" />
                   </div>
                   <div>
-                    <div className="font-display text-xl text-ink">{gamification.badges.length}</div>
-                    <div className="font-mono text-[9px] tracking-sovereign text-muted-foreground">Insignias</div>
+                    <div className="font-display text-xl text-ink">
+                      {gamification.badges.length}
+                    </div>
+                    <div className="font-mono text-[9px] tracking-sovereign text-muted-foreground">
+                      Insignias
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -128,7 +169,9 @@ function Dashboard() {
                   </div>
                   <div>
                     <div className="font-display text-xl text-ink">{gamification.streak_days}</div>
-                    <div className="font-mono text-[9px] tracking-sovereign text-muted-foreground">Racha</div>
+                    <div className="font-mono text-[9px] tracking-sovereign text-muted-foreground">
+                      Racha
+                    </div>
                   </div>
                 </div>
               </div>
@@ -136,7 +179,10 @@ function Dashboard() {
               {gamification.badges.length > 0 && (
                 <div className="flex flex-wrap gap-2">
                   {gamification.badges.slice(0, 5).map((b) => (
-                    <span key={b} className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-accent/10 text-accent">
+                    <span
+                      key={b}
+                      className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-accent/10 text-accent"
+                    >
                       {b.replace("badge_", "").replace(/_/g, " ")}
                     </span>
                   ))}
@@ -144,7 +190,9 @@ function Dashboard() {
               )}
 
               {gamification.badges.length === 0 && (
-                <p className="text-sm text-muted-foreground">Completa misiones en RDM Quest para ganar insignias y XP</p>
+                <p className="text-sm text-muted-foreground">
+                  Completa misiones en RDM Quest para ganar insignias y XP
+                </p>
               )}
             </div>
           )}
@@ -155,15 +203,27 @@ function Dashboard() {
             <Shield className="w-5 h-5 text-accent mb-2" />
             <div className="font-display text-lg text-ink">Identidad</div>
             <p className="text-xs text-muted-foreground mt-1 break-all">{user.email}</p>
-            <p className="font-mono text-[10px] tracking-sovereign text-muted-foreground mt-2">UID {user.id.slice(0, 8)}…</p>
+            <p className="font-mono text-[10px] tracking-sovereign text-muted-foreground mt-2">
+              UID {user.id.slice(0, 8)}…
+            </p>
           </div>
 
           <div className="rounded-2xl border-hairline bg-card p-6">
             <Activity className="w-5 h-5 text-accent mb-2" />
             <div className="font-display text-lg text-ink">Pulso cívico</div>
             <div className="mt-3 grid grid-cols-2 gap-3 text-center">
-              <div><div className="font-display text-2xl text-ink">{gamification?.points ?? 0}</div><div className="font-mono text-[9px] tracking-sovereign text-muted-foreground">puntos</div></div>
-              <div><div className="font-display text-2xl text-ink">{gamification?.level ?? 1}</div><div className="font-mono text-[9px] tracking-sovereign text-muted-foreground">nivel</div></div>
+              <div>
+                <div className="font-display text-2xl text-ink">{gamification?.points ?? 0}</div>
+                <div className="font-mono text-[9px] tracking-sovereign text-muted-foreground">
+                  puntos
+                </div>
+              </div>
+              <div>
+                <div className="font-display text-2xl text-ink">{gamification?.level ?? 1}</div>
+                <div className="font-mono text-[9px] tracking-sovereign text-muted-foreground">
+                  nivel
+                </div>
+              </div>
             </div>
           </div>
 
@@ -171,11 +231,31 @@ function Dashboard() {
             <Sparkles className="w-5 h-5 text-accent mb-2" />
             <div className="font-display text-lg text-ink mb-2">Atajos</div>
             <ul className="text-sm space-y-1">
-              <li><a className="hover:text-accent" href="/atlas">→ Atlas territorial</a></li>
-              <li><a className="hover:text-accent" href="/rdm-quest">→ RDM Quest</a></li>
-              <li><a className="hover:text-accent" href="/musica">→ RDM Ecos Música</a></li>
-              <li><a className="hover:text-accent" href="/realito">→ Hablar con Realito</a></li>
-              <li><a className="hover:text-accent" href="/comunidad">→ Foro federado</a></li>
+              <li>
+                <a className="hover:text-accent" href="/atlas">
+                  → Atlas territorial
+                </a>
+              </li>
+              <li>
+                <a className="hover:text-accent" href="/rdm-quest">
+                  → RDM Quest
+                </a>
+              </li>
+              <li>
+                <a className="hover:text-accent" href="/musica">
+                  → RDM Ecos Música
+                </a>
+              </li>
+              <li>
+                <a className="hover:text-accent" href="/realito">
+                  → Hablar con Realito
+                </a>
+              </li>
+              <li>
+                <a className="hover:text-accent" href="/comunidad">
+                  → Foro federado
+                </a>
+              </li>
             </ul>
           </div>
 
@@ -183,13 +263,25 @@ function Dashboard() {
             <Trophy className="w-5 h-5 text-accent mb-2" />
             <div className="font-display text-lg text-ink mb-2">Próximas Misiones</div>
             <ul className="text-sm space-y-2">
-              <li className="flex items-center gap-2"><Target className="w-4 h-4 text-accent shrink-0" /><span>Explora 5 POIs en el Atlas</span></li>
-              <li className="flex items-center gap-2"><Target className="w-4 h-4 text-accent shrink-0" /><span>Crea tu primera Crónica Sonora</span></li>
-              <li className="flex items-center gap-2"><Target className="w-4 h-4 text-accent shrink-0" /><span>Alcanza nivel 2</span></li>
+              <li className="flex items-center gap-2">
+                <Target className="w-4 h-4 text-accent shrink-0" />
+                <span>Explora 5 POIs en el Atlas</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <Target className="w-4 h-4 text-accent shrink-0" />
+                <span>Crea tu primera Crónica Sonora</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <Target className="w-4 h-4 text-accent shrink-0" />
+                <span>Alcanza nivel 2</span>
+              </li>
             </ul>
           </div>
 
-          <button onClick={signOut} className="w-full rounded-full border-hairline px-5 py-2.5 text-sm hover:bg-secondary inline-flex items-center justify-center gap-2">
+          <button
+            onClick={signOut}
+            className="w-full rounded-full border-hairline px-5 py-2.5 text-sm hover:bg-secondary inline-flex items-center justify-center gap-2"
+          >
             <LogOut className="w-4 h-4" /> Cerrar sesión
           </button>
         </aside>

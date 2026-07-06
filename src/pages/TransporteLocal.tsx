@@ -17,7 +17,11 @@ export default function TransporteLocal() {
 
   useEffect(() => {
     async function load() {
-      const { data } = await supabase.from("transport_providers").select("*").eq("status", "active").order("name");
+      const { data } = await supabase
+        .from("transport_providers")
+        .select("*")
+        .eq("status", "active")
+        .order("name");
       if (data) setProviders(data);
     }
     load();
@@ -41,13 +45,23 @@ export default function TransporteLocal() {
     <RDMLayout>
       <div className="min-h-screen">
         <div className="container mx-auto px-4 md:px-8 pt-24 pb-16">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-10"
+          >
             <div className="flex items-center gap-3 mb-2">
               <Car className="h-5 w-5 text-primary" />
-              <span className="text-xs tracking-[0.3em] uppercase text-muted-foreground">Movilidad</span>
+              <span className="text-xs tracking-[0.3em] uppercase text-muted-foreground">
+                Movilidad
+              </span>
             </div>
-            <h1 className="font-display text-4xl md:text-5xl text-foreground mb-4">Transporte Local</h1>
-            <p className="text-muted-foreground max-w-2xl">Servicios de transporte disponibles en Real del Monte.</p>
+            <h1 className="font-display text-4xl md:text-5xl text-foreground mb-4">
+              Transporte Local
+            </h1>
+            <p className="text-muted-foreground max-w-2xl">
+              Servicios de transporte disponibles en Real del Monte.
+            </p>
           </motion.div>
 
           {paged.length === 0 ? (
@@ -57,7 +71,9 @@ export default function TransporteLocal() {
             </div>
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {paged.map(p => <TransportCard key={p.id} provider={p} />)}
+              {paged.map((p) => (
+                <TransportCard key={p.id} provider={p} />
+              ))}
             </div>
           )}
 

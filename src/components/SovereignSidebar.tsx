@@ -50,7 +50,9 @@ export function SovereignSidebar({ activeView, onViewChange }: SovereignSidebarP
               transition={{ duration: 0.1 }}
               className="overflow-hidden"
             >
-              <p className="text-sm font-semibold text-sidebar-accent-foreground font-display tracking-tight">RDM Digital</p>
+              <p className="text-sm font-semibold text-sidebar-accent-foreground font-display tracking-tight">
+                RDM Digital
+              </p>
               <p className="text-[10px] text-sidebar-foreground">OS v4.1</p>
             </motion.div>
           )}

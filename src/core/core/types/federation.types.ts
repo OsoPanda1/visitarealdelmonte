@@ -79,21 +79,12 @@ export enum EthicRuleCategory {
  * (Declarado aquí porque lo usan los validadores de ética.)
  */
 export type ProtocolLifecycleState =
-  | "received"
-  | "validated"
-  | "authorized"
-  | "executed"
-  | "reverted"
-  | "rejected";
+  "received" | "validated" | "authorized" | "executed" | "reverted" | "rejected";
 
 /**
  * Fuente principal que gatilló la decisión.
  */
-export type DecisionSource =
-  | "human_guardian"
-  | "ai_recommendation"
-  | "mixed"
-  | "system";
+export type DecisionSource = "human_guardian" | "ai_recommendation" | "mixed" | "system";
 
 /**
  * Comando de protocolo canonizado.
@@ -156,11 +147,7 @@ export interface EthicDecision {
 // L1: MEMORY & REGISTRY (MSR + BookPi)
 // ============================================================================
 
-export type RegistryStatus =
-  | "accepted"
-  | "rejected"
-  | "pending"
-  | "cancelled";
+export type RegistryStatus = "accepted" | "rejected" | "pending" | "cancelled";
 
 /**
  * Evento canonizado en el registro (MSR).
@@ -323,11 +310,7 @@ export interface ContextualDecision {
 // L5: DOMAIN SERVICES
 // ============================================================================
 
-export type DomainServiceStatus =
-  | "ready"
-  | "initializing"
-  | "error"
-  | "maintenance";
+export type DomainServiceStatus = "ready" | "initializing" | "error" | "maintenance";
 
 export interface DomainService {
   name: string;
@@ -405,10 +388,7 @@ export interface UIState<T = unknown> {
 // L7: QUANTUM-INSPIRED
 // ============================================================================
 
-export type FeedbackStrategy =
-  | "penalize_strategy"
-  | "reinforce_strategy"
-  | "neutral";
+export type FeedbackStrategy = "penalize_strategy" | "reinforce_strategy" | "neutral";
 
 export interface QuantumDecisionState {
   /**

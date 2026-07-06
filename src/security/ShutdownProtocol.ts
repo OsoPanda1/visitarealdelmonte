@@ -23,7 +23,11 @@ export class ShutdownProtocol {
   private shutdownInProgress = false;
   private lastShutdown: ShutdownEvent | null = null;
 
-  async initiate(level: ShutdownLevel, reason: string, initiatedBy = "SYSTEM"): Promise<ShutdownEvent> {
+  async initiate(
+    level: ShutdownLevel,
+    reason: string,
+    initiatedBy = "SYSTEM",
+  ): Promise<ShutdownEvent> {
     if (this.shutdownInProgress) {
       logger.warn("[SHUTDOWN] Apagado ya en progreso");
       throw new Error("Shutdown already in progress");
@@ -70,7 +74,7 @@ export class ShutdownProtocol {
     const start = Date.now();
     try {
       if (level === "GRACEFUL") {
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 500));
       }
       mdx5.stop();
       return { name: "stopKernel", status: "COMPLETED", durationMs: Date.now() - start };
@@ -85,7 +89,11 @@ export class ShutdownProtocol {
       knowledgeEngine.stop();
       return { name: "stopKnowledgeEngine", status: "COMPLETED", durationMs: Date.now() - start };
     } catch (error) {
-      return { name: "stopKnowledgeEngine", status: level === "CRITICAL_FAILURE" ? "SKIPPED" : "FAILED", durationMs: Date.now() - start };
+      return {
+        name: "stopKnowledgeEngine",
+        status: level === "CRITICAL_FAILURE" ? "SKIPPED" : "FAILED",
+        durationMs: Date.now() - start,
+      };
     }
   }
 
@@ -109,7 +117,7 @@ export class ShutdownProtocol {
         const queueSize = mdx5.getQueueSize();
         if (queueSize > 0) {
           logger.info("[SHUTDOWN] Esperando drenaje de cola", { queueSize });
-          await new Promise(resolve => setTimeout(resolve, Math.min(queueSize * 10, 3000)));
+          await new Promise((resolve) => setTimeout(resolve, Math.min(queueSize * 10, 3000)));
         }
       }
       return { name: "flushPending", status: "COMPLETED", durationMs: Date.now() - start };
@@ -122,7 +130,7 @@ export class ShutdownProtocol {
     const start = Date.now();
     try {
       if (level === "GRACEFUL") {
-        await new Promise(resolve => setTimeout(resolve, 200));
+        await new Promise((resolve) => setTimeout(resolve, 200));
       }
       return { name: "closeConnections", status: "COMPLETED", durationMs: Date.now() - start };
     } catch (error) {

@@ -33,7 +33,8 @@ export function useDashboardMetrics() {
   return useQuery<DashboardSnapshot>({
     queryKey: ["dashboard-metrics"],
     queryFn: async () => {
-      const { data, error } = await supabase.functions.invoke<DashboardSnapshot>("metrics-aggregates");
+      const { data, error } =
+        await supabase.functions.invoke<DashboardSnapshot>("metrics-aggregates");
       if (error) throw error;
       if (!data) throw new Error("No metrics returned");
       return data;

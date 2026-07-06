@@ -144,9 +144,9 @@ export default function Mitos() {
             transition={{ ...fadeUp.transition, delay: 0.2 }}
             className="mx-auto mt-6 max-w-2xl text-balance text-base font-body leading-relaxed text-muted-foreground md:text-lg"
           >
-            Real del Monte se cuenta a sí mismo en la voz de sus abuelos, en el
-            crujir de sus minas y en el viento del Panteón Inglés. Estas son
-            las historias que la montaña se niega a olvidar.
+            Real del Monte se cuenta a sí mismo en la voz de sus abuelos, en el crujir de sus minas
+            y en el viento del Panteón Inglés. Estas son las historias que la montaña se niega a
+            olvidar.
           </motion.p>
 
           <motion.div
@@ -242,9 +242,8 @@ export default function Mitos() {
             ¿Conoces una leyenda que aún no contamos?
           </h3>
           <p className="mx-auto mt-3 max-w-xl text-sm font-body leading-relaxed text-muted-foreground">
-            Este archivo vive mientras la comunidad lo alimente. Comparte tu
-            historia en el módulo de Comunidad y el consejo editorial del RDM
-            decidirá si la montaña la adopta.
+            Este archivo vive mientras la comunidad lo alimente. Comparte tu historia en el módulo
+            de Comunidad y el consejo editorial del RDM decidirá si la montaña la adopta.
           </p>
           <a
             href="/comunidad"

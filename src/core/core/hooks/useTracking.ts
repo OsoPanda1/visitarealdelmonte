@@ -97,9 +97,7 @@ function saveOfflineQueue(queue: InternalTrackBody[]): void {
   try {
     // limitamos el tamaño para no crecer indefinidamente
     const trimmed =
-      queue.length > OFFLINE_QUEUE_MAX
-        ? queue.slice(queue.length - OFFLINE_QUEUE_MAX)
-        : queue;
+      queue.length > OFFLINE_QUEUE_MAX ? queue.slice(queue.length - OFFLINE_QUEUE_MAX) : queue;
     localStorage.setItem(OFFLINE_QUEUE_KEY, JSON.stringify(trimmed));
   } catch {
     // ignorar problemas de espacio/cupo
@@ -167,20 +165,13 @@ export async function track(input: TrackPayload): Promise<void> {
   try {
     const sessionId = input.external_session_id ?? getSessionId();
     const route =
-      input.route ??
-      (isBrowser()
-        ? window.location.pathname + window.location.search
-        : undefined);
+      input.route ?? (isBrowser() ? window.location.pathname + window.location.search : undefined);
 
     const userAgent =
-      isBrowser() && typeof navigator !== "undefined"
-        ? navigator.userAgent
-        : undefined;
+      isBrowser() && typeof navigator !== "undefined" ? navigator.userAgent : undefined;
 
     const referrer =
-      isBrowser() && typeof document !== "undefined"
-        ? document.referrer || undefined
-        : undefined;
+      isBrowser() && typeof document !== "undefined" ? document.referrer || undefined : undefined;
 
     const body: InternalTrackBody = {
       ...input,
@@ -288,8 +279,7 @@ export function useTourismTracking(options?: { anonymizeIp?: boolean }) {
   const trackDonation = useCallback(
     (stage: "started" | "completed", payload?: Record<string, unknown>) =>
       withDefaults({
-        event_type:
-          stage === "started" ? "donation_started" : "donation_completed",
+        event_type: stage === "started" ? "donation_started" : "donation_completed",
         entity_type: "donation",
         payload,
       }),
@@ -299,8 +289,7 @@ export function useTourismTracking(options?: { anonymizeIp?: boolean }) {
   const trackMembership = useCallback(
     (stage: "started" | "completed", payload?: Record<string, unknown>) =>
       withDefaults({
-        event_type:
-          stage === "started" ? "membership_started" : "membership_completed",
+        event_type: stage === "started" ? "membership_started" : "membership_completed",
         entity_type: "membership",
         payload,
       }),
@@ -310,8 +299,7 @@ export function useTourismTracking(options?: { anonymizeIp?: boolean }) {
   const trackWallPost = useCallback(
     (action: "created" | "liked", postId?: string) =>
       withDefaults({
-        event_type:
-          action === "created" ? "wall_post_created" : "wall_post_liked",
+        event_type: action === "created" ? "wall_post_created" : "wall_post_liked",
         entity_type: "wall_post",
         entity_id: postId,
       }),

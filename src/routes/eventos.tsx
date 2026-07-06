@@ -7,9 +7,15 @@ export const Route = createFileRoute("/eventos")({
   head: () => ({
     meta: [
       { title: "Eventos · Calendario civilizatorio · RDM" },
-      { name: "description", content: "Agenda federada: asambleas, hackatones, festivales y vigilias en Real del Monte." },
+      {
+        name: "description",
+        content: "Agenda federada: asambleas, hackatones, festivales y vigilias en Real del Monte.",
+      },
       { property: "og:title", content: "Eventos · RDM Digital" },
-      { property: "og:description", content: "Calendario civilizatorio del Sistema Operativo Territorial LTOS." },
+      {
+        property: "og:description",
+        content: "Calendario civilizatorio del Sistema Operativo Territorial LTOS.",
+      },
     ],
   }),
   component: EventosPage,
@@ -37,7 +43,10 @@ function EventosPage() {
           {EVENTS.map((e) => {
             const d = new Date(e.date);
             return (
-              <li key={e.title} className="grid md:grid-cols-[120px_1fr_auto] items-center gap-6 px-6 py-5 hover:bg-secondary/40">
+              <li
+                key={e.title}
+                className="grid md:grid-cols-[120px_1fr_auto] items-center gap-6 px-6 py-5 hover:bg-secondary/40"
+              >
                 <div>
                   <div className="font-display text-4xl text-ink leading-none">{d.getDate()}</div>
                   <div className="font-mono text-[10px] tracking-sovereign text-muted-foreground uppercase mt-1">
@@ -47,11 +56,22 @@ function EventosPage() {
                 <div>
                   <h3 className="font-display text-xl text-ink">{e.title}</h3>
                   <div className="mt-1 flex items-center gap-3 text-[11px] font-mono text-muted-foreground">
-                    <span className="inline-flex items-center gap-1"><MapPin className="w-3 h-3" />{e.place}</span>
-                    <span className="inline-flex items-center gap-1"><Calendar className="w-3 h-3" />confirmado</span>
+                    <span className="inline-flex items-center gap-1">
+                      <MapPin className="w-3 h-3" />
+                      {e.place}
+                    </span>
+                    <span className="inline-flex items-center gap-1">
+                      <Calendar className="w-3 h-3" />
+                      confirmado
+                    </span>
                   </div>
                 </div>
-                <span className="text-[10px] font-mono px-3 py-1 rounded-full justify-self-start md:justify-self-end" style={{ background: `${TAG_COLOR[e.tag]}22`, color: TAG_COLOR[e.tag] }}>{e.tag}</span>
+                <span
+                  className="text-[10px] font-mono px-3 py-1 rounded-full justify-self-start md:justify-self-end"
+                  style={{ background: `${TAG_COLOR[e.tag]}22`, color: TAG_COLOR[e.tag] }}
+                >
+                  {e.tag}
+                </span>
               </li>
             );
           })}

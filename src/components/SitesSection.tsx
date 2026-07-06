@@ -14,14 +14,16 @@ const sites = [
   {
     title: "Pastes del Portal",
     category: "Gastronomía · Herencia Cornish",
-    description: "La receta original traída por mineros ingleses en 1824, horneada con fuego de leña.",
+    description:
+      "La receta original traída por mineros ingleses en 1824, horneada con fuego de leña.",
     image: pasteImg,
     glow: "glow-cyan",
   },
   {
     title: "Centro Histórico",
     category: "Arquitectura · Colonial",
-    description: "Calles empedradas con fachadas del siglo XVIII, cada esquina cuenta una historia.",
+    description:
+      "Calles empedradas con fachadas del siglo XVIII, cada esquina cuenta una historia.",
     image: callesImg,
     glow: "glow-cyan",
   },

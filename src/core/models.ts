@@ -36,7 +36,7 @@ export interface TuristaEstado {
     lastMovementAt?: Date;
   };
   metadata?: {
-    deviceType?: 'mobile' | 'desktop' | 'tablet';
+    deviceType?: "mobile" | "desktop" | "tablet";
     referrer?: string;
     sessionId?: string;
   };
@@ -46,9 +46,9 @@ export interface TuristaEstado {
 // DECISIONES ISABELLA
 // ============================================================================
 
-export type DecisionLevel = 'CRITICO' | 'ALERTA' | 'INFO' | 'SUGERENCIA';
-export type RetentionIntent = 'SAFE_EXIT' | 'UPSELL' | 'DISCOVERY' | 'RETENTION' | 'ENGAGEMENT';
-export type TouristPattern = 'EXPLORING' | 'EXITING' | 'IDLE' | 'RETURNING' | 'LINGERING';
+export type DecisionLevel = "CRITICO" | "ALERTA" | "INFO" | "SUGERENCIA";
+export type RetentionIntent = "SAFE_EXIT" | "UPSELL" | "DISCOVERY" | "RETENTION" | "ENGAGEMENT";
+export type TouristPattern = "EXPLORING" | "EXITING" | "IDLE" | "RETURNING" | "LINGERING";
 
 export interface ScoreBreakdown {
   total: number;
@@ -83,14 +83,8 @@ export type Decision = IsabellaDecision;
 // PUNTOS DE INTERES (POI)
 // ============================================================================
 
-export type POICategory = 
-  | 'historia' 
-  | 'cultura' 
-  | 'gastronomia' 
-  | 'aventura' 
-  | 'hospedaje' 
-  | 'comercio' 
-  | 'servicios';
+export type POICategory =
+  "historia" | "cultura" | "gastronomia" | "aventura" | "hospedaje" | "comercio" | "servicios";
 
 export interface PointOfInterest {
   id: string;
@@ -106,7 +100,7 @@ export interface PointOfInterest {
   precioEstimado?: {
     min: number;
     max: number;
-    moneda: 'MXN' | 'USD';
+    moneda: "MXN" | "USD";
   };
   horario?: {
     apertura: string;
@@ -124,7 +118,7 @@ export interface ExitPoint {
   id: string;
   name: string;
   coords: Coordenadas;
-  type: 'main' | 'secondary' | 'emergency';
+  type: "main" | "secondary" | "emergency";
   boundingBox: BoundingBox;
   capacity?: number;
 }
@@ -138,47 +132,47 @@ export interface ExitPoint {
 // ============================================================================
 
 export type FederationId =
-  | 'DEKATEOTL'     // F1: DATA - Vault / PostGIS / TimeSeries
-  | 'ANUBIS'        // F2: INTEL - Cognitive & Agentic AI
-  | 'BOOKPI_DATAGIT'// F3: SEC - PQC / Zero-Trust / Q-Cells
-  | 'PHOENIX'       // F4: GOV - Executable Governance
-  | 'MDD_TAMV'      // F5: ECON - Economía local / phygital
-  | 'KAOS_HYPERRENDER' // F6: VIS - GeoEngine 2D/3D
-  | 'CHRONOS';      // F7: TERRITORY - Edge / IoT / Human mesh
+  | "DEKATEOTL" // F1: DATA - Vault / PostGIS / TimeSeries
+  | "ANUBIS" // F2: INTEL - Cognitive & Agentic AI
+  | "BOOKPI_DATAGIT" // F3: SEC - PQC / Zero-Trust / Q-Cells
+  | "PHOENIX" // F4: GOV - Executable Governance
+  | "MDD_TAMV" // F5: ECON - Economía local / phygital
+  | "KAOS_HYPERRENDER" // F6: VIS - GeoEngine 2D/3D
+  | "CHRONOS"; // F7: TERRITORY - Edge / IoT / Human mesh
 
-export type FederationNumber = 'F1' | 'F2' | 'F3' | 'F4' | 'F5' | 'F6' | 'F7';
+export type FederationNumber = "F1" | "F2" | "F3" | "F4" | "F5" | "F6" | "F7";
 
 export const FEDERATION_MAP: Record<FederationNumber, FederationId> = {
-  F1: 'DEKATEOTL',
-  F2: 'ANUBIS',
-  F3: 'BOOKPI_DATAGIT',
-  F4: 'PHOENIX',
-  F5: 'MDD_TAMV',
-  F6: 'KAOS_HYPERRENDER',
-  F7: 'CHRONOS',
+  F1: "DEKATEOTL",
+  F2: "ANUBIS",
+  F3: "BOOKPI_DATAGIT",
+  F4: "PHOENIX",
+  F5: "MDD_TAMV",
+  F6: "KAOS_HYPERRENDER",
+  F7: "CHRONOS",
 };
 
 export const FEDERATION_DOMAIN: Record<FederationId, string> = {
-  DEKATEOTL: 'data.rdm.tamv',
-  ANUBIS: 'intel.rdm.tamv',
-  BOOKPI_DATAGIT: 'sec.rdm.tamv',
-  PHOENIX: 'gov.rdm.tamv',
-  MDD_TAMV: 'econ.rdm.tamv',
-  KAOS_HYPERRENDER: 'vis.rdm.tamv',
-  CHRONOS: 'territory.rdm.tamv',
+  DEKATEOTL: "data.rdm.tamv",
+  ANUBIS: "intel.rdm.tamv",
+  BOOKPI_DATAGIT: "sec.rdm.tamv",
+  PHOENIX: "gov.rdm.tamv",
+  MDD_TAMV: "econ.rdm.tamv",
+  KAOS_HYPERRENDER: "vis.rdm.tamv",
+  CHRONOS: "territory.rdm.tamv",
 };
 
 export const FEDERATION_NAMES: Record<FederationId, string> = {
-  DEKATEOTL: 'Federación de Datos (DATA)',
-  ANUBIS: 'Federación de Inteligencia (INTEL)',
-  BOOKPI_DATAGIT: 'Federación de Seguridad (SEC)',
-  PHOENIX: 'Federación de Gobernanza (GOV)',
-  MDD_TAMV: 'Federación Económica (ECON)',
-  KAOS_HYPERRENDER: 'Federación Visual (VIS)',
-  CHRONOS: 'Federación Territorial (TERRITORY)',
+  DEKATEOTL: "Federación de Datos (DATA)",
+  ANUBIS: "Federación de Inteligencia (INTEL)",
+  BOOKPI_DATAGIT: "Federación de Seguridad (SEC)",
+  PHOENIX: "Federación de Gobernanza (GOV)",
+  MDD_TAMV: "Federación Económica (ECON)",
+  KAOS_HYPERRENDER: "Federación Visual (VIS)",
+  CHRONOS: "Federación Territorial (TERRITORY)",
 };
 
-export type FederationStatus = 'ACTIVE' | 'IDLE' | 'DEGRADED' | 'OFFLINE';
+export type FederationStatus = "ACTIVE" | "IDLE" | "DEGRADED" | "OFFLINE";
 
 export interface FederationModule {
   id: FederationId;
@@ -197,7 +191,7 @@ export interface FederationModule {
 // TIPOS DEL CICLO MD-X5
 // ============================================================================
 
-export type MDX5Phase = 'RECEIVE' | 'EVALUATE' | 'PLAN' | 'EXECUTE' | 'COMMIT' | 'RECONCILE';
+export type MDX5Phase = "RECEIVE" | "EVALUATE" | "PLAN" | "EXECUTE" | "COMMIT" | "RECONCILE";
 
 export interface MDX5Intent {
   id: string;
@@ -205,7 +199,7 @@ export interface MDX5Intent {
   payload: unknown;
   source: string;
   federation?: FederationId;
-  priority: 'low' | 'normal' | 'high' | 'critical';
+  priority: "low" | "normal" | "high" | "critical";
   timestamp: Date;
   traceId: string;
 }
@@ -224,7 +218,7 @@ export interface MDX5Decision {
 // TIME UP - GOBERNANZA ÉTICA
 // ============================================================================
 
-export type TimeUpVerdict = 'APPROVED' | 'REJECTED' | 'PENDING_HUMAN' | 'PENDING_ISABELLA';
+export type TimeUpVerdict = "APPROVED" | "REJECTED" | "PENDING_HUMAN" | "PENDING_ISABELLA";
 
 export interface TimeUpPolicy {
   id: string;
@@ -232,7 +226,7 @@ export interface TimeUpPolicy {
   description: string;
   federation: FederationId;
   rule: string;
-  severity: 'INFO' | 'ALERTA' | 'CRITICO';
+  severity: "INFO" | "ALERTA" | "CRITICO";
 }
 
 export interface LedgerEntry {
@@ -282,7 +276,7 @@ export interface BusEvent<T = unknown> {
   payload: T;
   timestamp: Date;
   traceId?: string;
-  priority: 'low' | 'normal' | 'high' | 'critical';
+  priority: "low" | "normal" | "high" | "critical";
 }
 
 // ============================================================================
@@ -332,7 +326,7 @@ export interface LRUCacheConfig {
 // ============================================================================
 
 export interface ContextoCivilizatorio {
-  clima: 'despejado' | 'lluvia' | 'niebla_densa' | 'nublado';
+  clima: "despejado" | "lluvia" | "niebla_densa" | "nublado";
   eventos_activos: string[];
   turistas_concurrentes: number;
   saturacion_zonas: Record<string, number>;
@@ -356,7 +350,7 @@ export interface OrchestratorConfig {
 // KERNEL OUTPUT
 // ============================================================================
 
-export type Intent = 'gastronomia' | 'hospedaje' | 'historia' | 'aventura' | 'cultura' | 'comercio';
+export type Intent = "gastronomia" | "hospedaje" | "historia" | "aventura" | "cultura" | "comercio";
 
 export interface KernelOutput {
   intent: Intent;
@@ -372,8 +366,8 @@ export interface KernelOutput {
 // IDENTIDAD SOBERANA (SSI)
 // ============================================================================
 
-export type IdentityStatus = 'PENDING' | 'ACTIVE' | 'REVOKED' | 'RECOVERING' | 'FROZEN';
-export type SovereigntyLevel = 'INDIVIDUAL' | 'COMMUNITY' | 'INSTITUTIONAL' | 'FEDERAL';
+export type IdentityStatus = "PENDING" | "ACTIVE" | "REVOKED" | "RECOVERING" | "FROZEN";
+export type SovereigntyLevel = "INDIVIDUAL" | "COMMUNITY" | "INSTITUTIONAL" | "FEDERAL";
 
 export interface SovereignIdentity {
   id: string;
@@ -391,8 +385,8 @@ export interface SovereignIdentity {
 // NODOS CIVILES (Federacion)
 // ============================================================================
 
-export type NodeStatus = 'PROVISIONING' | 'ACTIVE' | 'SUSPENDED' | 'DECOMMISSIONED' | 'QUARANTINED';
-export type CertificationLevel = 'LEVEL_0' | 'LEVEL_1' | 'LEVEL_2' | 'LEVEL_3' | 'LEVEL_4';
+export type NodeStatus = "PROVISIONING" | "ACTIVE" | "SUSPENDED" | "DECOMMISSIONED" | "QUARANTINED";
+export type CertificationLevel = "LEVEL_0" | "LEVEL_1" | "LEVEL_2" | "LEVEL_3" | "LEVEL_4";
 
 export interface CivilNode {
   id: string;
@@ -410,23 +404,17 @@ export interface CivilNode {
 // CONTRATOS SOCIO-TECNICOS
 // ============================================================================
 
-export type ContractType = 
-  | 'MEMBERSHIP' 
-  | 'SERVICE_AGREEMENT' 
-  | 'DATA_SHARING' 
-  | 'RESOURCE_POOLING' 
-  | 'GOVERNANCE' 
-  | 'ECONOMIC' 
-  | 'SECURITY';
+export type ContractType =
+  | "MEMBERSHIP"
+  | "SERVICE_AGREEMENT"
+  | "DATA_SHARING"
+  | "RESOURCE_POOLING"
+  | "GOVERNANCE"
+  | "ECONOMIC"
+  | "SECURITY";
 
-export type ContractStatus = 
-  | 'DRAFT' 
-  | 'NEGOTIATING' 
-  | 'PENDING' 
-  | 'ACTIVE' 
-  | 'EXPIRED' 
-  | 'TERMINATED' 
-  | 'DISPUTED';
+export type ContractStatus =
+  "DRAFT" | "NEGOTIATING" | "PENDING" | "ACTIVE" | "EXPIRED" | "TERMINATED" | "DISPUTED";
 
 export interface SocioTechnicalContract {
   id: string;

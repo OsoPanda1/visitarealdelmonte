@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useCallback } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { NavLink, useLocation, useNavigate } from "react-router-dom"
+import React, { useEffect, useState, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   Home,
   Users,
@@ -18,19 +18,19 @@ import {
   Menu,
   X,
   ChevronUp,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
-type NavIcon = React.ComponentType<React.SVGProps<SVGSVGElement>>
+type NavIcon = React.ComponentType<React.SVGProps<SVGSVGElement>>;
 
 interface NavItem {
-  id: string
-  icon: NavIcon
-  label: string
-  path: string
-  badge?: number
-  highlight?: boolean
+  id: string;
+  icon: NavIcon;
+  label: string;
+  path: string;
+  badge?: number;
+  highlight?: boolean;
 }
 
 const MAIN_ITEMS: NavItem[] = [
@@ -53,7 +53,7 @@ const MAIN_ITEMS: NavItem[] = [
     path: "/marketplace",
   },
   { id: "governance", icon: Shield, label: "Governance", path: "/governance" },
-]
+];
 
 const QUICK_ACTIONS: NavItem[] = [
   {
@@ -67,53 +67,53 @@ const QUICK_ACTIONS: NavItem[] = [
   { id: "chat", icon: MessageCircle, label: "Chat", path: "/chat" },
   { id: "profile", icon: User, label: "Perfil", path: "/profile" },
   { id: "settings", icon: Settings, label: "Ajustes", path: "/settings" },
-]
+];
 
-const SCROLL_HIDE_THRESHOLD = 100
-const SCROLL_TOP_BUTTON_THRESHOLD = 500
+const SCROLL_HIDE_THRESHOLD = 100;
+const SCROLL_TOP_BUTTON_THRESHOLD = 500;
 
 const NavigationBar: React.FC = () => {
-  const [isExpanded, setIsExpanded] = useState(false)
-  const [isVisible, setIsVisible] = useState(true)
-  const [lastScrollY, setLastScrollY] = useState(0)
-  const navigate = useNavigate()
-  const location = useLocation()
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // Control de visibilidad con scroll (oculta al bajar, muestra al subir)
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollY = window.scrollY
+      const currentScrollY = window.scrollY;
 
       if (currentScrollY < SCROLL_HIDE_THRESHOLD || currentScrollY < lastScrollY) {
-        setIsVisible(true)
+        setIsVisible(true);
       } else if (currentScrollY > lastScrollY && currentScrollY > SCROLL_HIDE_THRESHOLD) {
-        setIsVisible(false)
-        setIsExpanded(false)
+        setIsVisible(false);
+        setIsExpanded(false);
       }
 
-      setLastScrollY(currentScrollY)
-    }
+      setLastScrollY(currentScrollY);
+    };
 
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [lastScrollY])
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
 
   // Cerrar HUD al cambiar de ruta
   useEffect(() => {
-    setIsExpanded(false)
-  }, [location.pathname])
+    setIsExpanded(false);
+  }, [location.pathname]);
 
   const handleNavigation = useCallback(
     (path: string) => {
-      navigate(path)
-      setIsExpanded(false)
+      navigate(path);
+      setIsExpanded(false);
     },
     [navigate],
-  )
+  );
 
   const toggleExpanded = useCallback(() => {
-    setIsExpanded((prev) => !prev)
-  }, [])
+    setIsExpanded((prev) => !prev);
+  }, []);
 
   return (
     <AnimatePresence>
@@ -143,8 +143,8 @@ const NavigationBar: React.FC = () => {
                     key={item.id}
                     to={item.path}
                     onClick={(e) => {
-                      e.preventDefault()
-                      handleNavigation(item.path)
+                      e.preventDefault();
+                      handleNavigation(item.path);
                     }}
                     className={({ isActive }) => cnNavItem(isActive, item.highlight)}
                     aria-label={item.label}
@@ -191,14 +191,14 @@ const NavigationBar: React.FC = () => {
                 size="icon"
                 onClick={toggleExpanded}
                 aria-expanded={isExpanded}
-                aria-label={isExpanded ? "Cerrar panel de acciones rápidas" : "Abrir panel de acciones rápidas"}
+                aria-label={
+                  isExpanded
+                    ? "Cerrar panel de acciones rápidas"
+                    : "Abrir panel de acciones rápidas"
+                }
                 className="relative z-10 h-10 w-10 rounded-2xl border border-cyan-300/40 bg-slate-900/70 text-slate-100 shadow-[0_0_18px_rgba(15,23,42,0.9)] hover:bg-slate-800/80"
               >
-                {isExpanded ? (
-                  <X className="h-5 w-5" />
-                ) : (
-                  <Menu className="h-5 w-5" />
-                )}
+                {isExpanded ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </Button>
             </motion.div>
 
@@ -265,9 +265,7 @@ const NavigationBar: React.FC = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  onClick={() =>
-                    window.scrollTo({ top: 0, behavior: "smooth" })
-                  }
+                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                   className="absolute -top-12 left-1/2 -translate-x-1/2 rounded-full border border-slate-500/60 bg-slate-950/85 p-2 text-slate-300 shadow-[0_0_24px_rgba(15,23,42,0.95)] backdrop-blur-md transition-colors hover:bg-slate-900/90 hover:text-slate-50"
                   aria-label="Volver al inicio de la página"
                 >
@@ -279,28 +277,28 @@ const NavigationBar: React.FC = () => {
         </motion.nav>
       )}
     </AnimatePresence>
-  )
-}
+  );
+};
 
 function cnNavItem(isActive: boolean, highlight?: boolean): string {
   const base =
-    "relative flex min-w-[3.1rem] flex-col items-center justify-center rounded-2xl px-2 py-1.5 text-[10px] transition-all duration-200"
+    "relative flex min-w-[3.1rem] flex-col items-center justify-center rounded-2xl px-2 py-1.5 text-[10px] transition-all duration-200";
   if (isActive) {
     return [
       base,
       "border border-cyan-300/50 bg-slate-900/80 text-cyan-300 shadow-[0_0_22px_rgba(34,211,238,0.7)]",
-    ].join(" ")
+    ].join(" ");
   }
   if (highlight) {
     return [
       base,
       "border border-cyan-300/40 bg-slate-900/70 text-slate-200 hover:bg-slate-900/90",
-    ].join(" ")
+    ].join(" ");
   }
   return [
     base,
     "border border-transparent text-slate-400 hover:bg-slate-900/60 hover:text-slate-50",
-  ].join(" ")
+  ].join(" ");
 }
 
-export default NavigationBar
+export default NavigationBar;

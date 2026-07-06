@@ -1,7 +1,11 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Send, Sparkles, ShieldCheck, Activity } from "lucide-react";
-import { applyDecisionToHeptafederation, getTelemetry, getGlobalHealth } from "@/lib/heptafederation";
+import {
+  applyDecisionToHeptafederation,
+  getTelemetry,
+  getGlobalHealth,
+} from "@/lib/heptafederation";
 import { useIsabellaSSE } from "@/hooks/useIsabellaSSE";
 import ReactMarkdown from "react-markdown";
 import { useCivicEvent } from "@/hooks/useCivicEvent";
@@ -114,10 +118,7 @@ export function RealitoOrb() {
       let buffer = "";
       const assistantId = `a_${Date.now()}`;
 
-      setMessages((prev) => [
-        ...prev,
-        { id: assistantId, role: "assistant", content: "" },
-      ]);
+      setMessages((prev) => [...prev, { id: assistantId, role: "assistant", content: "" }]);
 
       const upsert = (chunk: string) => {
         assistantContent += chunk;
@@ -245,11 +246,11 @@ export function RealitoOrb() {
                         style={{
                           width: `${t.status}%`,
                           background:
-                          t.status > 95
+                            t.status > 95
                               ? "hsl(var(--success))"
                               : t.status > 85
-                              ? "hsl(var(--accent))"
-                              : "hsl(var(--destructive))",
+                                ? "hsl(var(--accent))"
+                                : "hsl(var(--destructive))",
                         }}
                       />
                     </div>
@@ -276,9 +277,7 @@ export function RealitoOrb() {
               {messages.map((msg) => (
                 <div
                   key={msg.id}
-                  className={`flex ${
-                    msg.role === "user" ? "justify-end" : "justify-start"
-                  }`}
+                  className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                 >
                   <div
                     className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm font-body ${

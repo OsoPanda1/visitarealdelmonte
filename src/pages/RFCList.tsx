@@ -58,9 +58,7 @@ export default function RFCList() {
                         <FileText className="h-4 w-4 text-electric" />
                         <span className="text-sm font-mono text-muted-foreground">{rfc.id}</span>
                       </div>
-                      <Badge className={RFC_COLORS[rfc.status]}>
-                        {statusLabels[rfc.status]}
-                      </Badge>
+                      <Badge className={RFC_COLORS[rfc.status]}>{statusLabels[rfc.status]}</Badge>
                     </div>
                     <CardTitle className="text-lg mt-2">{rfc.title}</CardTitle>
                     <CardDescription className="text-sm line-clamp-2">

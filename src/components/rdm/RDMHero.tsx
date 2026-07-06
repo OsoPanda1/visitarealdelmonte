@@ -37,7 +37,8 @@ export function RDMHero() {
             style={{
               backgroundImage: `url(${img})`,
               opacity: i === currentImg ? 0.5 : 0,
-              animation: i === currentImg ? "rdmKenBurns 25s ease-in-out infinite alternate" : "none",
+              animation:
+                i === currentImg ? "rdmKenBurns 25s ease-in-out infinite alternate" : "none",
             }}
           />
         ))}
@@ -82,9 +83,7 @@ export function RDMHero() {
             key={i}
             onClick={() => setCurrentImg(i)}
             className={`w-2 h-2 rounded-full transition-all duration-500 ${
-              i === currentImg
-                ? "bg-[hsl(var(--rdm-amber))] w-6"
-                : "bg-white/30 hover:bg-white/50"
+              i === currentImg ? "bg-[hsl(var(--rdm-amber))] w-6" : "bg-white/30 hover:bg-white/50"
             }`}
             aria-label={`Background image ${i + 1}`}
           />
@@ -92,7 +91,10 @@ export function RDMHero() {
       </div>
 
       {/* Content */}
-      <motion.div style={{ opacity }} className="relative z-10 h-full flex flex-col justify-end pb-24 px-6 md:px-16 lg:px-24">
+      <motion.div
+        style={{ opacity }}
+        className="relative z-10 h-full flex flex-col justify-end pb-24 px-6 md:px-16 lg:px-24"
+      >
         <div className="max-w-4xl">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -132,7 +134,8 @@ export function RDMHero() {
             className="text-lg md:text-xl text-white/70 max-w-xl leading-relaxed mb-8"
             style={{ fontFamily: "var(--font-body)" }}
           >
-            A 2,700 metros sobre el nivel del mar, donde la historia minera británica se fusiona con la calidez mexicana.
+            A 2,700 metros sobre el nivel del mar, donde la historia minera británica se fusiona con
+            la calidez mexicana.
           </motion.p>
 
           <motion.div

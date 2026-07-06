@@ -52,11 +52,7 @@ export function AccommodationSection() {
   const headingOpacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
 
   return (
-    <section
-      id="hospedaje"
-      ref={ref}
-      className="relative isolate overflow-hidden bg-background"
-    >
+    <section id="hospedaje" ref={ref} className="relative isolate overflow-hidden bg-background">
       {/* HERO INMERSIVO */}
       <div className="relative h-[60vh] min-h-[420px] overflow-hidden">
         {/* Fondo montaña */}
@@ -68,10 +64,7 @@ export function AccommodationSection() {
         />
 
         {/* Capa de neblina / atmósfera */}
-        <motion.div
-          style={{ y: mistY }}
-          className="pointer-events-none absolute inset-0"
-        >
+        <motion.div style={{ y: mistY }} className="pointer-events-none absolute inset-0">
           <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-background via-background/40 to-transparent" />
           <div className="absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-background/70 via-transparent to-transparent" />
           <div className="pointer-events-none absolute inset-0 opacity-40 mix-blend-screen">
@@ -131,9 +124,9 @@ export function AccommodationSection() {
                 transition={{ duration: 0.7, ease: "easeOut", delay: 0.15 }}
                 className="mt-4 max-w-xl text-sm font-body text-muted-foreground/90 md:text-base"
               >
-                Seleccionamos hospedajes que combinan arquitectura colonial, calor
-                de chimenea y vistas al bosque. Cada espacio está curado para
-                que tu noche en la montaña se sienta íntima, segura y memorables.
+                Seleccionamos hospedajes que combinan arquitectura colonial, calor de chimenea y
+                vistas al bosque. Cada espacio está curado para que tu noche en la montaña se sienta
+                íntima, segura y memorables.
               </motion.p>
 
               {/* Mini badges contexto clima / amenities principales */}
@@ -175,9 +168,8 @@ export function AccommodationSection() {
                 Colonial, cálido y hecho a medida de tu visita
               </h3>
               <p className="mt-3 max-w-xl text-sm font-body text-muted-foreground">
-                Desde casas con patios llenos de bugambilias hasta haciendas con
-                spa enclavadas en la montaña, aquí empiezan tus noches en Real
-                del Monte.
+                Desde casas con patios llenos de bugambilias hasta haciendas con spa enclavadas en
+                la montaña, aquí empiezan tus noches en Real del Monte.
               </p>
             </div>
 
@@ -214,7 +206,8 @@ export function AccommodationSection() {
                   <img
                     src={hotel.image}
                     alt={hotel.name}
-                    loading="lazy" className="h-full w-full transform object-cover transition-transform duration-900 group-hover:scale-110 group-hover:brightness-105"
+                    loading="lazy"
+                    className="h-full w-full transform object-cover transition-transform duration-900 group-hover:scale-110 group-hover:brightness-105"
                   />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background via-background/5 to-transparent" />
 
@@ -301,9 +294,8 @@ export function AccommodationSection() {
             className="mt-10 flex flex-col gap-3 text-xs font-body text-muted-foreground md:flex-row md:items-center md:justify-between"
           >
             <p>
-              Todos los espacios listados han sido visitados y fotografiados por
-              nuestro equipo en Real del Monte, para asegurar una experiencia
-              coherente con lo que ves en esta guía.
+              Todos los espacios listados han sido visitados y fotografiados por nuestro equipo en
+              Real del Monte, para asegurar una experiencia coherente con lo que ves en esta guía.
             </p>
             <p className="text-[0.7rem] uppercase tracking-[0.3em] text-muted-foreground/80">
               Hospedaje · Curaduría local RDM Digital

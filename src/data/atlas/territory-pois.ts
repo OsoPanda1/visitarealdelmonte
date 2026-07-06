@@ -15,13 +15,7 @@ const callesImg = "/placeholder.svg";
 //
 
 export type POICategory =
-  | "historico"
-  | "mineria"
-  | "geologico"
-  | "plaza"
-  | "mercado"
-  | "templo"
-  | "escuela";
+  "historico" | "mineria" | "geologico" | "plaza" | "mercado" | "templo" | "escuela";
 
 export type RdmRiskLevel = "low" | "medium" | "high" | "critical";
 
@@ -42,13 +36,7 @@ export type FederationLayer =
 export type ImportanceLevel = 1 | 2 | 3; // 1 = referencia, 3 = detalle
 
 export type TerritorialEntityKind =
-  | "chapter"
-  | "mine"
-  | "paste"
-  | "street"
-  | "legend"
-  | "route"
-  | "event";
+  "chapter" | "mine" | "paste" | "street" | "legend" | "route" | "event";
 
 export type TerritorialNodeId = string;
 
@@ -105,8 +93,7 @@ export const RDM_TERRITORY_POIS: TerritoryPOI[] = [
     lng: -98.6694,
     altitudeM: 2700,
     description: "Cabecera del Nodo Cero. Templo principal del territorio TAMV.",
-    significance:
-      "Coordenada de fundación de la República Digital. Origen del manuscrito.",
+    significance: "Coordenada de fundación de la República Digital. Origen del manuscrito.",
     federationId: "gubernamental",
     riskLevel: "medium",
     relevance: "core-node",
@@ -119,10 +106,8 @@ export const RDM_TERRITORY_POIS: TerritoryPOI[] = [
     lat: 20.1421,
     lng: -98.6712,
     altitudeM: 2680,
-    description:
-      "Mina cornish del siglo XIX. Eje patrimonial del temporal extractivo.",
-    significance:
-      "Memoria del trabajo cornish-mexicano. Símbolo de la herida y la resiliencia.",
+    description: "Mina cornish del siglo XIX. Eje patrimonial del temporal extractivo.",
+    significance: "Memoria del trabajo cornish-mexicano. Símbolo de la herida y la resiliencia.",
     federationId: "cultural",
     riskLevel: "high",
     relevance: "federated-node",
@@ -136,8 +121,7 @@ export const RDM_TERRITORY_POIS: TerritoryPOI[] = [
     lng: -98.6678,
     altitudeM: 2710,
     description: "Cementerio cornish del siglo XIX, único en su tipo en México.",
-    significance:
-      "Sincretismo cornish-otomí-mexicano. Federación Cultural.",
+    significance: "Sincretismo cornish-otomí-mexicano. Federación Cultural.",
     federationId: "cultural",
     riskLevel: "medium",
     relevance: "federated-node",
@@ -151,8 +135,7 @@ export const RDM_TERRITORY_POIS: TerritoryPOI[] = [
     lng: -98.7333,
     altitudeM: 2400,
     description: "Capital político-administrativa del Estado de Hidalgo.",
-    significance:
-      "Nodo de articulación con el Estado Federal. Sede de relaciones formales.",
+    significance: "Nodo de articulación con el Estado Federal. Sede de relaciones formales.",
     federationId: "gubernamental",
     riskLevel: "medium",
     relevance: "federated-node",
@@ -193,10 +176,8 @@ export const RDM_TERRITORY_POIS: TerritoryPOI[] = [
     lat: 20.143,
     lng: -98.67,
     altitudeM: 2700,
-    description:
-      "Mercado federado de productores locales bajo el protocolo TAMV.",
-    significance:
-      "Federación Económica. Punto de circulación de Crédito TAMV.",
+    description: "Mercado federado de productores locales bajo el protocolo TAMV.",
+    significance: "Federación Económica. Punto de circulación de Crédito TAMV.",
     federationId: "economica",
     riskLevel: "medium",
     relevance: "core-node",
@@ -209,10 +190,8 @@ export const RDM_TERRITORY_POIS: TerritoryPOI[] = [
     lat: 20.1438,
     lng: -98.6685,
     altitudeM: 2705,
-    description:
-      "Espacio simbólico de la Federación Tecnológica. Servidor ritual.",
-    significance:
-      "Núcleo cognitivo. Isabella Sentinel residencia simbólica.",
+    description: "Espacio simbólico de la Federación Tecnológica. Servidor ritual.",
+    significance: "Núcleo cognitivo. Isabella Sentinel residencia simbólica.",
     federationId: "tecnologica",
     riskLevel: "high",
     relevance: "core-node",
@@ -226,10 +205,8 @@ export const RDM_TERRITORY_POIS: TerritoryPOI[] = [
     lat: 20.1445,
     lng: -98.6705,
     altitudeM: 2710,
-    description:
-      "Sede educativa del territorio. Pedagogía descolonizada.",
-    significance:
-      "Federación Educativa. Formación de ciudadanos del Nodo Cero.",
+    description: "Sede educativa del territorio. Pedagogía descolonizada.",
+    significance: "Federación Educativa. Formación de ciudadanos del Nodo Cero.",
     federationId: "educativa",
     riskLevel: "low",
     relevance: "federated-node",
@@ -242,10 +219,8 @@ export const RDM_TERRITORY_POIS: TerritoryPOI[] = [
     lat: 20.144,
     lng: -98.6695,
     altitudeM: 2700,
-    description:
-      "Repositorio físico-digital de testimonios y lenguas originarias.",
-    significance:
-      "Federación Cultural. Custodia de la memoria temporal.",
+    description: "Repositorio físico-digital de testimonios y lenguas originarias.",
+    significance: "Federación Cultural. Custodia de la memoria temporal.",
     federationId: "cultural",
     riskLevel: "high",
     relevance: "core-node",
@@ -753,9 +728,7 @@ export function haversineKm(a: LatLng, b: LatLng): number {
   const dLng = toRad(b.lng - a.lng);
   const lat1 = toRad(a.lat);
   const lat2 = toRad(b.lat);
-  const h =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
   const c = 2 * Math.asin(Math.sqrt(h));
   return R * c;
 } //
@@ -785,9 +758,7 @@ export function coreNodePOIs(): TerritoryPOI[] {
 }
 
 export function highRiskPOIs(): TerritoryPOI[] {
-  return RDM_TERRITORY_POIS.filter(
-    (p) => p.riskLevel === "high" || p.riskLevel === "critical",
-  );
+  return RDM_TERRITORY_POIS.filter((p) => p.riskLevel === "high" || p.riskLevel === "critical");
 }
 
 export function getSacredKernel(): TerritoryPOI | undefined {

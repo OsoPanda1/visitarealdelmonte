@@ -6,7 +6,13 @@ import { ModuleCinematicIntro } from "@/components/ModuleCinematicIntro";
 import { BusinessCard } from "@/components/business/BusinessCard";
 import { ElegantPagination } from "@/components/ElegantPagination";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import type { Business } from "@/types/supabase";
 
@@ -41,9 +47,12 @@ export default function Comercios() {
     load();
   }, []);
 
-  const filtered = businesses.filter(b => {
+  const filtered = businesses.filter((b) => {
     const matchCat = category === "all" || b.category === category;
-    const matchSearch = !search || b.name?.toLowerCase().includes(search.toLowerCase()) || b.description?.toLowerCase().includes(search.toLowerCase());
+    const matchSearch =
+      !search ||
+      b.name?.toLowerCase().includes(search.toLowerCase()) ||
+      b.description?.toLowerCase().includes(search.toLowerCase());
     return matchCat && matchSearch;
   });
 
@@ -65,27 +74,52 @@ export default function Comercios() {
     <RDMLayout>
       <div className="min-h-screen">
         <div className="container mx-auto px-4 md:px-8 pt-24 pb-16">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-10"
+          >
             <div className="flex items-center gap-3 mb-2">
               <Store className="h-5 w-5 text-accent" />
-              <span className="text-xs tracking-[0.3em] uppercase text-muted-foreground">Economía Local</span>
+              <span className="text-xs tracking-[0.3em] uppercase text-muted-foreground">
+                Economía Local
+              </span>
             </div>
-            <h1 className="font-display text-4xl md:text-5xl text-foreground mb-4">Directorio de Comercios</h1>
-            <p className="text-muted-foreground max-w-2xl">Negocios activos verificados en Real del Monte. Apoya la economía local.</p>
+            <h1 className="font-display text-4xl md:text-5xl text-foreground mb-4">
+              Directorio de Comercios
+            </h1>
+            <p className="text-muted-foreground max-w-2xl">
+              Negocios activos verificados en Real del Monte. Apoya la economía local.
+            </p>
           </motion.div>
 
           <div className="flex flex-col sm:flex-row gap-3 mb-8">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Buscar comercio..." value={search} onChange={e => setSearch(e.target.value)} className="pl-10 rounded-xl bg-card/60 border-border/50" />
+              <Input
+                placeholder="Buscar comercio..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="pl-10 rounded-xl bg-card/60 border-border/50"
+              />
             </div>
-            <Select value={category} onValueChange={v => { setCategory(v); setPage(0); }}>
+            <Select
+              value={category}
+              onValueChange={(v) => {
+                setCategory(v);
+                setPage(0);
+              }}
+            >
               <SelectTrigger className="w-48 rounded-xl bg-card/60 border-border/50">
                 <Filter className="h-4 w-4 mr-2" />
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {CATEGORIES.map(c => <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>)}
+                {CATEGORIES.map((c) => (
+                  <SelectItem key={c.value} value={c.value}>
+                    {c.label}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -97,7 +131,9 @@ export default function Comercios() {
             </div>
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {paged.map(b => <BusinessCard key={b.id} business={b} />)}
+              {paged.map((b) => (
+                <BusinessCard key={b.id} business={b} />
+              ))}
             </div>
           )}
 

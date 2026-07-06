@@ -1,4 +1,4 @@
-import { logger } from '@/lib/logger';
+import { logger } from "@/lib/logger";
 
 interface CacheEntry<T> {
   value: T;
@@ -26,7 +26,10 @@ class InMemoryCache implements CacheAdapter {
 
   async get<T>(key: string): Promise<T | null> {
     const entry = this.store.get(key);
-    if (!entry) { this.misses++; return null; }
+    if (!entry) {
+      this.misses++;
+      return null;
+    }
     if (entry.expiresAt <= Date.now()) {
       this.store.delete(key);
       this.misses++;
@@ -77,31 +80,38 @@ class InMemoryCache implements CacheAdapter {
 }
 
 class RedisCache implements CacheAdapter {
-  private client: { get: (k: string) => Promise<string | null>; set: (k: string, v: string, mode: string, ttl: number) => Promise<unknown>; del: (k: string) => Promise<number> } | null = null;
+  private client: {
+    get: (k: string) => Promise<string | null>;
+    set: (k: string, v: string, mode: string, ttl: number) => Promise<unknown>;
+    del: (k: string) => Promise<number>;
+  } | null = null;
   private hits = 0;
   private misses = 0;
 
   async connect(url: string): Promise<void> {
     try {
-      const { createClient } = await import('redis');
-      this.client = createClient({ url }) as unknown as RedisCache['client'];
+      const { createClient } = await import("redis");
+      this.client = createClient({ url }) as unknown as RedisCache["client"];
       (this.client as unknown as { connect: () => Promise<void> }).connect();
     } catch {
-      logger.warn('[Cache] Redis no disponible, usando fallback a InMemoryCache');
+      logger.warn("[Cache] Redis no disponible, usando fallback a InMemoryCache");
     }
   }
 
   async get<T>(key: string): Promise<T | null> {
     if (!this.client) return null;
     const raw = await this.client.get(key);
-    if (!raw) { this.misses++; return null; }
+    if (!raw) {
+      this.misses++;
+      return null;
+    }
     this.hits++;
     return JSON.parse(raw) as T;
   }
 
   async set<T>(key: string, value: T, ttlMs = 60_000): Promise<void> {
     if (this.client) {
-      await this.client.set(key, JSON.stringify(value), 'PX', ttlMs);
+      await this.client.set(key, JSON.stringify(value), "PX", ttlMs);
     }
   }
 
@@ -129,7 +139,7 @@ class RedisCache implements CacheAdapter {
 const cacheInstance: CacheAdapter = new InMemoryCache();
 
 function createCache(): CacheAdapter {
-  if (typeof process !== 'undefined' && process.env.REDIS_URL) {
+  if (typeof process !== "undefined" && process.env.REDIS_URL) {
     const redis = new RedisCache();
     redis.connect(process.env.REDIS_URL);
     return redis;

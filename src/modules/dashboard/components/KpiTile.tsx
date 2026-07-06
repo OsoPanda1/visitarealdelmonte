@@ -25,7 +25,9 @@ export function KpiTile({ label, value, delta, icon = "📊", accent = "gold" }:
     >
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground">{label}</p>
+          <p className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground">
+            {label}
+          </p>
           <p className="mt-2 text-3xl font-display font-bold tracking-tight">{value}</p>
         </div>
         <span className="text-2xl opacity-80">{icon}</span>
@@ -33,7 +35,10 @@ export function KpiTile({ label, value, delta, icon = "📊", accent = "gold" }:
       {delta !== undefined && (
         <div className="mt-3 flex items-center gap-1 text-[11px] font-mono">
           {delta >= 0 ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-          <span>{delta >= 0 ? "+" : ""}{delta}% vs ayer</span>
+          <span>
+            {delta >= 0 ? "+" : ""}
+            {delta}% vs ayer
+          </span>
         </div>
       )}
     </motion.div>

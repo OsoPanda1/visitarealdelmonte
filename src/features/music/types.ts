@@ -3,15 +3,15 @@
  * The sonic nervous system of LTOS
  */
 
-export type SpatialMode = 'archivo' | 'espacio' | 'metaverso';
-export type CanonicalLevel = 'historical' | 'artistic' | 'community';
-export type AlbumType = 'studio' | 'live' | 'archive' | 'compilation' | 'cronica';
-export type ArtistEra = 'colonial' | 'minero' | 'cornish' | 'modern' | 'contemporary';
-export type CronicaType = 'ruta' | 'memoria' | 'ambiental' | 'mixed';
-export type MecenasTier = 'oyente' | 'mecenas' | 'productor';
-export type DonationType = 'track' | 'album' | 'cronica' | 'general' | 'artist' | 'project';
-export type MusicEventType = 'listening_party' | 'archive_session' | 'concert' | 'workshop';
-export type TrackStatus = 'active' | 'draft' | 'archived' | 'restricted';
+export type SpatialMode = "archivo" | "espacio" | "metaverso";
+export type CanonicalLevel = "historical" | "artistic" | "community";
+export type AlbumType = "studio" | "live" | "archive" | "compilation" | "cronica";
+export type ArtistEra = "colonial" | "minero" | "cornish" | "modern" | "contemporary";
+export type CronicaType = "ruta" | "memoria" | "ambiental" | "mixed";
+export type MecenasTier = "oyente" | "mecenas" | "productor";
+export type DonationType = "track" | "album" | "cronica" | "general" | "artist" | "project";
+export type MusicEventType = "listening_party" | "archive_session" | "concert" | "workshop";
+export type TrackStatus = "active" | "draft" | "archived" | "restricted";
 
 export interface MusicArtist {
   id: string;
@@ -21,7 +21,7 @@ export interface MusicArtist {
   origin: string;
   era: ArtistEra | null;
   avatar_url: string | null;
-  status: 'active' | 'archived' | 'featured';
+  status: "active" | "archived" | "featured";
   metadata: Record<string, unknown>;
   created_at: string;
 }
@@ -40,7 +40,7 @@ export interface MusicAlbum {
   territory_id: string;
   total_tracks: number;
   total_duration_ms: number;
-  status: 'active' | 'draft' | 'archived';
+  status: "active" | "draft" | "archived";
   metadata: Record<string, unknown>;
   created_at: string;
   artist?: MusicArtist;
@@ -99,7 +99,7 @@ export interface MusicCronica {
   like_count: number;
   fork_count: number;
   total_duration_ms: number;
-  status: 'active' | 'draft' | 'archived';
+  status: "active" | "draft" | "archived";
   metadata: Record<string, unknown>;
   created_at: string;
   tracks?: CronicaTrack[];
@@ -110,7 +110,7 @@ export interface CronicaTrack {
   cronica_id: string;
   track_id: string;
   position: number;
-  transition_type: 'crossfade' | 'gap' | 'narrative_gap' | 'ambient';
+  transition_type: "crossfade" | "gap" | "narrative_gap" | "ambient";
   transition_ms: number;
   narration_text: string | null;
   track?: MusicTrack;
@@ -119,7 +119,7 @@ export interface CronicaTrack {
 export interface MusicListeningSession {
   id: string;
   user_id: string | null;
-  session_type: 'solo' | 'collective' | 'event';
+  session_type: "solo" | "collective" | "event";
   track_id: string | null;
   cronica_id: string | null;
   spatial_mode: SpatialMode;
@@ -137,7 +137,7 @@ export interface MusicDonation {
   target_id: string | null;
   amount_cents: number;
   currency: string;
-  payment_status: 'pending' | 'completed' | 'failed' | 'refunded';
+  payment_status: "pending" | "completed" | "failed" | "refunded";
   mecenas_tier: MecenasTier | null;
   message: string | null;
   anonymous: boolean;
@@ -158,7 +158,7 @@ export interface MusicEvent {
   is_virtual: boolean;
   stream_url: string | null;
   reward_json: { xp?: number; badge_code?: string };
-  status: 'upcoming' | 'live' | 'completed' | 'cancelled';
+  status: "upcoming" | "live" | "completed" | "cancelled";
   metadata: Record<string, unknown>;
 }
 

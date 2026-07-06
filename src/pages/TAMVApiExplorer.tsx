@@ -17,14 +17,49 @@ interface Endpoint {
 }
 
 const endpoints: Endpoint[] = [
-  { method: "GET", path: "/api/tamv/identity", desc: "Lista ciudadanos federados", group: "identity" },
-  { method: "POST", path: "/api/tamv/identity", desc: "Emite DID + ancla BookPI", group: "identity" },
-  { method: "GET", path: "/api/tamv/governance/proposals", desc: "Propuestas DAO", group: "governance" },
-  { method: "POST", path: "/api/tamv/governance/proposals", desc: "Crea propuesta", group: "governance" },
-  { method: "POST", path: "/api/tamv/economy/distribute", desc: "Distribuye Phoenix 20·30·50", group: "economy" },
-  { method: "POST", path: "/api/tamv/ai/decision", desc: "Registra DecisionRecord (SHA-256)", group: "ai" },
+  {
+    method: "GET",
+    path: "/api/tamv/identity",
+    desc: "Lista ciudadanos federados",
+    group: "identity",
+  },
+  {
+    method: "POST",
+    path: "/api/tamv/identity",
+    desc: "Emite DID + ancla BookPI",
+    group: "identity",
+  },
+  {
+    method: "GET",
+    path: "/api/tamv/governance/proposals",
+    desc: "Propuestas DAO",
+    group: "governance",
+  },
+  {
+    method: "POST",
+    path: "/api/tamv/governance/proposals",
+    desc: "Crea propuesta",
+    group: "governance",
+  },
+  {
+    method: "POST",
+    path: "/api/tamv/economy/distribute",
+    desc: "Distribuye Phoenix 20·30·50",
+    group: "economy",
+  },
+  {
+    method: "POST",
+    path: "/api/tamv/ai/decision",
+    desc: "Registra DecisionRecord (SHA-256)",
+    group: "ai",
+  },
   { method: "GET", path: "/api/tamv/ai/decisions", desc: "Audita decisiones IA", group: "ai" },
-  { method: "GET", path: "/api/tamv/metaverse/dreamspaces", desc: "DreamSpaces XR activos", group: "metaverse" },
+  {
+    method: "GET",
+    path: "/api/tamv/metaverse/dreamspaces",
+    desc: "DreamSpaces XR activos",
+    group: "metaverse",
+  },
   { method: "GET", path: "/api/tamv/msr/status", desc: "Estado del Nodo Cero", group: "msr" },
 ];
 
@@ -103,8 +138,8 @@ const TAMVApiExplorer = () => {
               Explorador de <span className="text-gradient-gold">API</span>
             </h1>
             <p className="font-body text-sm text-muted-foreground max-w-2xl mx-auto">
-              Endpoints reales del Nodo Cero. Pulsa <em>Probar</em> para ejecutar la llamada
-              contra el backend federado RDM Digital.
+              Endpoints reales del Nodo Cero. Pulsa <em>Probar</em> para ejecutar la llamada contra
+              el backend federado RDM Digital.
             </p>
           </motion.div>
 

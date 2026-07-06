@@ -21,24 +21,30 @@ export function ExplorerView() {
         className="relative w-full h-[400px] rounded-xl bg-primary overflow-hidden border border-border"
       >
         {/* Grid overlay */}
-        <div className="absolute inset-0 opacity-10" style={{
-          backgroundImage: "linear-gradient(hsl(var(--secondary)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--secondary)) 1px, transparent 1px)",
-          backgroundSize: "40px 40px",
-        }} />
+        <div
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage:
+              "linear-gradient(hsl(var(--secondary)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--secondary)) 1px, transparent 1px)",
+            backgroundSize: "40px 40px",
+          }}
+        />
 
         {/* Center marker */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-2">
           <Navigation className="w-8 h-8 text-accent" />
           <div className="glass px-3 py-1.5 rounded-lg">
             <p className="text-xs text-primary-foreground font-mono">20.138°N, 98.671°W</p>
-            <p className="text-[10px] text-primary-foreground/60 text-center">Real del Monte, Hgo.</p>
+            <p className="text-[10px] text-primary-foreground/60 text-center">
+              Real del Monte, Hgo.
+            </p>
           </div>
         </div>
 
         {/* Place markers */}
         {places.map((place, i) => {
-          const offsetX = ((place.lng + 98.675) * 8000) + 50;
-          const offsetY = ((20.142 - place.lat) * 8000) + 50;
+          const offsetX = (place.lng + 98.675) * 8000 + 50;
+          const offsetY = (20.142 - place.lat) * 8000 + 50;
           return (
             <motion.div
               key={place.id}
@@ -46,7 +52,10 @@ export function ExplorerView() {
               animate={{ scale: 1 }}
               transition={{ delay: i * 0.05, type: "spring" }}
               className="absolute group"
-              style={{ left: `${Math.min(Math.max(offsetX, 5), 95)}%`, top: `${Math.min(Math.max(offsetY, 5), 95)}%` }}
+              style={{
+                left: `${Math.min(Math.max(offsetX, 5), 95)}%`,
+                top: `${Math.min(Math.max(offsetY, 5), 95)}%`,
+              }}
             >
               <div className="w-3 h-3 rounded-full bg-accent border-2 border-accent-foreground cursor-pointer hover:scale-150 transition-transform" />
               <div className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-2 glass px-2 py-1 rounded-md whitespace-nowrap z-10">
@@ -58,7 +67,9 @@ export function ExplorerView() {
 
         {/* Legend */}
         <div className="absolute bottom-3 right-3 glass px-3 py-2 rounded-lg">
-          <p className="text-[10px] text-primary-foreground/80 font-medium mb-1">Capa Territorial</p>
+          <p className="text-[10px] text-primary-foreground/80 font-medium mb-1">
+            Capa Territorial
+          </p>
           <div className="flex items-center gap-3 text-[10px] text-primary-foreground/60">
             <span className="flex items-center gap-1">
               <span className="w-2 h-2 rounded-full bg-accent" /> Lugares

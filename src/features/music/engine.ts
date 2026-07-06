@@ -14,7 +14,7 @@ import type {
   MusicArtist,
   SpatialMode,
   CanonicalLevel,
-} from './types';
+} from "./types";
 
 // ============================================================================
 // RECOMMENDATION ENGINE
@@ -36,16 +36,16 @@ export function recommendTracks(
   ctx: RecommendationContext,
   limit = 8,
 ): MusicTrack[] {
-  let scored = allTracks.map((track) => {
+  const scored = allTracks.map((track) => {
     let score = 0;
 
     // Canonical level bonus
-    if (track.canonical_level === 'historical') score += 30;
-    else if (track.canonical_level === 'artistic') score += 20;
+    if (track.canonical_level === "historical") score += 30;
+    else if (track.canonical_level === "artistic") score += 20;
     else score += 10;
 
     // Territory match
-    if (ctx.territory_id && track.location_name?.toLowerCase().includes('real del monte')) {
+    if (ctx.territory_id && track.location_name?.toLowerCase().includes("real del monte")) {
       score += 25;
     }
 
@@ -82,11 +82,11 @@ export function recommendCronicas(
   ctx: RecommendationContext,
   limit = 4,
 ): MusicCronica[] {
-  let scored = allCronicas.map((cronica) => {
+  const scored = allCronicas.map((cronica) => {
     let score = 0;
 
-    if (cronica.canonical_level === 'historical') score += 30;
-    else if (cronica.canonical_level === 'artistic') score += 20;
+    if (cronica.canonical_level === "historical") score += 30;
+    else if (cronica.canonical_level === "artistic") score += 20;
     else score += 10;
 
     // Community engagement
@@ -103,17 +103,14 @@ export function recommendCronicas(
 /**
  * Recommends events based on timing and user engagement.
  */
-export function recommendEvents(
-  allEvents: MusicEvent[],
-  limit = 3,
-): MusicEvent[] {
+export function recommendEvents(allEvents: MusicEvent[], limit = 3): MusicEvent[] {
   const now = new Date();
   return allEvents
-    .filter((e) => e.status === 'upcoming' || e.status === 'live')
+    .filter((e) => e.status === "upcoming" || e.status === "live")
     .sort((a, b) => {
       // Live events first
-      if (a.status === 'live' && b.status !== 'live') return -1;
-      if (b.status === 'live' && a.status !== 'live') return 1;
+      if (a.status === "live" && b.status !== "live") return -1;
+      if (b.status === "live" && a.status !== "live") return 1;
       // Then by start time
       return new Date(a.starts_at).getTime() - new Date(b.starts_at).getTime();
     })
@@ -128,52 +125,52 @@ export function recommendEvents(
  * Maps a music action to a gamification event.
  */
 export function musicActionToGameEvent(
-  action: 'track_play' | 'cronica_complete' | 'donation' | 'event_attend',
+  action: "track_play" | "cronica_complete" | "donation" | "event_attend",
   payload: Record<string, unknown>,
 ): { event_type: string; payload: Record<string, unknown> } | null {
   switch (action) {
-    case 'track_play':
+    case "track_play":
       return {
-        event_type: 'page_visit',
+        event_type: "page_visit",
         payload: {
-          page: '/musica',
+          page: "/musica",
           track_id: payload.track_id,
           artist_id: payload.artist_id,
           spatial_mode: payload.spatial_mode,
-          xp_track: 'cultura',
+          xp_track: "cultura",
           xp_reward: 10,
         },
       };
-    case 'cronica_complete':
+    case "cronica_complete":
       return {
-        event_type: 'community_action',
+        event_type: "community_action",
         payload: {
-          action: 'cronica_listened',
+          action: "cronica_listened",
           cronica_id: payload.cronica_id,
           tracks_completed: payload.tracks_completed,
-          xp_track: 'cultura',
+          xp_track: "cultura",
           xp_reward: 50,
         },
       };
-    case 'donation':
+    case "donation":
       return {
-        event_type: 'community_action',
+        event_type: "community_action",
         payload: {
-          action: 'music_donation',
+          action: "music_donation",
           amount_cents: payload.amount_cents,
           mecenas_tier: payload.mecenas_tier,
-          xp_track: 'comunidad',
+          xp_track: "comunidad",
           xp_reward: Math.round((payload.amount_cents as number) / 10) * 5,
         },
       };
-    case 'event_attend':
+    case "event_attend":
       return {
-        event_type: 'community_action',
+        event_type: "community_action",
         payload: {
-          action: 'music_event_attend',
+          action: "music_event_attend",
           event_id: payload.event_id,
           event_type: payload.event_type,
-          xp_track: 'cultura',
+          xp_track: "cultura",
           xp_reward: 75,
         },
       };
@@ -200,12 +197,12 @@ export function recommendSpatialMode(
 
   // Night = metaverso, evening = espacio, day = archivo
   if (hour >= 21 || hour < 6) {
-    return track.spatial_profiles?.metaverso ? 'metaverso' : 'espacio';
+    return track.spatial_profiles?.metaverso ? "metaverso" : "espacio";
   }
   if (hour >= 18 || hour < 21) {
-    return 'espacio';
+    return "espacio";
   }
-  return 'archivo';
+  return "archivo";
 }
 
 // ============================================================================
@@ -232,7 +229,7 @@ export function calculateSoundPersona(input: SoundPersonaInput) {
       eraCounts[track.era] = (eraCounts[track.era] || 0) + 1;
     }
     // Extract genre from album metadata or track metadata
-    const genre = (track.metadata?.genre as string) || 'unknown';
+    const genre = (track.metadata?.genre as string) || "unknown";
     genreCounts[genre] = (genreCounts[genre] || 0) + 1;
     if (track.location_name) {
       locationCounts[track.location_name] = (locationCounts[track.location_name] || 0) + 1;
@@ -241,7 +238,7 @@ export function calculateSoundPersona(input: SoundPersonaInput) {
 
   const totalDonated = input.donationHistory.reduce((s, d) => s + d.amount_cents, 0);
   const hasMecenas = input.donationHistory.some(
-    (d) => d.mecenas_tier === 'mecenas' || d.mecenas_tier === 'productor',
+    (d) => d.mecenas_tier === "mecenas" || d.mecenas_tier === "productor",
   );
 
   return {
@@ -253,7 +250,7 @@ export function calculateSoundPersona(input: SoundPersonaInput) {
       .slice(0, 5)
       .map(([loc]) => loc),
     total_listened_ms: totalMs,
-    mecenas_level: hasMecenas ? 'active' : totalDonated > 0 ? 'supporter' : 'listener',
+    mecenas_level: hasMecenas ? "active" : totalDonated > 0 ? "supporter" : "listener",
   };
 }
 

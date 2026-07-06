@@ -11,7 +11,11 @@ import calleImg from "@/assets/rdm-calle.jpeg";
 import minaImg from "@/assets/rdm-mina.jpeg";
 
 const photos = [
-  { src: plazaImg, alt: "Plaza principal de Real del Monte", caption: "Plaza Principal, atardecer dorado" },
+  {
+    src: plazaImg,
+    alt: "Plaza principal de Real del Monte",
+    caption: "Plaza Principal, atardecer dorado",
+  },
   { src: arqImg, alt: "Parroquia entre la niebla", caption: "Parroquia de la Asunción" },
   { src: minaImg, alt: "Interior iluminado de una mina", caption: "Mina de Acosta, nivel 3" },
   { src: gastroImg, alt: "Paste tradicional", caption: "Paste original, receta de 1850" },
@@ -36,7 +40,9 @@ const PhotoGallery = () => {
           transition={{ duration: 1 }}
           className="text-center mb-16"
         >
-          <span className="font-body text-[10px] tracking-[0.4em] uppercase text-gold/60">Galería</span>
+          <span className="font-body text-[10px] tracking-[0.4em] uppercase text-gold/60">
+            Galería
+          </span>
           <h2 className="font-display text-4xl md:text-6xl text-foreground mt-4 tracking-tight">
             <span className="text-gradient-gold">Fragmentos de Luz</span>
           </h2>
@@ -60,10 +66,17 @@ const PhotoGallery = () => {
                 onClick={() => setSelectedIdx(i)}
               >
                 <div className={`overflow-hidden ${isLarge ? "aspect-[4/3]" : "aspect-square"}`}>
-                  <img src={photo.src} alt={photo.alt} className="w-full h-full object-cover" loading="lazy" />
+                  <img
+                    src={photo.src}
+                    alt={photo.alt}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 flex items-end p-4 md:p-6">
-                  <p className="font-display text-sm md:text-base text-foreground italic">{photo.caption}</p>
+                  <p className="font-display text-sm md:text-base text-foreground italic">
+                    {photo.caption}
+                  </p>
                 </div>
               </motion.div>
             );
@@ -86,20 +99,36 @@ const PhotoGallery = () => {
             transition={{ duration: 0.5 }}
             className="relative max-w-5xl max-h-[85vh]"
           >
-            <img src={photos[selectedIdx].src} alt={photos[selectedIdx].alt}
-              loading="lazy" className="max-w-full max-h-[80vh] object-contain rounded-lg" />
-            <p className="text-center font-display text-lg text-platinum/60 italic mt-6">{photos[selectedIdx].caption}</p>
+            <img
+              src={photos[selectedIdx].src}
+              alt={photos[selectedIdx].alt}
+              loading="lazy"
+              className="max-w-full max-h-[80vh] object-contain rounded-lg"
+            />
+            <p className="text-center font-display text-lg text-platinum/60 italic mt-6">
+              {photos[selectedIdx].caption}
+            </p>
           </motion.div>
 
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-8">
             <button
-              onClick={(e) => { e.stopPropagation(); setSelectedIdx(Math.max(0, selectedIdx - 1)); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedIdx(Math.max(0, selectedIdx - 1));
+              }}
               className="font-body text-xs tracking-widest uppercase text-muted-foreground hover:text-gold transition-colors"
-            >← Anterior</button>
+            >
+              ← Anterior
+            </button>
             <button
-              onClick={(e) => { e.stopPropagation(); setSelectedIdx(Math.min(photos.length - 1, selectedIdx + 1)); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedIdx(Math.min(photos.length - 1, selectedIdx + 1));
+              }}
               className="font-body text-xs tracking-widest uppercase text-muted-foreground hover:text-gold transition-colors"
-            >Siguiente →</button>
+            >
+              Siguiente →
+            </button>
           </div>
         </motion.div>
       )}

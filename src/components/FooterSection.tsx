@@ -7,7 +7,12 @@ export function FooterSection() {
     <footer className="relative">
       {/* CTA Section */}
       <div className="relative h-[50vh] overflow-hidden flex items-center justify-center">
-        <img src={mistyMountains} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover opacity-30" />
+        <img
+          src={mistyMountains}
+          alt=""
+          loading="lazy"
+          className="absolute inset-0 w-full h-full object-cover opacity-30"
+        />
         <div className="absolute inset-0 bg-gradient-to-b from-background via-background/80 to-background" />
 
         <motion.div
@@ -22,8 +27,8 @@ export function FooterSection() {
             <span className="text-accent">comienza aquí</span>
           </h2>
           <p className="text-foreground/60 font-body max-w-md mx-auto mb-8">
-            Real del Monte te espera con 500 años de historia, sabores únicos y la
-            magia de la Sierra de Pachuca.
+            Real del Monte te espera con 500 años de historia, sabores únicos y la magia de la
+            Sierra de Pachuca.
           </p>
           <a
             href="#inicio"
@@ -44,21 +49,29 @@ export function FooterSection() {
               </div>
               <div>
                 <p className="font-display font-bold text-lg">RDM Digital</p>
-                <p className="text-xs text-muted-foreground font-body">OS v4.1 — Soberanía Territorial</p>
+                <p className="text-xs text-muted-foreground font-body">
+                  OS v4.1 — Soberanía Territorial
+                </p>
               </div>
             </div>
             <p className="text-sm text-muted-foreground font-body leading-relaxed">
-              Sistema operativo territorial diseñado para transformar Real del Monte
-              en el primer nodo turístico inteligente de Latinoamérica.
+              Sistema operativo territorial diseñado para transformar Real del Monte en el primer
+              nodo turístico inteligente de Latinoamérica.
             </p>
           </div>
 
           <div>
             <h4 className="font-display font-semibold mb-4">Contacto</h4>
             <div className="space-y-3 text-sm text-muted-foreground font-body">
-              <p className="flex items-center gap-2"><MapPin className="w-4 h-4 text-accent" /> Real del Monte, Hidalgo, México</p>
-              <p className="flex items-center gap-2"><Mail className="w-4 h-4 text-accent" /> info@rdmdigital.mx</p>
-              <p className="flex items-center gap-2"><Phone className="w-4 h-4 text-accent" /> +52 771 123 4567</p>
+              <p className="flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-accent" /> Real del Monte, Hidalgo, México
+              </p>
+              <p className="flex items-center gap-2">
+                <Mail className="w-4 h-4 text-accent" /> info@rdmdigital.mx
+              </p>
+              <p className="flex items-center gap-2">
+                <Phone className="w-4 h-4 text-accent" /> +52 771 123 4567
+              </p>
             </div>
           </div>
 
@@ -68,7 +81,10 @@ export function FooterSection() {
               {["Historia", "Gastronomía", "Aventura", "Hospedaje", "Cultura"].map((item) => (
                 <a
                   key={item}
-                  href={`#${item.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`}
+                  href={`#${item
+                    .toLowerCase()
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "")}`}
                   className="block text-sm text-muted-foreground font-body hover:text-accent transition-colors"
                 >
                   {item}
@@ -88,7 +104,8 @@ export function FooterSection() {
 
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-muted-foreground font-body">
-            © 2026 RDM Digital. Sistema Soberano — Datos locales, infraestructura local, beneficio local.
+            © 2026 RDM Digital. Sistema Soberano — Datos locales, infraestructura local, beneficio
+            local.
           </p>
           <div className="flex items-center gap-2 text-xs text-muted-foreground font-body">
             <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />

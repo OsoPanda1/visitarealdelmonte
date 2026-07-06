@@ -23,9 +23,7 @@ export function getServerEnv(): ServerEnv {
   const parsed = serverSchema.safeParse(process.env);
   if (!parsed.success) {
     const issues = parsed.error.flatten().fieldErrors;
-    throw new Error(
-      `[env.server] Missing/invalid server env: ${JSON.stringify(issues)}`,
-    );
+    throw new Error(`[env.server] Missing/invalid server env: ${JSON.stringify(issues)}`);
   }
   cached = parsed.data;
   return cached;

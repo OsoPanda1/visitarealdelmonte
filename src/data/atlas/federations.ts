@@ -33,7 +33,12 @@ export const RDM_FEDERATIONS: Federation[] = [
     colorHex: "#c47d3b",
     icon: "graduation-cap",
     domain: "edu.rdm.tamv",
-    modules: ["Universidad Soberana", "Currículo Descolonizado", "Pedagogía Minera", "Bilingüe Otomí-Español"],
+    modules: [
+      "Universidad Soberana",
+      "Currículo Descolonizado",
+      "Pedagogía Minera",
+      "Bilingüe Otomí-Español",
+    ],
   },
   {
     id: "cultural",
@@ -44,7 +49,12 @@ export const RDM_FEDERATIONS: Federation[] = [
     colorHex: "#8a6d4f",
     icon: "landmark",
     domain: "cul.rdm.tamv",
-    modules: ["Archivo Patrimonial", "Festival del Paste", "Lenguas Originarias", "Memoria Temporal"],
+    modules: [
+      "Archivo Patrimonial",
+      "Festival del Paste",
+      "Lenguas Originarias",
+      "Memoria Temporal",
+    ],
   },
   {
     id: "economica",

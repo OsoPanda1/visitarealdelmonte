@@ -3,7 +3,7 @@
  * Metricas tecnicas y de negocio para observabilidad
  */
 
-import { logger } from '@/lib/logger';
+import { logger } from "@/lib/logger";
 
 type Labels = Record<string, string>;
 
@@ -18,7 +18,9 @@ const MAX_LABEL_VALUE_LENGTH = 64;
 function validateLabels(labels: Labels, metricName: string): void {
   const keys = Object.keys(labels);
   if (keys.length > MAX_LABEL_KEYS) {
-    logger.warn(`[prometheus] ${metricName}: truncating labels from ${keys.length} to ${MAX_LABEL_KEYS}`);
+    logger.warn(
+      `[prometheus] ${metricName}: truncating labels from ${keys.length} to ${MAX_LABEL_KEYS}`,
+    );
     for (const k of keys.slice(MAX_LABEL_KEYS)) delete labels[k];
   }
   for (const [k, v] of Object.entries(labels)) {
@@ -33,14 +35,16 @@ export class Counter {
 
   constructor(
     public readonly name: string,
-    public readonly help: string
+    public readonly help: string,
   ) {}
 
   inc(labels: Labels = {}, value = 1): void {
     validateLabels(labels, this.name);
     const key = JSON.stringify(labels);
     if (!this.data.has(key) && this.data.size >= MAX_CARDINALITY) {
-      logger.warn(`[prometheus] ${this.name}: cardinality limit (${MAX_CARDINALITY}) reached, dropping labels`);
+      logger.warn(
+        `[prometheus] ${this.name}: cardinality limit (${MAX_CARDINALITY}) reached, dropping labels`,
+      );
       return;
     }
     const previous = this.data.get(key) ?? 0;
@@ -69,7 +73,7 @@ export class Gauge {
 
   constructor(
     public readonly name: string,
-    public readonly help: string
+    public readonly help: string,
   ) {}
 
   inc(value = 1): void {
@@ -101,7 +105,7 @@ export class Histogram {
   constructor(
     public readonly name: string,
     public readonly help: string,
-    private readonly buckets: number[]
+    private readonly buckets: number[],
   ) {
     this.buckets = buckets.sort((a, b) => a - b);
   }
@@ -122,26 +126,22 @@ export class Histogram {
     sum: number;
     buckets: Array<{ le: number; count: number }>;
   } {
-    const allObs = [
-      ...this.observations,
-      ...[...this.labeledObservations.values()].flat(),
-    ];
+    const allObs = [...this.observations, ...[...this.labeledObservations.values()].flat()];
 
     return {
       count: allObs.length,
       sum: allObs.reduce((acc, curr) => acc + curr, 0),
-      buckets: this.buckets.map(bucket => ({
+      buckets: this.buckets.map((bucket) => ({
         le: bucket,
-        count: allObs.filter(v => v <= bucket).length,
+        count: allObs.filter((v) => v <= bucket).length,
       })),
     };
   }
 
   percentile(p: number): number {
-    const allObs = [
-      ...this.observations,
-      ...[...this.labeledObservations.values()].flat(),
-    ].sort((a, b) => a - b);
+    const allObs = [...this.observations, ...[...this.labeledObservations.values()].flat()].sort(
+      (a, b) => a - b,
+    );
 
     if (allObs.length === 0) return 0;
 
@@ -184,11 +184,9 @@ export class Registry {
         for (const entry of entries) {
           const labels = Object.entries(entry.labels)
             .map(([k, v]) => `${k}="${v}"`)
-            .join(',');
+            .join(",");
           lines.push(
-            labels
-              ? `${metric.name}{${labels}} ${entry.value}`
-              : `${metric.name} ${entry.value}`
+            labels ? `${metric.name}{${labels}} ${entry.value}` : `${metric.name} ${entry.value}`,
           );
         }
       } else if (metric instanceof Gauge) {
@@ -206,7 +204,7 @@ export class Registry {
       }
     }
 
-    return lines.join('\n');
+    return lines.join("\n");
   }
 
   toJSON(): Record<string, unknown> {
@@ -240,114 +238,99 @@ export const register = new Registry();
 
 // Metricas de Decision Isabella
 export const isabellaTerritorialDecisionLatencyMs = new Histogram(
-  'isabella_territorial_decision_latency_ms',
-  'Latencia de decisiones territoriales Isabella',
-  [10, 25, 50, 100, 200, 500, 1000]
+  "isabella_territorial_decision_latency_ms",
+  "Latencia de decisiones territoriales Isabella",
+  [10, 25, 50, 100, 200, 500, 1000],
 );
 
 export const decisionScore = new Histogram(
-  'decision_score',
-  'Distribucion del score calculado por turista',
-  [0.2, 0.4, 0.6, 0.8, 1]
+  "decision_score",
+  "Distribucion del score calculado por turista",
+  [0.2, 0.4, 0.6, 0.8, 1],
 );
 
 export const decisionsEmittedTotal = new Counter(
-  'decisions_emitted_total',
-  'Total de decisiones emitidas por tipo y territorio'
+  "decisions_emitted_total",
+  "Total de decisiones emitidas por tipo y territorio",
 );
 
 // Metricas de Feedback
 export const reviews = new Counter(
-  'reviews_total',
-  'Volumen de resenas por territorio y polaridad'
+  "reviews_total",
+  "Volumen de resenas por territorio y polaridad",
 );
 
 export const consentEvents = new Counter(
-  'consent_events_total',
-  'Total de eventos de consentimiento'
+  "consent_events_total",
+  "Total de eventos de consentimiento",
 );
 
 export const reviewsScore = new Histogram(
-  'reviews_score',
-  'Distribucion de rating de resenas',
-  [1, 2, 3, 4, 5]
+  "reviews_score",
+  "Distribucion de rating de resenas",
+  [1, 2, 3, 4, 5],
 );
 
 // Metricas de Conexiones
-export const streamConnections = new Gauge(
-  'sse_connections',
-  'Conexiones SSE activas'
-);
+export const streamConnections = new Gauge("sse_connections", "Conexiones SSE activas");
 
-export const activeUsers = new Gauge(
-  'active_users',
-  'Usuarios activos en el sistema'
-);
+export const activeUsers = new Gauge("active_users", "Usuarios activos en el sistema");
 
 // Metricas de Cache Geo
 export const isabellaGeoLruSize = new Gauge(
-  'isabella_geo_lru_size',
-  'Tamano actual del LRU geoespacial'
+  "isabella_geo_lru_size",
+  "Tamano actual del LRU geoespacial",
 );
 
 export const isabellaGeoLruCapacity = new Gauge(
-  'isabella_geo_lru_capacity',
-  'Capacidad maxima del LRU geoespacial'
+  "isabella_geo_lru_capacity",
+  "Capacidad maxima del LRU geoespacial",
 );
 
-export const geoLruHits = new Counter(
-  'geo_lru_hits_total',
-  'Hits del cache LRU geoespacial'
-);
+export const geoLruHits = new Counter("geo_lru_hits_total", "Hits del cache LRU geoespacial");
 
-export const geoLruMisses = new Counter(
-  'geo_lru_misses_total',
-  'Misses del cache LRU geoespacial'
-);
+export const geoLruMisses = new Counter("geo_lru_misses_total", "Misses del cache LRU geoespacial");
 
 // Metricas de Movimiento
 export const isabellaMovementFilterAlpha = new Gauge(
-  'isabella_movement_filter_alpha',
-  'Alpha del filtro EMA de movimiento'
+  "isabella_movement_filter_alpha",
+  "Alpha del filtro EMA de movimiento",
 );
 
 // Metricas de Bus de Eventos
 export const eventsDroppedTotal = new Counter(
-  'events_dropped_total',
-  'Eventos descartados por backpressure'
+  "events_dropped_total",
+  "Eventos descartados por backpressure",
 );
 
 export const eventsProcessedTotal = new Counter(
-  'events_processed_total',
-  'Eventos procesados por el bus'
+  "events_processed_total",
+  "Eventos procesados por el bus",
 );
 
-export const eventQueueSize = new Gauge(
-  'event_queue_size',
-  'Tamano actual de la cola de eventos'
-);
+export const eventQueueSize = new Gauge("event_queue_size", "Tamano actual de la cola de eventos");
 
 // Metricas de Federacion
 export const federationHealth = new Gauge(
-  'federation_health',
-  'Salud global de la heptafederacion'
+  "federation_health",
+  "Salud global de la heptafederacion",
 );
 
 export const federationModuleStatus = new Counter(
-  'federation_module_status_total',
-  'Estado de modulos de federacion'
+  "federation_module_status_total",
+  "Estado de modulos de federacion",
 );
 
 // Metricas de Kernel
 export const kernelLatency = new Histogram(
-  'kernel_latency_ms',
-  'Latencia del kernel de recomendaciones',
-  [10, 25, 50, 100, 250, 500]
+  "kernel_latency_ms",
+  "Latencia del kernel de recomendaciones",
+  [10, 25, 50, 100, 250, 500],
 );
 
 export const intentsProcessed = new Counter(
-  'intents_processed_total',
-  'Intents procesados por tipo'
+  "intents_processed_total",
+  "Intents procesados por tipo",
 );
 
 // Alias de compatibilidad
@@ -375,13 +358,13 @@ export const decisionLatency = isabellaTerritorialDecisionLatencyMs;
   federationModuleStatus,
   kernelLatency,
   intentsProcessed,
-].forEach(metric => register.registerMetric(metric));
+].forEach((metric) => register.registerMetric(metric));
 
 // ============================================================================
 // TERRITORIOS PERMITIDOS (Anti-cardinalidad)
 // ============================================================================
 
-export const ALLOWED_TERRITORIES = ['RDM', 'PACHUCA', 'HIDALGO', 'CDMX'] as const;
+export const ALLOWED_TERRITORIES = ["RDM", "PACHUCA", "HIDALGO", "CDMX"] as const;
 export type AllowedTerritory = (typeof ALLOWED_TERRITORIES)[number];
 
 export function sanitizeTerritory(territory: string): AllowedTerritory {
@@ -389,5 +372,5 @@ export function sanitizeTerritory(territory: string): AllowedTerritory {
   if (ALLOWED_TERRITORIES.includes(upper as AllowedTerritory)) {
     return upper as AllowedTerritory;
   }
-  return 'RDM';
+  return "RDM";
 }

@@ -4,7 +4,11 @@ import L, { type LeafletEventHandlerFnMap, type Map as LeafletMap } from "leafle
 import Supercluster from "supercluster";
 import { Compass, Layers3, LocateFixed, RotateCcw, Sparkles } from "lucide-react";
 import "leaflet/dist/leaflet.css";
-import { DEFAULT_MAP_VIEWPORT, type MapMarkerData, type MapViewportState } from "@/features/places/mapTypes";
+import {
+  DEFAULT_MAP_VIEWPORT,
+  type MapMarkerData,
+  type MapViewportState,
+} from "@/features/places/mapTypes";
 
 // Definición estricta de tipos para evitar errores de propiedades inexistentes
 type ClusterProps = { cluster: true; cluster_id: number; point_count: number };
@@ -27,7 +31,7 @@ interface Map2DPanelProps {
 const createPinIcon = (type: MapMarkerData["type"], isPremium?: boolean) => {
   const color = isPremium ? "#E5E7EB" : type === "place" ? "#60a5fa" : "#34d399";
   const glow = isPremium ? "0 0 15px rgba(229, 231, 235, 0.8)" : `0 0 12px ${color}`;
-  
+
   return L.divIcon({
     className: "custom-map-pin",
     html: `<span style="display:flex;width:${isPremium ? 26 : 20}px;height:${isPremium ? 26 : 20}px;border-radius:999px;background:${color};box-shadow:0 0 0 4px rgba(10,15,27,.8), ${glow};border:1px solid rgba(255,255,255,0.9);backdrop-filter: blur(2px);"></span>`,
@@ -44,7 +48,11 @@ const createClusterIcon = (count: number) =>
     iconAnchor: [19, 19],
   });
 
-function MapEventBridge({ onViewportChange }: { onViewportChange: (next: Partial<MapViewportState>) => void }) {
+function MapEventBridge({
+  onViewportChange,
+}: {
+  onViewportChange: (next: Partial<MapViewportState>) => void;
+}) {
   const map = useMap();
 
   useEffect(() => {
@@ -111,7 +119,13 @@ function isClusterFeature(item: ClusterItem): item is ClusterFeature {
   return Boolean((item.properties as ClusterProps).cluster);
 }
 
-function ClusterLayer({ markers, onSelect }: { markers: MapMarkerData[]; onSelect: (marker: MapMarkerData) => void }) {
+function ClusterLayer({
+  markers,
+  onSelect,
+}: {
+  markers: MapMarkerData[];
+  onSelect: (marker: MapMarkerData) => void;
+}) {
   const map = useMap();
   const markerLookup = useMemo(() => new Map(markers.map((m) => [m.id, m])), [markers]);
 
@@ -190,7 +204,13 @@ function ClusterLayer({ markers, onSelect }: { markers: MapMarkerData[]; onSelec
   );
 }
 
-export function Map2DPanel({ markers, selected, viewport, onSelect, onViewportChange }: Map2DPanelProps) {
+export function Map2DPanel({
+  markers,
+  selected,
+  viewport,
+  onSelect,
+  onViewportChange,
+}: Map2DPanelProps) {
   const [tileMode, setTileMode] = useState<"dark" | "light">("dark");
   const tileConfig =
     tileMode === "dark"
@@ -220,10 +240,10 @@ export function Map2DPanel({ markers, selected, viewport, onSelect, onViewportCh
         <ClusterLayer markers={markers} onSelect={onSelect} />
       </MapContainer>
 
-
       {markers.length === 0 && (
         <div className="absolute inset-0 z-[510] flex items-center justify-center bg-slate-950/70 p-4 text-center text-sm text-silver-300 backdrop-blur-sm">
-          No hay nodos para este filtro. Cambia el criterio o vuelve a “Todo” para recuperar la visualización.
+          No hay nodos para este filtro. Cambia el criterio o vuelve a “Todo” para recuperar la
+          visualización.
         </div>
       )}
 

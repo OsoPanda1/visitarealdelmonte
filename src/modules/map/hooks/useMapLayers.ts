@@ -38,12 +38,19 @@ export function useMapLayers() {
   const toggle = useCallback((key: string) => {
     setActiveKeys((prev) => {
       const next = new Set(prev);
-      if (next.has(key)) next.delete(key); else next.add(key);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
       return next;
     });
   }, []);
 
   const isActive = useCallback((key: string) => activeKeys.has(key), [activeKeys]);
 
-  return { layers: layersQuery.data ?? [], isLoading: layersQuery.isLoading, isActive, toggle, activeKeys };
+  return {
+    layers: layersQuery.data ?? [],
+    isLoading: layersQuery.isLoading,
+    isActive,
+    toggle,
+    activeKeys,
+  };
 }

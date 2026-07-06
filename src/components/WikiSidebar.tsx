@@ -1,8 +1,33 @@
 import {
-  BookOpen, Landmark, Layers, Shield, Brain, Clock, FileText,
-  Home, Network, GraduationCap, Globe, Coins, ChevronDown,
-  Activity, Cpu, BookMarked, Rocket, Crown, Briefcase, Plug, Target, Library,
-  Users, Link2, Monitor, Atom, Search, Heart, Award,
+  BookOpen,
+  Landmark,
+  Layers,
+  Shield,
+  Brain,
+  Clock,
+  FileText,
+  Home,
+  Network,
+  GraduationCap,
+  Globe,
+  Coins,
+  ChevronDown,
+  Activity,
+  Cpu,
+  BookMarked,
+  Rocket,
+  Crown,
+  Briefcase,
+  Plug,
+  Target,
+  Library,
+  Users,
+  Link2,
+  Monitor,
+  Atom,
+  Search,
+  Heart,
+  Award,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -17,11 +42,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 const mainNav = [
   { title: "Inicio", url: "/", icon: Home },

@@ -74,12 +74,17 @@ const MEGA_CATEGORIES: MegaCategory[] = [
     label: "Turismo",
     accent: "hsl(var(--rdm-amber))",
     links: [
-      { path: "/lugares",            label: "Lugares de interés",  icon: MapPin,        desc: "POIs y atracciones" },
-      { path: "/patrimonio-cultural",label: "Patrimonio Cultural", icon: Landmark,      desc: "Monumentos y UNESCO" },
-      { path: "/arte",               label: "Arte y Artesanías",   icon: Palette,       desc: "Platerías y talleres" },
-      { path: "/cultura",            label: "Cultura",             icon: Globe,         desc: "Tradiciones vivas" },
-      { path: "/relatos",            label: "Leyendas",            icon: BookOpen,      desc: "Mitos mineros" },
-      { path: "/estacionamientos",   label: "Cómo llegar",         icon: Car,           desc: "Rutas y parking" },
+      { path: "/lugares", label: "Lugares de interés", icon: MapPin, desc: "POIs y atracciones" },
+      {
+        path: "/patrimonio-cultural",
+        label: "Patrimonio Cultural",
+        icon: Landmark,
+        desc: "Monumentos y UNESCO",
+      },
+      { path: "/arte", label: "Arte y Artesanías", icon: Palette, desc: "Platerías y talleres" },
+      { path: "/cultura", label: "Cultura", icon: Globe, desc: "Tradiciones vivas" },
+      { path: "/relatos", label: "Leyendas", icon: BookOpen, desc: "Mitos mineros" },
+      { path: "/estacionamientos", label: "Cómo llegar", icon: Car, desc: "Rutas y parking" },
     ],
   },
   {
@@ -87,12 +92,22 @@ const MEGA_CATEGORIES: MegaCategory[] = [
     label: "Comunidad",
     accent: "hsl(var(--rdm-blue))",
     links: [
-      { path: "/comunidad",          label: "Foro",                icon: MessageSquare, desc: "Publicaciones y noticias" },
-      { path: "/musica",             label: "Música RDM",          icon: Music2,        desc: "Escucha y descarga" },
-      { path: "/directorio",         label: "Directorio",          icon: Store,         desc: "Negocios locales" },
-      { path: "/leaderboard",        label: "Tabla de Honor",      icon: Trophy,        desc: "Ranking de exploradores" },
-      { path: "/perfil",             label: "Mi Perfil",           icon: UserIcon,      desc: "Puntos y logros" },
-      { path: "/registro-comercio",  label: "Registra tu Negocio", icon: ShoppingBag,   desc: "Únete al directorio" },
+      { path: "/comunidad", label: "Foro", icon: MessageSquare, desc: "Publicaciones y noticias" },
+      { path: "/musica", label: "Música RDM", icon: Music2, desc: "Escucha y descarga" },
+      { path: "/directorio", label: "Directorio", icon: Store, desc: "Negocios locales" },
+      {
+        path: "/leaderboard",
+        label: "Tabla de Honor",
+        icon: Trophy,
+        desc: "Ranking de exploradores",
+      },
+      { path: "/perfil", label: "Mi Perfil", icon: UserIcon, desc: "Puntos y logros" },
+      {
+        path: "/registro-comercio",
+        label: "Registra tu Negocio",
+        icon: ShoppingBag,
+        desc: "Únete al directorio",
+      },
     ],
   },
   {
@@ -100,12 +115,22 @@ const MEGA_CATEGORIES: MegaCategory[] = [
     label: "Atlas & Historia",
     accent: "hsl(var(--rdm-green))",
     links: [
-      { path: "/capitulos",           label: "Capítulos narrativos", icon: BookOpen, desc: "Historia por capítulos" },
-      { path: "/capitulos/minas",     label: "Las Minas",            icon: Pickaxe,  desc: "Historia minera" },
-      { path: "/capitulos/pastes",    label: "Los Pastes",           icon: Coffee,   desc: "Gastronomía típica" },
-      { path: "/capitulos/cementerio",label: "Panteón Inglés",       icon: Landmark, desc: "Legado británico" },
-      { path: "/capitulos/calles",    label: "Las Calles",           icon: Map,      desc: "Arquitectura colonial" },
-      { path: "/capitulos/leyendas",  label: "Leyendas",             icon: Mic2,     desc: "Relatos del pueblo" },
+      {
+        path: "/capitulos",
+        label: "Capítulos narrativos",
+        icon: BookOpen,
+        desc: "Historia por capítulos",
+      },
+      { path: "/capitulos/minas", label: "Las Minas", icon: Pickaxe, desc: "Historia minera" },
+      { path: "/capitulos/pastes", label: "Los Pastes", icon: Coffee, desc: "Gastronomía típica" },
+      {
+        path: "/capitulos/cementerio",
+        label: "Panteón Inglés",
+        icon: Landmark,
+        desc: "Legado británico",
+      },
+      { path: "/capitulos/calles", label: "Las Calles", icon: Map, desc: "Arquitectura colonial" },
+      { path: "/capitulos/leyendas", label: "Leyendas", icon: Mic2, desc: "Relatos del pueblo" },
     ],
   },
   {
@@ -113,31 +138,46 @@ const MEGA_CATEGORIES: MegaCategory[] = [
     label: "Servicios",
     accent: "hsl(var(--rdm-purple))",
     links: [
-      { path: "/paquetes",          label: "Paquetes turísticos", icon: Star,       desc: "Experiencias curadas" },
-      { path: "/transporte-local",  label: "Transporte Local",    icon: Bus,        desc: "Movilidad en RDM" },
-      { path: "/shuttle-cdmx-rdm",  label: "Shuttle CDMX↔RDM",   icon: Bus,        desc: "Traslados directos" },
-      { path: "/negocios",          label: "Portal Negocios",     icon: Store,      desc: "Panel de comercios" },
-      { path: "/donar",             label: "Donar",               icon: Heart,      desc: "Apoya la plataforma" },
-      { path: "/quienes-somos",     label: "Quiénes somos",       icon: Users,      desc: "El equipo RDM Digital" },
-      { path: "/premium",           label: "Planes Premium",      icon: Crown,      desc: "$99/mes — canjea puntos por premios reales" },
+      { path: "/paquetes", label: "Paquetes turísticos", icon: Star, desc: "Experiencias curadas" },
+      { path: "/transporte-local", label: "Transporte Local", icon: Bus, desc: "Movilidad en RDM" },
+      {
+        path: "/shuttle-cdmx-rdm",
+        label: "Shuttle CDMX↔RDM",
+        icon: Bus,
+        desc: "Traslados directos",
+      },
+      { path: "/negocios", label: "Portal Negocios", icon: Store, desc: "Panel de comercios" },
+      { path: "/donar", label: "Donar", icon: Heart, desc: "Apoya la plataforma" },
+      {
+        path: "/quienes-somos",
+        label: "Quiénes somos",
+        icon: Users,
+        desc: "El equipo RDM Digital",
+      },
+      {
+        path: "/premium",
+        label: "Planes Premium",
+        icon: Crown,
+        desc: "$99/mes — canjea puntos por premios reales",
+      },
     ],
   },
 ];
 
 const EXTRA_LINKS: NavLink[] = [
-  { path: "/dichos-mineros",  label: "Dichos Mineros" },
-  { path: "/atlas-maximus",   label: "Atlas Maximus" },
+  { path: "/dichos-mineros", label: "Dichos Mineros" },
+  { path: "/atlas-maximus", label: "Atlas Maximus" },
   { path: "/ecosistema-ltos", label: "Ecosistema LTOS" },
 ];
 
 // ─── Component ──────────────────────────────────────────────────────────────
 
 export function RDMNavbar() {
-  const [scrolled,    setScrolled]    = useState(false);
-  const [mobileOpen,  setMobileOpen]  = useState(false);
-  const [megaOpen,    setMegaOpen]    = useState(false);
-  const [hoverPath,   setHoverPath]   = useState<string | null>(null);
-  const megaRef  = useRef<HTMLDivElement>(null);
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [megaOpen, setMegaOpen] = useState(false);
+  const [hoverPath, setHoverPath] = useState<string | null>(null);
+  const megaRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
   const { user, profile } = useRDMAuth();
 
@@ -166,9 +206,7 @@ export function RDMNavbar() {
   const isActive = (path: string) =>
     path === "/" ? location.pathname === "/" : location.pathname.startsWith(path);
 
-  const initials = profile?.display_name
-    ? profile.display_name.slice(0, 2).toUpperCase()
-    : "RD";
+  const initials = profile?.display_name ? profile.display_name.slice(0, 2).toUpperCase() : "RD";
 
   return (
     <>
@@ -195,7 +233,6 @@ export function RDMNavbar() {
         </AnimatePresence>
 
         <div className="max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between h-16">
-
           {/* ── Logo ── */}
           <Link to="/" className="flex items-center gap-2.5 group shrink-0">
             <motion.div
@@ -232,7 +269,11 @@ export function RDMNavbar() {
               <motion.div
                 key={item.path}
                 initial={{ opacity: 0, y: -6 }}
-                animate={{ opacity: 1, y: 0, transition: { delay: 0.05 * i, type: "spring", stiffness: 220, damping: 16 } }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                  transition: { delay: 0.05 * i, type: "spring", stiffness: 220, damping: 16 },
+                }}
                 onMouseEnter={() => setHoverPath(item.path)}
                 onMouseLeave={() => setHoverPath(null)}
                 className="relative"
@@ -279,7 +320,10 @@ export function RDMNavbar() {
                 whileTap={{ scale: 0.97 }}
               >
                 Explorar todo
-                <motion.span animate={{ rotate: megaOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
+                <motion.span
+                  animate={{ rotate: megaOpen ? 180 : 0 }}
+                  transition={{ duration: 0.2 }}
+                >
                   <ChevronDown className="w-3 h-3" />
                 </motion.span>
               </motion.button>
@@ -413,11 +457,23 @@ export function RDMNavbar() {
             >
               <AnimatePresence mode="wait">
                 {mobileOpen ? (
-                  <motion.span key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.16 }}>
+                  <motion.span
+                    key="close"
+                    initial={{ rotate: -90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 90, opacity: 0 }}
+                    transition={{ duration: 0.16 }}
+                  >
                     <X className="w-5 h-5" />
                   </motion.span>
                 ) : (
-                  <motion.span key="open" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.16 }}>
+                  <motion.span
+                    key="open"
+                    initial={{ rotate: 90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: -90, opacity: 0 }}
+                    transition={{ duration: 0.16 }}
+                  >
                     <Menu className="w-5 h-5" />
                   </motion.span>
                 )}
@@ -451,10 +507,16 @@ export function RDMNavbar() {
               {/* Drawer header */}
               <div className="flex items-center justify-between px-5 py-4 border-b border-[hsl(var(--border)/0.3)] shrink-0">
                 <div>
-                  <span className="font-bold text-base text-[hsl(var(--foreground))]" style={{ fontFamily: "var(--font-display)" }}>
+                  <span
+                    className="font-bold text-base text-[hsl(var(--foreground))]"
+                    style={{ fontFamily: "var(--font-display)" }}
+                  >
                     RDM Digital
                   </span>
-                  <span className="block text-[9px] tracking-widest uppercase text-[hsl(var(--rdm-amber))]" style={{ fontFamily: "var(--font-body)" }}>
+                  <span
+                    className="block text-[9px] tracking-widest uppercase text-[hsl(var(--rdm-amber))]"
+                    style={{ fontFamily: "var(--font-body)" }}
+                  >
                     Pueblo Mágico
                   </span>
                 </div>
@@ -471,7 +533,10 @@ export function RDMNavbar() {
               <div className="flex-1 overflow-y-auto px-4 py-4 space-y-5">
                 {/* Primary */}
                 <div>
-                  <p className="text-[9px] font-bold tracking-widest uppercase text-[hsl(var(--muted-foreground))] px-2 mb-2" style={{ fontFamily: "var(--font-body)" }}>
+                  <p
+                    className="text-[9px] font-bold tracking-widest uppercase text-[hsl(var(--muted-foreground))] px-2 mb-2"
+                    style={{ fontFamily: "var(--font-body)" }}
+                  >
                     Principal
                   </p>
                   <div className="space-y-0.5">
@@ -486,7 +551,9 @@ export function RDMNavbar() {
                         }`}
                         style={{ fontFamily: "var(--font-body)" }}
                       >
-                        {item.icon && <item.icon className="w-4 h-4 shrink-0 text-[hsl(var(--muted-foreground))]" />}
+                        {item.icon && (
+                          <item.icon className="w-4 h-4 shrink-0 text-[hsl(var(--muted-foreground))]" />
+                        )}
                         {item.label}
                       </Link>
                     ))}
@@ -514,7 +581,9 @@ export function RDMNavbar() {
                           }`}
                           style={{ fontFamily: "var(--font-body)" }}
                         >
-                          {link.icon && <link.icon className="w-3.5 h-3.5 shrink-0 text-[hsl(var(--muted-foreground))]" />}
+                          {link.icon && (
+                            <link.icon className="w-3.5 h-3.5 shrink-0 text-[hsl(var(--muted-foreground))]" />
+                          )}
                           <span>
                             <span className="font-medium">{link.label}</span>
                             {link.desc && (
@@ -531,7 +600,10 @@ export function RDMNavbar() {
 
                 {/* Extra / platform links */}
                 <div>
-                  <p className="text-[9px] font-bold tracking-widest uppercase text-[hsl(var(--muted-foreground))] px-2 mb-2" style={{ fontFamily: "var(--font-body)" }}>
+                  <p
+                    className="text-[9px] font-bold tracking-widest uppercase text-[hsl(var(--muted-foreground))] px-2 mb-2"
+                    style={{ fontFamily: "var(--font-body)" }}
+                  >
                     Plataforma
                   </p>
                   <div className="space-y-0.5">

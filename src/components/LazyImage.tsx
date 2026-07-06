@@ -11,7 +11,15 @@ interface LazyImageProps {
   height?: number;
 }
 
-export function LazyImage({ src, alt, className, wrapperClassName, placeholder, width, height }: LazyImageProps) {
+export function LazyImage({
+  src,
+  alt,
+  className,
+  wrapperClassName,
+  placeholder,
+  width,
+  height,
+}: LazyImageProps) {
   const imgRef = useRef<HTMLImageElement>(null);
   const [loaded, setLoaded] = useState(false);
   const [inView, setInView] = useState(false);
@@ -33,7 +41,11 @@ export function LazyImage({ src, alt, className, wrapperClassName, placeholder, 
   }, []);
 
   return (
-    <div ref={imgRef} className={cn("relative overflow-hidden", wrapperClassName)} style={{ width, height }}>
+    <div
+      ref={imgRef}
+      className={cn("relative overflow-hidden", wrapperClassName)}
+      style={{ width, height }}
+    >
       {!loaded && (
         <div className={cn("absolute inset-0 animate-pulse bg-muted rounded-md", className)} />
       )}

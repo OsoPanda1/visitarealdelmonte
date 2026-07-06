@@ -1,16 +1,14 @@
-import React from "react"
-import { type LSMRenderProps, LSMRenderEngine } from "@/components/map/LSMRenderEngine"
-import TerritorialSVGMap, {
-  type TerritorialSVGMapProps,
-} from "@/components/map/TerritorialSVGMap"
+import React from "react";
+import { type LSMRenderProps, LSMRenderEngine } from "@/components/map/LSMRenderEngine";
+import TerritorialSVGMap, { type TerritorialSVGMapProps } from "@/components/map/TerritorialSVGMap";
 
 export interface UnifiedMapBridgeProps {
   /** Configuración de la capa LSM (movilidad, turismo, etc.) */
-  lsmConfig: LSMRenderProps
+  lsmConfig: LSMRenderProps;
   /** Props para el mapa territorial (POIs, selección, etc.) */
-  territorialConfig?: Omit<TerritorialSVGMapProps, "onSelect">
+  territorialConfig?: Omit<TerritorialSVGMapProps, "onSelect">;
   /** Callback cuando el usuario selecciona un nodo/POI desde cualquier mapa */
-  onSelectNode?: (id: string) => void
+  onSelectNode?: (id: string) => void;
 }
 
 /**
@@ -27,8 +25,8 @@ const UnifiedMapBridge: React.FC<UnifiedMapBridgeProps> = ({
   onSelectNode,
 }) => {
   const handleTerritorialSelect = (id: string) => {
-    onSelectNode?.(id)
-  }
+    onSelectNode?.(id);
+  };
 
   return (
     <section
@@ -71,14 +69,11 @@ const UnifiedMapBridge: React.FC<UnifiedMapBridgeProps> = ({
         </header>
 
         <div className="mt-1 h-[220px]">
-          <TerritorialSVGMap
-            {...territorialConfig}
-            onSelect={handleTerritorialSelect}
-          />
+          <TerritorialSVGMap {...territorialConfig} onSelect={handleTerritorialSelect} />
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default UnifiedMapBridge
+export default UnifiedMapBridge;

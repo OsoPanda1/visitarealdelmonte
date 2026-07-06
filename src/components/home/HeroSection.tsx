@@ -3,10 +3,10 @@
  * TAMV ONLINE - El Metaverso Destructor
  */
 
-import React, { useRef, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { ArrowRight, Sparkles } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import React, { useRef, useEffect } from "react";
+import { motion } from "framer-motion";
+import { ArrowRight, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const HeroSection: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -15,7 +15,7 @@ const HeroSection: React.FC = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     canvas.width = window.innerWidth;
@@ -40,17 +40,17 @@ const HeroSection: React.FC = () => {
         vy: (Math.random() - 0.5) * 0.5,
         size: Math.random() * 3 + 1,
         color: `hsl(${190 + Math.random() * 60}, 70%, 60%)`,
-        alpha: Math.random() * 0.5 + 0.2
+        alpha: Math.random() * 0.5 + 0.2,
       });
     }
 
     let animationId: number;
 
     const animate = () => {
-      ctx.fillStyle = 'rgba(10, 10, 30, 0.1)';
+      ctx.fillStyle = "rgba(10, 10, 30, 0.1)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      particles.forEach(p => {
+      particles.forEach((p) => {
         p.x += p.vx;
         p.y += p.vy;
 
@@ -67,7 +67,7 @@ const HeroSection: React.FC = () => {
 
       // Conexiones entre partículas cercanas
       particles.forEach((p1, i) => {
-        particles.slice(i + 1).forEach(p2 => {
+        particles.slice(i + 1).forEach((p2) => {
           const dist = Math.hypot(p1.x - p2.x, p1.y - p2.y);
           if (dist < 100) {
             ctx.beginPath();
@@ -90,11 +90,11 @@ const HeroSection: React.FC = () => {
       canvas.height = window.innerHeight * 0.7;
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     return () => {
       cancelAnimationFrame(animationId);
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
@@ -104,7 +104,9 @@ const HeroSection: React.FC = () => {
       <canvas
         ref={canvasRef}
         className="absolute inset-0 z-0"
-        style={{ background: 'linear-gradient(180deg, rgba(10,10,30,1) 0%, rgba(20,10,40,1) 100%)' }}
+        style={{
+          background: "linear-gradient(180deg, rgba(10,10,30,1) 0%, rgba(20,10,40,1) 100%)",
+        }}
       />
 
       {/* Overlay con gradiente */}
@@ -118,15 +120,16 @@ const HeroSection: React.FC = () => {
           transition={{ duration: 0.8 }}
         >
           {/* Logo TAMV */}
-          <h1 
+          <h1
             className="text-6xl md:text-8xl lg:text-9xl font-black tracking-wider mb-4"
             style={{
-              background: 'linear-gradient(180deg, #fff 0%, #00f0ff 40%, #0066ff 70%, #9b87f5 100%)',
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              color: 'transparent',
-              textShadow: '0 0 60px rgba(0, 240, 255, 0.4)',
-              letterSpacing: '0.15em'
+              background:
+                "linear-gradient(180deg, #fff 0%, #00f0ff 40%, #0066ff 70%, #9b87f5 100%)",
+              backgroundClip: "text",
+              WebkitBackgroundClip: "text",
+              color: "transparent",
+              textShadow: "0 0 60px rgba(0, 240, 255, 0.4)",
+              letterSpacing: "0.15em",
             }}
           >
             T A M V

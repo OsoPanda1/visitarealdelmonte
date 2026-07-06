@@ -59,28 +59,28 @@ const FileUpload = ({
     }
 
     const newFiles: UploadFile[] = [];
-    
+
     Array.from(fileList).forEach((file) => {
       if (files.length + newFiles.length >= maxFiles) return;
-      
+
       if (file.size > maxSize * 1024 * 1024) {
         toast.error(`"${file.name}" excede el límite de ${maxSize}MB`);
         return;
       }
-      
+
       const fileType = file.type || "";
-      const isAllowed = allowedTypes.some(type => {
+      const isAllowed = allowedTypes.some((type) => {
         if (type.endsWith("/*")) {
           return fileType.startsWith(type.split("/")[0]);
         }
         return type === fileType;
       });
-      
+
       if (!isAllowed) {
         toast.error(`"${file.name}" tipo de archivo no soportado`);
         return;
       }
-      
+
       newFiles.push({
         id: `${file.name}-${Date.now()}`,
         file,
@@ -88,9 +88,9 @@ const FileUpload = ({
         status: "idle",
       });
     });
-    
+
     if (newFiles.length > 0) {
-      setFiles(prev => [...prev, ...newFiles]);
+      setFiles((prev) => [...prev, ...newFiles]);
     }
   };
 
@@ -98,7 +98,7 @@ const FileUpload = ({
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
-    
+
     if (e.dataTransfer.files.length > 0) {
       processFiles(e.dataTransfer.files);
     }
@@ -118,9 +118,11 @@ const FileUpload = ({
     }
 
     setIsUploading(true);
-    setFiles(prev => prev.map(file => 
-      file.status === "idle" ? { ...file, status: "uploading" as const } : file
-    ));
+    setFiles((prev) =>
+      prev.map((file) =>
+        file.status === "idle" ? { ...file, status: "uploading" as const } : file,
+      ),
+    );
 
     const uploadedUrls: string[] = [];
     const userId = user.id;
@@ -132,28 +134,32 @@ const FileUpload = ({
       const ext = uploadFile.file.name.split(".").pop();
       const fileName = `${baseFolder}/${Date.now()}-${crypto.randomUUID()}.${ext}`;
 
-      const { error } = await supabase.storage
-        .from(bucket)
-        .upload(fileName, uploadFile.file, {
-          cacheControl: "3600",
-          upsert: false,
-        });
+      const { error } = await supabase.storage.from(bucket).upload(fileName, uploadFile.file, {
+        cacheControl: "3600",
+        upsert: false,
+      });
 
       if (error) {
         toast.error(`Error al subir ${uploadFile.file.name}: ${error.message}`);
-        setFiles(prev => prev.map(f =>
-          f.id === uploadFile.id ? { ...f, progress: 0, status: "error" as const } : f
-        ));
+        setFiles((prev) =>
+          prev.map((f) =>
+            f.id === uploadFile.id ? { ...f, progress: 0, status: "error" as const } : f,
+          ),
+        );
         continue;
       }
 
-      const { data: { publicUrl } } = supabase.storage
-        .from(bucket)
-        .getPublicUrl(fileName);
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from(bucket).getPublicUrl(fileName);
 
-      setFiles(prev => prev.map(f =>
-        f.id === uploadFile.id ? { ...f, progress: 100, status: "complete" as const, url: publicUrl } : f
-      ));
+      setFiles((prev) =>
+        prev.map((f) =>
+          f.id === uploadFile.id
+            ? { ...f, progress: 100, status: "complete" as const, url: publicUrl }
+            : f,
+        ),
+      );
 
       uploadedUrls.push(publicUrl);
     }
@@ -167,7 +173,7 @@ const FileUpload = ({
   };
 
   const handleRemoveFile = (id: string) => {
-    setFiles(prev => prev.filter(file => file.id !== id));
+    setFiles((prev) => prev.filter((file) => file.id !== id));
   };
 
   const formatFileSize = (bytes: number): string => {
@@ -184,17 +190,19 @@ const FileUpload = ({
         className={cn(
           "h-40 flex flex-col items-center justify-center transition-all duration-300",
           isDragging ? "border-quantum-300 shadow-prismatic" : "",
-          isUploading ? "opacity-50 pointer-events-none" : ""
+          isUploading ? "opacity-50 pointer-events-none" : "",
         )}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         onClick={() => fileInputRef.current?.click()}
       >
-        <div className={cn(
-          "flex flex-col items-center justify-center text-center transition-transform duration-300",
-          isDragging ? "scale-105" : ""
-        )}>
+        <div
+          className={cn(
+            "flex flex-col items-center justify-center text-center transition-transform duration-300",
+            isDragging ? "scale-105" : "",
+          )}
+        >
           <div className="h-12 w-12 rounded-full bg-quantum-300/10 flex items-center justify-center mb-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -234,13 +242,10 @@ const FileUpload = ({
               {files.length} / {maxFiles} files
             </span>
           </div>
-          
+
           <div className="space-y-3">
             {files.map((file) => (
-              <div 
-                key={file.id} 
-                className="relative"
-              >
+              <div key={file.id} className="relative">
                 <UploadVisualizer
                   progress={file.progress}
                   fileName={file.file.name}
@@ -287,7 +292,7 @@ const FileUpload = ({
               size="sm"
               className="bg-gradient-prismatic hover:opacity-90 text-primary-foreground"
               onClick={uploadFiles}
-              disabled={isUploading || !user || files.every(f => f.status !== "idle")}
+              disabled={isUploading || !user || files.every((f) => f.status !== "idle")}
             >
               {isUploading ? "Subiendo..." : "Subir a Supabase Storage"}
             </Button>

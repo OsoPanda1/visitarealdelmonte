@@ -1,6 +1,19 @@
 import { WikiPage } from "@/components/WikiPage";
 import { Section, InfoCard } from "@/components/WikiElements";
-import { Layers, Shield, Brain, Globe, Network, Cpu, Palette, Clock, Coins, Zap, BookOpen, Lock } from "lucide-react";
+import {
+  Layers,
+  Shield,
+  Brain,
+  Globe,
+  Network,
+  Cpu,
+  Palette,
+  Clock,
+  Coins,
+  Zap,
+  BookOpen,
+  Lock,
+} from "lucide-react";
 import { motion } from "framer-motion";
 
 const FEDERACIONES = [
@@ -27,7 +40,7 @@ const FEDERACIONES = [
     name: "BookPI™ / DataGit™",
     subtitle: "Inmutabilidad y Auditoría",
     stack: "IPFS Pinning + Blockchain MSR",
-    desc: "Registro de trazabilidad granular mediante árboles de Merkle. Cada interacción se convierte en un compromiso atómico e inalterable, creando una \"Caja Negra\" del desarrollo territorial.",
+    desc: 'Registro de trazabilidad granular mediante árboles de Merkle. Cada interacción se convierte en un compromiso atómico e inalterable, creando una "Caja Negra" del desarrollo territorial.',
     icon: BookOpen,
     color: "hsl(var(--rdm-blue))",
   },
@@ -54,7 +67,7 @@ const FEDERACIONES = [
     name: "KAOS / HyperRender™",
     subtitle: "Sensorialidad y XR",
     stack: "Three.js + WebNN + Haptic Feedback API",
-    desc: "Capa de manifestación visual y táctil. Proyecta a Isabella IA™ en entornos de realidad extendida con alta fidelidad (\"Crystal Glow\"), permitiendo una interacción inmersiva con el patrimonio.",
+    desc: 'Capa de manifestación visual y táctil. Proyecta a Isabella IA™ en entornos de realidad extendida con alta fidelidad ("Crystal Glow"), permitiendo una interacción inmersiva con el patrimonio.',
     icon: Palette,
     color: "hsl(var(--rdm-purple))",
   },
@@ -72,25 +85,32 @@ const FEDERACIONES = [
 const Arquitectura = () => (
   <WikiPage
     title="Arquitectura Heptafederada"
-        subtitle="Núcleo de Inteligencia Territorial — Soberanía Digital de Clase Mundial"
-      >
-        {/* Hero Banner */}
-        <div className="relative h-48 w-full overflow-hidden">
-          <img src="/images/church-asuncion.jpg" alt="Iglesia de la Asunción en Real del Monte" className="h-full w-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
-        </div>
-        <Section title="Visión general">
+    subtitle="Núcleo de Inteligencia Territorial — Soberanía Digital de Clase Mundial"
+  >
+    {/* Hero Banner */}
+    <div className="relative h-48 w-full overflow-hidden">
+      <img
+        src="/images/church-asuncion.jpg"
+        alt="Iglesia de la Asunción en Real del Monte"
+        className="h-full w-full object-cover"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+    </div>
+    <Section title="Visión general">
       <p className="text-muted-foreground leading-relaxed mb-4">
-        El <strong className="text-foreground">RDM Smart City OS</strong> se fundamenta en siete núcleos autónomos
-        que conforman la <strong className="text-foreground">Inteligencia Heptafederada</strong>. Cada federación
-        opera con independencia pero comparte identidad, estándares y protocolos de gobernanza con el resto del
-        ecosistema, bajo una estética "Sovereign-Crystal" (Platinum-Silver y Obsidian Mist).
+        El <strong className="text-foreground">RDM Smart City OS</strong> se fundamenta en siete
+        núcleos autónomos que conforman la{" "}
+        <strong className="text-foreground">Inteligencia Heptafederada</strong>. Cada federación
+        opera con independencia pero comparte identidad, estándares y protocolos de gobernanza con
+        el resto del ecosistema, bajo una estética "Sovereign-Crystal" (Platinum-Silver y Obsidian
+        Mist).
       </p>
       <p className="text-muted-foreground leading-relaxed">
-        A través de <strong className="text-foreground">21,600 horas de investigación independiente</strong>,
-        la arquitectura integra Criptografía Post-Cuántica (PQC) bajo estándares NIST, Inteligencia Artificial
-        Explicable (XAI) y Trazabilidad Distribuida — demostrando que la innovación de clase mundial puede
-        emerger desde la periferia geográfica y académica.
+        A través de{" "}
+        <strong className="text-foreground">21,600 horas de investigación independiente</strong>, la
+        arquitectura integra Criptografía Post-Cuántica (PQC) bajo estándares NIST, Inteligencia
+        Artificial Explicable (XAI) y Trazabilidad Distribuida — demostrando que la innovación de
+        clase mundial puede emerger desde la periferia geográfica y académica.
       </p>
     </Section>
 
@@ -134,14 +154,17 @@ const Arquitectura = () => (
           </div>
           <div>
             <h3 className="text-lg font-bold text-foreground">Soberano Digital Autónomo</h3>
-            <p className="text-xs text-muted-foreground">No es un chatbot — es un sistema de interpretación territorial</p>
+            <p className="text-xs text-muted-foreground">
+              No es un chatbot — es un sistema de interpretación territorial
+            </p>
           </div>
         </div>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          Isabella IA™ nace de una investigación de 21,600 horas dedicada a humanizar la inteligencia digital.
-          Su propósito es interpretar, coordinar y justificar decisiones dentro de un territorio, actuando como
-          un "amigo guerrero" que protege y preserva la identidad cultural. Se alinea con las tendencias más
-          avanzadas de sistemas multi-agente y computación contextual.
+          Isabella IA™ nace de una investigación de 21,600 horas dedicada a humanizar la
+          inteligencia digital. Su propósito es interpretar, coordinar y justificar decisiones
+          dentro de un territorio, actuando como un "amigo guerrero" que protege y preserva la
+          identidad cultural. Se alinea con las tendencias más avanzadas de sistemas multi-agente y
+          computación contextual.
         </p>
       </div>
     </Section>
@@ -149,12 +172,34 @@ const Arquitectura = () => (
     <Section title="Validación Científica">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {[
-          { title: "Criptografía Post-Cuántica", desc: "Alineación con FIPS 203 (ML-KEM) y FIPS 204 (ML-DSA) del NIST (2024)", icon: Lock },
-          { title: "IA Explicable (XAI)", desc: "Valores de Shapley para interpretación de modelos (Lundberg & Lee, 2017)", icon: Brain },
-          { title: "Sistemas Distribuidos", desc: "Teorema CAP y protocolos de consenso para redes P2P resilientes", icon: Network },
-          { title: "Antifragilidad", desc: "Marco conceptual de Nassim Taleb — el sistema mejora ante la presión", icon: Zap },
+          {
+            title: "Criptografía Post-Cuántica",
+            desc: "Alineación con FIPS 203 (ML-KEM) y FIPS 204 (ML-DSA) del NIST (2024)",
+            icon: Lock,
+          },
+          {
+            title: "IA Explicable (XAI)",
+            desc: "Valores de Shapley para interpretación de modelos (Lundberg & Lee, 2017)",
+            icon: Brain,
+          },
+          {
+            title: "Sistemas Distribuidos",
+            desc: "Teorema CAP y protocolos de consenso para redes P2P resilientes",
+            icon: Network,
+          },
+          {
+            title: "Antifragilidad",
+            desc: "Marco conceptual de Nassim Taleb — el sistema mejora ante la presión",
+            icon: Zap,
+          },
         ].map((item) => (
-          <InfoCard key={item.title} icon={item.icon} title={item.title} description={item.desc} variant="gold" />
+          <InfoCard
+            key={item.title}
+            icon={item.icon}
+            title={item.title}
+            description={item.desc}
+            variant="gold"
+          />
         ))}
       </div>
     </Section>
@@ -162,10 +207,22 @@ const Arquitectura = () => (
     <Section title="Capas del Modelo Civilizacional">
       <div className="space-y-3">
         {[
-          { layer: "Capa Física", desc: "Calles, minas, plazas, miradores y negocios reales del pueblo." },
-          { layer: "Capa de Datos", desc: "Registros digitales de lugares, comercios, eventos, reseñas y flujos de visita." },
-          { layer: "Capa Cognitiva", desc: "Narrativas y rutas temáticas, contenidos de IA territorial (recomendaciones)." },
-          { layer: "Capa Económica", desc: "Derrama turística, licencias locales, integración de pagos y tokens soberanos." },
+          {
+            layer: "Capa Física",
+            desc: "Calles, minas, plazas, miradores y negocios reales del pueblo.",
+          },
+          {
+            layer: "Capa de Datos",
+            desc: "Registros digitales de lugares, comercios, eventos, reseñas y flujos de visita.",
+          },
+          {
+            layer: "Capa Cognitiva",
+            desc: "Narrativas y rutas temáticas, contenidos de IA territorial (recomendaciones).",
+          },
+          {
+            layer: "Capa Económica",
+            desc: "Derrama turística, licencias locales, integración de pagos y tokens soberanos.",
+          },
         ].map((item, i) => (
           <motion.div
             key={item.layer}
@@ -189,8 +246,24 @@ const Arquitectura = () => (
 
     <Section title="Stack Tecnológico">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {["React 18", "TypeScript", "Three.js", "Supabase", "Leaflet", "Vite", "Tailwind CSS", "Framer Motion", "LangGraph", "SHAP", "IPFS", "zk-SNARKs"].map((tech) => (
-          <div key={tech} className="text-center py-3 px-2 rounded-lg border border-border/50 bg-muted/20 text-sm text-foreground font-medium">
+        {[
+          "React 18",
+          "TypeScript",
+          "Three.js",
+          "Supabase",
+          "Leaflet",
+          "Vite",
+          "Tailwind CSS",
+          "Framer Motion",
+          "LangGraph",
+          "SHAP",
+          "IPFS",
+          "zk-SNARKs",
+        ].map((tech) => (
+          <div
+            key={tech}
+            className="text-center py-3 px-2 rounded-lg border border-border/50 bg-muted/20 text-sm text-foreground font-medium"
+          >
             {tech}
           </div>
         ))}

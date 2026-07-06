@@ -1,7 +1,7 @@
-import type { Coordenadas, BoundingBox, PointOfInterest } from '@/core/models';
-import { withinBBox, fastDistance, createBBox } from '@/core/geo';
-import type { TerritorialZone, ZoneEvent, ZoneAlert } from './types';
-import { logger } from '@/lib/logger';
+import type { Coordenadas, BoundingBox, PointOfInterest } from "@/core/models";
+import { withinBBox, fastDistance, createBBox } from "@/core/geo";
+import type { TerritorialZone, ZoneEvent, ZoneAlert } from "./types";
+import { logger } from "@/lib/logger";
 
 interface GeofenceConfig {
   checkIntervalMs: number;
@@ -11,8 +11,12 @@ interface GeofenceConfig {
 
 export class TerritorialGeofencer {
   private zones: TerritorialZone[] = [];
-  private userPositions: Map<string, { coords: Coordenadas; enteredAt: Date; lastSeen: Date; currentZone?: string }> = new Map();
-  private zoneHistory: Map<string, { zoneId: string; enteredAt: Date; exitedAt?: Date }[]> = new Map();
+  private userPositions: Map<
+    string,
+    { coords: Coordenadas; enteredAt: Date; lastSeen: Date; currentZone?: string }
+  > = new Map();
+  private zoneHistory: Map<string, { zoneId: string; enteredAt: Date; exitedAt?: Date }[]> =
+    new Map();
   private listeners: Set<(event: ZoneEvent) => void> = new Set();
   private alertListeners: Set<(alert: ZoneAlert) => void> = new Set();
   private interval: ReturnType<typeof setInterval> | null = null;
@@ -29,7 +33,7 @@ export class TerritorialGeofencer {
 
   defineZones(zones: TerritorialZone[]): void {
     this.zones = zones;
-    logger.info('[Geofencer] Zonas territoriales definidas', { count: zones.length });
+    logger.info("[Geofencer] Zonas territoriales definidas", { count: zones.length });
   }
 
   addZone(zone: TerritorialZone): void {
@@ -39,7 +43,7 @@ export class TerritorialGeofencer {
   start(): void {
     if (this.interval) return;
     this.interval = setInterval(() => this.checkAll(), this.config.checkIntervalMs);
-    logger.info('[Geofencer] Vigilancia territorial iniciada');
+    logger.info("[Geofencer] Vigilancia territorial iniciada");
   }
 
   stop(): void {
@@ -65,7 +69,7 @@ export class TerritorialGeofencer {
 
     if (currentZone && currentZone.id !== prevZoneId) {
       const event: ZoneEvent = {
-        type: 'zone_enter',
+        type: "zone_enter",
         userId,
         zoneId: currentZone.id,
         zoneName: currentZone.name,
@@ -89,10 +93,10 @@ export class TerritorialGeofencer {
 
     if (!currentZone && prevZoneId) {
       const event: ZoneEvent = {
-        type: 'zone_exit',
+        type: "zone_exit",
         userId,
         zoneId: prevZoneId,
-        zoneName: this.zones.find(z => z.id === prevZoneId)?.name ?? '',
+        zoneName: this.zones.find((z) => z.id === prevZoneId)?.name ?? "",
         coords,
         timestamp: now,
       };
@@ -116,7 +120,7 @@ export class TerritorialGeofencer {
   getCurrentZone(userId: string): TerritorialZone | null {
     const pos = this.userPositions.get(userId);
     if (!pos?.currentZone) return null;
-    return this.zones.find(z => z.id === pos.currentZone) ?? null;
+    return this.zones.find((z) => z.id === pos.currentZone) ?? null;
   }
 
   getZoneHistory(userId: string): { zoneId: string; enteredAt: Date; exitedAt?: Date }[] {
@@ -147,12 +151,12 @@ export class TerritorialGeofencer {
 
   private findZone(coords: Coordenadas): TerritorialZone | null {
     for (const zone of this.zones) {
-      if (zone.type === 'circle') {
+      if (zone.type === "circle") {
         const dist = fastDistance(coords, { lat: zone.centerLat, lng: zone.centerLng });
         if (dist <= zone.radiusMeters) return zone;
-      } else if (zone.type === 'bbox' && zone.boundingBox) {
+      } else if (zone.type === "bbox" && zone.boundingBox) {
         if (withinBBox(coords, zone.boundingBox)) return zone;
-      } else if (zone.type === 'polygon' && zone.polygon) {
+      } else if (zone.type === "polygon" && zone.polygon) {
         if (this.pointInPolygon(coords, zone.polygon)) return zone;
       }
     }
@@ -162,10 +166,14 @@ export class TerritorialGeofencer {
   private pointInPolygon(point: Coordenadas, polygon: { lat: number; lng: number }[]): boolean {
     let inside = false;
     for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-      const xi = polygon[i].lng, yi = polygon[i].lat;
-      const xj = polygon[j].lng, yj = polygon[j].lat;
-      if ((yi > point.lat) !== (yj > point.lat) &&
-          point.lng < ((xj - xi) * (point.lat - yi)) / (yj - yi) + xi) {
+      const xi = polygon[i].lng,
+        yi = polygon[i].lat;
+      const xj = polygon[j].lng,
+        yj = polygon[j].lat;
+      if (
+        yi > point.lat !== yj > point.lat &&
+        point.lng < ((xj - xi) * (point.lat - yi)) / (yj - yi) + xi
+      ) {
         inside = !inside;
       }
     }
@@ -177,10 +185,10 @@ export class TerritorialGeofencer {
     for (const [userId, pos] of this.userPositions) {
       const dwellMinutes = (now.getTime() - pos.enteredAt.getTime()) / 60000;
       if (pos.currentZone && dwellMinutes >= this.config.dwellTimeMinutes) {
-        const zone = this.zones.find(z => z.id === pos.currentZone);
+        const zone = this.zones.find((z) => z.id === pos.currentZone);
         if (zone) {
           const alert: ZoneAlert = {
-            type: 'dwell_alert',
+            type: "dwell_alert",
             userId,
             zoneId: zone.id,
             zoneName: zone.name,
@@ -205,63 +213,63 @@ export const territorialGeofencer = new TerritorialGeofencer();
 export function initializeRDMZones(): void {
   territorialGeofencer.defineZones([
     {
-      id: 'rdm-centro-historico',
-      name: 'Centro Historico',
-      type: 'circle',
+      id: "rdm-centro-historico",
+      name: "Centro Historico",
+      type: "circle",
       centerLat: 20.1432,
       centerLng: -98.6694,
       radiusMeters: 400,
-      description: 'Nucleo principal del pueblo',
-      risk: 'low',
+      description: "Nucleo principal del pueblo",
+      risk: "low",
     },
     {
-      id: 'rdm-mina-acosta',
-      name: 'Mina de Acosta',
-      type: 'circle',
+      id: "rdm-mina-acosta",
+      name: "Mina de Acosta",
+      type: "circle",
       centerLat: 20.1421,
       centerLng: -98.6712,
       radiusMeters: 200,
-      description: 'Zona del museo minero',
-      risk: 'medium',
+      description: "Zona del museo minero",
+      risk: "medium",
     },
     {
-      id: 'rdm-panteon-ingles',
-      name: 'Panteon Ingles',
-      type: 'circle',
+      id: "rdm-panteon-ingles",
+      name: "Panteon Ingles",
+      type: "circle",
       centerLat: 20.1455,
       centerLng: -98.6678,
       radiusMeters: 150,
-      description: 'Cementerio historico',
-      risk: 'low',
+      description: "Cementerio historico",
+      risk: "low",
     },
     {
-      id: 'rdm-penas-cargadas',
-      name: 'Penas Cargadas',
-      type: 'circle',
+      id: "rdm-penas-cargadas",
+      name: "Penas Cargadas",
+      type: "circle",
       centerLat: 20.15,
       centerLng: -98.66,
       radiusMeters: 300,
-      description: 'Zona de miradores naturales',
-      risk: 'medium',
+      description: "Zona de miradores naturales",
+      risk: "medium",
     },
     {
-      id: 'rdm-plaza-principal',
-      name: 'Plaza Principal',
-      type: 'circle',
+      id: "rdm-plaza-principal",
+      name: "Plaza Principal",
+      type: "circle",
       centerLat: 20.1386,
       centerLng: -98.6707,
       radiusMeters: 100,
-      description: 'Corazon del pueblo',
-      risk: 'low',
+      description: "Corazon del pueblo",
+      risk: "low",
     },
     {
-      id: 'rdm-calle-hidalgo',
-      name: 'Calle Hidalgo',
-      type: 'bbox',
+      id: "rdm-calle-hidalgo",
+      name: "Calle Hidalgo",
+      type: "bbox",
       boundingBox: { minLat: 20.139, maxLat: 20.142, minLng: -98.669, maxLng: -98.667 },
       radiusMeters: 150,
-      description: 'Eje comercial principal',
-      risk: 'low',
+      description: "Eje comercial principal",
+      risk: "low",
     },
   ]);
 }

@@ -20,8 +20,7 @@ export const OPERATIVE_MODULES: ModuleState[] = [
     completion: 94,
     route: "/",
     spec: "src/components/NodoCeroCommandCenter.tsx",
-    notes:
-      "Se renderiza en home y en Fusion con KPIs, protocolo y bitácora de absorción.",
+    notes: "Se renderiza en home y en Fusion con KPIs, protocolo y bitácora de absorción.",
   },
   {
     id: "tamv-status",
@@ -31,8 +30,7 @@ export const OPERATIVE_MODULES: ModuleState[] = [
     completion: 90,
     route: "/tamv/status",
     spec: "RDM-Digital-X/src/pages/TAMVStatus.tsx",
-    notes:
-      "Consulta /api/tamv/msr/status y cae a snapshot soberano si el backend está offline.",
+    notes: "Consulta /api/tamv/msr/status y cae a snapshot soberano si el backend está offline.",
   },
   {
     id: "tamv-api-explorer",
@@ -42,8 +40,7 @@ export const OPERATIVE_MODULES: ModuleState[] = [
     completion: 88,
     route: "/tamv/api",
     spec: "RDM-Digital-X/src/pages/TAMVApiExplorer.tsx",
-    notes:
-      "Prueba endpoints de identidad, gobernanza, economía, IA y MSR con fallback auditable.",
+    notes: "Prueba endpoints de identidad, gobernanza, economía, IA y MSR con fallback auditable.",
   },
   {
     id: "tamv-thesis",
@@ -53,8 +50,7 @@ export const OPERATIVE_MODULES: ModuleState[] = [
     completion: 92,
     route: "/tamv/thesis",
     spec: "RDM-Digital-X/src/data/tamv-thesis.ts",
-    notes:
-      "Integra anclajes, pilares, federaciones, capas, RFCs y madurez del Nodo Cero.",
+    notes: "Integra anclajes, pilares, federaciones, capas, RFCs y madurez del Nodo Cero.",
   },
   {
     id: "territorial-twin",
@@ -64,8 +60,7 @@ export const OPERATIVE_MODULES: ModuleState[] = [
     completion: 82,
     route: "/mapa",
     spec: "real-del-monte-twin",
-    notes:
-      "POIs, riesgos, rutas y telemetría se exponen en mapa, dashboard y capa soberana.",
+    notes: "POIs, riesgos, rutas y telemetría se exponen en mapa, dashboard y capa soberana.",
   },
   {
     id: "commerce-phoenix",
@@ -113,9 +108,7 @@ export const OPERATIVE_MODULES: ModuleState[] = [
   },
 ];
 
-export function summarizeByDomain(
-  modules: ModuleState[] = OPERATIVE_MODULES,
-): DomainSummary[] {
+export function summarizeByDomain(modules: ModuleState[] = OPERATIVE_MODULES): DomainSummary[] {
   const map = new Map<string, DomainSummary>();
 
   for (const module of modules) {
@@ -142,12 +135,7 @@ export function summarizeByDomain(
   }));
 }
 
-export function overallCompletion(
-  modules: ModuleState[] = OPERATIVE_MODULES,
-): number {
+export function overallCompletion(modules: ModuleState[] = OPERATIVE_MODULES): number {
   if (!modules.length) return 0;
-  return Math.round(
-    modules.reduce((sum, module) => sum + module.completion, 0) /
-      modules.length,
-  );
+  return Math.round(modules.reduce((sum, module) => sum + module.completion, 0) / modules.length);
 }

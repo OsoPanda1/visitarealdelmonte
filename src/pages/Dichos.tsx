@@ -1,19 +1,31 @@
 import { RDMLayout } from "@/components/rdm/RDMLayout";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Quote, Heart, Sparkles, Lightbulb, Users, Clock, 
-  Search, Filter, ChevronDown, Volume2, Share2, BookOpen
+import {
+  Quote,
+  Heart,
+  Sparkles,
+  Lightbulb,
+  Users,
+  Clock,
+  Search,
+  Filter,
+  ChevronDown,
+  Volume2,
+  Share2,
+  BookOpen,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { 
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
-import { 
-  Card, CardContent, CardDescription, CardHeader, CardTitle 
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -39,7 +51,7 @@ const DICHOS = [
     significado: "Estás débil",
     jergaOriginal: "Estás Agustín Hernández",
     categoria: "VIDA_COTIDIANA",
-    likes: 156
+    likes: 156,
   },
   {
     id: "2",
@@ -48,7 +60,7 @@ const DICHOS = [
     significado: "Vamos a hacer los ejercicios",
     jergaOriginal: "Vamos a hacer los Alberto Rivera",
     categoria: "TRABAJO",
-    likes: 89
+    likes: 89,
   },
   {
     id: "3",
@@ -57,7 +69,7 @@ const DICHOS = [
     significado: "Andas caliente",
     jergaOriginal: "Andas Amalia",
     categoria: "HUMOR",
-    likes: 234
+    likes: 234,
   },
   {
     id: "4",
@@ -66,7 +78,7 @@ const DICHOS = [
     significado: "Ya estamos todas las muchachas (usado para viejitas)",
     jergaOriginal: "Ya estamos todas las Aurelia Melgarejo",
     categoria: "FAMILIA",
-    likes: 178
+    likes: 178,
   },
   {
     id: "5",
@@ -75,7 +87,7 @@ const DICHOS = [
     significado: "Ponme para mi desayuno",
     jergaOriginal: "Ponme para mi Braulia Rutas",
     categoria: "COMIDA_BEBIDA",
-    likes: 145
+    likes: 145,
   },
   {
     id: "6",
@@ -84,7 +96,7 @@ const DICHOS = [
     significado: "Me voy a descansar",
     jergaOriginal: "Me voy a Carmelito",
     categoria: "VIDA_COTIDIANA",
-    likes: 267
+    likes: 267,
   },
   {
     id: "7",
@@ -93,7 +105,7 @@ const DICHOS = [
     significado: "Viene con sus mejores garritas (ropa elegante)",
     jergaOriginal: "Viene con sus Chucho Colunga",
     categoria: "HUMOR",
-    likes: 198
+    likes: 198,
   },
   {
     id: "8",
@@ -102,7 +114,7 @@ const DICHOS = [
     significado: "Perdóname la vida",
     jergaOriginal: "Perdóname la Chucho Pérez",
     categoria: "BRINDIS",
-    likes: 156
+    likes: 156,
   },
   {
     id: "9",
@@ -111,7 +123,7 @@ const DICHOS = [
     significado: "Habrá una tocada (fiesta/evento musical)",
     jergaOriginal: "Habrá un Chuco Bolio",
     categoria: "PERSONAJES",
-    likes: 312
+    likes: 312,
   },
   {
     id: "10",
@@ -120,7 +132,7 @@ const DICHOS = [
     significado: "Ya me duelen las sentaderas",
     jergaOriginal: "Ya me duelen las Ciro Arellano",
     categoria: "HUMOR",
-    likes: 87
+    likes: 87,
   },
   {
     id: "11",
@@ -129,7 +141,7 @@ const DICHOS = [
     significado: "Cuidado con la pulmonía",
     jergaOriginal: "Cuidado con la Ciro Hernández",
     categoria: "VIDA_COTIDIANA",
-    likes: 134
+    likes: 134,
   },
   {
     id: "12",
@@ -138,7 +150,7 @@ const DICHOS = [
     significado: "Qué bruto eres",
     jergaOriginal: "Cómo eres Conrado Arista",
     categoria: "HUMOR",
-    likes: 178
+    likes: 178,
   },
   {
     id: "13",
@@ -147,7 +159,7 @@ const DICHOS = [
     significado: "No te vaya a caer un rayo",
     jergaOriginal: "No te vaya a caer un Domingo Rivera",
     categoria: "MINERIA",
-    likes: 156
+    likes: 156,
   },
   {
     id: "14",
@@ -156,7 +168,7 @@ const DICHOS = [
     significado: "Brindis rudo minero",
     jergaOriginal: "¡Como dijo el Agrarista! Salud chinga",
     categoria: "BRINDIS",
-    likes: 289
+    likes: 289,
   },
   {
     id: "15",
@@ -165,7 +177,7 @@ const DICHOS = [
     significado: "De a momento (rápido/provisional)",
     jergaOriginal: "De a Félix Castañeda",
     categoria: "VIDA_COTIDIANA",
-    likes: 98
+    likes: 98,
   },
   {
     id: "16",
@@ -174,7 +186,7 @@ const DICHOS = [
     significado: "Anda de cusco (coqueto/malicioso)",
     jergaOriginal: "Anda de Gonzalo Meras",
     categoria: "HUMOR",
-    likes: 145
+    likes: 145,
   },
   {
     id: "17",
@@ -183,7 +195,7 @@ const DICHOS = [
     significado: "Ya me echo la penúltima (copa)",
     jergaOriginal: "Ya me echo la Horacio Meneses",
     categoria: "BRINDIS",
-    likes: 267
+    likes: 267,
   },
   {
     id: "18",
@@ -192,7 +204,7 @@ const DICHOS = [
     significado: "No te recargues (no te apoyes/no abuses)",
     jergaOriginal: "No te José García",
     categoria: "TRABAJO",
-    likes: 198
+    likes: 198,
   },
   {
     id: "19",
@@ -201,7 +213,7 @@ const DICHOS = [
     significado: "Estás muy chulo",
     jergaOriginal: "Estás muy José Luis Fernández",
     categoria: "HUMOR",
-    likes: 156
+    likes: 156,
   },
   {
     id: "20",
@@ -210,7 +222,7 @@ const DICHOS = [
     significado: "¿Cómo está la raza?",
     jergaOriginal: "¿Cómo está la José Roa?",
     categoria: "PERSONAJES",
-    likes: 312
+    likes: 312,
   },
   {
     id: "21",
@@ -219,7 +231,7 @@ const DICHOS = [
     significado: "Puro billete tosco (dinero en efectivo/grande)",
     jergaOriginal: "Yo uso puro Kiko García",
     categoria: "COMIDA_BEBIDA",
-    likes: 87
+    likes: 87,
   },
   {
     id: "22",
@@ -228,7 +240,7 @@ const DICHOS = [
     significado: "Te veo muy mortificado/preocupado",
     jergaOriginal: "Te veo muy Lolita Carrera",
     categoria: "VIDA_COTIDIANA",
-    likes: 134
+    likes: 134,
   },
   {
     id: "23",
@@ -237,7 +249,7 @@ const DICHOS = [
     significado: "Brindis tradicional de cantina",
     jergaOriginal: "¡Salud mulas apartando a mis compadres!",
     categoria: "BRINDIS",
-    likes: 178
+    likes: 178,
   },
   {
     id: "24",
@@ -246,7 +258,7 @@ const DICHOS = [
     significado: "Vienes con tu carota (de mal humor)",
     jergaOriginal: "Vienes como la mamá del Bolillo",
     categoria: "HUMOR",
-    likes: 156
+    likes: 156,
   },
   {
     id: "25",
@@ -255,7 +267,7 @@ const DICHOS = [
     significado: "Andas todo lambrijo (flaco/hambriento)",
     jergaOriginal: "Andas todo Manuel Negrón",
     categoria: "HUMOR",
-    likes: 289
+    likes: 289,
   },
   {
     id: "26",
@@ -264,7 +276,7 @@ const DICHOS = [
     significado: "Andas todo roido (desgastado)",
     jergaOriginal: "Andas todo Mario Hernández",
     categoria: "VIDA_COTIDIANA",
-    likes: 98
+    likes: 98,
   },
   {
     id: "27",
@@ -273,7 +285,7 @@ const DICHOS = [
     significado: "Me dejaste picadito (con ganas de más)",
     jergaOriginal: "Me dejaste Martín López",
     categoria: "COMIDA_BEBIDA",
-    likes: 145
+    likes: 145,
   },
   {
     id: "28",
@@ -282,7 +294,7 @@ const DICHOS = [
     significado: "Para echarme mis sagrados alimentos",
     jergaOriginal: "Para echarme mis Martín Pérez",
     categoria: "COMIDA_BEBIDA",
-    likes: 267
+    likes: 267,
   },
   {
     id: "29",
@@ -291,7 +303,7 @@ const DICHOS = [
     significado: "No seas ladinito (astuto/ventajoso)",
     jergaOriginal: "No seas Moisés Escamilla",
     categoria: "HUMOR",
-    likes: 198
+    likes: 198,
   },
   {
     id: "30",
@@ -300,7 +312,7 @@ const DICHOS = [
     significado: "Andas todo menso",
     jergaOriginal: "Andas todo Mundo Oliver",
     categoria: "HUMOR",
-    likes: 156
+    likes: 156,
   },
   {
     id: "31",
@@ -309,7 +321,7 @@ const DICHOS = [
     significado: "No te hagas pendejo",
     jergaOriginal: "No te hagas Narciso Trejo",
     categoria: "HUMOR",
-    likes: 312
+    likes: 312,
   },
   {
     id: "32",
@@ -318,7 +330,7 @@ const DICHOS = [
     significado: "Parecen Judas (traidores/criticones)",
     jergaOriginal: "Parecen Nicolás Ordaz",
     categoria: "HUMOR",
-    likes: 87
+    likes: 87,
   },
   {
     id: "33",
@@ -327,7 +339,7 @@ const DICHOS = [
     significado: "Échate un finfonazo (un trago de alcohol)",
     jergaOriginal: "Échate un Nicolás Tejeda",
     categoria: "BRINDIS",
-    likes: 134
+    likes: 134,
   },
   {
     id: "34",
@@ -336,7 +348,7 @@ const DICHOS = [
     significado: "Hacer algo con exageración sin importar daños",
     jergaOriginal: "Échale copal al santo, no le hace que...",
     categoria: "PERSONAJES",
-    likes: 178
+    likes: 178,
   },
   {
     id: "35",
@@ -345,7 +357,7 @@ const DICHOS = [
     significado: "Con todo respeto",
     jergaOriginal: "Con todo Pancho Soto",
     categoria: "PERSONAJES",
-    likes: 156
+    likes: 156,
   },
   {
     id: "36",
@@ -354,7 +366,7 @@ const DICHOS = [
     significado: "Vete a tu casita",
     jergaOriginal: "Vete a tu Pánfilo Soto",
     categoria: "FAMILIA",
-    likes: 289
+    likes: 289,
   },
   {
     id: "37",
@@ -363,7 +375,7 @@ const DICHOS = [
     significado: "Te pega la vieja (la esposa)",
     jergaOriginal: "Te pega la Pepe Terán",
     categoria: "FAMILIA",
-    likes: 98
+    likes: 98,
   },
   {
     id: "38",
@@ -372,7 +384,7 @@ const DICHOS = [
     significado: "Mis mijitos (hijos) se enfermaron",
     jergaOriginal: "Mis Plutarco García se pusieron malos",
     categoria: "FAMILIA",
-    likes: 145
+    likes: 145,
   },
   {
     id: "39",
@@ -381,7 +393,7 @@ const DICHOS = [
     significado: "Pura mula loca (gente alborotada)",
     jergaOriginal: "Veo a puro Pompero Rivera",
     categoria: "HUMOR",
-    likes: 267
+    likes: 267,
   },
   {
     id: "40",
@@ -390,7 +402,7 @@ const DICHOS = [
     significado: "Con mi sagrada esposa",
     jergaOriginal: "Con mi Ramón Hernández",
     categoria: "FAMILIA",
-    likes: 198
+    likes: 198,
   },
   {
     id: "41",
@@ -399,7 +411,7 @@ const DICHOS = [
     significado: "Vengo de la nube gris (Ciudad de México)",
     jergaOriginal: "Vengo de la Ramón Razo",
     categoria: "PERSONAJES",
-    likes: 156
+    likes: 156,
   },
   {
     id: "42",
@@ -408,7 +420,7 @@ const DICHOS = [
     significado: "Verás como no pasa nada",
     jergaOriginal: "Verás como Refugio Fragoso",
     categoria: "PERSONAJES",
-    likes: 312
+    likes: 312,
   },
   {
     id: "43",
@@ -417,7 +429,7 @@ const DICHOS = [
     significado: "Llegaste un poquito tarde",
     jergaOriginal: "Llegaste Roberto Arista",
     categoria: "VIDA_COTIDIANA",
-    likes: 87
+    likes: 87,
   },
   {
     id: "44",
@@ -426,7 +438,7 @@ const DICHOS = [
     significado: "Vienes como el diablo (enojado)",
     jergaOriginal: "Vienes como Roberto Martínez",
     categoria: "HUMOR",
-    likes: 134
+    likes: 134,
   },
   {
     id: "45",
@@ -435,7 +447,7 @@ const DICHOS = [
     significado: "Te traes a la descendencia (a la familia)",
     jergaOriginal: "Te traes a la Ruberta García",
     categoria: "FAMILIA",
-    likes: 178
+    likes: 178,
   },
   {
     id: "46",
@@ -444,7 +456,7 @@ const DICHOS = [
     significado: "Están muy chirris (pequeños/débiles)",
     jergaOriginal: "Están muy Sergio Pérez",
     categoria: "HUMOR",
-    likes: 156
+    likes: 156,
   },
   {
     id: "47",
@@ -453,8 +465,8 @@ const DICHOS = [
     significado: "Mi fiera (esposa/pareja) no me dejaba",
     jergaOriginal: "Mi Simón Guerrero no me dejaba",
     categoria: "FAMILIA",
-    likes: 289
-  }
+    likes: 289,
+  },
 ];
 
 const DichosPage = () => {
@@ -465,9 +477,9 @@ const DichosPage = () => {
   const [likedDichos, setLikedDichos] = useState<Set<string>>(new Set());
 
   // Filter dichos
-  const filteredDichos = DICHOS.filter(dicho => {
+  const filteredDichos = DICHOS.filter((dicho) => {
     const matchesCategory = selectedCategory === "all" || dicho.categoria === selectedCategory;
-    const matchesSearch = 
+    const matchesSearch =
       dicho.texto.toLowerCase().includes(searchQuery.toLowerCase()) ||
       dicho.personaje.toLowerCase().includes(searchQuery.toLowerCase()) ||
       dicho.significado.toLowerCase().includes(searchQuery.toLowerCase());
@@ -476,7 +488,7 @@ const DichosPage = () => {
 
   // Handle like
   const handleLike = (id: string) => {
-    setLikedDichos(prev => {
+    setLikedDichos((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(id)) {
         newSet.delete(id);
@@ -493,11 +505,10 @@ const DichosPage = () => {
   return (
     <RDMLayout>
       <div className="min-h-screen bg-background">
-        
         {/* Hero Section */}
         <div className="relative h-[50vh] min-h-[400px] overflow-hidden bg-gradient-to-b from-amber-900/20 to-background">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(234,179,8,0.1),transparent_70%)]" />
-          
+
           <div className="container mx-auto px-4 md:px-8 pt-28">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -510,18 +521,17 @@ const DichosPage = () => {
                   Archivo Histórico
                 </Badge>
               </div>
-              
+
               <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4">
                 Dichos{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-orange-600">
                   Personificados
                 </span>
               </h1>
-              
+
               <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-                Descubre las expresiones tradicionales de Real del Monte. 
-                47 personajes históricos conforman el rico vocabulario característico de este 
-                Pueblo Mágico hidalguense.
+                Descubre las expresiones tradicionales de Real del Monte. 47 personajes históricos
+                conforman el rico vocabulario característico de este Pueblo Mágico hidalguense.
               </p>
 
               <div className="flex flex-wrap gap-3">
@@ -551,7 +561,7 @@ const DichosPage = () => {
                 <SelectValue placeholder="Categoría" />
               </SelectTrigger>
               <SelectContent>
-                {CATEGORIES.map(cat => (
+                {CATEGORIES.map((cat) => (
                   <SelectItem key={cat.id} value={cat.id}>
                     {cat.icon} {cat.label}
                   </SelectItem>
@@ -578,7 +588,10 @@ const DichosPage = () => {
                     <Card className="h-full bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20 border-amber-200/50">
                       <CardContent className="p-6">
                         <div className="flex items-center gap-2 mb-2">
-                          <Badge variant="secondary" className="text-xs bg-amber-100 text-amber-800">
+                          <Badge
+                            variant="secondary"
+                            className="text-xs bg-amber-100 text-amber-800"
+                          >
                             {dicho.personaje}
                           </Badge>
                         </div>
@@ -591,10 +604,13 @@ const DichosPage = () => {
                         </p>
                         <div className="flex items-center justify-between">
                           <Badge variant="outline" className="text-xs">
-                            {CATEGORIES.find(c => c.id === dicho.categoria)?.icon} {dicho.categoria.replace("_", " ")}
+                            {CATEGORIES.find((c) => c.id === dicho.categoria)?.icon}{" "}
+                            {dicho.categoria.replace("_", " ")}
                           </Badge>
                           <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                            <Heart className={`w-4 h-4 ${likedDichos.has(dicho.id) ? "fill-red-500 text-red-500" : ""}`} />
+                            <Heart
+                              className={`w-4 h-4 ${likedDichos.has(dicho.id) ? "fill-red-500 text-red-500" : ""}`}
+                            />
                             {dicho.likes}
                           </div>
                         </div>
@@ -639,12 +655,13 @@ const DichosPage = () => {
           {/* Dichos Grid */}
           <section>
             <h2 className="font-serif text-2xl font-bold mb-6">
-              {selectedCategory === "all" 
-                ? "Índice Alfabético de Dichos Realmontenses" 
-                : CATEGORIES.find(c => c.id === selectedCategory)?.icon + " " + CATEGORIES.find(c => c.id === selectedCategory)?.label
-              }
+              {selectedCategory === "all"
+                ? "Índice Alfabético de Dichos Realmontenses"
+                : CATEGORIES.find((c) => c.id === selectedCategory)?.icon +
+                  " " +
+                  CATEGORIES.find((c) => c.id === selectedCategory)?.label}
             </h2>
-            
+
             {filteredDichos.length === 0 ? (
               <div className="text-center py-12 text-muted-foreground">
                 <Quote className="w-12 h-12 mx-auto mb-4 opacity-50" />
@@ -662,7 +679,7 @@ const DichosPage = () => {
                       exit={{ opacity: 0, scale: 0.9 }}
                       transition={{ delay: index * 0.05 }}
                     >
-                      <Card 
+                      <Card
                         className={`h-full cursor-pointer transition-all hover:shadow-lg ${
                           expandedSaid === dicho.id ? "ring-2 ring-amber-500" : ""
                         }`}
@@ -672,12 +689,15 @@ const DichosPage = () => {
                           <div className="flex items-start justify-between gap-2 mb-3">
                             <Quote className="w-6 h-6 text-amber-500/50 shrink-0" />
                             <Badge variant="outline" className="text-xs shrink-0">
-                              {CATEGORIES.find(c => c.id === dicho.categoria)?.icon}
+                              {CATEGORIES.find((c) => c.id === dicho.categoria)?.icon}
                             </Badge>
                           </div>
-                          
+
                           <div className="mb-2">
-                            <Badge variant="secondary" className="text-xs bg-amber-100 text-amber-800">
+                            <Badge
+                              variant="secondary"
+                              className="text-xs bg-amber-100 text-amber-800"
+                            >
                               {dicho.personaje}
                             </Badge>
                           </div>
@@ -685,7 +705,7 @@ const DichosPage = () => {
                           <h3 className="font-serif text-lg font-bold text-foreground mb-2">
                             "{dicho.texto}"
                           </h3>
-                          
+
                           <AnimatePresence>
                             {expandedSaid === dicho.id && (
                               <motion.div
@@ -695,7 +715,9 @@ const DichosPage = () => {
                                 className="overflow-hidden"
                               >
                                 <div className="bg-muted/30 p-3 rounded-lg mt-3">
-                                  <p className="text-xs text-muted-foreground mb-1">Jerga Original:</p>
+                                  <p className="text-xs text-muted-foreground mb-1">
+                                    Jerga Original:
+                                  </p>
                                   <p className="font-mono text-sm italic text-foreground mb-2">
                                     "{dicho.jergaOriginal}"
                                   </p>
@@ -704,12 +726,13 @@ const DichosPage = () => {
                                   <strong>Significado:</strong> {dicho.significado}
                                 </p>
                                 <Badge variant="outline" className="mt-3">
-                                  {CATEGORIES.find(c => c.id === dicho.categoria)?.icon} {dicho.categoria.replace("_", " ")}
+                                  {CATEGORIES.find((c) => c.id === dicho.categoria)?.icon}{" "}
+                                  {dicho.categoria.replace("_", " ")}
                                 </Badge>
                               </motion.div>
                             )}
                           </AnimatePresence>
-                          
+
                           <div className="flex items-center justify-between mt-4 pt-4 border-t">
                             <button
                               onClick={(e) => {
@@ -718,7 +741,9 @@ const DichosPage = () => {
                               }}
                               className="flex items-center gap-1 text-sm text-muted-foreground hover:text-red-500 transition-colors"
                             >
-                              <Heart className={`w-4 h-4 ${likedDichos.has(dicho.id) ? "fill-red-500 text-red-500" : ""}`} />
+                              <Heart
+                                className={`w-4 h-4 ${likedDichos.has(dicho.id) ? "fill-red-500 text-red-500" : ""}`}
+                              />
                               {dicho.likes + (likedDichos.has(dicho.id) ? 1 : 0)}
                             </button>
                             <button className="text-sm text-muted-foreground hover:text-amber-500 transition-colors">
@@ -743,20 +768,16 @@ const DichosPage = () => {
                   ¿Conoces algún dicho tradicional?
                 </h3>
                 <p className="opacity-80 mb-6 max-w-xl mx-auto">
-                  Ayúdanos a preservar la cultura de Real del Monte contribuyendo con 
-                  dichos o expresiones tradicionales que conozcas.
+                  Ayúdanos a preservar la cultura de Real del Monte contribuyendo con dichos o
+                  expresiones tradicionales que conozcas.
                 </p>
-                <Button 
-                  variant="secondary" 
-                  className="bg-white text-amber-700 hover:bg-white/90"
-                >
+                <Button variant="secondary" className="bg-white text-amber-700 hover:bg-white/90">
                   Contribuir con un Dichos
                 </Button>
               </CardContent>
             </Card>
           </section>
         </div>
-
       </div>
     </RDMLayout>
   );

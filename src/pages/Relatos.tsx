@@ -18,7 +18,7 @@ const legends = [
 
 Los ancianos del pueblo cuentan que antes de cualquier accidente grave, varios trabajadores han reportado ver la figura fantasmal iluminando las galerías oscuras. Algunos incluso afirman que el espíritu les ha salvado la vida al hacerles retroceder justo antes de un derrumbe.`,
     location: "Mina de Acosta",
-    theme: "from-red-500/20 to-orange-500/20"
+    theme: "from-red-500/20 to-orange-500/20",
   },
   {
     title: "La Novia del Panteón",
@@ -29,7 +29,7 @@ Los ancianos del pueblo cuentan que antes de cualquier accidente grave, varios t
 
 Los visitantes nocturnos han reportado escuchar sus suspiros entre los pinos, y algunos aseguran haber visto una figura femenina de pie junto a la tumba con una rosa en las manos. Los lugareños dicen que si pides un deseo frente a su lápida con respeto, Elizabeth lo hará realidad.`,
     location: "Panteón Inglés",
-    theme: "from-pink-500/20 to-rose-500/20"
+    theme: "from-pink-500/20 to-rose-500/20",
   },
   {
     title: "Las Peñas que Cargan",
@@ -40,7 +40,7 @@ Los visitantes nocturnos han reportado escuchar sus suspiros entre los pinos, y 
 
 Como castigo, fueron condenadas a permanecer en equilibrio precario por toda la eternidad, recordando a los humanos que la naturaleza siempre prevalece sobre la ambición. Hasta hoy, los ancianos otomíes realizan ofrendas en la base de las peñas para honrar a estos guardianes caídos.`,
     location: "Peñas Cargadas",
-    theme: "from-green-500/20 to-emerald-500/20"
+    theme: "from-green-500/20 to-emerald-500/20",
   },
   {
     title: "El Túnel del Tiempo",
@@ -51,31 +51,35 @@ Como castigo, fueron condenadas a permanecer en equilibrio precario por toda la 
 
 Un geólogo de la UNAM que estudió el fenómeno descubrió anomalías electromagnéticas en la zona, pero no pudo explicar las visiones. Los lugareños prefieren no hablar mucho del lugar, pues creen que "el tiempo está delgado" en ese punto y se pueden cruzar mundos.`,
     location: "Mina Dificultad",
-    theme: "from-purple-500/20 to-indigo-500/20"
-  }
+    theme: "from-purple-500/20 to-indigo-500/20",
+  },
 ];
 
 const shortStories = [
   {
     title: "El Último Pastelero Cornish",
-    excerpt: "Don William Hosking era el último pastelero de pura sangre cornish en Real del Monte. Su receta secreta del paste tradicional...",
-    readTime: "5 min"
+    excerpt:
+      "Don William Hosking era el último pastelero de pura sangre cornish en Real del Monte. Su receta secreta del paste tradicional...",
+    readTime: "5 min",
   },
   {
     title: "La Boda de la Montaña",
-    excerpt: "En 1885, la boda entre Sarah Jenkins y Miguel Ángel Hernández unió a dos familias y dos culturas en una celebración que duró tres días...",
-    readTime: "8 min"
+    excerpt:
+      "En 1885, la boda entre Sarah Jenkins y Miguel Ángel Hernández unió a dos familias y dos culturas en una celebración que duró tres días...",
+    readTime: "8 min",
   },
   {
     title: "El Rescate de San Cayetano",
-    excerpt: "Cuando la mina se inundó en 1920, fue un perro llamado San Cayetano quien guió a los rescatistas hasta los sobrevivientes atrapados...",
-    readTime: "6 min"
+    excerpt:
+      "Cuando la mina se inundó en 1920, fue un perro llamado San Cayetano quien guió a los rescatistas hasta los sobrevivientes atrapados...",
+    readTime: "6 min",
   },
   {
     title: "La Maldición de la Veta Madre",
-    excerpt: "La veta de plata más rica del distrito trajo fortuna y desgracia por igual. Esta es la historia de los hombres que la encontraron...",
-    readTime: "10 min"
-  }
+    excerpt:
+      "La veta de plata más rica del distrito trajo fortuna y desgracia por igual. Esta es la historia de los hombres que la encontraron...",
+    readTime: "10 min",
+  },
 ];
 
 const RelatosPage = () => {
@@ -127,9 +131,11 @@ const RelatosPage = () => {
 
   return (
     <RDMLayout>
-      <SEOMeta title="Relatos y Leyendas" description="Leyendas, misterios y relatos de tradición oral de Real del Monte, Pueblo Mágico." />
+      <SEOMeta
+        title="Relatos y Leyendas"
+        description="Leyendas, misterios y relatos de tradición oral de Real del Monte, Pueblo Mágico."
+      />
       <div className="min-h-screen bg-background">
-        
         {/* Video Modal */}
         {showVideo && (
           <motion.div
@@ -157,10 +163,10 @@ const RelatosPage = () => {
             </div>
           </motion.div>
         )}
-        
+
         {/* Hero */}
         <div className="relative h-[60vh] min-h-[500px] overflow-hidden">
-          <div 
+          <div
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: `url(${panteonImg})` }}
           />
@@ -180,10 +186,10 @@ const RelatosPage = () => {
                   Relatos y Leyendas
                 </h1>
                 <p className="text-lg text-muted-foreground max-w-2xl mb-6">
-                  Historias que se cuentan al calor de la chimenea, entre la neblina de la montaña, 
+                  Historias que se cuentan al calor de la chimenea, entre la neblina de la montaña,
                   transmitidas de generación en generación.
                 </p>
-                
+
                 {/* Video Button */}
                 <motion.button
                   onClick={() => setShowVideo(true)}
@@ -228,12 +234,15 @@ const RelatosPage = () => {
                 >
                   <div className={index % 2 === 1 ? "lg:order-2" : ""}>
                     <div className="relative rounded-2xl overflow-hidden shadow-elevated group">
-                      <img 
+                      <img
                         src={legend.image}
                         alt={legend.title}
-                        loading="lazy" className="w-full h-[350px] object-cover transition-transform duration-700 group-hover:scale-105"
+                        loading="lazy"
+                        className="w-full h-[350px] object-cover transition-transform duration-700 group-hover:scale-105"
                       />
-                      <div className={`absolute inset-0 bg-gradient-to-t ${legend.theme} to-transparent opacity-60`} />
+                      <div
+                        className={`absolute inset-0 bg-gradient-to-t ${legend.theme} to-transparent opacity-60`}
+                      />
                       <div className="absolute bottom-4 left-4 right-4">
                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/50 text-white text-xs backdrop-blur-sm">
                           <legend.icon className="w-3.5 h-3.5" />
@@ -293,9 +302,7 @@ const RelatosPage = () => {
                   <h3 className="font-serif text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
                     {story.title}
                   </h3>
-                  <p className="text-sm text-muted-foreground mb-4 line-clamp-3">
-                    {story.excerpt}
-                  </p>
+                  <p className="text-sm text-muted-foreground mb-4 line-clamp-3">{story.excerpt}</p>
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <BookOpen className="w-3.5 h-3.5" />
                     <span>Lectura: {story.readTime}</span>
@@ -321,8 +328,8 @@ const RelatosPage = () => {
                   ¿Tienes una historia que contar?
                 </h2>
                 <p className="text-white/90 max-w-xl mx-auto mb-6">
-                  Real del Monte está lleno de historias esperando ser contadas. Si conoces una leyenda, 
-                  un relato familiar o una experiencia paranormal, compártela con nosotros.
+                  Real del Monte está lleno de historias esperando ser contadas. Si conoces una
+                  leyenda, un relato familiar o una experiencia paranormal, compártela con nosotros.
                 </p>
                 <button className="px-8 py-3 rounded-xl bg-white text-terracotta font-semibold hover:bg-white/90 transition-colors">
                   Compartir mi historia
@@ -331,7 +338,6 @@ const RelatosPage = () => {
             </motion.div>
           </div>
         </section>
-
       </div>
     </RDMLayout>
   );

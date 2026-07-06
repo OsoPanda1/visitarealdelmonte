@@ -8,33 +8,37 @@
  * All state changes flow through this unified bus.
  */
 
-import { publish as yunPublish, subscribe as yunSubscribe, createEvent } from '@/core/yun/event-bus';
-import { federationBus } from '@/federaciones/FederationBus';
-import type { YunEventEnvelope, YunFederation, YunDomain, YunEventType } from '@/core/yun/types';
-import type { FederationId } from '@/core/models';
+import {
+  publish as yunPublish,
+  subscribe as yunSubscribe,
+  createEvent,
+} from "@/core/yun/event-bus";
+import { federationBus } from "@/federaciones/FederationBus";
+import type { YunEventEnvelope, YunFederation, YunDomain, YunEventType } from "@/core/yun/types";
+import type { FederationId } from "@/core/models";
 
 // ============================================================================
 // TAMV FEDERATION → YUN FEDERATION MAPPING
 // ============================================================================
 
 const TAMV_TO_YUN_FEDERATION: Record<FederationId, YunFederation> = {
-  DEKATEOTL: 'comercio',
-  ANUBIS: 'turismo_cultura',
-  BOOKPI_DATAGIT: 'academia',
-  PHOENIX: 'gobierno',
-  MDD_TAMV: 'tech_infra',
-  KAOS_HYPERRENDER: 'comunidad',
-  CHRONOS: 'metaverso_xr',
+  DEKATEOTL: "comercio",
+  ANUBIS: "turismo_cultura",
+  BOOKPI_DATAGIT: "academia",
+  PHOENIX: "gobierno",
+  MDD_TAMV: "tech_infra",
+  KAOS_HYPERRENDER: "comunidad",
+  CHRONOS: "metaverso_xr",
 };
 
 const YUN_TO_TAMV_FEDERATION: Record<YunFederation, FederationId> = {
-  comercio: 'DEKATEOTL',
-  turismo_cultura: 'ANUBIS',
-  academia: 'BOOKPI_DATAGIT',
-  gobierno: 'PHOENIX',
-  tech_infra: 'MDD_TAMV',
-  comunidad: 'KAOS_HYPERRENDER',
-  metaverso_xr: 'CHRONOS',
+  comercio: "DEKATEOTL",
+  turismo_cultura: "ANUBIS",
+  academia: "BOOKPI_DATAGIT",
+  gobierno: "PHOENIX",
+  tech_infra: "MDD_TAMV",
+  comunidad: "KAOS_HYPERRENDER",
+  metaverso_xr: "CHRONOS",
 };
 
 // ============================================================================
@@ -47,14 +51,14 @@ const YUN_TO_TAMV_FEDERATION: Record<YunFederation, FederationId> = {
  */
 function bridgeFederationToYun(): void {
   const federationTypes = [
-    'FEDERATION_INTENT',
-    'EMOTIONAL_INSIGHT',
-    'TERRITORIAL_DATA_INGEST',
-    'TERRITORIAL_HEARTBEAT',
-    'ZONE_UPDATE',
-    'PHYGITAL_OPPORTUNITY',
-    'GUARDIAN_ACTION',
-    'SOVEREIGNTY_ALERT',
+    "FEDERATION_INTENT",
+    "EMOTIONAL_INSIGHT",
+    "TERRITORIAL_DATA_INGEST",
+    "TERRITORIAL_HEARTBEAT",
+    "ZONE_UPDATE",
+    "PHYGITAL_OPPORTUNITY",
+    "GUARDIAN_ACTION",
+    "SOVEREIGNTY_ALERT",
   ];
 
   for (const eventType of federationTypes) {
@@ -84,18 +88,18 @@ function bridgeFederationToYun(): void {
  */
 function bridgeYunToFederation(): void {
   const yunDomainToFed: Record<string, FederationId> = {
-    identity: 'BOOKPI_DATAGIT',
-    commerce: 'MDD_TAMV',
-    knowledge: 'ANUBIS',
-    telemetry: 'PHOENIX',
-    gameplay: 'CHRONOS',
+    identity: "BOOKPI_DATAGIT",
+    commerce: "MDD_TAMV",
+    knowledge: "ANUBIS",
+    telemetry: "PHOENIX",
+    gameplay: "CHRONOS",
   };
 
-  yunSubscribe('yun.*.*.created', (event) => {
+  yunSubscribe("yun.*.*.created", (event) => {
     const domain = event.metadata.domain;
     if (domain && yunDomainToFed[domain]) {
       federationBus.emit({
-        type: 'YUN_DOMAIN_EVENT',
+        type: "YUN_DOMAIN_EVENT",
         source: yunDomainToFed[domain],
         payload: {
           eventType: event.type,
@@ -107,7 +111,7 @@ function bridgeYunToFederation(): void {
     }
   });
 
-  yunSubscribe('yun.federation.degraded', (event) => {
+  yunSubscribe("yun.federation.degraded", (event) => {
     const federation = event.metadata.federation;
     if (federation) {
       const tamvFed = YUN_TO_TAMV_FEDERATION[federation];
@@ -117,7 +121,7 @@ function bridgeYunToFederation(): void {
     }
   });
 
-  yunSubscribe('yun.federation.recovered', (event) => {
+  yunSubscribe("yun.federation.recovered", (event) => {
     const federation = event.metadata.federation;
     if (federation) {
       const tamvFed = YUN_TO_TAMV_FEDERATION[federation];
@@ -161,7 +165,7 @@ export async function publishUnified<T>(
   // Also publish to FederationBus if TAMV federation specified
   if (options.tamvFederation) {
     federationBus.emit({
-      type: type.split('.').slice(2).join('.'),
+      type: type.split(".").slice(2).join("."),
       source: options.tamvFederation,
       payload: data,
       traceId: options.traceId ?? `yun_${Date.now()}`,
@@ -221,5 +225,5 @@ export function initEventBusBridge(): void {
   bridgeFederationToYun();
   bridgeYunToFederation();
   initialized = true;
-  console.log('[YUN EventBusBridge] Unified event bus initialized — TAMV ↔ YUN ↔ Core bridged');
+  console.log("[YUN EventBusBridge] Unified event bus initialized — TAMV ↔ YUN ↔ Core bridged");
 }

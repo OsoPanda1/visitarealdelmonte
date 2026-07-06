@@ -10,7 +10,7 @@
 // YUN DOMAINS (5 architectural layers)
 // ============================================================================
 
-export const YUN_DOMAINS = ['identity', 'commerce', 'knowledge', 'telemetry', 'gameplay'] as const;
+export const YUN_DOMAINS = ["identity", "commerce", "knowledge", "telemetry", "gameplay"] as const;
 export type YunDomain = (typeof YUN_DOMAINS)[number];
 
 // ============================================================================
@@ -18,13 +18,13 @@ export type YunDomain = (typeof YUN_DOMAINS)[number];
 // ============================================================================
 
 export const YUN_FEDERATIONS = [
-  'comercio',
-  'turismo_cultura',
-  'academia',
-  'gobierno',
-  'tech_infra',
-  'comunidad',
-  'metaverso_xr',
+  "comercio",
+  "turismo_cultura",
+  "academia",
+  "gobierno",
+  "tech_infra",
+  "comunidad",
+  "metaverso_xr",
 ] as const;
 export type YunFederation = (typeof YUN_FEDERATIONS)[number];
 
@@ -32,14 +32,14 @@ export type YunFederation = (typeof YUN_FEDERATIONS)[number];
 // DATA CLASSIFICATION (4 levels)
 // ============================================================================
 
-export const DATA_CLASSIFICATIONS = ['public', 'internal', 'confidential', 'restricted'] as const;
+export const DATA_CLASSIFICATIONS = ["public", "internal", "confidential", "restricted"] as const;
 export type DataClassification = (typeof DATA_CLASSIFICATIONS)[number];
 
 // ============================================================================
 // STORAGE ENGINES (5 backends)
 // ============================================================================
 
-export const STORAGE_ENGINES = ['supabase', 'neon', 'turso', 'd1', 'redis'] as const;
+export const STORAGE_ENGINES = ["supabase", "neon", "turso", "d1", "redis"] as const;
 export type StorageEngine = (typeof STORAGE_ENGINES)[number];
 
 // ============================================================================
@@ -47,11 +47,11 @@ export type StorageEngine = (typeof STORAGE_ENGINES)[number];
 // ============================================================================
 
 export const DOMAIN_STORAGE: Record<YunDomain, StorageEngine> = {
-  identity: 'supabase',
-  commerce: 'neon',
-  knowledge: 'turso',
-  telemetry: 'd1',
-  gameplay: 'redis',
+  identity: "supabase",
+  commerce: "neon",
+  knowledge: "turso",
+  telemetry: "d1",
+  gameplay: "redis",
 } as const;
 
 // ============================================================================
@@ -59,13 +59,13 @@ export const DOMAIN_STORAGE: Record<YunDomain, StorageEngine> = {
 // ============================================================================
 
 export const FEDERATION_DOMAINS: Record<YunFederation, YunDomain[]> = {
-  comercio: ['commerce'],
-  turismo_cultura: ['knowledge'],
-  academia: ['knowledge'],
-  gobierno: ['identity', 'telemetry'],
-  tech_infra: ['telemetry', 'identity'],
-  comunidad: ['knowledge', 'gameplay'],
-  metaverso_xr: ['gameplay'],
+  comercio: ["commerce"],
+  turismo_cultura: ["knowledge"],
+  academia: ["knowledge"],
+  gobierno: ["identity", "telemetry"],
+  tech_infra: ["telemetry", "identity"],
+  comunidad: ["knowledge", "gameplay"],
+  metaverso_xr: ["gameplay"],
 } as const;
 
 // ============================================================================
@@ -146,7 +146,7 @@ export interface YunGatewayConfig {
     halfOpenMax: number;
   };
   tls: {
-    minVersion: 'TLSv1.2' | 'TLSv1.3';
+    minVersion: "TLSv1.2" | "TLSv1.3";
     ciphers: string[];
   };
 }
@@ -157,7 +157,7 @@ export interface YunGatewayConfig {
 
 export interface YunFederationHealth {
   federation: YunFederation;
-  status: 'healthy' | 'degraded' | 'critical' | 'offline';
+  status: "healthy" | "degraded" | "critical" | "offline";
   health_score: number;
   last_heartbeat: string;
   active_domains: YunDomain[];
@@ -177,7 +177,7 @@ export interface YunMetric {
 }
 
 export interface YunLogEntry {
-  level: 'debug' | 'info' | 'warn' | 'error' | 'fatal';
+  level: "debug" | "info" | "warn" | "error" | "fatal";
   message: string;
   context: Record<string, unknown>;
   timestamp: string;
@@ -192,7 +192,7 @@ export interface YunTraceSpan {
   name: string;
   start_time: string;
   end_time?: string;
-  status: 'ok' | 'error' | 'unset';
+  status: "ok" | "error" | "unset";
   attributes: Record<string, string>;
 }
 
@@ -203,7 +203,7 @@ export interface YunTraceSpan {
 export interface YunADR {
   id: string;
   title: string;
-  status: 'proposed' | 'accepted' | 'deprecated' | 'superseded';
+  status: "proposed" | "accepted" | "deprecated" | "superseded";
   date: string;
   authors: string[];
   context: string;

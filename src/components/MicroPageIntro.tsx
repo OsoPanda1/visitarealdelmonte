@@ -66,8 +66,15 @@ export default function MicroPageIntro() {
           <div className="rounded-2xl border border-[hsl(var(--border)/0.3)] bg-[hsl(var(--card)/0.9)] px-4 py-3 shadow-lg backdrop-blur-xl">
             <div className="flex items-center justify-between gap-3">
               <div className="min-w-0">
-                <p className="text-[10px] uppercase tracking-[0.22em] text-[hsl(var(--muted-foreground))]">Navegando</p>
-                <p className="truncate text-base font-semibold text-[hsl(var(--foreground))]" style={{ fontFamily: "var(--font-display)" }}>{label}</p>
+                <p className="text-[10px] uppercase tracking-[0.22em] text-[hsl(var(--muted-foreground))]">
+                  Navegando
+                </p>
+                <p
+                  className="truncate text-base font-semibold text-[hsl(var(--foreground))]"
+                  style={{ fontFamily: "var(--font-display)" }}
+                >
+                  {label}
+                </p>
               </div>
               <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[hsl(var(--rdm-amber)/0.15)] text-[hsl(var(--rdm-amber))]">
                 <Sparkles className="h-4 w-4" />

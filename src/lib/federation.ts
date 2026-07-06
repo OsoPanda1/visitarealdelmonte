@@ -1,11 +1,5 @@
 export type FederationKey =
-  | "MDD_TAMV"
-  | "BOOKPI"
-  | "PHOENIX"
-  | "KAOS"
-  | "CHRONOS"
-  | "ANUBIS"
-  | "DEKATEOTL";
+  "MDD_TAMV" | "BOOKPI" | "PHOENIX" | "KAOS" | "CHRONOS" | "ANUBIS" | "DEKATEOTL";
 
 export interface FederationLayer {
   key: FederationKey;
@@ -79,7 +73,7 @@ export const federationColor = (k: string) =>
   HEPTA_LAYERS.find((l) => l.key === k)?.color ?? "oklch(0.5 0.05 260)";
 
 export const FEDERATION_COLORS: Record<string, string> = Object.fromEntries(
-  HEPTA_LAYERS.map((l) => [l.key, l.color])
+  HEPTA_LAYERS.map((l) => [l.key, l.color]),
 );
 
 export const SECURITY_PROTOCOLS: Record<string, { name: string; description: string }> = {
@@ -90,7 +84,8 @@ export const SECURITY_PROTOCOLS: Record<string, { name: string; description: str
 
 export const ISABELLA_CORE_IDENTITY = {
   name: "Isabella AI",
-  purpose: "Soy Isabella, tu guía en el ecosistema RDM. Triple Federado: Conceptual | Legal | Técnico.",
+  purpose:
+    "Soy Isabella, tu guía en el ecosistema RDM. Triple Federado: Conceptual | Legal | Técnico.",
 };
 
 export function generateFederationHash(): string {

@@ -26,12 +26,15 @@ export function usePasteRoute() {
 
   const load = useCallback(async () => {
     try {
-      const timeout = new Promise<never>((_, rej) => setTimeout(() => rej(new Error("timeout")), 3500));
+      const timeout = new Promise<never>((_, rej) =>
+        setTimeout(() => rej(new Error("timeout")), 3500),
+      );
       const fetchAll = (async () => {
-        const [{ data: poiData, error: pErr }, { data: ratingData, error: rErr }] = await Promise.all([
-          supabase.from("paste_pois").select("*").eq("active", true).order("order_index"),
-          supabase.from("paste_ratings").select("poi_id, score"),
-        ]);
+        const [{ data: poiData, error: pErr }, { data: ratingData, error: rErr }] =
+          await Promise.all([
+            supabase.from("paste_pois").select("*").eq("active", true).order("order_index"),
+            supabase.from("paste_ratings").select("poi_id, score"),
+          ]);
         if (pErr) throw pErr;
         if (rErr) throw rErr;
         return { poiData, ratingData };
@@ -50,8 +53,13 @@ export function usePasteRoute() {
         avg_rating: agg[p.id] ? Number((agg[p.id].sum / agg[p.id].n).toFixed(1)) : 4.8,
         rating_count: agg[p.id]?.n ?? 0,
       }));
-      if (!merged.length) { setPois(DEMO_POIS as PastePoi[]); setDemo(true); }
-      else { setPois(merged); setDemo(false); }
+      if (!merged.length) {
+        setPois(DEMO_POIS as PastePoi[]);
+        setDemo(true);
+      } else {
+        setPois(merged);
+        setDemo(false);
+      }
       setError(null);
     } catch (e) {
       setPois(DEMO_POIS as PastePoi[]);
@@ -62,7 +70,9 @@ export function usePasteRoute() {
     }
   }, []);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    load();
+  }, [load]);
 
   return { pois, loading, error, demo, reload: load };
 }

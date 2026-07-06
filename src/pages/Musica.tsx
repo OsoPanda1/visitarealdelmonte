@@ -1,7 +1,7 @@
-import { useState, useCallback, useEffect } from "react"
-import { RDMLayout } from "@/components/rdm/RDMLayout"
-import { SEOMeta } from "@/components/SEOMeta"
-import { motion, AnimatePresence } from "framer-motion"
+import { useState, useCallback, useEffect } from "react";
+import { RDMLayout } from "@/components/rdm/RDMLayout";
+import { SEOMeta } from "@/components/SEOMeta";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Play,
   Pause,
@@ -21,32 +21,32 @@ import {
   Calendar,
   MapPin,
   Users,
-} from "lucide-react"
-import ReactMarkdown from "react-markdown"
-import { useAudioPlayer, type Track } from "@/contexts/AudioPlayerContext"
-import playlistMd from "@/assets/musica/playlist.md?raw"
+} from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import { useAudioPlayer, type Track } from "@/contexts/AudioPlayerContext";
+import playlistMd from "@/assets/musica/playlist.md?raw";
 
 // Ecos Música — New system components
-import { SpatialPlayer } from "@/features/music/components/SpatialPlayer"
-import { CronicaPanel } from "@/features/music/components/CronicaPanel"
-import { MecenasPanel } from "@/features/music/components/MecenasPanel"
-import { MOCK_TRACKS, MOCK_CRONICAS, MOCK_EVENTS } from "@/features/music/api"
-import { recommendTracks, recommendCronicas, recommendEvents } from "@/features/music/engine"
-import { recordMusicAction } from "@/features/music/api"
-import type { MusicTrack, MusicCronica, MusicEvent } from "@/features/music/types"
+import { SpatialPlayer } from "@/features/music/components/SpatialPlayer";
+import { CronicaPanel } from "@/features/music/components/CronicaPanel";
+import { MecenasPanel } from "@/features/music/components/MecenasPanel";
+import { MOCK_TRACKS, MOCK_CRONICAS, MOCK_EVENTS } from "@/features/music/api";
+import { recommendTracks, recommendCronicas, recommendEvents } from "@/features/music/engine";
+import { recordMusicAction } from "@/features/music/api";
+import type { MusicTrack, MusicCronica, MusicEvent } from "@/features/music/types";
 
-import aMimadreMp3 from "@/assets/musica/a_mimadre.mp3"
-import reinaTrejoMp3 from "@/assets/musica/reina_trejo.mp3"
-import tumiradaMp3 from "@/assets/musica/tumirada.mp3"
-import adictedToyouMp3 from "@/assets/musica/adicted_toyou).mp3"
-import cadaNocheMp3 from "@/assets/musica/cada_noche.mp3"
-import elSenaladoMp3 from "@/assets/musica/el_señalado.mp3"
-import legadoMp3 from "@/assets/musica/Legado (1).mp3"
-import patioDetierraMp3 from "@/assets/musica/patio_detierra.mp3"
-import puroDolorMp3 from "@/assets/musica/puro_dolor.mp3"
-import shootingStarMp3 from "@/assets/musica/shooting_star.mp3"
-import rdmYoteadoroMp3 from "@/assets/musica/rdm_yoteadoro.mp3"
-import rdmintroMp3 from "@/assets/musica/rdmintro (2).mp3"
+import aMimadreMp3 from "@/assets/musica/a_mimadre.mp3";
+import reinaTrejoMp3 from "@/assets/musica/reina_trejo.mp3";
+import tumiradaMp3 from "@/assets/musica/tumirada.mp3";
+import adictedToyouMp3 from "@/assets/musica/adicted_toyou).mp3";
+import cadaNocheMp3 from "@/assets/musica/cada_noche.mp3";
+import elSenaladoMp3 from "@/assets/musica/el_señalado.mp3";
+import legadoMp3 from "@/assets/musica/Legado (1).mp3";
+import patioDetierraMp3 from "@/assets/musica/patio_detierra.mp3";
+import puroDolorMp3 from "@/assets/musica/puro_dolor.mp3";
+import shootingStarMp3 from "@/assets/musica/shooting_star.mp3";
+import rdmYoteadoroMp3 from "@/assets/musica/rdm_yoteadoro.mp3";
+import rdmintroMp3 from "@/assets/musica/rdmintro (2).mp3";
 
 const PLAYLIST: Track[] = [
   {
@@ -104,7 +104,8 @@ const PLAYLIST: Track[] = [
     id: "el_senalado",
     title: "El Señalado",
     artist: "Edwin Castillo",
-    description: "Narrativa musical sobre llevar una marca distinta y encontrar fuerza en la propia identidad.",
+    description:
+      "Narrativa musical sobre llevar una marca distinta y encontrar fuerza en la propia identidad.",
     src: elSenaladoMp3,
     duration: 240,
     bpm: 82,
@@ -125,7 +126,8 @@ const PLAYLIST: Track[] = [
     id: "patio_detierra",
     title: "Patio de Tierra",
     artist: "Edwin Castillo",
-    description: "Melodía que evoca los patios de las casas antiguas y las memorias que ahí habitan.",
+    description:
+      "Melodía que evoca los patios de las casas antiguas y las memorias que ahí habitan.",
     src: patioDetierraMp3,
     duration: 200,
     bpm: 65,
@@ -172,14 +174,14 @@ const PLAYLIST: Track[] = [
     bpm: 70,
     mood: "Épico",
   },
-]
+];
 
-const DONATION_AMOUNTS = [50, 100, 200, 500, 1000]
+const DONATION_AMOUNTS = [50, 100, 200, 500, 1000];
 
 function formatDuration(secs: number): string {
-  const m = Math.floor(secs / 60)
-  const s = secs % 60
-  return `${m}:${s.toString().padStart(2, "0")}`
+  const m = Math.floor(secs / 60);
+  const s = secs % 60;
+  return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
 /* ------------------------------------------------------------------ */
@@ -193,22 +195,22 @@ function TrackRow({
   isPlaying,
   onPlay,
 }: {
-  track: Track
-  index: number
-  isActive: boolean
-  isPlaying: boolean
-  onPlay: () => void
+  track: Track;
+  index: number;
+  isActive: boolean;
+  isPlaying: boolean;
+  onPlay: () => void;
 }) {
-  const [expanded, setExpanded] = useState(false)
-  const open = expanded || (isActive && isPlaying)
+  const [expanded, setExpanded] = useState(false);
+  const open = expanded || (isActive && isPlaying);
 
   // Colores de mood (verde limón / rojo cereza / azul eléctrico)
   const moodColor =
     track.mood === "Triste" || track.mood === "Intenso"
       ? "#FF1744" // rojo cereza
       : track.mood === "Energético" || track.mood === "Épico"
-      ? "#00D4FF" // azul eléctrico
-      : "#A7F300" // verde limón por defecto
+        ? "#00D4FF" // azul eléctrico
+        : "#A7F300"; // verde limón por defecto
 
   return (
     <motion.div
@@ -223,8 +225,8 @@ function TrackRow({
     >
       <button
         onClick={() => {
-          onPlay()
-          if (!isActive) setExpanded(true)
+          onPlay();
+          if (!isActive) setExpanded(true);
         }}
         className="w-full flex items-center gap-3 px-3 py-2.5 text-left"
       >
@@ -237,8 +239,7 @@ function TrackRow({
                   key={b}
                   className="w-[3px] rounded-full animate-bounce"
                   style={{
-                    background:
-                      "linear-gradient(to top, #00D4FF, #A7F300)",
+                    background: "linear-gradient(to top, #00D4FF, #A7F300)",
                     height: `${5 + b * 3}px`,
                     animationDelay: `${b * 0.42}s`,
                   }}
@@ -288,8 +289,8 @@ function TrackRow({
           </span>
           <button
             onClick={(e) => {
-              e.stopPropagation()
-              onPlay()
+              e.stopPropagation();
+              onPlay();
             }}
             className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all will-change-transform will-change-opacity ${
               isActive
@@ -305,8 +306,8 @@ function TrackRow({
           </button>
           <button
             onClick={(e) => {
-              e.stopPropagation()
-              setExpanded(!expanded)
+              e.stopPropagation();
+              setExpanded(!expanded);
             }}
             className={`p-1 transition-transform duration-200 ${
               open ? "rotate-180" : ""
@@ -355,7 +356,7 @@ function TrackRow({
         )}
       </AnimatePresence>
     </motion.div>
-  )
+  );
 }
 
 /* ------------------------------------------------------------------ */
@@ -363,24 +364,23 @@ function TrackRow({
 /* ------------------------------------------------------------------ */
 
 function ActiveProgressBar() {
-  const { progress } = useAudioPlayer()
+  const { progress } = useAudioPlayer();
   return (
     <div className="mt-2 h-1.5 rounded-full bg-[#E5E7EB] overflow-hidden">
       <div
         className="h-full rounded-full transition-[width] duration-250"
         style={{
           width: `${progress * 100}%`,
-          background:
-            "linear-gradient(90deg, #FF1744, #00D4FF, #A7F300)",
+          background: "linear-gradient(90deg, #FF1744, #00D4FF, #A7F300)",
         }}
       />
     </div>
-  )
+  );
 }
 
 function NowPlayingBadge() {
-  const { currentTrack, isPlaying } = useAudioPlayer()
-  if (!currentTrack) return null
+  const { currentTrack, isPlaying } = useAudioPlayer();
+  if (!currentTrack) return null;
 
   return (
     <motion.div
@@ -400,51 +400,53 @@ function NowPlayingBadge() {
         </p>
       </div>
     </motion.div>
-  )
+  );
 }
 
 /* ------------------------------------------------------------------ */
 /*  ECOS MUSICA — Spatial audio, crónicas, events                      */
 /* ------------------------------------------------------------------ */
 
-const recommendedTracks = recommendTracks(MOCK_TRACKS, { territory_id: "rdm" }, 4)
-const recommendedCronicas = recommendCronicas(MOCK_CRONICAS, {}, 3)
-const recommendedEvents = recommendEvents(MOCK_EVENTS, 3)
+const recommendedTracks = recommendTracks(MOCK_TRACKS, { territory_id: "rdm" }, 4);
+const recommendedCronicas = recommendCronicas(MOCK_CRONICAS, {}, 3);
+const recommendedEvents = recommendEvents(MOCK_EVENTS, 3);
 
 function EcosMusicaSection() {
-  const [activeTab, setActiveTab] = useState<"player" | "cronicas" | "eventos">("player")
-  const [selectedTrack, setSelectedTrack] = useState<MusicTrack>(recommendedTracks[0] || MOCK_TRACKS[0])
-  const [trackIndex, setTrackIndex] = useState(0)
-  const [xpToast, setXpToast] = useState<string | null>(null)
+  const [activeTab, setActiveTab] = useState<"player" | "cronicas" | "eventos">("player");
+  const [selectedTrack, setSelectedTrack] = useState<MusicTrack>(
+    recommendedTracks[0] || MOCK_TRACKS[0],
+  );
+  const [trackIndex, setTrackIndex] = useState(0);
+  const [xpToast, setXpToast] = useState<string | null>(null);
 
   const handleXpEarned = (xp: number) => {
-    setXpToast(`+${xp} XP Cultura`)
-    setTimeout(() => setXpToast(null), 2500)
-  }
+    setXpToast(`+${xp} XP Cultura`);
+    setTimeout(() => setXpToast(null), 2500);
+  };
 
   const handleNextTrack = () => {
-    const next = (trackIndex + 1) % recommendedTracks.length
-    setTrackIndex(next)
-    setSelectedTrack(recommendedTracks[next])
+    const next = (trackIndex + 1) % recommendedTracks.length;
+    setTrackIndex(next);
+    setSelectedTrack(recommendedTracks[next]);
     recordMusicAction("track_play", {
       track_id: recommendedTracks[next].id,
       spatial_mode: "archivo",
-    })
-  }
+    });
+  };
 
   const handlePrevTrack = () => {
-    const prev = trackIndex > 0 ? trackIndex - 1 : recommendedTracks.length - 1
-    setTrackIndex(prev)
-    setSelectedTrack(recommendedTracks[prev])
-  }
+    const prev = trackIndex > 0 ? trackIndex - 1 : recommendedTracks.length - 1;
+    setTrackIndex(prev);
+    setSelectedTrack(recommendedTracks[prev]);
+  };
 
   const handlePlayCronica = (cronica: MusicCronica) => {
     recordMusicAction("cronica_complete", {
       cronica_id: cronica.id,
       tracks_completed: cronica.trackCount ?? 0,
-    })
-    handleXpEarned(50)
-  }
+    });
+    handleXpEarned(50);
+  };
 
   return (
     <section className="py-16 px-6 md:px-16 bg-[#050814] relative overflow-hidden">
@@ -475,7 +477,8 @@ function EcosMusicaSection() {
           >
             Archivo Sonoro de
             <span className="bg-gradient-to-r from-[#00D4FF] to-[#A7F300] bg-clip-text text-transparent">
-              {" "}Real del Monte
+              {" "}
+              Real del Monte
             </span>
           </h2>
           <p className="mt-3 text-sm text-[#9CA3AF] max-w-xl">
@@ -491,7 +494,7 @@ function EcosMusicaSection() {
             { key: "cronicas" as const, label: "Cronicas", icon: BookOpen },
             { key: "eventos" as const, label: "Eventos", icon: Calendar },
           ].map((tab) => {
-            const Icon = tab.icon
+            const Icon = tab.icon;
             return (
               <button
                 key={tab.key}
@@ -505,7 +508,7 @@ function EcosMusicaSection() {
                 <Icon className="w-3.5 h-3.5" />
                 {tab.label}
               </button>
-            )
+            );
           })}
         </div>
 
@@ -552,8 +555,8 @@ function EcosMusicaSection() {
                     <button
                       key={track.id}
                       onClick={() => {
-                        setSelectedTrack(track)
-                        setTrackIndex(idx)
+                        setSelectedTrack(track);
+                        setTrackIndex(idx);
                       }}
                       className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all ${
                         selectedTrack.id === track.id
@@ -571,15 +574,16 @@ function EcosMusicaSection() {
                         <p className="text-[10px] text-[#9CA3AF]">{track.artist?.name}</p>
                       </div>
                       <span className="text-[9px] text-[#9CA3AF] tabular-nums">
-                        {Math.round(track.duration_ms / 60000)}:{String(Math.round((track.duration_ms % 60000) / 1000)).padStart(2, "0")}
+                        {Math.round(track.duration_ms / 60000)}:
+                        {String(Math.round((track.duration_ms % 60000) / 1000)).padStart(2, "0")}
                       </span>
                       <span
                         className={`text-[8px] px-1.5 py-0.5 rounded-full uppercase tracking-wider ${
                           track.canonical_level === "historical"
                             ? "bg-amber-500/20 text-amber-400"
                             : track.canonical_level === "artistic"
-                            ? "bg-purple-500/20 text-purple-400"
-                            : "bg-blue-500/20 text-blue-400"
+                              ? "bg-purple-500/20 text-purple-400"
+                              : "bg-blue-500/20 text-blue-400"
                         }`}
                       >
                         {track.canonical_level}
@@ -634,7 +638,9 @@ function EcosMusicaSection() {
                         >
                           {evt.status === "live" ? "En vivo" : "Proximo"}
                         </span>
-                        <span className="text-[9px] text-[#9CA3AF] capitalize">{evt.event_type.replace("_", " ")}</span>
+                        <span className="text-[9px] text-[#9CA3AF] capitalize">
+                          {evt.event_type.replace("_", " ")}
+                        </span>
                       </div>
                       <h4 className="text-sm font-bold text-white">{evt.title}</h4>
                     </div>
@@ -653,7 +659,9 @@ function EcosMusicaSection() {
                       </p>
                     </div>
                   </div>
-                  <p className="text-[11px] text-[#9CA3AF] leading-relaxed mb-3">{evt.description}</p>
+                  <p className="text-[11px] text-[#9CA3AF] leading-relaxed mb-3">
+                    {evt.description}
+                  </p>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3 text-[10px] text-[#9CA3AF]">
                       <span className="flex items-center gap-1">
@@ -678,7 +686,7 @@ function EcosMusicaSection() {
         </AnimatePresence>
       </div>
     </section>
-  )
+  );
 }
 
 /* ------------------------------------------------------------------ */
@@ -686,33 +694,33 @@ function EcosMusicaSection() {
 /* ------------------------------------------------------------------ */
 
 export default function Musica() {
-  const { currentTrack, isPlaying, play, togglePlay } = useAudioPlayer()
-  const [donationAmount, setDonationAmount] = useState<number | null>(null)
-  const [customAmount, setCustomAmount] = useState("")
-  const [donating, setDonating] = useState(false)
+  const { currentTrack, isPlaying, play, togglePlay } = useAudioPlayer();
+  const [donationAmount, setDonationAmount] = useState<number | null>(null);
+  const [customAmount, setCustomAmount] = useState("");
+  const [donating, setDonating] = useState(false);
 
   const handleDonation = async () => {
-    const amount = donationAmount ?? (customAmount ? parseInt(customAmount) : null)
-    if (!amount || amount <= 0) return
-    setDonating(true)
+    const amount = donationAmount ?? (customAmount ? parseInt(customAmount) : null);
+    if (!amount || amount <= 0) return;
+    setDonating(true);
     try {
       const res = await fetch("/api/donations/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount }),
-      })
+      });
       if (!res.ok) {
-        setDonating(false)
-        return
+        setDonating(false);
+        return;
       }
-      const { url } = await res.json()
-      if (url) window.location.href = url
+      const { url } = await res.json();
+      if (url) window.location.href = url;
     } catch {
-      setDonating(false)
+      setDonating(false);
     }
-  }
+  };
 
-  const totalDuration = PLAYLIST.reduce((a: number, t: Track) => a + t.duration, 0)
+  const totalDuration = PLAYLIST.reduce((a: number, t: Track) => a + t.duration, 0);
 
   return (
     <RDMLayout>
@@ -832,9 +840,9 @@ export default function Musica() {
                       isPlaying={isPlaying && currentTrack?.id === track.id}
                       onPlay={() => {
                         if (currentTrack?.id === track.id) {
-                          togglePlay()
+                          togglePlay();
                         } else {
-                          play(track, PLAYLIST)
+                          play(track, PLAYLIST);
                         }
                       }}
                     />
@@ -864,9 +872,7 @@ export default function Musica() {
                   <div className="absolute bottom-4 left-6 flex items-center gap-3">
                     <Heart className="w-7 h-7 text-[#050814]" />
                     <div>
-                      <h3 className="text-sm font-bold text-[#0b1020]">
-                        Apoya esta música
-                      </h3>
+                      <h3 className="text-sm font-bold text-[#0b1020]">Apoya esta música</h3>
                       <p className="text-[11px] text-[#24304f]">
                         Tu donación mantiene vivo este archivo sonoro.
                       </p>
@@ -899,7 +905,7 @@ export default function Musica() {
       {/* Ecos Musica — Spatial audio, crónicas, events */}
       <EcosMusicaSection />
     </RDMLayout>
-  )
+  );
 }
 
 /* ------------------------------------------------------------------ */
@@ -914,15 +920,14 @@ function DonationControls({
   donating,
   onDonate,
 }: {
-  donationAmount: number | null
-  setDonationAmount: (v: number | null) => void
-  customAmount: string
-  setCustomAmount: (v: string) => void
-  donating: boolean
-  onDonate: () => void
+  donationAmount: number | null;
+  setDonationAmount: (v: number | null) => void;
+  customAmount: string;
+  setCustomAmount: (v: string) => void;
+  donating: boolean;
+  onDonate: () => void;
 }) {
-  const currentAmount =
-    donationAmount ?? (customAmount ? parseInt(customAmount) || 0 : 0)
+  const currentAmount = donationAmount ?? (customAmount ? parseInt(customAmount) || 0 : 0);
 
   return (
     <>
@@ -931,8 +936,8 @@ function DonationControls({
           <button
             key={amount}
             onClick={() => {
-              setDonationAmount(amount)
-              setCustomAmount("")
+              setDonationAmount(amount);
+              setCustomAmount("");
             }}
             className={`relative px-5 py-2.5 rounded-xl text-sm font-bold transition-all will-change-transform will-change-opacity ${
               donationAmount === amount
@@ -942,23 +947,17 @@ function DonationControls({
           >
             ${amount.toLocaleString()}
             {amount === 500 && (
-              <span className="block text-[9px] font-normal opacity-70">
-                Más apoyado
-              </span>
+              <span className="block text-[9px] font-normal opacity-70">Más apoyado</span>
             )}
             {amount === 1000 && (
-              <span className="block text-[9px] font-normal opacity-70">
-                ⭐ Patrocinador
-              </span>
+              <span className="block text-[9px] font-normal opacity-70">⭐ Patrocinador</span>
             )}
           </button>
         ))}
       </div>
 
       <div className="flex items-center gap-3 mb-6">
-        <span className="text-[11px] text-[#4B5563] shrink-0">
-          Otra cantidad:
-        </span>
+        <span className="text-[11px] text-[#4B5563] shrink-0">Otra cantidad:</span>
         <div className="relative flex-1 max-w-[200px]">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#6B7280] text-sm font-semibold">
             $
@@ -969,8 +968,8 @@ function DonationControls({
             placeholder="0"
             value={customAmount}
             onChange={(e) => {
-              setCustomAmount(e.target.value)
-              setDonationAmount(null)
+              setCustomAmount(e.target.value);
+              setDonationAmount(null);
             }}
             className="w-full pl-7 pr-4 py-2.5 rounded-xl bg-white border border-[#E5E7EB] text-[#0b1020] text-sm focus:outline-none focus:border-[#00D4FF] transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
           />
@@ -991,8 +990,7 @@ function DonationControls({
         ) : (
           <>
             <Heart className="w-4 h-4" />
-            Donar $
-            {currentAmount.toLocaleString() || "…"}
+            Donar ${currentAmount.toLocaleString() || "…"}
           </>
         )}
       </button>
@@ -1002,5 +1000,5 @@ function DonationControls({
         Pago procesado vía Stripe. No almacenamos datos bancarios.
       </p>
     </>
-  )
+  );
 }

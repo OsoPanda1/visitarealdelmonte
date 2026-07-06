@@ -1,19 +1,19 @@
-import type { Coordenadas, FederationId, FederationModule, IsabellaDecision } from '@/core/models';
-import type { UserContribution } from '@/core/territorial/types';
-import type { FederationEvent } from '@/federaciones/FederationBus';
-import type { ZoneEvent } from '@/core/territorial/types';
-import type { IsabellaAction } from '@/core/ai/isabella-guardian';
+import type { Coordenadas, FederationId, FederationModule, IsabellaDecision } from "@/core/models";
+import type { UserContribution } from "@/core/territorial/types";
+import type { FederationEvent } from "@/federaciones/FederationBus";
+import type { ZoneEvent } from "@/core/territorial/types";
+import type { IsabellaAction } from "@/core/ai/isabella-guardian";
 
 // ============================================================================
 // INPUT PORTS (South)
 // ============================================================================
 
 export type PipelineInput =
-  | { type: 'territorial_contribution'; contribution: UserContribution }
-  | { type: 'federation_event'; event: FederationEvent }
-  | { type: 'user_query'; query: string; userId: string; coords?: Coordenadas }
-  | { type: 'zone_event'; event: ZoneEvent }
-  | { type: 'system_tick'; timestamp: Date };
+  | { type: "territorial_contribution"; contribution: UserContribution }
+  | { type: "federation_event"; event: FederationEvent }
+  | { type: "user_query"; query: string; userId: string; coords?: Coordenadas }
+  | { type: "zone_event"; event: ZoneEvent }
+  | { type: "system_tick"; timestamp: Date };
 
 // ============================================================================
 // CONSCIOUSNESS PROCESSING
@@ -61,7 +61,7 @@ export interface OntologyContext {
 
 export interface AwakeningSignal {
   shouldTrigger: boolean;
-  phase: 'SILENT' | 'WHISPER' | 'ANNOUNCE' | 'ROAR' | 'TRANSCEND';
+  phase: "SILENT" | "WHISPER" | "ANNOUNCE" | "ROAR" | "TRANSCEND";
   reason: string;
   territorialActivityLevel: number;
 }
@@ -72,7 +72,7 @@ export interface AwakeningSignal {
 
 export interface GuardianVerdict {
   action: IsabellaAction;
-  severity: 'normal' | 'safe' | 'emergency';
+  severity: "normal" | "safe" | "emergency";
   federationsImpacted: FederationId[];
   reason: string;
 }
@@ -82,11 +82,11 @@ export interface FederationAction {
   eventType: string;
   payload: unknown;
   traceId: string;
-  priority: 'low' | 'normal' | 'high' | 'critical';
+  priority: "low" | "normal" | "high" | "critical";
 }
 
 export interface TerritorialAction {
-  type: 'contribution_response' | 'geofence_alert' | 'heat_update' | 'zone_broadcast';
+  type: "contribution_response" | "geofence_alert" | "heat_update" | "zone_broadcast";
   payload: unknown;
   timestamp: Date;
 }

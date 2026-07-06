@@ -52,8 +52,13 @@ const BrumaHeader = () => {
         }`}
       >
         <Link to="/" className="flex items-center gap-3 group">
-          <img src={logoImg} alt="RDM" loading="lazy" className="w-8 h-8 object-contain"
-            style={{ filter: "drop-shadow(0 0 8px hsla(43, 80%, 55%, 0.3))" }} />
+          <img
+            src={logoImg}
+            alt="RDM"
+            loading="lazy"
+            className="w-8 h-8 object-contain"
+            style={{ filter: "drop-shadow(0 0 8px hsla(43, 80%, 55%, 0.3))" }}
+          />
           <div>
             <span className="font-display text-base text-foreground tracking-wide group-hover:text-gradient-gold transition-all">
               RDM Digital
@@ -71,7 +76,9 @@ const BrumaHeader = () => {
               key={item.path}
               to={item.path}
               className={`font-body text-[11px] tracking-[0.12em] uppercase transition-colors duration-300 ${
-                location.pathname === item.path ? "text-gold" : "text-muted-foreground hover:text-gold"
+                location.pathname === item.path
+                  ? "text-gold"
+                  : "text-muted-foreground hover:text-gold"
               }`}
             >
               {item.label}
@@ -91,9 +98,18 @@ const BrumaHeader = () => {
         >
           <span className="hidden sm:inline">{menuOpen ? "Cerrar" : "Índice"}</span>
           <div className="flex flex-col gap-1 w-5">
-            <motion.div animate={{ rotate: menuOpen ? 45 : 0, y: menuOpen ? 5 : 0 }} className="w-full h-[1px] bg-gold" />
-            <motion.div animate={{ opacity: menuOpen ? 0 : 1 }} className="w-full h-[1px] bg-gold/60" />
-            <motion.div animate={{ rotate: menuOpen ? -45 : 0, y: menuOpen ? -5 : 0 }} className="w-full h-[1px] bg-gold" />
+            <motion.div
+              animate={{ rotate: menuOpen ? 45 : 0, y: menuOpen ? 5 : 0 }}
+              className="w-full h-[1px] bg-gold"
+            />
+            <motion.div
+              animate={{ opacity: menuOpen ? 0 : 1 }}
+              className="w-full h-[1px] bg-gold/60"
+            />
+            <motion.div
+              animate={{ rotate: menuOpen ? -45 : 0, y: menuOpen ? -5 : 0 }}
+              className="w-full h-[1px] bg-gold"
+            />
           </div>
         </button>
       </motion.header>
@@ -107,7 +123,8 @@ const BrumaHeader = () => {
             transition={{ duration: 0.5 }}
             className="fixed inset-0 z-40 flex items-center justify-center"
             style={{
-              background: "linear-gradient(135deg, hsla(220, 30%, 5%, 0.97), hsla(220, 35%, 3%, 0.99))",
+              background:
+                "linear-gradient(135deg, hsla(220, 30%, 5%, 0.97), hsla(220, 35%, 3%, 0.99))",
               backdropFilter: "blur(30px)",
             }}
           >
@@ -131,9 +148,13 @@ const BrumaHeader = () => {
                       {ch.preview}
                     </span>
                     <span className="w-px h-8 bg-gradient-to-b from-transparent via-gold/30 to-transparent" />
-                    <span className={`font-display text-3xl md:text-5xl tracking-tight transition-colors duration-500 ${
-                      location.pathname === ch.path ? "text-gradient-gold" : "text-foreground/80 hover:text-gradient-gold"
-                    }`}>
+                    <span
+                      className={`font-display text-3xl md:text-5xl tracking-tight transition-colors duration-500 ${
+                        location.pathname === ch.path
+                          ? "text-gradient-gold"
+                          : "text-foreground/80 hover:text-gradient-gold"
+                      }`}
+                    >
                       {ch.label}
                     </span>
                   </Link>

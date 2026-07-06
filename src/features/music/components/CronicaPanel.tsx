@@ -115,15 +115,15 @@ export function CronicaPanel({ cronicas, onPlay, onFork }: CronicaPanelProps) {
                           cronica.canonical_level === "historical"
                             ? "bg-amber-50 text-amber-700 border border-amber-200"
                             : cronica.canonical_level === "artistic"
-                            ? "bg-purple-50 text-purple-700 border border-purple-200"
-                            : "bg-blue-50 text-blue-700 border border-blue-200"
+                              ? "bg-purple-50 text-purple-700 border border-purple-200"
+                              : "bg-blue-50 text-blue-700 border border-blue-200"
                         }`}
                       >
                         {cronica.canonical_level === "historical"
                           ? "Canonico Historico"
                           : cronica.canonical_level === "artistic"
-                          ? "Canon Artistico"
-                          : "Comunidad"}
+                            ? "Canon Artistico"
+                            : "Comunidad"}
                       </span>
                     </div>
 

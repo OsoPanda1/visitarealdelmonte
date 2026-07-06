@@ -20,20 +20,32 @@ export default function HealthSparkline({ color = "#D4AF37" }: Props) {
     };
     load();
     const id = setInterval(load, 15000);
-    return () => { cancel = true; clearInterval(id); };
+    return () => {
+      cancel = true;
+      clearInterval(id);
+    };
   }, []);
 
   if (points.length < 2) {
-    return <div className="h-12 flex items-center text-[10px] font-mono text-muted-foreground/60">acumulando lecturas…</div>;
+    return (
+      <div className="h-12 flex items-center text-[10px] font-mono text-muted-foreground/60">
+        acumulando lecturas…
+      </div>
+    );
   }
-  const w = 200, h = 48, pad = 4;
-  const max = 1, min = 0;
+  const w = 200,
+    h = 48,
+    pad = 4;
+  const max = 1,
+    min = 0;
   const step = (w - pad * 2) / (points.length - 1);
-  const d = points.map((v, i) => {
-    const x = pad + i * step;
-    const y = h - pad - ((v - min) / (max - min)) * (h - pad * 2);
-    return `${i === 0 ? "M" : "L"} ${x.toFixed(1)} ${y.toFixed(1)}`;
-  }).join(" ");
+  const d = points
+    .map((v, i) => {
+      const x = pad + i * step;
+      const y = h - pad - ((v - min) / (max - min)) * (h - pad * 2);
+      return `${i === 0 ? "M" : "L"} ${x.toFixed(1)} ${y.toFixed(1)}`;
+    })
+    .join(" ");
   const last = points[points.length - 1];
 
   return (
@@ -48,7 +60,9 @@ export default function HealthSparkline({ color = "#D4AF37" }: Props) {
         <path d={`${d} L ${w - pad} ${h - pad} L ${pad} ${h - pad} Z`} fill="url(#spark-fill)" />
         <path d={d} fill="none" stroke={color} strokeWidth="1.5" />
       </svg>
-      <span className="text-sm font-display font-bold" style={{ color }}>{last.toFixed(2)}</span>
+      <span className="text-sm font-display font-bold" style={{ color }}>
+        {last.toFixed(2)}
+      </span>
     </div>
   );
 }

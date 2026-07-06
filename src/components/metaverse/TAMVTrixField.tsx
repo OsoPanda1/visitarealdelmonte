@@ -4,13 +4,7 @@
  */
 
 import React, { useEffect, useRef, useState } from "react";
-import {
-  motion,
-  AnimatePresence,
-  useMotionValue,
-  useSpring,
-  useTransform,
-} from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
 
 interface TAMVTrixFieldProps {
   title?: string;
@@ -98,9 +92,7 @@ const TAMVTrixField: React.FC<TAMVTrixFieldProps> = ({
         const depth = col.depth;
         const z = 1 - depth;
 
-        const fontSize =
-          minFontSize +
-          (maxFontSize - minFontSize) * col.scale * (0.4 + 0.6 * z);
+        const fontSize = minFontSize + (maxFontSize - minFontSize) * col.scale * (0.4 + 0.6 * z);
 
         const baseX = i * columnWidth + columnWidth / 2;
         const x = baseX + col.drift * 28 * z;
@@ -113,27 +105,17 @@ const TAMVTrixField: React.FC<TAMVTrixFieldProps> = ({
         const velocity = velocityBase * densityBoost;
 
         const word = WORDS[col.wordIndex] || "TAMVONLINE";
-        const coreLetter =
-          CORE_LETTERS[Math.floor(Math.random() * CORE_LETTERS.length)];
+        const coreLetter = CORE_LETTERS[Math.floor(Math.random() * CORE_LETTERS.length)];
         const wordLetter = word[col.charIndex % word.length];
 
         // lejos = core, cerca = palabra legible TAMV
         const letter = depth > 0.55 ? coreLetter : wordLetter;
 
-        const gradient = ctx.createLinearGradient(
-          x,
-          y - fontSize * 5,
-          x,
-          y + fontSize
-        );
+        const gradient = ctx.createLinearGradient(x, y - fontSize * 5, x, y + fontSize);
 
         const headColor = "#3bf5ff";
-        const haloColor = `rgba(59, 245, 255, ${
-          0.35 * col.opacity + 0.22 * z
-        })`;
-        const tailColor = `rgba(0, 160, 255, ${
-          0.12 * col.opacity + 0.12 * z
-        })`;
+        const haloColor = `rgba(59, 245, 255, ${0.35 * col.opacity + 0.22 * z})`;
+        const tailColor = `rgba(0, 160, 255, ${0.12 * col.opacity + 0.12 * z})`;
 
         gradient.addColorStop(0, "rgba(0, 0, 0, 0)");
         gradient.addColorStop(0.35, tailColor);
@@ -234,25 +216,18 @@ const TAMVTrixField: React.FC<TAMVTrixFieldProps> = ({
         />
 
         {/* Órbitas suaves */}
-        <div
-          className="absolute inset-0"
-          style={{ transform: "translateZ(-140px) scale(1.2)" }}
-        >
+        <div className="absolute inset-0" style={{ transform: "translateZ(-140px) scale(1.2)" }}>
           <div
             className="absolute inset-1/4 rounded-full border border-cyan-400/15"
             style={{
-              boxShadow:
-                "0 0 40px rgba(59,245,255,0.25), 0 0 80px rgba(37,99,235,0.25)",
+              boxShadow: "0 0 40px rgba(59,245,255,0.25), 0 0 80px rgba(37,99,235,0.25)",
             }}
           />
           <div className="absolute inset-[30%] rounded-full border border-slate-500/12" />
         </div>
 
         {/* Partículas TAMV */}
-        <div
-          className="absolute inset-0"
-          style={{ transform: "translateZ(-100px)" }}
-        >
+        <div className="absolute inset-0" style={{ transform: "translateZ(-100px)" }}>
           {Array.from({ length: 30 }).map((_, i) => {
             const left = Math.random() * 100;
             const top = Math.random() * 100;
@@ -325,8 +300,7 @@ const TAMVTrixField: React.FC<TAMVTrixFieldProps> = ({
                 <h2
                   className="text-[11px] md:text-base lg:text-lg xl:text-xl font-semibold tracking-[0.5em] text-center uppercase text-cyan-200"
                   style={{
-                    textShadow:
-                      "0 0 10px rgba(59,245,255,0.8),0 0 22px rgba(37,99,235,0.6)",
+                    textShadow: "0 0 10px rgba(59,245,255,0.8),0 0 22px rgba(37,99,235,0.6)",
                   }}
                 >
                   {subtitle}
@@ -361,8 +335,7 @@ const TAMVTrixField: React.FC<TAMVTrixFieldProps> = ({
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background:
-            "radial-gradient(ellipse at center, transparent 0%, rgba(2,6,23,0.9) 100%)",
+          background: "radial-gradient(ellipse at center, transparent 0%, rgba(2,6,23,0.9) 100%)",
         }}
       />
       <div

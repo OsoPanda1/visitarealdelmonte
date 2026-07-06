@@ -265,6 +265,10 @@ export const CATEGORY_META: Record<RdmCategory, { color: string; emoji: string; 
   Leyenda: { color: "#8B5CF6", emoji: "👻", label: "Leyenda" },
 };
 
-export const RDM_LEGENDS = RDM_POIS.filter((p) => p.category === "Leyenda" || p.tags?.includes("leyenda"));
+export const RDM_LEGENDS = RDM_POIS.filter(
+  (p) => p.category === "Leyenda" || p.tags?.includes("leyenda"),
+);
 export const RDM_GASTRO = RDM_POIS.filter((p) => p.category === "Gastronomía");
-export const RDM_HISTORY = RDM_POIS.filter((p) => p.category === "Historia" || p.category === "Patrimonio");
+export const RDM_HISTORY = RDM_POIS.filter(
+  (p) => p.category === "Historia" || p.category === "Patrimonio",
+);

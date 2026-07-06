@@ -60,22 +60,22 @@ export interface TimeUpVerdict {
 export const FEDERATION_WEIGHTS: Record<FederationId, number> = {
   1: 0.25,
   2: 0.15,
-  3: 0.20,
-  4: 0.20,
+  3: 0.2,
+  4: 0.2,
   5: 0.05,
-  6: 0.10,
+  6: 0.1,
   7: 0.05,
 };
 
 export const THEME_WEIGHTS: Record<ThemeId, number> = {
   1: 0.15,
   2: 0.15,
-  3: 0.10,
-  4: 0.10,
+  3: 0.1,
+  4: 0.1,
   5: 0.15,
-  6: 0.10,
-  7: 0.10,
-  8: 0.10,
+  6: 0.1,
+  7: 0.1,
+  8: 0.1,
   9: 0.05,
 };
 

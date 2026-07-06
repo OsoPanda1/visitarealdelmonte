@@ -78,7 +78,12 @@ export function AdventureSection() {
               viewport={{ once: true }}
               className="rounded-2xl overflow-hidden h-[240px]"
             >
-              <img src={waterfallForest} alt="Cascada" loading="lazy" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+              <img
+                src={waterfallForest}
+                alt="Cascada"
+                loading="lazy"
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+              />
             </motion.div>
             <motion.div
               initial={{ opacity: 0 }}
@@ -87,16 +92,21 @@ export function AdventureSection() {
               transition={{ delay: 0.1 }}
               className="rounded-2xl overflow-hidden h-[240px]"
             >
-              <img src={mistyMountains} alt="Montañas" loading="lazy" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+              <img
+                src={mistyMountains}
+                alt="Montañas"
+                loading="lazy"
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+              />
             </motion.div>
           </div>
 
           {/* Trails */}
           <div className="lg:col-span-2 flex flex-col justify-center">
             <p className="text-foreground/70 font-body text-lg leading-relaxed mb-4">
-              A 2,700 metros sobre el nivel del mar, cada paso es una conquista.
-              La bruma de la Sierra de Pachuca te envuelve como un abrazo ancestral
-              mientras descubres senderos que conectan con siglos de historia.
+              A 2,700 metros sobre el nivel del mar, cada paso es una conquista. La bruma de la
+              Sierra de Pachuca te envuelve como un abrazo ancestral mientras descubres senderos que
+              conectan con siglos de historia.
             </p>
             <p className="text-foreground/70 font-body text-base leading-relaxed mb-10">
               Esta vertical combina aventura ligera, interpretación ambiental y paradas narrativas:
@@ -124,8 +134,12 @@ export function AdventureSection() {
                   </div>
                   <p className="text-sm text-muted-foreground font-body mb-3">{trail.desc}</p>
                   <div className="flex gap-4 text-xs text-muted-foreground font-body">
-                    <span className="flex items-center gap-1"><Compass className="w-3 h-3" /> {trail.distance}</span>
-                    <span className="flex items-center gap-1"><Wind className="w-3 h-3" /> {trail.time}</span>
+                    <span className="flex items-center gap-1">
+                      <Compass className="w-3 h-3" /> {trail.distance}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Wind className="w-3 h-3" /> {trail.time}
+                    </span>
                   </div>
                 </motion.div>
               ))}

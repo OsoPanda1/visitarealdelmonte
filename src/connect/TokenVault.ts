@@ -1,11 +1,13 @@
-import type { TokenRecord, ConnectSubject, ConnectTokenResponse, ConnectorConfig } from './types';
-import { federationBus } from '@/federaciones/FederationBus';
+import type { TokenRecord, ConnectSubject, ConnectTokenResponse, ConnectorConfig } from "./types";
+import { federationBus } from "@/federaciones/FederationBus";
 
 async function hashToken(token: string): Promise<string> {
   const enc = new TextEncoder();
   const data = enc.encode(token);
-  const hash = await crypto.subtle.digest('SHA-256', data);
-  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+  const hash = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(hash))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
 }
 
 class TokenVault {
@@ -17,7 +19,7 @@ class TokenVault {
     scopes: string[] = [],
     installationId?: string,
   ): Promise<ConnectTokenResponse> {
-    const raw = `${connector.uid}:${Date.now()}:${crypto.randomUUID().replace(/-/g, '')}`;
+    const raw = `${connector.uid}:${Date.now()}:${crypto.randomUUID().replace(/-/g, "")}`;
     const id = `tok-${(await hashToken(raw)).slice(0, 12)}`;
     const expiresAt = Date.now() + 3600_000;
 
@@ -34,8 +36,8 @@ class TokenVault {
     this.records.set(id, record);
 
     federationBus.emit({
-      type: 'TOKEN_ISSUED',
-      source: 'ANUBIS',
+      type: "TOKEN_ISSUED",
+      source: "ANUBIS",
       payload: { tokenId: id, connectorUid: connector.uid, subject: subject.type, scopes },
       traceId: id,
     });
@@ -62,8 +64,8 @@ class TokenVault {
     const ok = this.records.delete(tokenId);
     if (ok) {
       federationBus.emit({
-        type: 'TOKEN_REVOKED',
-        source: 'ANUBIS',
+        type: "TOKEN_REVOKED",
+        source: "ANUBIS",
         payload: { tokenId },
         traceId: `revoke-${tokenId}`,
       });
@@ -74,7 +76,8 @@ class TokenVault {
   getStats() {
     return {
       activeTokens: this.records.size,
-      expiredTokens: Array.from(this.records.values()).filter(r => r.expiresAt <= Date.now()).length,
+      expiredTokens: Array.from(this.records.values()).filter((r) => r.expiresAt <= Date.now())
+        .length,
     };
   }
 }

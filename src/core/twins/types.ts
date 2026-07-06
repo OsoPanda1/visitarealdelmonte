@@ -115,10 +115,7 @@ export type TerritorialTwin = MeshNodeTwin | CommerceTwin | EnvironmentalSensorT
 
 export type TwinType = TerritorialTwin["@type"][number];
 
-export type TwinTelemetry =
-  | MeshNodeTelemetry
-  | CommerceTelemetry
-  | SensorTelemetry;
+export type TwinTelemetry = MeshNodeTelemetry | CommerceTelemetry | SensorTelemetry;
 
 // ─── Twin State (post Micro-Sentinel) ─────────────────────────
 
@@ -139,7 +136,10 @@ export interface DittoThing {
   thingId: string;
   policyId: string;
   attributes: Record<string, string>;
-  features: Record<string, {
-    properties: Record<string, string | number | boolean>;
-  }>;
+  features: Record<
+    string,
+    {
+      properties: Record<string, string | number | boolean>;
+    }
+  >;
 }

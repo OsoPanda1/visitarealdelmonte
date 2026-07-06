@@ -23,20 +23,20 @@ export interface Relation {
   targetId: string;
   type: string;
   strength: number;
-  direction: 'forward' | 'backward' | 'bidirectional';
+  direction: "forward" | "backward" | "bidirectional";
 }
 
 export interface Gap {
   gapId: string;
   description: string;
   domain: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: "low" | "medium" | "high" | "critical";
   suggestedAction: string;
 }
 
 export interface Reference {
   sourceId: string;
-  type: 'canon' | 'research' | 'community' | 'external';
+  type: "canon" | "research" | "community" | "external";
   link: string;
   trustLevel: number;
   verifiedAt: Date | null;
@@ -54,26 +54,26 @@ export interface RiskProfile {
   riskId: string;
   dimension: string;
   probability: number;
-  severity: 'low' | 'medium' | 'high' | 'critical';
-  type: 'technical' | 'social' | 'economic' | 'cultural' | 'ethical';
+  severity: "low" | "medium" | "high" | "critical";
+  type: "technical" | "social" | "economic" | "cultural" | "ethical";
   mitigation: string;
 }
 
 export interface CanonicalEntry {
   recordId: string;
   title: string;
-  category: 'patrimonio' | 'politica_publica' | 'innovacion' | 'memoria_comunitaria';
+  category: "patrimonio" | "politica_publica" | "innovacion" | "memoria_comunitaria";
   event: Record<string, unknown>;
   evidence: Evidence[];
   timestamp: Date;
   authorId: string;
-  retentionPolicy: 'permanente' | 'largo_plazo' | 'rotativa';
+  retentionPolicy: "permanente" | "largo_plazo" | "rotativa";
   immutable: boolean;
 }
 
 export interface Evidence {
   evidenceId: string;
-  type: 'document' | 'testimony' | 'data' | 'media';
+  type: "document" | "testimony" | "data" | "media";
   content: string;
   hash: string;
   verifiedAt: Date;
@@ -82,12 +82,12 @@ export interface Evidence {
 export interface PolicyViolation {
   ruleId: string;
   ruleName: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: "low" | "medium" | "high" | "critical";
   description: string;
 }
 
 export interface LumenDecision {
-  decision: 'permitir' | 'restringir' | 'bloquear' | 'escalar_a_humano';
+  decision: "permitir" | "restringir" | "bloquear" | "escalar_a_humano";
   rationale: string;
   logEntry: LumenLogEntry;
   violations: PolicyViolation[];
@@ -126,7 +126,7 @@ export interface SkillMetadata {
   name: string;
   version: string;
   description: string;
-  priority: 'maximo' | 'critico' | 'alto' | 'medio' | 'bajo';
+  priority: "maximo" | "critico" | "alto" | "medio" | "bajo";
   enabled: boolean;
   lastRun: Date | null;
   totalCalls: number;

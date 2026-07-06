@@ -7,25 +7,25 @@ import { logger } from "@/lib/logger";
  * - Can be wired to Sentry or PostHog in production by swapping the transport.
  */
 
-export type UIErrorLevel = 'debug' | 'info' | 'warn' | 'error' | 'fatal'
+export type UIErrorLevel = "debug" | "info" | "warn" | "error" | "fatal";
 
 export interface UIErrorPayload {
-  level: UIErrorLevel
-  source: string
-  message: string
-  route?: string
-  userId?: string
-  details?: Record<string, unknown>
-  timestamp?: string
+  level: UIErrorLevel;
+  source: string;
+  message: string;
+  route?: string;
+  userId?: string;
+  details?: Record<string, unknown>;
+  timestamp?: string;
 }
 
-type Transport = (payload: UIErrorPayload) => void
+type Transport = (payload: UIErrorPayload) => void;
 
-let _transport: Transport | null = null
+let _transport: Transport | null = null;
 
 /** Override the transport (e.g. Sentry) before the app mounts. */
 export function setUITelemetryTransport(transport: Transport): void {
-  _transport = transport
+  _transport = transport;
 }
 
 /**
@@ -37,11 +37,11 @@ export function logUIError(payload: UIErrorPayload): void {
   const enriched: UIErrorPayload = {
     ...payload,
     timestamp: payload.timestamp ?? new Date().toISOString(),
-  }
+  };
 
   if (_transport) {
     try {
-      _transport(enriched)
+      _transport(enriched);
     } catch {
       // swallow transport errors to avoid cascading failures
     }
@@ -49,21 +49,21 @@ export function logUIError(payload: UIErrorPayload): void {
 
   // Always log to console in dev; never in production unless no transport.
   if (import.meta.env.DEV || !_transport) {
-    const tag = `[rdm:telemetry:${enriched.level}]`
-    const msg = `${tag} [${enriched.source}] ${enriched.message}`
+    const tag = `[rdm:telemetry:${enriched.level}]`;
+    const msg = `${tag} [${enriched.source}] ${enriched.message}`;
     switch (enriched.level) {
-      case 'fatal':
-      case 'error':
-        logger.error(msg, enriched.details)
-        break
-      case 'warn':
-        logger.warn(msg, enriched.details)
-        break
-      case 'info':
-        logger.info(msg, enriched.details)
-        break
+      case "fatal":
+      case "error":
+        logger.error(msg, enriched.details);
+        break;
+      case "warn":
+        logger.warn(msg, enriched.details);
+        break;
+      case "info":
+        logger.info(msg, enriched.details);
+        break;
       default:
-        logger.debug(msg, enriched.details)
+        logger.debug(msg, enriched.details);
     }
   }
 }
@@ -71,13 +71,13 @@ export function logUIError(payload: UIErrorPayload): void {
 /** Convenience helpers */
 export const uiTelemetry = {
   debug: (source: string, message: string, details?: Record<string, unknown>) =>
-    logUIError({ level: 'debug', source, message, details }),
+    logUIError({ level: "debug", source, message, details }),
   info: (source: string, message: string, details?: Record<string, unknown>) =>
-    logUIError({ level: 'info', source, message, details }),
+    logUIError({ level: "info", source, message, details }),
   warn: (source: string, message: string, details?: Record<string, unknown>) =>
-    logUIError({ level: 'warn', source, message, details }),
+    logUIError({ level: "warn", source, message, details }),
   error: (source: string, message: string, details?: Record<string, unknown>) =>
-    logUIError({ level: 'error', source, message, details }),
-}
+    logUIError({ level: "error", source, message, details }),
+};
 
-export default uiTelemetry
+export default uiTelemetry;

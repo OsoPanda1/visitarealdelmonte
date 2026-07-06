@@ -19,9 +19,11 @@ export function InfoCard({ title, description, icon: Icon, variant = "gold" }: I
       }`}
     >
       <div className="flex items-start gap-3">
-        <div className={`p-2 rounded-md ${
-          variant === "gold" ? "bg-primary/10 text-primary" : "bg-secondary/10 text-secondary"
-        }`}>
+        <div
+          className={`p-2 rounded-md ${
+            variant === "gold" ? "bg-primary/10 text-primary" : "bg-secondary/10 text-secondary"
+          }`}
+        >
           <Icon className="h-5 w-5" />
         </div>
         <div>
@@ -44,7 +46,11 @@ export function Section({ title, children, id, icon: Icon }: SectionProps) {
   return (
     <section id={id} className="space-y-4">
       <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
-        {Icon ? <Icon className="h-5 w-5 text-primary" /> : <span className="w-1 h-5 rounded-full bg-primary inline-block" />}
+        {Icon ? (
+          <Icon className="h-5 w-5 text-primary" />
+        ) : (
+          <span className="w-1 h-5 rounded-full bg-primary inline-block" />
+        )}
         {title}
       </h2>
       {children}
@@ -88,9 +94,7 @@ export function InfoBox({ type = "info", title, children }: InfoBoxProps) {
       <div className="flex items-start gap-3">
         <Icon className={`h-5 w-5 ${styles.iconColor} shrink-0 mt-0.5`} />
         <div className="flex-1">
-          {title && (
-            <h4 className={`font-semibold ${styles.iconColor} mb-1`}>{title}</h4>
-          )}
+          {title && <h4 className={`font-semibold ${styles.iconColor} mb-1`}>{title}</h4>}
           <div className="text-muted-foreground leading-relaxed">{children}</div>
         </div>
       </div>

@@ -1,8 +1,16 @@
-import type { Coordenadas, BoundingBox } from '@/core/models';
+import type { Coordenadas, BoundingBox } from "@/core/models";
 
-export type ContributionType = 'checkin' | 'review' | 'photo' | 'rating' | 'tip' | 'event_report' | 'route_trace' | 'poi_suggestion';
+export type ContributionType =
+  | "checkin"
+  | "review"
+  | "photo"
+  | "rating"
+  | "tip"
+  | "event_report"
+  | "route_trace"
+  | "poi_suggestion";
 
-export type ZoneGeometryType = 'circle' | 'bbox' | 'polygon';
+export type ZoneGeometryType = "circle" | "bbox" | "polygon";
 
 export interface TerritorialZone {
   id: string;
@@ -14,11 +22,11 @@ export interface TerritorialZone {
   boundingBox?: BoundingBox;
   polygon?: { lat: number; lng: number }[];
   description: string;
-  risk: 'low' | 'medium' | 'high';
+  risk: "low" | "medium" | "high";
 }
 
 export interface ZoneEvent {
-  type: 'zone_enter' | 'zone_exit';
+  type: "zone_enter" | "zone_exit";
   userId: string;
   zoneId: string;
   zoneName: string;
@@ -27,7 +35,7 @@ export interface ZoneEvent {
 }
 
 export interface ZoneAlert {
-  type: 'dwell_alert';
+  type: "dwell_alert";
   userId: string;
   zoneId: string;
   zoneName: string;
@@ -36,9 +44,10 @@ export interface ZoneAlert {
   timestamp: Date;
 }
 
-export type ContributionStatus = 'pending' | 'verified' | 'flagged' | 'archived';
+export type ContributionStatus = "pending" | "verified" | "flagged" | "archived";
 
-export type VerificationMethod = 'auto_geo' | 'photo_confirm' | 'peer_review' | 'isabella_validation';
+export type VerificationMethod =
+  "auto_geo" | "photo_confirm" | "peer_review" | "isabella_validation";
 
 export interface UserContribution {
   id: string;
@@ -67,7 +76,7 @@ export type ContributionPayload =
   | POISuggestionPayload;
 
 export interface CheckInPayload {
-  type: 'checkin';
+  type: "checkin";
   poiName: string;
   durationMinutes?: number;
   mood?: string;
@@ -75,7 +84,7 @@ export interface CheckInPayload {
 }
 
 export interface ReviewPayload {
-  type: 'review';
+  type: "review";
   text: string;
   rating: number;
   language: string;
@@ -83,7 +92,7 @@ export interface ReviewPayload {
 }
 
 export interface PhotoPayload {
-  type: 'photo';
+  type: "photo";
   caption?: string;
   tags: string[];
   imageHash?: string;
@@ -91,21 +100,21 @@ export interface PhotoPayload {
 }
 
 export interface RatingPayload {
-  type: 'rating';
+  type: "rating";
   score: number;
   category: string;
   quickFeedback?: boolean;
 }
 
 export interface TipPayload {
-  type: 'tip';
+  type: "tip";
   text: string;
-  category: 'proTip' | 'warning' | 'local_knowledge' | 'hidden_gem';
+  category: "proTip" | "warning" | "local_knowledge" | "hidden_gem";
   helpful: number;
 }
 
 export interface EventReportPayload {
-  type: 'event_report';
+  type: "event_report";
   eventName: string;
   description: string;
   date: string;
@@ -114,15 +123,15 @@ export interface EventReportPayload {
 }
 
 export interface RouteTracePayload {
-  type: 'route_trace';
+  type: "route_trace";
   waypoints: { lat: number; lng: number; timestamp: Date }[];
   distanceKm: number;
   durationMinutes: number;
-  transportMode: 'walking' | 'driving' | 'biking' | 'bus';
+  transportMode: "walking" | "driving" | "biking" | "bus";
 }
 
 export interface POISuggestionPayload {
-  type: 'poi_suggestion';
+  type: "poi_suggestion";
   suggestedName: string;
   category: string;
   description: string;
@@ -158,5 +167,5 @@ export interface UserTerritorialProfile {
   badges: string[];
   contributionStreak: number;
   lastContribution: Date;
-  trustLevel: 'newcomer' | 'regular' | 'trusted' | 'guardian';
+  trustLevel: "newcomer" | "regular" | "trusted" | "guardian";
 }

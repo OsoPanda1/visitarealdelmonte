@@ -48,7 +48,8 @@ export const fusionRepositories: FusionRepository[] = [
       {
         id: "identity",
         label: "ID-NVIDA / Identidad",
-        description: "Base de sesión ciudadana-comercial para unificar perfiles, membresías y acceso a servicios.",
+        description:
+          "Base de sesión ciudadana-comercial para unificar perfiles, membresías y acceso a servicios.",
         route: "/comercios/registro",
         icon: ShieldCheck,
       },
@@ -75,14 +76,16 @@ export const fusionRepositories: FusionRepository[] = [
       {
         id: "routes",
         label: "Rutas experienciales",
-        description: "Conecta historia, gastronomía, ecoturismo y cultura con llamadas a acción operativas.",
+        description:
+          "Conecta historia, gastronomía, ecoturismo y cultura con llamadas a acción operativas.",
         route: "/rutas",
         icon: Map,
       },
       {
         id: "commerce",
         label: "Comercios vivos",
-        description: "Activa directorio, registro y checkout para negocios locales dentro del portal.",
+        description:
+          "Activa directorio, registro y checkout para negocios locales dentro del portal.",
         route: "/catalogo",
         icon: Globe2,
       },
@@ -109,12 +112,18 @@ export const fusionRepositories: FusionRepository[] = [
       {
         id: "digital-twin",
         label: "Mapa vivo",
-        description: "Hace visible la relación entre puntos patrimoniales, comercios, rutas y saturación zonal.",
+        description:
+          "Hace visible la relación entre puntos patrimoniales, comercios, rutas y saturación zonal.",
         route: "/#mapa",
         icon: Network,
       },
     ],
-    contracts: ["/api/places/register", "/api/places/:id", "/api/telemetry/ingest", "/api/telemetry/live"],
+    contracts: [
+      "/api/places/register",
+      "/api/places/:id",
+      "/api/telemetry/ingest",
+      "/api/telemetry/live",
+    ],
   },
   {
     id: "citemesh-roots",
@@ -129,14 +138,16 @@ export const fusionRepositories: FusionRepository[] = [
       {
         id: "autopoiesis",
         label: "Autopoiesis continua",
-        description: "Capa de mejora, sincronización CRDT y resiliencia civilizatoria entre nodos autónomos.",
+        description:
+          "Capa de mejora, sincronización CRDT y resiliencia civilizatoria entre nodos autónomos.",
         route: "/tamv/thesis",
         icon: Boxes,
       },
       {
         id: "isabella",
         label: "Isabella AI auditada",
-        description: "Asistente territorial con memoria, guardianía y explicabilidad para servicios ciudadanos.",
+        description:
+          "Asistente territorial con memoria, guardianía y explicabilidad para servicios ciudadanos.",
         route: "/tamv",
         icon: Bot,
       },
@@ -149,21 +160,24 @@ export const fusionPillars = [
   {
     id: "sovereign-shell",
     title: "Shell ciudadano-comercial",
-    description: "Un solo portal de entrada para visitantes, comercios, comunidad, donativos y exploración cultural.",
+    description:
+      "Un solo portal de entrada para visitantes, comercios, comunidad, donativos y exploración cultural.",
     icon: Sparkles,
     routes: ["/", "/catalogo", "/comercios/registro", "/donar"],
   },
   {
     id: "territorial-twin",
     title: "Gemelo territorial operativo",
-    description: "Mapa vivo con sitios, rutas, comercios y telemetría preparada para decisiones de saturación y cuidado patrimonial.",
+    description:
+      "Mapa vivo con sitios, rutas, comercios y telemetría preparada para decisiones de saturación y cuidado patrimonial.",
     icon: Radar,
     routes: ["/#mapa", "/rutas", "/tamv/status"],
   },
   {
     id: "federated-memory",
     title: "Memoria federada auditable",
-    description: "Protocolos, tesis, BookPI, MSR y contratos de integración para dejar rastro verificable de cada módulo.",
+    description:
+      "Protocolos, tesis, BookPI, MSR y contratos de integración para dejar rastro verificable de cada módulo.",
     icon: Database,
     routes: ["/tamv", "/tamv/api", "/tamv/thesis", "/tenochtitlan"],
   },

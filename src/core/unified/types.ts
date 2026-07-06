@@ -1,6 +1,6 @@
-import type { FederationId, Coordenadas, IsabellaDecision, SystemMetrics } from '@/core/models';
-import type { UserContribution, TerritorialStats } from '@/core/territorial/types';
-import type { PipelineResult, PipelineInput } from '@/isabella/pipeline/pipeline.types';
+import type { FederationId, Coordenadas, IsabellaDecision, SystemMetrics } from "@/core/models";
+import type { UserContribution, TerritorialStats } from "@/core/territorial/types";
+import type { PipelineResult, PipelineInput } from "@/isabella/pipeline/pipeline.types";
 
 // ============================================================================
 // GLOBAL SYSTEM STATE
@@ -23,7 +23,7 @@ export interface GlobalSystemState {
 
 export interface ModuleHealth {
   name: string;
-  status: 'healthy' | 'degraded' | 'critical' | 'offline';
+  status: "healthy" | "degraded" | "critical" | "offline";
   score: number;
   lastHeartbeat: Date;
   metrics: Record<string, number>;
@@ -34,22 +34,22 @@ export interface ModuleHealth {
 // ============================================================================
 
 export type UnifiedEventType =
-  | 'territorial:contribution'
-  | 'territorial:zone_enter'
-  | 'territorial:zone_exit'
-  | 'territorial:heat_update'
-  | 'isabella:emotion'
-  | 'isabella:consciousness'
-  | 'isabella:awakening'
-  | 'isabella:knowledge'
-  | 'federation:routed'
-  | 'federation:health_change'
-  | 'federation:sovereignty'
-  | 'pipeline:result'
-  | 'pipeline:error'
-  | 'guardian:decision'
-  | 'system:tick'
-  | 'system:alert';
+  | "territorial:contribution"
+  | "territorial:zone_enter"
+  | "territorial:zone_exit"
+  | "territorial:heat_update"
+  | "isabella:emotion"
+  | "isabella:consciousness"
+  | "isabella:awakening"
+  | "isabella:knowledge"
+  | "federation:routed"
+  | "federation:health_change"
+  | "federation:sovereignty"
+  | "pipeline:result"
+  | "pipeline:error"
+  | "guardian:decision"
+  | "system:tick"
+  | "system:alert";
 
 export interface UnifiedEvent {
   id: string;
@@ -61,7 +61,7 @@ export interface UnifiedEvent {
     traceId: string;
     userId?: string;
     territory?: string;
-    priority: 'low' | 'normal' | 'high' | 'critical';
+    priority: "low" | "normal" | "high" | "critical";
   };
   timestamp: Date;
 }
@@ -74,7 +74,7 @@ export type UnifiedEventHandler = (event: UnifiedEvent) => void;
 
 export interface PersistableContribution extends UserContribution {
   syncedAt?: Date;
-  syncStatus: 'pending' | 'synced' | 'failed';
+  syncStatus: "pending" | "synced" | "failed";
 }
 
 export interface PersistablePipelineResult {
@@ -122,7 +122,7 @@ export interface ReputationScore {
   verificationScore: number;
   communityScore: number;
   consistencyScore: number;
-  trend: 'rising' | 'stable' | 'declining';
+  trend: "rising" | "stable" | "declining";
   lastUpdated: Date;
 }
 
@@ -132,24 +132,24 @@ export interface ReputationScore {
 
 export interface UnifiedConfig {
   version: string;
-  environment: 'development' | 'staging' | 'production';
+  environment: "development" | "staging" | "production";
   enablePersistence: boolean;
   enableRealTimeSync: boolean;
   supervisorIntervalMs: number;
   persistenceIntervalMs: number;
   snapshotIntervalMs: number;
   maxConcurrentPipelines: number;
-  logLevel: 'debug' | 'info' | 'warn' | 'error';
+  logLevel: "debug" | "info" | "warn" | "error";
 }
 
 export const DEFAULT_UNIFIED_CONFIG: UnifiedConfig = {
-  version: 'GEN-8.0',
-  environment: 'development',
+  version: "GEN-8.0",
+  environment: "development",
   enablePersistence: true,
   enableRealTimeSync: true,
   supervisorIntervalMs: 15000,
   persistenceIntervalMs: 60000,
   snapshotIntervalMs: 300000,
   maxConcurrentPipelines: 10,
-  logLevel: 'info',
+  logLevel: "info",
 };

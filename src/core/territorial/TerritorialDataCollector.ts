@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import type {
   UserContribution,
   ContributionType,
@@ -8,10 +8,10 @@ import type {
   TerritorialStats,
   UserTerritorialProfile,
   VerificationMethod,
-} from './types';
-import { logger } from '@/lib/logger';
-import { createBBox, fastDistance, withinBBox } from '@/core/geo';
-import type { Coordenadas } from '@/core/models';
+} from "./types";
+import { logger } from "@/lib/logger";
+import { createBBox, fastDistance, withinBBox } from "@/core/geo";
+import type { Coordenadas } from "@/core/models";
 
 interface CollectorConfig {
   minCheckinDistanceMeters: number;
@@ -47,7 +47,7 @@ export class TerritorialDataCollector {
     coords: Coordenadas,
     territorio: string,
     payload: ContributionPayload,
-    poiId?: string
+    poiId?: string,
   ): UserContribution {
     const id = uuidv4();
     const reputationWeight = this.calculateReputationWeight(userId);
@@ -57,7 +57,7 @@ export class TerritorialDataCollector {
       id,
       userId,
       type,
-      status: 'pending',
+      status: "pending",
       coords: { lat: coords.lat, lng: coords.lng },
       territorio,
       poiId,
@@ -74,8 +74,11 @@ export class TerritorialDataCollector {
     this.updateHeatMap(coords, type);
     this.notifyListeners(contribution);
 
-    logger.info('[TerritorialCollector] Contribucion registrada:', {
-      id, type, userId, territorio,
+    logger.info("[TerritorialCollector] Contribucion registrada:", {
+      id,
+      type,
+      userId,
+      territorio,
       verificationMethod,
     });
 
@@ -85,7 +88,7 @@ export class TerritorialDataCollector {
   verifyContribution(
     id: string,
     verified: boolean,
-    validator: 'system' | 'isabella' | 'peer' = 'system'
+    validator: "system" | "isabella" | "peer" = "system",
   ): UserContribution | null {
     const contribution = this.contributions.get(id);
     if (!contribution) return null;
@@ -94,23 +97,25 @@ export class TerritorialDataCollector {
       ? Math.min(1, contribution.verificationScore + 0.3)
       : Math.max(0, contribution.verificationScore - 0.5);
 
-    const newStatus: ContributionStatus = verificationScore >= this.config.verificationThreshold
-      ? 'verified'
-      : verificationScore <= 0.2
-        ? 'flagged'
-        : contribution.status;
+    const newStatus: ContributionStatus =
+      verificationScore >= this.config.verificationThreshold
+        ? "verified"
+        : verificationScore <= 0.2
+          ? "flagged"
+          : contribution.status;
 
     const updated: UserContribution = {
       ...contribution,
       status: newStatus,
       verificationScore,
-      verificationMethod: validator === 'isabella' ? 'isabella_validation' : contribution.verificationMethod,
+      verificationMethod:
+        validator === "isabella" ? "isabella_validation" : contribution.verificationMethod,
       updatedAt: new Date(),
     };
 
     this.contributions.set(id, updated);
 
-    if (newStatus === 'verified') {
+    if (newStatus === "verified") {
       this.boostUserReputation(contribution.userId, 0.05);
     }
 
@@ -119,32 +124,33 @@ export class TerritorialDataCollector {
 
   getContributionsByUser(userId: string): UserContribution[] {
     return Array.from(this.contributions.values())
-      .filter(c => c.userId === userId)
+      .filter((c) => c.userId === userId)
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
 
   getContributionsByTerritory(territorio: string): UserContribution[] {
     return Array.from(this.contributions.values())
-      .filter(c => c.territorio === territorio)
+      .filter((c) => c.territorio === territorio)
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
 
   getContributionsByPOI(poiId: string): UserContribution[] {
     return Array.from(this.contributions.values())
-      .filter(c => c.poiId === poiId)
+      .filter((c) => c.poiId === poiId)
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
 
   getContributionsInRadius(center: Coordenadas, radiusMeters: number): UserContribution[] {
     const bbox = createBBox(center, radiusMeters);
     return Array.from(this.contributions.values())
-      .filter(c => withinBBox(c.coords, bbox) && fastDistance(center, c.coords) <= radiusMeters)
+      .filter((c) => withinBBox(c.coords, bbox) && fastDistance(center, c.coords) <= radiusMeters)
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
 
   getVerifiedContributionsInRadius(center: Coordenadas, radiusMeters: number): UserContribution[] {
-    return this.getContributionsInRadius(center, radiusMeters)
-      .filter(c => c.status === 'verified');
+    return this.getContributionsInRadius(center, radiusMeters).filter(
+      (c) => c.status === "verified",
+    );
   }
 
   getHeatMap(): TerritorialHeatPoint[] {
@@ -153,18 +159,16 @@ export class TerritorialDataCollector {
 
   getStats(): TerritorialStats {
     const all = Array.from(this.contributions.values());
-    const verified = all.filter(c => c.status === 'verified');
-    const today = all.filter(c =>
-      c.createdAt.toDateString() === new Date().toDateString()
-    );
+    const verified = all.filter((c) => c.status === "verified");
+    const today = all.filter((c) => c.createdAt.toDateString() === new Date().toDateString());
 
     return {
       totalContributions: all.length,
-      uniqueContributors: new Set(all.map(c => c.userId)).size,
-      activePOIs: new Set(all.filter(c => c.poiId).map(c => c.poiId)).size,
-      checkinsToday: today.filter(c => c.type === 'checkin').length,
-      routeTraces: all.filter(c => c.type === 'route_trace').length,
-      photoContributions: all.filter(c => c.type === 'photo').length,
+      uniqueContributors: new Set(all.map((c) => c.userId)).size,
+      activePOIs: new Set(all.filter((c) => c.poiId).map((c) => c.poiId)).size,
+      checkinsToday: today.filter((c) => c.type === "checkin").length,
+      routeTraces: all.filter((c) => c.type === "route_trace").length,
+      photoContributions: all.filter((c) => c.type === "photo").length,
       averageRating: this.calculateAverageRating(all),
       territoryHealth: this.calculateTerritoryHealth(all, verified),
       lastUpdated: new Date(),
@@ -185,16 +189,19 @@ export class TerritorialDataCollector {
     if (!profile) return 0.5;
 
     const daysSinceLast = (Date.now() - profile.lastContribution.getTime()) / 86400000;
-    const decay = Math.max(0.3, 1 - (daysSinceLast / this.config.reputationDecayDays));
+    const decay = Math.max(0.3, 1 - daysSinceLast / this.config.reputationDecayDays);
 
     return Math.min(1, (profile.reputationScore * 0.7 + profile.verifiedCount * 0.05) * decay);
   }
 
-  private determineVerificationMethod(type: ContributionType, payload: ContributionPayload): VerificationMethod {
-    if (type === 'photo') return 'photo_confirm';
-    if (type === 'route_trace') return 'auto_geo';
-    if (type === 'review' || type === 'rating') return 'peer_review';
-    return 'auto_geo';
+  private determineVerificationMethod(
+    type: ContributionType,
+    payload: ContributionPayload,
+  ): VerificationMethod {
+    if (type === "photo") return "photo_confirm";
+    if (type === "route_trace") return "auto_geo";
+    if (type === "review" || type === "rating") return "peer_review";
+    return "auto_geo";
   }
 
   private updateUserProfile(userId: string, contribution: UserContribution): void {
@@ -208,14 +215,15 @@ export class TerritorialDataCollector {
       badges: [],
       contributionStreak: 0,
       lastContribution: new Date(0),
-      trustLevel: 'newcomer',
+      trustLevel: "newcomer",
     };
 
     profile.totalContributions++;
     profile.lastContribution = contribution.createdAt;
 
     if (existing) {
-      const daysSinceLast = (contribution.createdAt.getTime() - existing.lastContribution.getTime()) / 86400000;
+      const daysSinceLast =
+        (contribution.createdAt.getTime() - existing.lastContribution.getTime()) / 86400000;
       profile.contributionStreak = daysSinceLast <= 1 ? existing.contributionStreak + 1 : 1;
     } else {
       profile.contributionStreak = 1;
@@ -233,11 +241,13 @@ export class TerritorialDataCollector {
     this.userProfiles.set(userId, profile);
   }
 
-  private calculateTrustLevel(profile: UserTerritorialProfile): UserTerritorialProfile['trustLevel'] {
-    if (profile.verifiedCount >= 20 && profile.totalContributions >= 50) return 'guardian';
-    if (profile.verifiedCount >= 10 && profile.totalContributions >= 20) return 'trusted';
-    if (profile.totalContributions >= 5) return 'regular';
-    return 'newcomer';
+  private calculateTrustLevel(
+    profile: UserTerritorialProfile,
+  ): UserTerritorialProfile["trustLevel"] {
+    if (profile.verifiedCount >= 20 && profile.totalContributions >= 50) return "guardian";
+    if (profile.verifiedCount >= 10 && profile.totalContributions >= 20) return "trusted";
+    if (profile.totalContributions >= 5) return "regular";
+    return "newcomer";
   }
 
   private updateHeatMap(coords: Coordenadas, type: ContributionType): void {
@@ -246,8 +256,9 @@ export class TerritorialDataCollector {
     const lngKey = Math.round(coords.lng / resolution) * resolution;
 
     const existing = this.heatPoints.find(
-      h => Math.abs(h.coords.lat - latKey) < resolution / 2 &&
-           Math.abs(h.coords.lng - lngKey) < resolution / 2
+      (h) =>
+        Math.abs(h.coords.lat - latKey) < resolution / 2 &&
+        Math.abs(h.coords.lng - lngKey) < resolution / 2,
     );
 
     if (existing) {
@@ -276,9 +287,9 @@ export class TerritorialDataCollector {
 
   private calculateAverageRating(contributions: UserContribution[]): number {
     const ratings = contributions
-      .filter(c => c.payload.type === 'rating')
-      .map(c => (c.payload as unknown as Record<string, unknown>).score as number)
-      .filter((s): s is number => typeof s === 'number');
+      .filter((c) => c.payload.type === "rating")
+      .map((c) => (c.payload as unknown as Record<string, unknown>).score as number)
+      .filter((s): s is number => typeof s === "number");
 
     if (ratings.length === 0) return 0;
     return ratings.reduce((a, b) => a + b, 0) / ratings.length;
@@ -287,16 +298,18 @@ export class TerritorialDataCollector {
   private calculateTerritoryHealth(all: UserContribution[], verified: UserContribution[]): number {
     if (all.length === 0) return 0.5;
     const verificationRate = verified.length / all.length;
-    const recency = all.filter(c =>
-      (Date.now() - c.createdAt.getTime()) < 86400000 * 7
-    ).length / Math.max(all.length, 1);
-    return Math.min(1, (verificationRate * 0.6 + recency * 0.4));
+    const recency =
+      all.filter((c) => Date.now() - c.createdAt.getTime() < 86400000 * 7).length /
+      Math.max(all.length, 1);
+    return Math.min(1, verificationRate * 0.6 + recency * 0.4);
   }
 
   private notifyListeners(contribution: UserContribution): void {
     for (const listener of this.listeners) {
-      try { listener(contribution); } catch (e) {
-        logger.error('[TerritorialCollector] Error en listener:', e);
+      try {
+        listener(contribution);
+      } catch (e) {
+        logger.error("[TerritorialCollector] Error en listener:", e);
       }
     }
   }

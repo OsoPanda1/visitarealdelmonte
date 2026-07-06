@@ -1,5 +1,14 @@
 import { motion } from "framer-motion";
-import { TreePine, Mountain, Footprints, Tent, Camera, Binoculars, Sun, CloudFog } from "lucide-react";
+import {
+  TreePine,
+  Mountain,
+  Footprints,
+  Tent,
+  Camera,
+  Binoculars,
+  Sun,
+  CloudFog,
+} from "lucide-react";
 import { RDMLayout } from "@/components/rdm/RDMLayout";
 import { SEOMeta, PAGE_SEO } from "@/components/SEOMeta";
 import penasImg from "@/assets/penas-cargadas.webp";
@@ -21,61 +30,72 @@ const activities = [
     difficulty: "Moderada",
     duration: "3-4 horas",
     distance: "5 km",
-    description: "Ascenso a las impresionantes formaciones rocosas que parecen desafiar la gravedad. El recorrido ofrece vistas panorámicas del valle y bosque de oyamel.",
+    description:
+      "Ascenso a las impresionantes formaciones rocosas que parecen desafiar la gravedad. El recorrido ofrece vistas panorámicas del valle y bosque de oyamel.",
     image: penasImg,
     highlights: ["Vistas panorámicas", "Formaciones rocosas", "Bosque de niebla", "Fotografía"],
-    bestTime: "Abril - Noviembre"
+    bestTime: "Abril - Noviembre",
   },
   {
     title: "Caminata Histórica Centro",
     difficulty: "Fácil",
     duration: "2 horas",
     distance: "3 km",
-    description: "Recorrido por las calles empedradas del Centro Histórico visitando puntos de interés arquitectónico y cultural, incluyendo el Panteón Inglés.",
+    description:
+      "Recorrido por las calles empedradas del Centro Histórico visitando puntos de interés arquitectónico y cultural, incluyendo el Panteón Inglés.",
     image: callesImg,
     highlights: ["Arquitectura colonial", "Panteón Inglés", "Plaza Principal", "Museos"],
-    bestTime: "Todo el año"
+    bestTime: "Todo el año",
   },
   {
     title: "Tour de Minas Acosta",
     difficulty: "Moderada",
     duration: "2 horas",
     distance: "1 km",
-    description: "Descenso de 450 metros bajo tierra en la mina más famosa del distrito. Incluye explicación de técnicas mineras históricas y actuales.",
+    description:
+      "Descenso de 450 metros bajo tierra en la mina más famosa del distrito. Incluye explicación de técnicas mineras históricas y actuales.",
     image: minaImg,
-    highlights: ["Túneles históricos", "Museo minero", "Experiencia subterránea", "Guía especializado"],
-    bestTime: "Todo el año"
+    highlights: [
+      "Túneles históricos",
+      "Museo minero",
+      "Experiencia subterránea",
+      "Guía especializado",
+    ],
+    bestTime: "Todo el año",
   },
   {
     title: "Observación de Neblina",
     difficulty: "Fácil",
     duration: "Variable",
     distance: "Libre",
-    description: "Real del Monte es famoso por su neblina etérea. Los mejores puntos para observar este fenómeno natural son los miradores al amanecer y atardecer.",
+    description:
+      "Real del Monte es famoso por su neblina etérea. Los mejores puntos para observar este fenómeno natural son los miradores al amanecer y atardecer.",
     image: miradorPurisimaImg,
     highlights: ["Fotografía artística", "Atmósfera mística", "Miradores", "Amanecer/Atardecer"],
-    bestTime: "Junio - Septiembre"
+    bestTime: "Junio - Septiembre",
   },
   {
     title: "Recorrido Fotográfico Urbano",
     difficulty: "Fácil",
     duration: "2-3 horas",
     distance: "2.5 km",
-    description: "Explora las calles empedradas y la arquitectura colonial de Real del Monte. Ideal para fotografía de arquitectura y vida cotidiana del pueblo mágico.",
+    description:
+      "Explora las calles empedradas y la arquitectura colonial de Real del Monte. Ideal para fotografía de arquitectura y vida cotidiana del pueblo mágico.",
     image: callesJpg,
     highlights: ["Arquitectura", "Calles empedradas", "Fotografía urbana", "Cultura local"],
-    bestTime: "Todo el año"
+    bestTime: "Todo el año",
   },
   {
     title: "Ruta del Minero",
     difficulty: "Difícil",
     duration: "4-5 horas",
     distance: "8 km",
-    description: "Desafiante ruta que sigue los pasos de los antiguos mineros. Atraviesa terrenos irregulares, túneles abandonados y ofrece vistas de la sierra que pocos conocen.",
+    description:
+      "Desafiante ruta que sigue los pasos de los antiguos mineros. Atraviesa terrenos irregulares, túneles abandonados y ofrece vistas de la sierra que pocos conocen.",
     image: laDificultadImg,
     highlights: ["Túneles históricos", "Terreno desafiante", "Vistas únicas", "Historia minera"],
-    bestTime: "Octubre - Marzo"
-  }
+    bestTime: "Octubre - Marzo",
+  },
 ];
 
 const floraFauna = [
@@ -85,8 +105,8 @@ const floraFauna = [
       { name: "Oyamel", description: "Abies religiosa, árbol símbolo de la región" },
       { name: "Pino Amarillo", description: "Pinus montezumae, predominante en la zona" },
       { name: "Encino", description: "Quercus spp., bosques de galería" },
-      { name: "Wildflowers", description: "Diversas especies de orquídeas y flores silvestres" }
-    ]
+      { name: "Wildflowers", description: "Diversas especies de orquídeas y flores silvestres" },
+    ],
   },
   {
     category: "Fauna",
@@ -94,32 +114,35 @@ const floraFauna = [
       { name: "Zorrillo", description: "Spilogale sp., habitante nocturno frecuente" },
       { name: "Ardilla", description: "Sciurus aureogaster, común en áreas boscosas" },
       { name: "Tecolote", description: "Otus spp., búhos que habitan la zona" },
-      { name: "Colibríes", description: "Diversas especies, especialmente en jardines florales" }
-    ]
-  }
+      { name: "Colibríes", description: "Diversas especies, especialmente en jardines florales" },
+    ],
+  },
 ];
 
 const tips = [
   {
     icon: Sun,
     title: "Clima Variable",
-    description: "La temperatura puede cambiar drásticamente. Lleva capas de ropa y algo impermeable."
+    description:
+      "La temperatura puede cambiar drásticamente. Lleva capas de ropa y algo impermeable.",
   },
   {
     icon: Footprints,
     title: "Calzado Apropiado",
-    description: "Botas de senderismo con buen agarre son esenciales, especialmente para Peñas Cargadas."
+    description:
+      "Botas de senderismo con buen agarre son esenciales, especialmente para Peñas Cargadas.",
   },
   {
     icon: CloudFog,
     title: "Niebla Frecuente",
-    description: "La neblina puede reducir la visibilidad. Permanece en los senderos marcados."
+    description: "La neblina puede reducir la visibilidad. Permanece en los senderos marcados.",
   },
   {
     icon: Camera,
     title: "Fotografía",
-    description: "Las mejores fotos son al amanecer y atardecer cuando la neblina crea atmósferas únicas."
-  }
+    description:
+      "Las mejores fotos son al amanecer y atardecer cuando la neblina crea atmósferas únicas.",
+  },
 ];
 
 const EcoturismoPage = () => {
@@ -127,10 +150,10 @@ const EcoturismoPage = () => {
     <RDMLayout>
       <div className="min-h-screen bg-background">
         <SEOMeta {...PAGE_SEO.ecoturismo} />
-        
+
         {/* Hero */}
         <div className="relative h-[60vh] min-h-[500px] overflow-hidden">
-          <div 
+          <div
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: `url(${penasImg})` }}
           />
@@ -150,8 +173,8 @@ const EcoturismoPage = () => {
                   Ecoturismo
                 </h1>
                 <p className="text-lg text-muted-foreground max-w-2xl">
-                  Explora bosques de oyamel, formaciones rocosas milenarias y paisajes envueltos en neblina 
-                  en este santuario natural a 2,700 metros de altura.
+                  Explora bosques de oyamel, formaciones rocosas milenarias y paisajes envueltos en
+                  neblina en este santuario natural a 2,700 metros de altura.
                 </p>
               </motion.div>
             </div>
@@ -186,7 +209,7 @@ const EcoturismoPage = () => {
                   className="glass rounded-2xl overflow-hidden shadow-card hover:shadow-elevated transition-shadow"
                 >
                   <div className="relative h-56 overflow-hidden">
-                    <img 
+                    <img
                       src={activity.image}
                       alt={activity.title}
                       className="w-full h-full object-cover"
@@ -216,10 +239,12 @@ const EcoturismoPage = () => {
                     </p>
 
                     <div className="mb-4">
-                      <span className="text-xs text-muted-foreground uppercase tracking-wider">Destacados:</span>
+                      <span className="text-xs text-muted-foreground uppercase tracking-wider">
+                        Destacados:
+                      </span>
                       <div className="flex flex-wrap gap-2 mt-2">
                         {activity.highlights.map((highlight) => (
-                          <span 
+                          <span
                             key={highlight}
                             className="px-2 py-1 rounded-lg bg-forest/10 text-forest text-xs"
                           >
@@ -231,7 +256,8 @@ const EcoturismoPage = () => {
 
                     <div className="flex items-center justify-between pt-4 border-t border-border">
                       <span className="text-xs text-muted-foreground">
-                        <span className="font-medium text-foreground">Mejor época:</span> {activity.bestTime}
+                        <span className="font-medium text-foreground">Mejor época:</span>{" "}
+                        {activity.bestTime}
                       </span>
                       <button className="px-4 py-2 rounded-lg bg-forest text-white text-sm font-medium hover:bg-forest/90 transition-colors">
                         Reservar
@@ -344,10 +370,11 @@ const EcoturismoPage = () => {
               viewport={{ once: true }}
               className="relative rounded-3xl overflow-hidden"
             >
-              <img 
+              <img
                 src={heroPrincipalPng}
                 alt="Real del Monte"
-                loading="lazy" className="w-full h-[400px] object-cover"
+                loading="lazy"
+                className="w-full h-[400px] object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-r from-forest/90 to-forest/70 flex items-center">
                 <div className="px-8 md:px-16 max-w-xl">
@@ -356,8 +383,8 @@ const EcoturismoPage = () => {
                     ¿Listo para la aventura?
                   </h2>
                   <p className="text-white/80 mb-6">
-                    Descubre los tours guiados con expertos locales que conocen cada rincón 
-                    de la sierra y sus secretos mejor guardados.
+                    Descubre los tours guiados con expertos locales que conocen cada rincón de la
+                    sierra y sus secretos mejor guardados.
                   </p>
                   <button className="px-8 py-3 rounded-xl bg-white text-forest font-semibold hover:bg-white/90 transition-colors">
                     Ver tours disponibles
@@ -378,7 +405,8 @@ const EcoturismoPage = () => {
               <img
                 src={rdmInfografia}
                 alt="Infografía Real del Monte"
-                loading="lazy" className="max-w-full h-auto mx-auto rounded-xl"
+                loading="lazy"
+                className="max-w-full h-auto mx-auto rounded-xl"
                 style={{ maxHeight: "500px" }}
               />
               <p className="text-xs text-muted-foreground mt-4">
@@ -387,7 +415,6 @@ const EcoturismoPage = () => {
             </motion.div>
           </div>
         </section>
-
       </div>
     </RDMLayout>
   );

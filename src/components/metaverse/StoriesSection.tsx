@@ -18,11 +18,7 @@ interface StoriesSectionProps {
   onAddStory?: () => void;
 }
 
-const StoriesSection: React.FC<StoriesSectionProps> = ({
-  stories,
-  onStoryClick,
-  onAddStory
-}) => {
+const StoriesSection: React.FC<StoriesSectionProps> = ({ stories, onStoryClick, onAddStory }) => {
   return (
     <div className="relative">
       {/* Section Header */}
@@ -59,19 +55,21 @@ const StoriesSection: React.FC<StoriesSectionProps> = ({
             className="flex-shrink-0 flex flex-col items-center gap-2"
           >
             {/* Avatar with gradient ring */}
-            <div className={cn(
-              "relative w-20 h-20 rounded-full p-0.5",
-              story.hasNew 
-                ? "bg-gradient-to-br from-accent via-primary to-pink-500" 
-                : "bg-border"
-            )}>
+            <div
+              className={cn(
+                "relative w-20 h-20 rounded-full p-0.5",
+                story.hasNew
+                  ? "bg-gradient-to-br from-accent via-primary to-pink-500"
+                  : "bg-border",
+              )}
+            >
               <div className="w-full h-full rounded-full overflow-hidden bg-card p-0.5">
-                <div 
+                <div
                   className="w-full h-full rounded-full bg-cover bg-center"
                   style={{ backgroundImage: `url(${story.avatar})` }}
                 />
               </div>
-              
+
               {/* New indicator */}
               {story.hasNew && (
                 <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-accent text-[10px] font-bold text-accent-foreground">
@@ -79,7 +77,7 @@ const StoriesSection: React.FC<StoriesSectionProps> = ({
                 </span>
               )}
             </div>
-            
+
             {/* Username */}
             <span className="text-xs text-foreground/80 truncate max-w-[80px]">
               {story.username}

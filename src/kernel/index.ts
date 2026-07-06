@@ -1,7 +1,7 @@
-import { ChronusEngine, type PublishClient, type QueryableDb } from './engine/ChronusEngine';
-import { MDX5Kernel } from './engine/MDX5Kernel';
-import { timeUpEngine } from './engine/TimeUpEngine';
-import { ledger } from './engine/Ledger';
+import { ChronusEngine, type PublishClient, type QueryableDb } from "./engine/ChronusEngine";
+import { MDX5Kernel } from "./engine/MDX5Kernel";
+import { timeUpEngine } from "./engine/TimeUpEngine";
+import { ledger } from "./engine/Ledger";
 import { federationBus } from "@/federaciones/FederationBus";
 import { logger } from "@/lib/logger";
 
@@ -21,7 +21,7 @@ const mockPubSub: PublishClient = {
 };
 
 if (databaseUrl && !redisUrl) {
-  logger.warn('[KERNEL] DATABASE_URL y REDIS_URL no configurados. Se usará modo mock local.');
+  logger.warn("[KERNEL] DATABASE_URL y REDIS_URL no configurados. Se usará modo mock local.");
 }
 
 const chronus = new ChronusEngine({ db: mockDb, pubsub: mockPubSub });
@@ -38,19 +38,19 @@ export function startKernel() {
 
   autopoiesisTimer = setInterval(async () => {
     try {
-      await chronus.calcularSaturacionZonal('centro_historico', {
-        clima: 'despejado',
+      await chronus.calcularSaturacionZonal("centro_historico", {
+        clima: "despejado",
         eventos_activos: [],
         turistas_concurrentes: 0,
       });
     } catch (error) {
-      logger.error('[KERNEL] Error en ciclo de autopoiesis', error);
+      logger.error("[KERNEL] Error en ciclo de autopoiesis", error);
     }
   }, 60_000);
 
-  logger.info('[KERNEL] MD-X5 activo en modo soberano edge-first.');
-  logger.info('[KERNEL] TIME UP engine cargado con', { politicas: 10 });
-  logger.info('[KERNEL] Ledger listo para registrar acciones críticas');
+  logger.info("[KERNEL] MD-X5 activo en modo soberano edge-first.");
+  logger.info("[KERNEL] TIME UP engine cargado con", { politicas: 10 });
+  logger.info("[KERNEL] Ledger listo para registrar acciones críticas");
 }
 
 export function stopKernel() {
@@ -72,7 +72,7 @@ export function submitIntent(
   type: string,
   payload: unknown,
   source: string,
-  priority: 'low' | 'normal' | 'high' | 'critical' = 'normal',
+  priority: "low" | "normal" | "high" | "critical" = "normal",
 ): string {
   return mdx5.submit({
     type,

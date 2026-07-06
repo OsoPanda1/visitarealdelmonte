@@ -27,7 +27,7 @@ export function useSystemMode(pollIntervalMs = 30000) {
     bootstrapCoreEvents();
 
     const unsub = onModeChange((mode) => {
-      setState(prev => ({ ...prev, mode }));
+      setState((prev) => ({ ...prev, mode }));
     });
 
     // Periodic metrics collection

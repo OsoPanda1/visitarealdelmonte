@@ -18,7 +18,7 @@ export type {
   QuestType,
   QuestDifficulty,
   BadgeRarity,
-} from './types';
+} from "./types";
 
 export {
   calculateLevel,
@@ -29,10 +29,6 @@ export {
   evaluateBadgeCriteria,
   calculateRoles,
   processGameEvent,
-} from './engine';
+} from "./engine";
 
-export {
-  postGameEvent,
-  getPlayerProfile,
-  getLeaderboard,
-} from './api';
+export { postGameEvent, getPlayerProfile, getLeaderboard } from "./api";

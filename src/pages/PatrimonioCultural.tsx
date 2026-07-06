@@ -3,7 +3,14 @@ import { motion } from "framer-motion";
 import { Landmark, MapPin, Clock, Star, Filter } from "lucide-react";
 import { RDMLayout } from "@/components/rdm/RDMLayout";
 import { SEOMeta } from "@/components/SEOMeta";
-import { ALL_TERRITORIAL_SITES, MUSEOS_SITIO, ESPACIOS_IDENTIDAD, HITOS_VISUALES, PATRIMONIO_NATURAL, type SitioPatrimonial } from "@/data/rdm-territorial";
+import {
+  ALL_TERRITORIAL_SITES,
+  MUSEOS_SITIO,
+  ESPACIOS_IDENTIDAD,
+  HITOS_VISUALES,
+  PATRIMONIO_NATURAL,
+  type SitioPatrimonial,
+} from "@/data/rdm-territorial";
 
 type Filtro = "todos" | "museo" | "espacio-identidad" | "monumento" | "hito-visual" | "naturaleza";
 
@@ -44,13 +51,19 @@ function SiteCard({ site, index }: { site: SitioPatrimonial; index: number }) {
             </span>
             {site.destacado && <Star className="w-3 h-3 text-[hsl(var(--rdm-amber))]" />}
           </div>
-          <h3 className="font-semibold text-base group-hover:text-[hsl(var(--rdm-amber))] transition-colors" style={{ fontFamily: "var(--font-display)" }}>
+          <h3
+            className="font-semibold text-base group-hover:text-[hsl(var(--rdm-amber))] transition-colors"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
             {site.nombre}
           </h3>
         </div>
       </div>
 
-      <p className="text-xs text-[hsl(var(--muted-foreground))] leading-relaxed mb-3" style={{ fontFamily: "var(--font-body)" }}>
+      <p
+        className="text-xs text-[hsl(var(--muted-foreground))] leading-relaxed mb-3"
+        style={{ fontFamily: "var(--font-body)" }}
+      >
         {site.descripcion}
       </p>
 
@@ -77,26 +90,40 @@ function SiteCard({ site, index }: { site: SitioPatrimonial; index: number }) {
 export default function PatrimonioCulturalPage() {
   const [filtro, setFiltro] = useState<Filtro>("todos");
 
-  const sitiosFiltrados = filtro === "todos"
-    ? ALL_TERRITORIAL_SITES
-    : ALL_TERRITORIAL_SITES.filter((s) => s.categoria === filtro);
+  const sitiosFiltrados =
+    filtro === "todos"
+      ? ALL_TERRITORIAL_SITES
+      : ALL_TERRITORIAL_SITES.filter((s) => s.categoria === filtro);
 
   return (
     <RDMLayout>
-      <SEOMeta title="Patrimonio Cultural — Real del Monte" description="Museos, monumentos, hitos visuales y patrimonio natural de Real del Monte. Guía completa de activos históricos y culturales." />
+      <SEOMeta
+        title="Patrimonio Cultural — Real del Monte"
+        description="Museos, monumentos, hitos visuales y patrimonio natural de Real del Monte. Guía completa de activos históricos y culturales."
+      />
 
       {/* Hero */}
       <section className="pt-24 pb-12 px-6 md:px-16 lg:px-24">
         <div className="max-w-5xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <p className="text-sm tracking-[0.3em] uppercase text-[hsl(var(--rdm-amber))] mb-3" style={{ fontFamily: "var(--font-body)" }}>
+            <p
+              className="text-sm tracking-[0.3em] uppercase text-[hsl(var(--rdm-amber))] mb-3"
+              style={{ fontFamily: "var(--font-body)" }}
+            >
               Inventario Patrimonial
             </p>
-            <h1 className="text-4xl md:text-6xl font-bold mb-4" style={{ fontFamily: "var(--font-display)" }}>
+            <h1
+              className="text-4xl md:text-6xl font-bold mb-4"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
               Patrimonio <span className="text-[hsl(var(--rdm-amber))]">cultural</span>
             </h1>
-            <p className="text-[hsl(var(--muted-foreground))] max-w-2xl text-lg leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
-              {ALL_TERRITORIAL_SITES.length} sitios de interés catalogados: museos de sitio, monumentos, espacios de identidad, hitos visuales y patrimonio natural.
+            <p
+              className="text-[hsl(var(--muted-foreground))] max-w-2xl text-lg leading-relaxed"
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              {ALL_TERRITORIAL_SITES.length} sitios de interés catalogados: museos de sitio,
+              monumentos, espacios de identidad, hitos visuales y patrimonio natural.
             </p>
           </motion.div>
 
@@ -109,8 +136,18 @@ export default function PatrimonioCulturalPage() {
               { label: "Naturaleza", count: PATRIMONIO_NATURAL.length },
             ].map((s) => (
               <div key={s.label} className="rdm-glass rounded-lg px-4 py-2 text-center">
-                <p className="text-xl font-bold text-[hsl(var(--rdm-amber))]" style={{ fontFamily: "var(--font-display)" }}>{s.count}</p>
-                <p className="text-[10px] text-[hsl(var(--muted-foreground))]" style={{ fontFamily: "var(--font-body)" }}>{s.label}</p>
+                <p
+                  className="text-xl font-bold text-[hsl(var(--rdm-amber))]"
+                  style={{ fontFamily: "var(--font-display)" }}
+                >
+                  {s.count}
+                </p>
+                <p
+                  className="text-[10px] text-[hsl(var(--muted-foreground))]"
+                  style={{ fontFamily: "var(--font-body)" }}
+                >
+                  {s.label}
+                </p>
               </div>
             ))}
           </div>
@@ -148,7 +185,12 @@ export default function PatrimonioCulturalPage() {
         {sitiosFiltrados.length === 0 && (
           <div className="text-center py-20">
             <Landmark className="w-12 h-12 mx-auto text-[hsl(var(--muted-foreground))] mb-4" />
-            <p className="text-[hsl(var(--muted-foreground))]" style={{ fontFamily: "var(--font-body)" }}>No hay sitios en esta categoría.</p>
+            <p
+              className="text-[hsl(var(--muted-foreground))]"
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              No hay sitios en esta categoría.
+            </p>
           </div>
         )}
       </section>

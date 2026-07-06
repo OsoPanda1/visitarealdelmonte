@@ -5,8 +5,21 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import {
-  Shield, Wallet, Users, Globe, Activity, Zap, TrendingUp, Crown, Sparkles,
-  Network, Cpu, ScrollText, Database, Radio, Lock,
+  Shield,
+  Wallet,
+  Users,
+  Globe,
+  Activity,
+  Zap,
+  TrendingUp,
+  Crown,
+  Sparkles,
+  Network,
+  Cpu,
+  ScrollText,
+  Database,
+  Radio,
+  Lock,
 } from "lucide-react";
 import NavBar from "@/components/Navbar";
 import { FooterSection } from "@/components/FooterSection";
@@ -16,21 +29,40 @@ import { useEconomyStore } from "@/stores/tamv/economyStore";
 import { useNetworkStore } from "@/stores/tamv/networkStore";
 
 const TAMVHub = () => {
-  const { status, guardianMode, emotionalLevel, creativityIndex, empathyIndex } = useIsabellaStore();
+  const { status, guardianMode, emotionalLevel, creativityIndex, empathyIndex } =
+    useIsabellaStore();
   const { tcBalance, msrBalance, phoenixFund, infraFund, reserveFund } = useEconomyStore();
-  const { nodes, quantumEncryptionActive, msrBridgeConnected, bookpiAnchorActive } = useNetworkStore();
+  const { nodes, quantumEncryptionActive, msrBridgeConnected, bookpiAnchorActive } =
+    useNetworkStore();
 
   const systemMetrics = [
     { label: "Ciudadanos Federados", value: "24,847", icon: Users, trend: "+12.4%" },
     { label: "DreamSpaces Activos", value: "3,421", icon: Globe, trend: "+8.7%" },
     { label: "Decisiones/día (BABAS)", value: "156K", icon: Activity, trend: "+15.2%" },
-    { label: "Nodos Federados", value: nodes.length.toString(), icon: Network, trend: "Triple Federado" },
+    {
+      label: "Nodos Federados",
+      value: nodes.length.toString(),
+      icon: Network,
+      trend: "Triple Federado",
+    },
   ];
 
   const economyDistribution = [
-    { label: "Fénix (20%) — Resiliencia", value: phoenixFund, color: "from-[hsl(var(--terracotta))] to-[hsl(var(--copper))]" },
-    { label: "Infraestructura (30%)", value: infraFund, color: "from-[hsl(var(--electric))] to-[hsl(var(--navy))]" },
-    { label: "Reserva (50%)", value: reserveFund, color: "from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))]" },
+    {
+      label: "Fénix (20%) — Resiliencia",
+      value: phoenixFund,
+      color: "from-[hsl(var(--terracotta))] to-[hsl(var(--copper))]",
+    },
+    {
+      label: "Infraestructura (30%)",
+      value: infraFund,
+      color: "from-[hsl(var(--electric))] to-[hsl(var(--navy))]",
+    },
+    {
+      label: "Reserva (50%)",
+      value: reserveFund,
+      color: "from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))]",
+    },
   ];
 
   const protocols = [
@@ -59,7 +91,10 @@ const TAMVHub = () => {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <Badge variant="outline" className="mb-6 px-4 py-2 border-[hsl(var(--gold))]/40 bg-[hsl(var(--gold))]/5">
+            <Badge
+              variant="outline"
+              className="mb-6 px-4 py-2 border-[hsl(var(--gold))]/40 bg-[hsl(var(--gold))]/5"
+            >
               <Crown className="w-4 h-4 mr-2 text-[hsl(var(--gold))]" />
               <span className="font-body text-[10px] tracking-[0.3em] uppercase text-[hsl(var(--gold))]">
                 Nodo Cero · Real del Monte
@@ -70,8 +105,8 @@ const TAMVHub = () => {
               <span className="text-foreground/90">Civilization Hub</span>
             </h1>
             <p className="font-body text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Sistema operativo civilizacional híbrido cuántico-tradicional.
-              Triple Federado: <span className="text-[hsl(var(--gold))]">conceptual</span> ·{" "}
+              Sistema operativo civilizacional híbrido cuántico-tradicional. Triple Federado:{" "}
+              <span className="text-[hsl(var(--gold))]">conceptual</span> ·{" "}
               <span className="text-[hsl(var(--electric))]">legal</span> ·{" "}
               <span className="text-[hsl(var(--platinum))]">técnico</span>.
             </p>
@@ -99,7 +134,10 @@ const TAMVHub = () => {
                       </div>
                       <div className="flex flex-col items-end gap-2">
                         <m.icon className="w-7 h-7 text-[hsl(var(--gold))]/60" />
-                        <Badge variant="secondary" className="text-[9px] tracking-wider bg-[hsl(var(--electric))]/10 text-[hsl(var(--electric-light))]">
+                        <Badge
+                          variant="secondary"
+                          className="text-[9px] tracking-wider bg-[hsl(var(--electric))]/10 text-[hsl(var(--electric-light))]"
+                        >
                           <TrendingUp className="w-3 h-3 mr-1" />
                           {m.trend}
                         </Badge>
@@ -117,7 +155,9 @@ const TAMVHub = () => {
             <Card className="border-[hsl(var(--gold))]/20 bg-card/60 backdrop-blur-md">
               <CardHeader>
                 <CardTitle className="font-display text-xl flex items-center gap-2">
-                  <Shield className={`w-5 h-5 ${guardianMode ? "text-[hsl(var(--electric))]" : "text-muted-foreground"}`} />
+                  <Shield
+                    className={`w-5 h-5 ${guardianMode ? "text-[hsl(var(--electric))]" : "text-muted-foreground"}`}
+                  />
                   Isabella AI NextGen™
                 </CardTitle>
               </CardHeader>
@@ -145,7 +185,9 @@ const TAMVHub = () => {
                 ].map((m) => (
                   <div key={m.label}>
                     <div className="flex justify-between font-body text-xs mb-2">
-                      <span className="text-muted-foreground tracking-wider uppercase">{m.label}</span>
+                      <span className="text-muted-foreground tracking-wider uppercase">
+                        {m.label}
+                      </span>
                       <span className="text-foreground/80">{m.value}%</span>
                     </div>
                     <Progress value={m.value} className="h-1.5" />
@@ -165,12 +207,20 @@ const TAMVHub = () => {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-3">
                   <div className="p-3 rounded-lg bg-[hsl(var(--gold))]/8 border border-[hsl(var(--gold))]/20">
-                    <p className="font-body text-[9px] tracking-[0.2em] uppercase text-muted-foreground">TC</p>
-                    <p className="font-display text-2xl font-light mt-1">{tcBalance.toLocaleString()}</p>
+                    <p className="font-body text-[9px] tracking-[0.2em] uppercase text-muted-foreground">
+                      TC
+                    </p>
+                    <p className="font-display text-2xl font-light mt-1">
+                      {tcBalance.toLocaleString()}
+                    </p>
                   </div>
                   <div className="p-3 rounded-lg bg-[hsl(var(--electric))]/8 border border-[hsl(var(--electric))]/20">
-                    <p className="font-body text-[9px] tracking-[0.2em] uppercase text-muted-foreground">MSR</p>
-                    <p className="font-display text-2xl font-light mt-1">{msrBalance.toLocaleString()}</p>
+                    <p className="font-body text-[9px] tracking-[0.2em] uppercase text-muted-foreground">
+                      MSR
+                    </p>
+                    <p className="font-display text-2xl font-light mt-1">
+                      {msrBalance.toLocaleString()}
+                    </p>
                   </div>
                 </div>
                 <div className="pt-3 border-t border-border/30 space-y-3">
@@ -183,7 +233,9 @@ const TAMVHub = () => {
                         <span className="text-foreground/80">{f.label}</span>
                         <span className="text-muted-foreground">${f.value.toFixed(2)}</span>
                       </div>
-                      <div className={`h-1.5 rounded-full bg-gradient-to-r ${f.color} opacity-60`} />
+                      <div
+                        className={`h-1.5 rounded-full bg-gradient-to-r ${f.color} opacity-60`}
+                      />
                     </div>
                   ))}
                 </div>
@@ -306,19 +358,34 @@ const TAMVHub = () => {
                 ))}
               </div>
               <div className="mt-6 flex flex-wrap gap-3">
-                <Button asChild variant="default" className="bg-[hsl(var(--gold))] hover:bg-[hsl(var(--gold-dark))] text-background">
+                <Button
+                  asChild
+                  variant="default"
+                  className="bg-[hsl(var(--gold))] hover:bg-[hsl(var(--gold-dark))] text-background"
+                >
                   <Link to="/tamv/status">Ver Estado del Nodo Cero</Link>
                 </Button>
-                <Button asChild variant="outline" className="border-[hsl(var(--gold))]/30 text-foreground hover:bg-[hsl(var(--gold))]/10">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="border-[hsl(var(--gold))]/30 text-foreground hover:bg-[hsl(var(--gold))]/10"
+                >
                   <Link to="/tamv/api">Explorar API TAMV</Link>
                 </Button>
-                <Button asChild variant="outline" className="border-[hsl(var(--electric))]/40 text-[hsl(var(--electric-light))] hover:bg-[hsl(var(--electric))]/10">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="border-[hsl(var(--electric))]/40 text-[hsl(var(--electric-light))] hover:bg-[hsl(var(--electric))]/10"
+                >
                   <Link to="/tamv/thesis">
                     <ScrollText className="w-4 h-4 mr-2" />
                     Tesis Soberana TAMV
                   </Link>
                 </Button>
-                <Button asChild className="bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-[hsl(var(--navy-dark))] font-semibold">
+                <Button
+                  asChild
+                  className="bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-[hsl(var(--navy-dark))] font-semibold"
+                >
                   <Link to="/tenochtitlan">
                     <Network className="w-4 h-4 mr-2" />
                     System Tenochtitlán

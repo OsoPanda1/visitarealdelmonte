@@ -1,10 +1,5 @@
 import { logger } from "@/lib/logger";
-import type {
-  TimeUpPolicy,
-  TimeUpVerdict,
-  MDX5Intent,
-  FederationId,
-} from "@/core/models";
+import type { TimeUpPolicy, TimeUpVerdict, MDX5Intent, FederationId } from "@/core/models";
 
 interface PolicyResult {
   verdict: TimeUpVerdict;
@@ -16,7 +11,8 @@ const TIME_UP_POLICIES: TimeUpPolicy[] = [
   {
     id: "TUP-001",
     name: "No destrucción de memoria civilizatoria",
-    description: "F1 (DATA) no puede eliminar físicamente registros históricos. Solo archive lógico.",
+    description:
+      "F1 (DATA) no puede eliminar físicamente registros históricos. Solo archive lógico.",
     federation: "DEKATEOTL",
     rule: "f1_no_physical_delete",
     severity: "CRITICO",
@@ -48,7 +44,8 @@ const TIME_UP_POLICIES: TimeUpPolicy[] = [
   {
     id: "TUP-005",
     name: "Control dual en acciones críticas",
-    description: "Acciones críticas requieren aprobación de al menos dos fedraciones o Isabella + humana.",
+    description:
+      "Acciones críticas requieren aprobación de al menos dos fedraciones o Isabella + humana.",
     federation: "PHOENIX",
     rule: "dual_control_critical_actions",
     severity: "CRITICO",
@@ -80,7 +77,8 @@ const TIME_UP_POLICIES: TimeUpPolicy[] = [
   {
     id: "TUP-009",
     name: "Territorio físico no reemplazable por virtual",
-    description: "F7 (TERRITORY) no puede aprobar acciones que pongan en riesgo el territorio físico real.",
+    description:
+      "F7 (TERRITORY) no puede aprobar acciones que pongan en riesgo el territorio físico real.",
     federation: "CHRONOS",
     rule: "physical_territory_supremacy",
     severity: "CRITICO",
@@ -143,15 +141,16 @@ export class TimeUpEngine {
   }
 
   getGlobalVerdict(results: PolicyResult[]): TimeUpVerdict {
-    if (results.some(r => r.verdict === "REJECTED")) return "REJECTED";
-    if (results.some(r => r.verdict === "PENDING_HUMAN")) return "PENDING_HUMAN";
-    if (results.some(r => r.verdict === "PENDING_ISABELLA")) return "PENDING_ISABELLA";
+    if (results.some((r) => r.verdict === "REJECTED")) return "REJECTED";
+    if (results.some((r) => r.verdict === "PENDING_HUMAN")) return "PENDING_HUMAN";
+    if (results.some((r) => r.verdict === "PENDING_ISABELLA")) return "PENDING_ISABELLA";
     return "APPROVED";
   }
 
   private getReason(verdict: TimeUpVerdict, policy: TimeUpPolicy): string {
     if (verdict === "APPROVED") return `TIME UP: ${policy.name} aprobada`;
-    if (verdict === "PENDING_ISABELLA") return `TIME UP: ${policy.name} requiere validación de Isabella`;
+    if (verdict === "PENDING_ISABELLA")
+      return `TIME UP: ${policy.name} requiere validación de Isabella`;
     if (verdict === "PENDING_HUMAN") return `TIME UP: ${policy.name} requiere intervención humana`;
     return `TIME UP: ${policy.name} rechazada`;
   }

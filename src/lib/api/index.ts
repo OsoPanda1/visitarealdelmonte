@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_SUPABASE_URL ?? ""
+const BASE_URL = import.meta.env.VITE_SUPABASE_URL ?? "";
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE_URL}${path}`, {
@@ -7,9 +7,9 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
       ...options?.headers,
     },
     ...options,
-  })
-  if (!res.ok) throw new Error(`API error: ${res.status} ${res.statusText}`)
-  return res.json()
+  });
+  if (!res.ok) throw new Error(`API error: ${res.status} ${res.statusText}`);
+  return res.json();
 }
 
 export const paymentsApi = {
@@ -18,7 +18,7 @@ export const paymentsApi = {
       method: "POST",
       body: JSON.stringify(data),
     }),
-}
+};
 
 export const newsletterApi = {
   subscribe: (data: { email: string; source?: string; name?: string }) =>
@@ -35,4 +35,4 @@ export const newsletterApi = {
     request<{ success: boolean; data: { subscribed: boolean } }>(
       `/newsletter/check?email=${encodeURIComponent(email)}`,
     ),
-}
+};

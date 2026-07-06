@@ -3,7 +3,12 @@ import { motion } from "framer-motion";
 import { Clock, MapPin, Star, Utensils, Flame, Coffee, ChefHat, Sparkles } from "lucide-react";
 import { RDMLayout } from "@/components/rdm/RDMLayout";
 import { PAGE_SEO, SEOMeta } from "@/components/SEOMeta";
-import { AuroraBackground, TextReveal, StaggerContainer, StaggerItem } from "@/components/VisualEffects";
+import {
+  AuroraBackground,
+  TextReveal,
+  StaggerContainer,
+  StaggerItem,
+} from "@/components/VisualEffects";
 import GradientSeparator from "@/components/GradientSeparator";
 import pasteImg from "@/assets/paste.webp";
 import rdm1 from "@/assets/rdm1.jpeg";
@@ -29,21 +34,24 @@ const culinaryHighlights = [
   {
     icon: ChefHat,
     title: "Pastes Tradicionales",
-    description: "Herencia culinaria cornish desde 1850, con mas de 50 variedades que van desde el tradicional de papa con carne hasta creaciones contemporaneas.",
+    description:
+      "Herencia culinaria cornish desde 1850, con mas de 50 variedades que van desde el tradicional de papa con carne hasta creaciones contemporaneas.",
     color: "text-gold-400",
     bgColor: "bg-gold-400/10",
   },
   {
     icon: Coffee,
     title: "Cafe de Altura",
-    description: "Cafeterias artesanales que sirven cafe de olla y especialidades preparadas con granos selectos a 2,700 metros de altitud.",
+    description:
+      "Cafeterias artesanales que sirven cafe de olla y especialidades preparadas con granos selectos a 2,700 metros de altitud.",
     color: "text-blue-400",
     bgColor: "bg-blue-400/10",
   },
   {
     icon: Flame,
     title: "Cocina de Montana",
-    description: "Trucha fresca, barbacoa de hoyo, mixiotes y platillos hidalguenses con ingredientes locales y tecnicas ancestrales.",
+    description:
+      "Trucha fresca, barbacoa de hoyo, mixiotes y platillos hidalguenses con ingredientes locales y tecnicas ancestrales.",
     color: "text-orange-400",
     bgColor: "bg-orange-400/10",
   },
@@ -77,10 +85,12 @@ export default function GastronomiaPage() {
     <RDMLayout>
       <SEOMeta {...PAGE_SEO.gastronomia} />
       <div className="min-h-screen bg-background text-foreground">
-
         {/* Immersive Hero */}
         <section className="relative overflow-hidden pt-24 min-h-[70vh] flex items-center">
-          <div className="absolute inset-0 bg-cover bg-center opacity-25 ken-burns" style={{ backgroundImage: `url(${pasteImg})` }} />
+          <div
+            className="absolute inset-0 bg-cover bg-center opacity-25 ken-burns"
+            style={{ backgroundImage: `url(${pasteImg})` }}
+          />
           <div className="absolute inset-0 bg-gradient-to-b from-night-900/80 via-night-900/60 to-night-900" />
           <div className="absolute inset-0 bg-gradient-to-r from-night-900/50 via-transparent to-night-900/50" />
           <AuroraBackground />
@@ -102,7 +112,8 @@ export default function GastronomiaPage() {
                 <span
                   className="block animate-gradient-text text-glow-gold"
                   style={{
-                    backgroundImage: "linear-gradient(135deg, hsl(43,80%,55%) 0%, hsl(35,70%,65%) 25%, hsl(43,80%,55%) 50%, hsl(25,60%,50%) 75%, hsl(43,80%,55%) 100%)",
+                    backgroundImage:
+                      "linear-gradient(135deg, hsl(43,80%,55%) 0%, hsl(35,70%,65%) 25%, hsl(43,80%,55%) 50%, hsl(25,60%,50%) 75%, hsl(43,80%,55%) 100%)",
                     backgroundSize: "200% 200%",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
@@ -135,7 +146,8 @@ export default function GastronomiaPage() {
                   Sabores que cuentan historia
                 </h2>
                 <p className="text-silver-400 max-w-xl mx-auto">
-                  Una fusion unica entre la cocina mexicana y la herencia britanica que define la identidad gastronomica de Real del Monte.
+                  Una fusion unica entre la cocina mexicana y la herencia britanica que define la
+                  identidad gastronomica de Real del Monte.
                 </p>
               </div>
             </TextReveal>
@@ -147,15 +159,15 @@ export default function GastronomiaPage() {
                     whileHover={{ y: -6, scale: 1.02 }}
                     className="group relative rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm transition-all duration-400 hover:border-white/20 hover:bg-white/8 card-glow-hover"
                   >
-                    <div className={`w-14 h-14 rounded-2xl ${item.bgColor} flex items-center justify-center mb-6`}>
+                    <div
+                      className={`w-14 h-14 rounded-2xl ${item.bgColor} flex items-center justify-center mb-6`}
+                    >
                       <item.icon className={`h-7 w-7 ${item.color}`} />
                     </div>
                     <h3 className="font-serif text-xl font-semibold text-silver-200 mb-3">
                       {item.title}
                     </h3>
-                    <p className="text-sm text-silver-400 leading-relaxed">
-                      {item.description}
-                    </p>
+                    <p className="text-sm text-silver-400 leading-relaxed">{item.description}</p>
                   </motion.div>
                 </StaggerItem>
               ))}
@@ -193,7 +205,12 @@ export default function GastronomiaPage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-night-900/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
                   <div className="absolute bottom-0 left-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-2 group-hover:translate-y-0 z-10">
-                    <p className="text-white text-sm font-medium" style={{ fontFamily: "var(--font-body)" }}>{photo.label}</p>
+                    <p
+                      className="text-white text-sm font-medium"
+                      style={{ fontFamily: "var(--font-body)" }}
+                    >
+                      {photo.label}
+                    </p>
                   </div>
                 </motion.div>
               ))}
@@ -219,7 +236,10 @@ export default function GastronomiaPage() {
           {loading ? (
             <div className="grid gap-4 md:grid-cols-2">
               {[0, 1, 2, 3].map((i) => (
-                <div key={i} className="rounded-xl border border-white/10 bg-white/5 p-5 animate-pulse">
+                <div
+                  key={i}
+                  className="rounded-xl border border-white/10 bg-white/5 p-5 animate-pulse"
+                >
                   <div className="h-5 bg-white/10 rounded w-1/3 mb-3" />
                   <div className="h-3 bg-white/5 rounded w-2/3 mb-2" />
                   <div className="h-3 bg-white/5 rounded w-1/2" />
@@ -247,11 +267,22 @@ export default function GastronomiaPage() {
                       <Utensils className="h-4 w-4 text-gold-400" />
                       {business.name}
                     </h2>
-                    <p className="mb-3 text-sm text-silver-500 leading-relaxed">{business.description}</p>
+                    <p className="mb-3 text-sm text-silver-500 leading-relaxed">
+                      {business.description}
+                    </p>
                     <div className="flex flex-wrap gap-3 text-xs text-silver-400">
-                      <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-white/5"><Star className="h-3.5 w-3.5 text-gold-400" />{business.category}</span>
-                      <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-white/5"><Clock className="h-3.5 w-3.5" />Horario variable</span>
-                      <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-white/5"><MapPin className="h-3.5 w-3.5" />Centro historico</span>
+                      <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-white/5">
+                        <Star className="h-3.5 w-3.5 text-gold-400" />
+                        {business.category}
+                      </span>
+                      <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-white/5">
+                        <Clock className="h-3.5 w-3.5" />
+                        Horario variable
+                      </span>
+                      <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-white/5">
+                        <MapPin className="h-3.5 w-3.5" />
+                        Centro historico
+                      </span>
                     </div>
                   </motion.article>
                 </StaggerItem>
@@ -259,7 +290,6 @@ export default function GastronomiaPage() {
             </StaggerContainer>
           )}
         </section>
-
       </div>
     </RDMLayout>
   );

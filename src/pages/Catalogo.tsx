@@ -2,9 +2,24 @@ import { RDMLayout } from "@/components/rdm/RDMLayout";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import {
-  Hotel, UtensilsCrossed, Wine, Gem, Coffee, ShoppingBag,
-  Store, Truck, Star, Check, Sparkles, Clock, Percent,
-  ArrowRight, Shield, Users, TrendingUp, MapPin
+  Hotel,
+  UtensilsCrossed,
+  Wine,
+  Gem,
+  Coffee,
+  ShoppingBag,
+  Store,
+  Truck,
+  Star,
+  Check,
+  Sparkles,
+  Clock,
+  Percent,
+  ArrowRight,
+  Shield,
+  Users,
+  TrendingUp,
+  MapPin,
 } from "lucide-react";
 import { SEOMeta } from "@/components/SEOMeta";
 import { Button } from "@/components/ui/button";
@@ -186,8 +201,8 @@ const CatalogoPage = () => {
                 </span>
               </h1>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-                Posiciona tu negocio en la plataforma turística líder de Real del Monte.
-                Miles de visitantes buscan negocios como el tuyo cada mes.
+                Posiciona tu negocio en la plataforma turística líder de Real del Monte. Miles de
+                visitantes buscan negocios como el tuyo cada mes.
               </p>
 
               {/* Stats */}
@@ -227,8 +242,8 @@ const CatalogoPage = () => {
                         🎉 Oferta Especial: Primeros 200 negocios
                       </h3>
                       <p className="text-muted-foreground text-sm">
-                        50% de descuento al cubrir 6, 9 o 12 meses por adelantado.
-                        ¡Lugares limitados!
+                        50% de descuento al cubrir 6, 9 o 12 meses por adelantado. ¡Lugares
+                        limitados!
                       </p>
                     </div>
                   </div>
@@ -266,7 +281,8 @@ const CatalogoPage = () => {
                 Planes por Categoría
               </h2>
               <p className="text-muted-foreground max-w-xl mx-auto">
-                Precios mensuales. Todos los planes incluyen presencia en el mapa interactivo y directorio digital.
+                Precios mensuales. Todos los planes incluyen presencia en el mapa interactivo y
+                directorio digital.
               </p>
             </div>
 
@@ -291,7 +307,9 @@ const CatalogoPage = () => {
 
                     <div className="p-6">
                       <div className="flex items-center gap-3 mb-4">
-                        <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${tier.color} flex items-center justify-center`}>
+                        <div
+                          className={`w-10 h-10 rounded-xl bg-gradient-to-br ${tier.color} flex items-center justify-center`}
+                        >
                           <tier.icon className="w-5 h-5 text-white" />
                         </div>
                         <h3 className="font-semibold text-foreground text-sm leading-tight">
@@ -316,15 +334,23 @@ const CatalogoPage = () => {
                             <span className="text-sm text-muted-foreground line-through">
                               ${tier.price}/mes
                             </span>
-                            <Badge variant="secondary" className="text-[10px] bg-green-500/10 text-green-600 border-green-500/20">
+                            <Badge
+                              variant="secondary"
+                              className="text-[10px] bg-green-500/10 text-green-600 border-green-500/20"
+                            >
                               -50%
                             </Badge>
                           </div>
                         )}
                         <p className="text-xs text-muted-foreground mt-2">
-                          Total {plan.label}: <span className="font-semibold text-foreground">${totalDiscounted.toLocaleString()} MXN</span>
+                          Total {plan.label}:{" "}
+                          <span className="font-semibold text-foreground">
+                            ${totalDiscounted.toLocaleString()} MXN
+                          </span>
                           {showEarlyBird && (
-                            <span className="line-through ml-1">${totalOriginal.toLocaleString()}</span>
+                            <span className="line-through ml-1">
+                              ${totalOriginal.toLocaleString()}
+                            </span>
                           )}
                         </p>
                       </div>
@@ -332,7 +358,10 @@ const CatalogoPage = () => {
                       {/* Features */}
                       <ul className="space-y-2 mb-6">
                         {tier.features.map((f) => (
-                          <li key={f} className="flex items-start gap-2 text-xs text-muted-foreground">
+                          <li
+                            key={f}
+                            className="flex items-start gap-2 text-xs text-muted-foreground"
+                          >
                             <Check className="w-3.5 h-3.5 text-green-500 mt-0.5 flex-shrink-0" />
                             {f}
                           </li>
@@ -363,10 +392,26 @@ const CatalogoPage = () => {
             </h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
               {[
-                { icon: TrendingUp, title: "Más Clientes", desc: "Miles de turistas buscan negocios como el tuyo cada mes en nuestra plataforma." },
-                { icon: MapPin, title: "Visibilidad en Mapa", desc: "Tu negocio aparece en el mapa interactivo HUD con marcador destacado." },
-                { icon: Shield, title: "Sello Verificado", desc: "Genera confianza con el sello de verificación RDM Digital." },
-                { icon: Users, title: "Comunidad Activa", desc: "Forma parte de la red de negocios más importante de Real del Monte." },
+                {
+                  icon: TrendingUp,
+                  title: "Más Clientes",
+                  desc: "Miles de turistas buscan negocios como el tuyo cada mes en nuestra plataforma.",
+                },
+                {
+                  icon: MapPin,
+                  title: "Visibilidad en Mapa",
+                  desc: "Tu negocio aparece en el mapa interactivo HUD con marcador destacado.",
+                },
+                {
+                  icon: Shield,
+                  title: "Sello Verificado",
+                  desc: "Genera confianza con el sello de verificación RDM Digital.",
+                },
+                {
+                  icon: Users,
+                  title: "Comunidad Activa",
+                  desc: "Forma parte de la red de negocios más importante de Real del Monte.",
+                },
               ].map((b) => (
                 <motion.div
                   key={b.title}
@@ -400,8 +445,8 @@ const CatalogoPage = () => {
                 ¡Lugares limitados!
               </h2>
               <p className="text-muted-foreground max-w-xl mx-auto mb-6">
-                Solo los primeros 200 negocios obtienen el 50% de descuento.
-                No pierdas tu lugar en la plataforma turística más innovadora de Real del Monte.
+                Solo los primeros 200 negocios obtienen el 50% de descuento. No pierdas tu lugar en
+                la plataforma turística más innovadora de Real del Monte.
               </p>
               <Button size="lg" className="px-8">
                 <Star className="w-4 h-4 mr-2" />
@@ -410,7 +455,6 @@ const CatalogoPage = () => {
             </motion.div>
           </div>
         </section>
-
       </div>
     </RDMLayout>
   );

@@ -3,11 +3,11 @@ import { sanitizeHtml, stripHtml, escapeHtml } from "../sanitize";
 
 describe("sanitizeHtml — CodeQL #174-#178 regression", () => {
   it("removes script tags", () => {
-    expect(sanitizeHtml('<p>ok</p><script>alert(1)</script>')).toBe("<p>ok</p>");
+    expect(sanitizeHtml("<p>ok</p><script>alert(1)</script>")).toBe("<p>ok</p>");
   });
 
   it("blocks nested bypass that defeated regex sanitizers", () => {
-    expect(sanitizeHtml('<scr<script>ipt>alert(1)</scr</script>ipt>')).not.toContain("alert");
+    expect(sanitizeHtml("<scr<script>ipt>alert(1)</scr</script>ipt>")).not.toContain("alert");
   });
 
   it("strips event handlers", () => {

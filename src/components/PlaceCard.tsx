@@ -10,7 +10,14 @@ interface PlaceCardProps {
   index?: number;
 }
 
-const PlaceCard = ({ name, category, description, image, rating = 4.5, index = 0 }: PlaceCardProps) => {
+const PlaceCard = ({
+  name,
+  category,
+  description,
+  image,
+  rating = 4.5,
+  index = 0,
+}: PlaceCardProps) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}

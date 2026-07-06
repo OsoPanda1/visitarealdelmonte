@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -11,12 +10,19 @@ import { Loader2 } from "lucide-react";
 import SocialLinks from "@/modules/constelacionInteractiva/SocialLinks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { useRDMAuth } from "@/contexts/RDMAuthContext";
 
 /**
  * Oráculo Tecnológico: Panel de Control - Centro de Administración
- * 
+ *
  * Componente para la autenticación de usuarios en TAMV Online Network.
  * Permite el inicio de sesión con email y contraseña o mediante redes sociales.
  */
@@ -38,18 +44,18 @@ type AuthFormProps = {
   footerLinkUrl: string;
 };
 
-const AuthForm: React.FC<AuthFormProps> = ({ 
-  type, 
-  title, 
-  buttonText, 
-  footerText, 
-  footerLinkText, 
-  footerLinkUrl 
+const AuthForm: React.FC<AuthFormProps> = ({
+  type,
+  title,
+  buttonText,
+  footerText,
+  footerLinkText,
+  footerLinkUrl,
 }) => {
   const navigate = useNavigate();
   const { signInEmail, signUpEmail, signInGoogle } = useRDMAuth();
   const [loading, setLoading] = useState(false);
-  
+
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -81,7 +87,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
   }
 
   return (
-    <motion.div 
+    <motion.div
       className="bg-black/40 backdrop-blur-md border border-blue-500/20 rounded-lg p-6 shadow-xl"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -90,7 +96,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
       <h1 className="text-2xl font-bold text-center mb-6 text-gradient bg-gradient-crystal animate-text-shimmer">
         {title}
       </h1>
-      
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
@@ -100,18 +106,18 @@ const AuthForm: React.FC<AuthFormProps> = ({
               <FormItem>
                 <FormLabel className="text-blue-300">Email</FormLabel>
                 <FormControl>
-                  <Input 
+                  <Input
                     type="email"
-                    placeholder="tu@email.com" 
+                    placeholder="tu@email.com"
                     className="bg-black/30 border-blue-500/30 focus:border-blue-400"
-                    {...field} 
+                    {...field}
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          
+
           <FormField
             control={form.control}
             name="password"
@@ -119,18 +125,18 @@ const AuthForm: React.FC<AuthFormProps> = ({
               <FormItem>
                 <FormLabel className="text-blue-300">Contraseña</FormLabel>
                 <FormControl>
-                  <Input 
+                  <Input
                     type="password"
-                    placeholder="********" 
+                    placeholder="********"
                     className="bg-black/30 border-blue-500/30 focus:border-blue-400"
-                    {...field} 
+                    {...field}
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          
+
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <input
@@ -150,9 +156,9 @@ const AuthForm: React.FC<AuthFormProps> = ({
               </a>
             </div>
           </div>
-          
-          <Button 
-            type="submit" 
+
+          <Button
+            type="submit"
             className="w-full bg-gradient-crystal hover:bg-gradient-quantum transition-all duration-300"
             disabled={loading}
           >
@@ -161,7 +167,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
           </Button>
         </form>
       </Form>
-      
+
       <div className="mt-8">
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
@@ -173,12 +179,12 @@ const AuthForm: React.FC<AuthFormProps> = ({
             </span>
           </div>
         </div>
-        
+
         <div className="mt-6">
           <SocialLinks variant="buttons" iconSize={4} className="w-full" />
         </div>
       </div>
-      
+
       <p className="text-center text-sm text-muted-foreground mt-6">
         {footerText}{" "}
         <Link to={footerLinkUrl} className="text-blue-400 hover:text-blue-300 hover:underline">
@@ -187,9 +193,19 @@ const AuthForm: React.FC<AuthFormProps> = ({
       </p>
       <p className="text-center text-[10px] text-muted-foreground/50 mt-3 px-4">
         Al continuar aceptas nuestro{" "}
-        <Link to="/reglamento" className="text-blue-400 hover:underline">Reglamento</Link>
+        <Link to="/reglamento" className="text-blue-400 hover:underline">
+          Reglamento
+        </Link>
         {" y "}
-        <a href="/PRIVACY.md" className="text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer">Política de Privacidad</a>.
+        <a
+          href="/PRIVACY.md"
+          className="text-blue-400 hover:underline"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Política de Privacidad
+        </a>
+        .
       </p>
     </motion.div>
   );

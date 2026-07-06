@@ -17,19 +17,13 @@ export default function MusicDetail() {
     }
   }, [slug, player]);
 
-  const track = useMemo(
-    () => player.tracks.find((x) => x.slug === slug),
-    [player.tracks, slug],
-  );
+  const track = useMemo(() => player.tracks.find((x) => x.slug === slug), [player.tracks, slug]);
 
   if (!track) {
     return (
       <div className="min-h-screen pt-32 px-6 text-center">
         <p className="text-muted-foreground">Pista no encontrada.</p>
-        <Link
-          to="/music"
-          className="text-gold underline mt-4 inline-block"
-        >
+        <Link to="/music" className="text-gold underline mt-4 inline-block">
           Volver a RDM Radio
         </Link>
       </div>
@@ -89,12 +83,8 @@ export default function MusicDetail() {
               <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-gold/70">
                 Pista oficial · RDM Radio
               </p>
-              <h1 className="text-3xl md:text-4xl font-display font-bold mt-2">
-                {track.title}
-              </h1>
-              <p className="text-sm text-muted-foreground mt-1">
-                {track.artist}
-              </p>
+              <h1 className="text-3xl md:text-4xl font-display font-bold mt-2">{track.title}</h1>
+              <p className="text-sm text-muted-foreground mt-1">{track.artist}</p>
 
               {moods.length > 0 && (
                 <div className="mt-4 flex flex-wrap gap-2">
@@ -121,11 +111,7 @@ export default function MusicDetail() {
                   onClick={handlePlayPause}
                   className="flex items-center gap-2 rounded-xl gradient-gold px-5 py-2.5 text-sm font-body font-semibold text-primary-foreground shadow-gold"
                 >
-                  {isPlayingCurrent ? (
-                    <Pause className="h-4 w-4" />
-                  ) : (
-                    <Play className="h-4 w-4" />
-                  )}
+                  {isPlayingCurrent ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
                   {isPlayingCurrent ? "Pausar" : "Reproducir"}
                 </button>
 

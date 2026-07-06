@@ -3,18 +3,65 @@ import { motion, useInView } from "framer-motion";
 import aerialImage from "@/assets/aerial-realmont.jpg";
 
 interface POI {
-  id: string; name: string; description: string;
-  x: number; y: number;
+  id: string;
+  name: string;
+  description: string;
+  x: number;
+  y: number;
   category: "historia" | "gastronomia" | "arquitectura" | "naturaleza";
 }
 
 const pois: POI[] = [
-  { id: "1", name: "Mina de Acosta", description: "Desciende 400 metros al corazón de la montaña, donde los ecos de los mineros cornish aún resuenan.", x: 35, y: 40, category: "historia" },
-  { id: "2", name: "Panteón Inglés", description: "El único cementerio en México con tumbas que miran a Cornwall.", x: 62, y: 28, category: "historia" },
-  { id: "3", name: "Pastes El Portal", description: "El paste original, herencia de los mineros ingleses, horneado con la receta de 1850.", x: 48, y: 55, category: "gastronomia" },
-  { id: "4", name: "Parroquia de la Asunción", description: "Cantera labrada que desafía la niebla. Su torre es el faro de la montaña.", x: 45, y: 45, category: "arquitectura" },
-  { id: "5", name: "Peña del Cuervo", description: "Donde el bosque se abre y la vista abraza todo el valle.", x: 78, y: 35, category: "naturaleza" },
-  { id: "6", name: "Museo de Medicina", description: "La historia de la salud en un pueblo donde la altitud dictaba las reglas.", x: 28, y: 60, category: "historia" },
+  {
+    id: "1",
+    name: "Mina de Acosta",
+    description:
+      "Desciende 400 metros al corazón de la montaña, donde los ecos de los mineros cornish aún resuenan.",
+    x: 35,
+    y: 40,
+    category: "historia",
+  },
+  {
+    id: "2",
+    name: "Panteón Inglés",
+    description: "El único cementerio en México con tumbas que miran a Cornwall.",
+    x: 62,
+    y: 28,
+    category: "historia",
+  },
+  {
+    id: "3",
+    name: "Pastes El Portal",
+    description:
+      "El paste original, herencia de los mineros ingleses, horneado con la receta de 1850.",
+    x: 48,
+    y: 55,
+    category: "gastronomia",
+  },
+  {
+    id: "4",
+    name: "Parroquia de la Asunción",
+    description: "Cantera labrada que desafía la niebla. Su torre es el faro de la montaña.",
+    x: 45,
+    y: 45,
+    category: "arquitectura",
+  },
+  {
+    id: "5",
+    name: "Peña del Cuervo",
+    description: "Donde el bosque se abre y la vista abraza todo el valle.",
+    x: 78,
+    y: 35,
+    category: "naturaleza",
+  },
+  {
+    id: "6",
+    name: "Museo de Medicina",
+    description: "La historia de la salud en un pueblo donde la altitud dictaba las reglas.",
+    x: 28,
+    y: 60,
+    category: "historia",
+  },
 ];
 
 const categoryColors: Record<string, string> = {
@@ -39,12 +86,12 @@ const FogMap = () => {
       (pos) => {
         const lat = pos.coords.latitude;
         const lon = pos.coords.longitude;
-        const x = ((lon - (-98.68)) / ((-98.64) - (-98.68))) * 100;
+        const x = ((lon - -98.68) / (-98.64 - -98.68)) * 100;
         const y = ((20.15 - lat) / (20.15 - 20.12)) * 100;
         if (x >= 0 && x <= 100 && y >= 0 && y <= 100) setUserLocation({ x, y });
       },
       () => {},
-      { enableHighAccuracy: true }
+      { enableHighAccuracy: true },
     );
   }, []);
 
@@ -108,7 +155,9 @@ const FogMap = () => {
           transition={{ duration: 1 }}
           className="text-center mb-16"
         >
-          <span className="font-body text-[10px] tracking-[0.4em] uppercase text-gold/60">Mapa Interactivo</span>
+          <span className="font-body text-[10px] tracking-[0.4em] uppercase text-gold/60">
+            Mapa Interactivo
+          </span>
           <h2 className="font-display text-4xl md:text-6xl text-foreground mt-4 tracking-tight">
             <span className="text-gradient-gold">Mapa de Niebla</span>
           </h2>
@@ -125,19 +174,30 @@ const FogMap = () => {
           onMouseMove={handleMouseMove}
           onTouchMove={handleTouchMove}
         >
-          <img src={aerialImage} alt="Mapa aéreo de Real del Monte" loading="lazy" className="w-full h-full object-cover" />
+          <img
+            src={aerialImage}
+            alt="Mapa aéreo de Real del Monte"
+            loading="lazy"
+            className="w-full h-full object-cover"
+          />
 
           <canvas
             ref={canvasRef}
             className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ${fogRevealed ? "opacity-0 pointer-events-none" : ""}`}
           />
 
-          <div className={`absolute inset-0 transition-opacity duration-700 ${fogRevealed ? "opacity-100" : "opacity-0"}`}>
+          <div
+            className={`absolute inset-0 transition-opacity duration-700 ${fogRevealed ? "opacity-100" : "opacity-0"}`}
+          >
             {pois.map((poi) => (
               <button
                 key={poi.id}
                 className="absolute w-4 h-4 rounded-full pulse-gold transform -translate-x-1/2 -translate-y-1/2 z-10"
-                style={{ left: `${poi.x}%`, top: `${poi.y}%`, backgroundColor: categoryColors[poi.category] }}
+                style={{
+                  left: `${poi.x}%`,
+                  top: `${poi.y}%`,
+                  backgroundColor: categoryColors[poi.category],
+                }}
                 onClick={() => setSelectedPOI(selectedPOI?.id === poi.id ? null : poi)}
               />
             ))}
@@ -147,7 +207,9 @@ const FogMap = () => {
                 className="absolute w-4 h-4 rounded-full bg-electric pulse-electric transform -translate-x-1/2 -translate-y-1/2 z-20"
                 style={{ left: `${userLocation.x}%`, top: `${userLocation.y}%` }}
               >
-                <span className="absolute -top-6 left-1/2 -translate-x-1/2 font-body text-[10px] tracking-wider uppercase text-electric whitespace-nowrap">Tú</span>
+                <span className="absolute -top-6 left-1/2 -translate-x-1/2 font-body text-[10px] tracking-wider uppercase text-electric whitespace-nowrap">
+                  Tú
+                </span>
               </div>
             )}
           </div>
@@ -158,19 +220,32 @@ const FogMap = () => {
               animate={{ opacity: 1, y: 0 }}
               className="absolute bottom-6 left-6 right-6 md:left-auto md:right-6 md:w-80 glass rounded-xl p-6 z-30"
             >
-              <button onClick={() => setSelectedPOI(null)} className="absolute top-3 right-4 text-muted-foreground hover:text-foreground text-sm">×</button>
-              <span className="font-body text-[10px] tracking-[0.3em] uppercase" style={{ color: categoryColors[selectedPOI.category] }}>
+              <button
+                onClick={() => setSelectedPOI(null)}
+                className="absolute top-3 right-4 text-muted-foreground hover:text-foreground text-sm"
+              >
+                ×
+              </button>
+              <span
+                className="font-body text-[10px] tracking-[0.3em] uppercase"
+                style={{ color: categoryColors[selectedPOI.category] }}
+              >
                 {selectedPOI.category}
               </span>
               <h3 className="font-display text-xl text-foreground mt-2 mb-3">{selectedPOI.name}</h3>
-              <p className="font-body text-sm text-muted-foreground leading-relaxed">{selectedPOI.description}</p>
+              <p className="font-body text-sm text-muted-foreground leading-relaxed">
+                {selectedPOI.description}
+              </p>
             </motion.div>
           )}
 
           {!fogRevealed && (
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <motion.p animate={{ opacity: [0.3, 0.7, 0.3] }} transition={{ duration: 3, repeat: Infinity }}
-                className="font-display text-xl md:text-2xl text-gold/50 italic">
+              <motion.p
+                animate={{ opacity: [0.3, 0.7, 0.3] }}
+                transition={{ duration: 3, repeat: Infinity }}
+                className="font-display text-xl md:text-2xl text-gold/50 italic"
+              >
                 Desliza para limpiar la niebla
               </motion.p>
             </div>
@@ -178,12 +253,18 @@ const FogMap = () => {
         </motion.div>
 
         {fogRevealed && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
-            className="flex justify-center gap-8 mt-8 flex-wrap">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="flex justify-center gap-8 mt-8 flex-wrap"
+          >
             {Object.entries(categoryColors).map(([cat, color]) => (
               <div key={cat} className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full" style={{ backgroundColor: color }} />
-                <span className="font-body text-[10px] tracking-wider uppercase text-muted-foreground">{cat}</span>
+                <span className="font-body text-[10px] tracking-wider uppercase text-muted-foreground">
+                  {cat}
+                </span>
               </div>
             ))}
           </motion.div>

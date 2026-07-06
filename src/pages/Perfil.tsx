@@ -23,9 +23,24 @@ const profileSchema = z.object({
   avatar_url: z.string().url().max(500).optional().or(z.literal("")),
 });
 
-interface BadgeRow { id: string; name: string; description: string; icon: string; category: string; points_required: number; }
-interface UserBadgeRow { badge_id: string; earned_at: string; }
-interface TxRow { id: string; action: string; points: number; created_at: string; }
+interface BadgeRow {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  category: string;
+  points_required: number;
+}
+interface UserBadgeRow {
+  badge_id: string;
+  earned_at: string;
+}
+interface TxRow {
+  id: string;
+  action: string;
+  points: number;
+  created_at: string;
+}
 
 function levelProgress(points: number) {
   const level = Math.max(1, Math.floor(Math.sqrt(points / 100)) + 1);
@@ -68,7 +83,12 @@ export default function Perfil() {
       const [b, ub, tx] = await Promise.all([
         supabase.from("badges").select("*").order("points_required"),
         supabase.from("user_badges").select("badge_id, earned_at").eq("user_id", user.id),
-        supabase.from("point_transactions").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).limit(20),
+        supabase
+          .from("point_transactions")
+          .select("*")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false })
+          .limit(20),
       ]);
       setAllBadges((b.data ?? []) as BadgeRow[]);
       setEarned((ub.data ?? []) as UserBadgeRow[]);
@@ -83,24 +103,37 @@ export default function Perfil() {
     try {
       const ext = file.name.split(".").pop();
       const filePath = `${user.id}/avatar.${ext}`;
-      const { error: uploadError } = await supabase.storage.from("media").upload(filePath, file, { upsert: true });
+      const { error: uploadError } = await supabase.storage
+        .from("media")
+        .upload(filePath, file, { upsert: true });
       if (uploadError) throw uploadError;
       const { data: urlData } = supabase.storage.from("media").getPublicUrl(filePath);
       const avatar_url = urlData.publicUrl;
-      const { error: updateError } = await supabase.from("profiles").update({ avatar_url }).eq("id", user.id);
+      const { error: updateError } = await supabase
+        .from("profiles")
+        .update({ avatar_url })
+        .eq("id", user.id);
       if (updateError) throw updateError;
-      setForm(prev => ({ ...prev, avatar_url }));
+      setForm((prev) => ({ ...prev, avatar_url }));
       await refreshProfile();
       toast({ title: "Avatar actualizado" });
     } catch (error) {
-      toast({ title: "Error", description: error instanceof Error ? error.message : "No se pudo subir el avatar", variant: "destructive" });
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "No se pudo subir el avatar",
+        variant: "destructive",
+      });
     } finally {
       setUploadingAvatar(false);
     }
   };
 
   if (loading || !profile) {
-    return <div className="min-h-screen flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin" /></div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
   }
 
   const lp = levelProgress(profile.total_points);
@@ -109,16 +142,23 @@ export default function Perfil() {
   const handleSave = async () => {
     const parsed = profileSchema.safeParse(form);
     if (!parsed.success) {
-      toast({ title: "Datos inválidos", description: parsed.error.errors[0].message, variant: "destructive" });
+      toast({
+        title: "Datos inválidos",
+        description: parsed.error.errors[0].message,
+        variant: "destructive",
+      });
       return;
     }
     setSaving(true);
-    const { error } = await supabase.from("profiles").update({
-      display_name: parsed.data.display_name,
-      bio: parsed.data.bio || null,
-      location: parsed.data.location || null,
-      avatar_url: parsed.data.avatar_url || null,
-    }).eq("id", user!.id);
+    const { error } = await supabase
+      .from("profiles")
+      .update({
+        display_name: parsed.data.display_name,
+        bio: parsed.data.bio || null,
+        location: parsed.data.location || null,
+        avatar_url: parsed.data.avatar_url || null,
+      })
+      .eq("id", user!.id);
     setSaving(false);
     if (error) {
       toast({ title: "Error", description: error.message, variant: "destructive" });
@@ -133,8 +173,11 @@ export default function Perfil() {
       <div className="min-h-screen bg-background">
         <div className="container mx-auto px-4 md:px-8 pt-24 pb-16 max-w-5xl">
           {/* Header */}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-            className="rdm-glass rounded-2xl p-6 md:p-8 mb-6 flex flex-col md:flex-row items-center gap-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="rdm-glass rounded-2xl p-6 md:p-8 mb-6 flex flex-col md:flex-row items-center gap-6"
+          >
             <div className="relative group">
               <Avatar className="h-24 w-24 ring-4 ring-[hsl(var(--rdm-amber))]">
                 <AvatarImage src={profile.avatar_url ?? undefined} />
@@ -148,20 +191,38 @@ export default function Perfil() {
                 disabled={uploadingAvatar}
                 className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity"
               >
-                {uploadingAvatar ? <Loader2 className="h-6 w-6 animate-spin text-white" /> : <Upload className="h-6 w-6 text-white" />}
+                {uploadingAvatar ? (
+                  <Loader2 className="h-6 w-6 animate-spin text-white" />
+                ) : (
+                  <Upload className="h-6 w-6 text-white" />
+                )}
               </button>
-              <input ref={avatarInputRef} type="file" accept="image/*" className="hidden" onChange={handleUploadAvatar} />
+              <input
+                ref={avatarInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleUploadAvatar}
+              />
             </div>
             <div className="flex-1 text-center md:text-left">
               <h1 className="text-3xl font-bold">{profile.display_name}</h1>
               <p className="text-sm text-muted-foreground">{user!.email}</p>
               <div className="flex flex-wrap gap-2 mt-2 justify-center md:justify-start">
                 {roles.map((r) => (
-                  <Badge key={r} variant="secondary" className="capitalize">{r}</Badge>
+                  <Badge key={r} variant="secondary" className="capitalize">
+                    {r}
+                  </Badge>
                 ))}
               </div>
             </div>
-            <Button variant="outline" onClick={async () => { await signOut(); navigate("/"); }}>
+            <Button
+              variant="outline"
+              onClick={async () => {
+                await signOut();
+                navigate("/");
+              }}
+            >
               <LogOut className="h-4 w-4 mr-2" /> Cerrar sesión
             </Button>
           </motion.div>
@@ -189,29 +250,61 @@ export default function Perfil() {
 
           {/* Edit profile */}
           <Card className="mb-6">
-            <CardHeader><CardTitle className="text-lg">Editar perfil</CardTitle></CardHeader>
+            <CardHeader>
+              <CardTitle className="text-lg">Editar perfil</CardTitle>
+            </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Nombre</Label>
-                  <Input maxLength={60} value={form.display_name} onChange={(e) => setForm({ ...form, display_name: e.target.value })} />
+                  <Input
+                    maxLength={60}
+                    value={form.display_name}
+                    onChange={(e) => setForm({ ...form, display_name: e.target.value })}
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label>Ubicación</Label>
-                  <Input maxLength={80} placeholder="Real del Monte, Hgo." value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} />
+                  <Input
+                    maxLength={80}
+                    placeholder="Real del Monte, Hgo."
+                    value={form.location}
+                    onChange={(e) => setForm({ ...form, location: e.target.value })}
+                  />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label>Avatar</Label>
-                <p className="text-xs text-muted-foreground">Haz clic en tu avatar para subir una imagen, o ingresa una URL:</p>
-                <Input type="url" placeholder="https://..." value={form.avatar_url} onChange={(e) => setForm({ ...form, avatar_url: e.target.value })} />
+                <p className="text-xs text-muted-foreground">
+                  Haz clic en tu avatar para subir una imagen, o ingresa una URL:
+                </p>
+                <Input
+                  type="url"
+                  placeholder="https://..."
+                  value={form.avatar_url}
+                  onChange={(e) => setForm({ ...form, avatar_url: e.target.value })}
+                />
               </div>
               <div className="space-y-2">
                 <Label>Bio</Label>
-                <Textarea maxLength={280} rows={3} placeholder="Cuéntanos sobre ti..." value={form.bio} onChange={(e) => setForm({ ...form, bio: e.target.value })} />
+                <Textarea
+                  maxLength={280}
+                  rows={3}
+                  placeholder="Cuéntanos sobre ti..."
+                  value={form.bio}
+                  onChange={(e) => setForm({ ...form, bio: e.target.value })}
+                />
               </div>
-              <Button onClick={handleSave} disabled={saving} className="bg-[hsl(var(--rdm-amber))] hover:opacity-90">
-                {saving ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
+              <Button
+                onClick={handleSave}
+                disabled={saving}
+                className="bg-[hsl(var(--rdm-amber))] hover:opacity-90"
+              >
+                {saving ? (
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                ) : (
+                  <Save className="h-4 w-4 mr-2" />
+                )}
                 Guardar
               </Button>
             </CardContent>
@@ -220,14 +313,19 @@ export default function Perfil() {
           {/* Badges */}
           <Card className="mb-6">
             <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2"><Award className="h-5 w-5" /> Insignias ({earned.length}/{allBadges.length})</CardTitle>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Award className="h-5 w-5" /> Insignias ({earned.length}/{allBadges.length})
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                 {allBadges.map((b) => {
                   const has = earnedIds.has(b.id);
                   return (
-                    <div key={b.id} className={`p-4 rounded-xl border text-center transition-all ${has ? "bg-[hsl(var(--rdm-amber)/0.1)] border-[hsl(var(--rdm-amber))]" : "bg-muted/30 border-border opacity-50 grayscale"}`}>
+                    <div
+                      key={b.id}
+                      className={`p-4 rounded-xl border text-center transition-all ${has ? "bg-[hsl(var(--rdm-amber)/0.1)] border-[hsl(var(--rdm-amber))]" : "bg-muted/30 border-border opacity-50 grayscale"}`}
+                    >
                       <div className="text-3xl mb-1">{b.icon}</div>
                       <div className="text-xs font-semibold">{b.name}</div>
                       <div className="text-[10px] text-muted-foreground mt-1">{b.description}</div>
@@ -241,19 +339,30 @@ export default function Perfil() {
           {/* Recent activity */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2"><Sparkles className="h-5 w-5" /> Actividad reciente</CardTitle>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Sparkles className="h-5 w-5" /> Actividad reciente
+              </CardTitle>
             </CardHeader>
             <CardContent>
               {history.length === 0 ? (
-                <p className="text-sm text-muted-foreground">Aún no has ganado puntos. ¡Explora el pueblo!</p>
+                <p className="text-sm text-muted-foreground">
+                  Aún no has ganado puntos. ¡Explora el pueblo!
+                </p>
               ) : (
                 <ul className="space-y-2">
                   {history.map((tx) => (
-                    <li key={tx.id} className="flex items-center justify-between text-sm py-2 border-b border-border/50 last:border-0">
+                    <li
+                      key={tx.id}
+                      className="flex items-center justify-between text-sm py-2 border-b border-border/50 last:border-0"
+                    >
                       <span className="capitalize">{tx.action.replace(/_/g, " ")}</span>
                       <div className="flex items-center gap-3">
-                        <span className="text-xs text-muted-foreground">{new Date(tx.created_at).toLocaleDateString()}</span>
-                        <span className="font-semibold text-[hsl(var(--rdm-amber))]">+{tx.points}</span>
+                        <span className="text-xs text-muted-foreground">
+                          {new Date(tx.created_at).toLocaleDateString()}
+                        </span>
+                        <span className="font-semibold text-[hsl(var(--rdm-amber))]">
+                          +{tx.points}
+                        </span>
                       </div>
                     </li>
                   ))}

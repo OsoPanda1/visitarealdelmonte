@@ -113,10 +113,7 @@ export default function PremiumPlans() {
   const [busy, setBusy] = useState<string | null>(null);
   const prefersReducedMotion = useReducedMotion();
 
-  const plans = useMemo(
-    () => (tab === "usuarios" ? USER_PLANS : COMMERCE_PLANS),
-    [tab],
-  );
+  const plans = useMemo(() => (tab === "usuarios" ? USER_PLANS : COMMERCE_PLANS), [tab]);
 
   const handleActivate = async (planId: string, isCommerce: boolean) => {
     if (!user) {
@@ -141,7 +138,7 @@ export default function PremiumPlans() {
       const fn = getCheckoutFunctionName(planId, isCommerce);
 
       // Punto de auditoría mínimo: log informativo (idealmente enviar a telemetría backend)
-      // eslint-disable-next-line no-console
+
       console.info("Iniciando checkout premium", {
         userId: user.id,
         planId,
@@ -181,7 +178,11 @@ export default function PremiumPlans() {
       />
       {/* Hero Banner */}
       <div className="relative h-56 w-full overflow-hidden">
-        <img src="/images/artesanias-plata.jpg" alt="Artesanías de plata de Real del Monte" className="h-full w-full object-cover" />
+        <img
+          src="/images/artesanias-plata.jpg"
+          alt="Artesanías de plata de Real del Monte"
+          className="h-full w-full object-cover"
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
         <div className="absolute bottom-8 left-8 text-white">
           <h1 className="text-3xl font-bold">Planes Premium</h1>
@@ -192,12 +193,8 @@ export default function PremiumPlans() {
         <div className="container mx-auto max-w-6xl px-6">
           {/* Header */}
           <motion.div
-            initial={
-              prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 20 }
-            }
-            animate={
-              prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }
-            }
+            initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 20 }}
+            animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
             className="mb-10 text-center"
           >
             <span className="mb-3 block font-mono text-xs uppercase tracking-widest text-primary">
@@ -207,10 +204,9 @@ export default function PremiumPlans() {
               <span className="text-gradient-gold">Planes Premium</span>
             </h1>
             <p className="mx-auto max-w-2xl text-muted-foreground text-sm">
-              Elige el plan que mejor se adapte a ti. Los puntos de juegos se
-              convierten en premios reales en comercios federados de Real del
-              Monte. Los comercios acceden a la red de jugadores y analytics
-              territoriales.
+              Elige el plan que mejor se adapte a ti. Los puntos de juegos se convierten en premios
+              reales en comercios federados de Real del Monte. Los comercios acceden a la red de
+              jugadores y analytics territoriales.
             </p>
           </motion.div>
 
@@ -251,21 +247,9 @@ export default function PremiumPlans() {
               return (
                 <motion.div
                   key={plan.id}
-                  initial={
-                    prefersReducedMotion
-                      ? { opacity: 0 }
-                      : { opacity: 0, y: 18 }
-                  }
-                  animate={
-                    prefersReducedMotion
-                      ? { opacity: 1 }
-                      : { opacity: 1, y: 0 }
-                  }
-                  transition={
-                    prefersReducedMotion
-                      ? undefined
-                      : { delay: i * 0.08 }
-                  }
+                  initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 18 }}
+                  animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+                  transition={prefersReducedMotion ? undefined : { delay: i * 0.08 }}
                   className={cn(
                     "relative overflow-hidden rounded-2xl p-8 border transition-all duration-300 hover:scale-[1.02]",
                     isHighlight
@@ -295,21 +279,15 @@ export default function PremiumPlans() {
                           isHighlight ? "text-gold" : "text-muted-foreground",
                         )}
                       />
-                      <h2 className="font-display text-2xl text-foreground">
-                        {plan.name}
-                      </h2>
+                      <h2 className="font-display text-2xl text-foreground">{plan.name}</h2>
                     </div>
-                    <p className="mb-4 text-sm text-muted-foreground">
-                      {plan.tagline}
-                    </p>
+                    <p className="mb-4 text-sm text-muted-foreground">{plan.tagline}</p>
 
                     <div className="mb-6 flex items-baseline gap-1">
                       <span
                         className={cn(
                           "text-5xl font-display font-bold",
-                          isHighlight
-                            ? "text-gradient-gold"
-                            : "text-foreground",
+                          isHighlight ? "text-gradient-gold" : "text-foreground",
                         )}
                       >
                         {plan.price}
@@ -321,10 +299,7 @@ export default function PremiumPlans() {
 
                     <ul className="mb-8 space-y-3">
                       {plan.features.map((f) => (
-                        <li
-                          key={f}
-                          className="flex items-start gap-2 text-sm text-foreground/80"
-                        >
+                        <li key={f} className="flex items-start gap-2 text-sm text-foreground/80">
                           <Check
                             className={cn(
                               "mt-0.5 h-4 w-4 shrink-0",
@@ -338,9 +313,7 @@ export default function PremiumPlans() {
 
                     <Button
                       type="button"
-                      onClick={() =>
-                        handleActivate(plan.id, tab === "comercios")
-                      }
+                      onClick={() => handleActivate(plan.id, tab === "comercios")}
                       disabled={busy === plan.id}
                       className={cn(
                         "w-full gap-2 h-12 text-sm font-semibold",
@@ -353,9 +326,7 @@ export default function PremiumPlans() {
                         "Procesando..."
                       ) : (
                         <>
-                          {tab === "comercios"
-                            ? "Registrar comercio"
-                            : "Activar plan"}
+                          {tab === "comercios" ? "Registrar comercio" : "Activar plan"}
                           <ArrowRight className="h-4 w-4" />
                         </>
                       )}
@@ -368,12 +339,8 @@ export default function PremiumPlans() {
 
           {/* Cross-sell note */}
           <motion.div
-            initial={
-              prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 20 }
-            }
-            animate={
-              prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }
-            }
+            initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 20 }}
+            animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
             transition={prefersReducedMotion ? undefined : { delay: 0.4 }}
             className="mx-auto mt-12 max-w-2xl rounded-2xl border border-border/20 bg-card/40 p-6 text-center"
           >
@@ -382,13 +349,11 @@ export default function PremiumPlans() {
               ¿Cómo funcionan los puntos?
             </h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Juega Memoria Minera y Trivia Territorial para ganar puntos
-              canjeables. Los puntos se acreditan automáticamente al completar
-              partidas. Canjea tus puntos por pastes, micheladas, joyería de
-              plata, cenas románticas, noches de hospedaje y recorridos guiados
-              en comercios federados de Real del Monte. Los premios son
-              aportados por los propios comercios — la plataforma no retiene
-              comisión.
+              Juega Memoria Minera y Trivia Territorial para ganar puntos canjeables. Los puntos se
+              acreditan automáticamente al completar partidas. Canjea tus puntos por pastes,
+              micheladas, joyería de plata, cenas románticas, noches de hospedaje y recorridos
+              guiados en comercios federados de Real del Monte. Los premios son aportados por los
+              propios comercios — la plataforma no retiene comisión.
             </p>
             <div className="mt-4 flex flex-wrap justify-center gap-3 text-xs text-muted-foreground">
               <span className="flex items-center gap-1">
@@ -405,10 +370,7 @@ export default function PremiumPlans() {
 
           <p className="mt-8 text-center text-xs text-muted-foreground">
             ¿Dudas? Visita las{" "}
-            <Link
-              to="/faq"
-              className="text-gold underline-offset-2 hover:underline"
-            >
+            <Link to="/faq" className="text-gold underline-offset-2 hover:underline">
               Preguntas Frecuentes
             </Link>
             {" · "}Pago seguro con Stripe · Cancela cuando quieras

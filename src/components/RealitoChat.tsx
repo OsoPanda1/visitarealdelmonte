@@ -181,7 +181,9 @@ export default function RealitoChat({ initialOpen = false }: RealitoChatProps) {
                   <div
                     key={message.id}
                     className={`max-w-[85%] whitespace-pre-line rounded-xl px-3 py-2 text-sm ${
-                      message.role === "user" ? "ml-auto bg-gold-500 text-night-900" : "bg-white/10 text-silver-300"
+                      message.role === "user"
+                        ? "ml-auto bg-gold-500 text-night-900"
+                        : "bg-white/10 text-silver-300"
                     }`}
                   >
                     {message.content}
@@ -189,7 +191,9 @@ export default function RealitoChat({ initialOpen = false }: RealitoChatProps) {
                 ))
               )}
               {isTyping && (
-                <div className="w-fit rounded-xl bg-white/10 px-3 py-2 text-sm text-silver-400">REALITO está escribiendo…</div>
+                <div className="w-fit rounded-xl bg-white/10 px-3 py-2 text-sm text-silver-400">
+                  REALITO está escribiendo…
+                </div>
               )}
               <div ref={endRef} />
             </div>

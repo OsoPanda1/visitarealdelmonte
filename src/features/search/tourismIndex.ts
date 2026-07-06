@@ -6,13 +6,7 @@ import {
   type TerritoryPOI,
 } from "@/data/atlas/territory-pois";
 
-export type SearchHitKind =
-  | "poi"
-  | "capitulo"
-  | "mina"
-  | "paste"
-  | "ruta"
-  | "leyenda";
+export type SearchHitKind = "poi" | "capitulo" | "mina" | "paste" | "ruta" | "leyenda";
 
 export interface SearchHit {
   id: string;

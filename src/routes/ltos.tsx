@@ -8,9 +8,16 @@ export const Route = createFileRoute("/ltos")({
   head: () => ({
     meta: [
       { title: "LTOS · 12 Plataformas Federadas · RDM Digital" },
-      { name: "description", content: "Catálogo de las 12 sub-plataformas absorbidas en el Sistema Operativo Territorial LTOS de Real del Monte." },
+      {
+        name: "description",
+        content:
+          "Catálogo de las 12 sub-plataformas absorbidas en el Sistema Operativo Territorial LTOS de Real del Monte.",
+      },
       { property: "og:title", content: "LTOS · 12 Plataformas Federadas" },
-      { property: "og:description", content: "Kernels, Smart City, Digital Twin, Atlas, Civilizational Core y más." },
+      {
+        property: "og:description",
+        content: "Kernels, Smart City, Digital Twin, Atlas, Civilizational Core y más.",
+      },
     ],
   }),
   component: LtosPage,
@@ -32,10 +39,19 @@ function LtosPage() {
   return (
     <section className="container mx-auto px-6 py-16">
       <div className="max-w-3xl">
-        <div className="font-mono text-[10px] tracking-sovereign text-accent mb-3">II · Catálogo</div>
-        <h1 className="font-display text-5xl md:text-6xl text-ink">Plataforma <span className="text-gradient-copper italic">LTOS</span></h1>
-        <p className="mt-4 text-muted-foreground">Doce sub-plataformas absorbidas en un único Sistema Operativo Territorial. Arquitecto: <strong>{data.architect}</strong>.</p>
-        <p className="mt-1 text-[11px] font-mono text-muted-foreground">ORCID {data.credentials.orcid} · DOI {data.credentials.doi}</p>
+        <div className="font-mono text-[10px] tracking-sovereign text-accent mb-3">
+          II · Catálogo
+        </div>
+        <h1 className="font-display text-5xl md:text-6xl text-ink">
+          Plataforma <span className="text-gradient-copper italic">LTOS</span>
+        </h1>
+        <p className="mt-4 text-muted-foreground">
+          Doce sub-plataformas absorbidas en un único Sistema Operativo Territorial. Arquitecto:{" "}
+          <strong>{data.architect}</strong>.
+        </p>
+        <p className="mt-1 text-[11px] font-mono text-muted-foreground">
+          ORCID {data.credentials.orcid} · DOI {data.credentials.doi}
+        </p>
       </div>
 
       <div className="mt-10 flex flex-col md:flex-row gap-3">
@@ -54,7 +70,9 @@ function LtosPage() {
               key={f}
               onClick={() => setFed(f)}
               className={`rounded-full px-3 py-2 text-[11px] font-mono tracking-wider border transition-colors ${
-                fed === f ? "bg-foreground text-background border-foreground" : "border-hairline hover:bg-secondary"
+                fed === f
+                  ? "bg-foreground text-background border-foreground"
+                  : "border-hairline hover:bg-secondary"
               }`}
             >
               {f}
@@ -67,11 +85,24 @@ function LtosPage() {
         {filtered.map((p) => {
           const color = federationColor(p.federation);
           return (
-            <article key={p.slug} className="relative rounded-2xl border-hairline bg-card p-6 overflow-hidden hover:shadow-sovereign transition-all">
+            <article
+              key={p.slug}
+              className="relative rounded-2xl border-hairline bg-card p-6 overflow-hidden hover:shadow-sovereign transition-all"
+            >
               <div className="absolute top-0 left-0 right-0 h-1" style={{ background: color }} />
               <div className="flex items-center justify-between">
-                <span className="font-mono text-[9px] tracking-sovereign px-2 py-1 rounded-full" style={{ background: `${color}22`, color }}>{p.federation}</span>
-                <a href={`https://github.com/${data.owner}/${p.slug}`} target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-accent">
+                <span
+                  className="font-mono text-[9px] tracking-sovereign px-2 py-1 rounded-full"
+                  style={{ background: `${color}22`, color }}
+                >
+                  {p.federation}
+                </span>
+                <a
+                  href={`https://github.com/${data.owner}/${p.slug}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-muted-foreground hover:text-accent"
+                >
                   <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               </div>
@@ -79,26 +110,40 @@ function LtosPage() {
               <p className="text-sm text-muted-foreground mt-1">{p.role}</p>
               <div className="mt-4 grid grid-cols-4 gap-2">
                 {[
-                  ["files", p.files], ["src", p.src], ["pages", p.pages], ["edge", p.edge],
+                  ["files", p.files],
+                  ["src", p.src],
+                  ["pages", p.pages],
+                  ["edge", p.edge],
                 ].map(([k, v]) => (
                   <div key={String(k)} className="text-center">
                     <div className="font-display text-lg text-ink">{v}</div>
-                    <div className="font-mono text-[9px] tracking-sovereign text-muted-foreground">{k}</div>
+                    <div className="font-mono text-[9px] tracking-sovereign text-muted-foreground">
+                      {k}
+                    </div>
                   </div>
                 ))}
               </div>
               <div className="mt-4 flex flex-wrap gap-1">
                 {p.highlights.slice(0, 4).map((h) => (
-                  <span key={h} className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-secondary text-muted-foreground">{h}</span>
+                  <span
+                    key={h}
+                    className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-secondary text-muted-foreground"
+                  >
+                    {h}
+                  </span>
                 ))}
               </div>
             </article>
           );
         })}
       </div>
-      <p className="mt-10 text-center text-xs text-muted-foreground">{filtered.length} de {data.platforms.length} plataformas</p>
+      <p className="mt-10 text-center text-xs text-muted-foreground">
+        {filtered.length} de {data.platforms.length} plataformas
+      </p>
       <div className="mt-6 text-center">
-        <Link to="/federacion" className="text-sm text-accent hover:underline">→ Ver la heptafederación completa</Link>
+        <Link to="/federacion" className="text-sm text-accent hover:underline">
+          → Ver la heptafederación completa
+        </Link>
       </div>
     </section>
   );

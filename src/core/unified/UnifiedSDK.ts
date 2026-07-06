@@ -1,22 +1,27 @@
-import { logger } from '@/lib/logger';
-import { federationBus } from '@/federaciones/FederationBus';
-import { territorialFederationBridge } from '@/federaciones/territorial-federation-bridge';
-import { territorialCollector } from '@/core/territorial/TerritorialDataCollector';
-import { territorialGeofencer } from '@/core/territorial/TerritorialGeofencer';
-import { fusionEngine } from '@/core/territorial/TerritorialFusionEngine';
-import { consciousnessPipeline } from '@/isabella/pipeline/IsabellaConsciousnessPipeline';
-import { isabellaAPI } from '@/isabella/api';
-import { knowledgeEngine } from '@/isabella/knowledge/KnowledgeAbsorptionEngine';
-import { awakeningProtocol } from '@/isabella/protocols/IsabellaAwakeningProtocol';
-import { motorConciencia } from '@/isabella/core/consciousness';
-import { unifiedEventBus } from './UnifiedEventBus';
-import { unifiedSupervisor } from './UnifiedSupervisor';
-import { unifiedPersistence } from './UnifiedPersistence';
-import type { Coordenadas, FederationId, PointOfInterest } from '@/core/models';
-import type { ContributionType, ContributionPayload, UserContribution, TerritorialStats } from '@/core/territorial/types';
-import type { PipelineResult, PipelineInput } from '@/isabella/pipeline/pipeline.types';
-import type { ApiResponse, GlobalSystemState, UnifiedConfig, UnifiedEventType } from './types';
-import { DEFAULT_UNIFIED_CONFIG } from './types';
+import { logger } from "@/lib/logger";
+import { federationBus } from "@/federaciones/FederationBus";
+import { territorialFederationBridge } from "@/federaciones/territorial-federation-bridge";
+import { territorialCollector } from "@/core/territorial/TerritorialDataCollector";
+import { territorialGeofencer } from "@/core/territorial/TerritorialGeofencer";
+import { fusionEngine } from "@/core/territorial/TerritorialFusionEngine";
+import { consciousnessPipeline } from "@/isabella/pipeline/IsabellaConsciousnessPipeline";
+import { isabellaAPI } from "@/isabella/api";
+import { knowledgeEngine } from "@/isabella/knowledge/KnowledgeAbsorptionEngine";
+import { awakeningProtocol } from "@/isabella/protocols/IsabellaAwakeningProtocol";
+import { motorConciencia } from "@/isabella/core/consciousness";
+import { unifiedEventBus } from "./UnifiedEventBus";
+import { unifiedSupervisor } from "./UnifiedSupervisor";
+import { unifiedPersistence } from "./UnifiedPersistence";
+import type { Coordenadas, FederationId, PointOfInterest } from "@/core/models";
+import type {
+  ContributionType,
+  ContributionPayload,
+  UserContribution,
+  TerritorialStats,
+} from "@/core/territorial/types";
+import type { PipelineResult, PipelineInput } from "@/isabella/pipeline/pipeline.types";
+import type { ApiResponse, GlobalSystemState, UnifiedConfig, UnifiedEventType } from "./types";
+import { DEFAULT_UNIFIED_CONFIG } from "./types";
 
 export class UnifiedSDK {
   private config: UnifiedConfig;
@@ -34,7 +39,7 @@ export class UnifiedSDK {
       unifiedEventBus.start();
     }
 
-    logger.info('[UNIFIED-SDK] Sistemas unificados listos', {
+    logger.info("[UNIFIED-SDK] Sistemas unificados listos", {
       version: this.config.version,
       environment: this.config.environment,
     });
@@ -48,7 +53,7 @@ export class UnifiedSDK {
       unifiedPersistence.start(this.config.persistenceIntervalMs);
     }
 
-    logger.info('[UNIFIED-SDK] Fusion Engine + Supervisor + Persistence activados');
+    logger.info("[UNIFIED-SDK] Fusion Engine + Supervisor + Persistence activados");
   }
 
   stop(): void {
@@ -57,7 +62,7 @@ export class UnifiedSDK {
     unifiedPersistence.stop();
     unifiedEventBus.stop();
     this.initialized = false;
-    logger.info('[UNIFIED-SDK] Todos los sistemas detenidos');
+    logger.info("[UNIFIED-SDK] Todos los sistemas detenidos");
   }
 
   // ==========================================================================
@@ -74,14 +79,21 @@ export class UnifiedSDK {
   ): ApiResponse<UserContribution> {
     const start = Date.now();
     try {
-      const contribution = territorialCollector.recordContribution(userId, type, coords, territorio, payload, poiId);
+      const contribution = territorialCollector.recordContribution(
+        userId,
+        type,
+        coords,
+        territorio,
+        payload,
+        poiId,
+      );
       territorialFederationBridge.routeContribution(contribution);
 
       unifiedEventBus.emit({
-        type: 'territorial:contribution',
-        source: 'sdk',
+        type: "territorial:contribution",
+        source: "sdk",
         payload: { contributionId: contribution.id, type, territorio },
-        metadata: { traceId: contribution.id, userId, territory: territorio, priority: 'normal' },
+        metadata: { traceId: contribution.id, userId, territory: territorio, priority: "normal" },
       });
 
       return {
@@ -102,26 +114,33 @@ export class UnifiedSDK {
     }
   }
 
-  queryTerritory(text: string, userId: string, coords?: Coordenadas): Promise<ApiResponse<PipelineResult>> {
+  queryTerritory(
+    text: string,
+    userId: string,
+    coords?: Coordenadas,
+  ): Promise<ApiResponse<PipelineResult>> {
     const start = Date.now();
-    return consciousnessPipeline.processInput({
-      type: 'user_query',
-      query: text,
-      userId,
-      coords,
-    }).then(result => ({
-      success: true,
-      data: result,
-      traceId: result.traceId,
-      timestamp: new Date(),
-      durationMs: Date.now() - start,
-    })).catch(error => ({
-      success: false,
-      error: String(error),
-      traceId: crypto.randomUUID(),
-      timestamp: new Date(),
-      durationMs: Date.now() - start,
-    }));
+    return consciousnessPipeline
+      .processInput({
+        type: "user_query",
+        query: text,
+        userId,
+        coords,
+      })
+      .then((result) => ({
+        success: true,
+        data: result,
+        traceId: result.traceId,
+        timestamp: new Date(),
+        durationMs: Date.now() - start,
+      }))
+      .catch((error) => ({
+        success: false,
+        error: String(error),
+        traceId: crypto.randomUUID(),
+        timestamp: new Date(),
+        durationMs: Date.now() - start,
+      }));
   }
 
   getTerritorialStats(): TerritorialStats {
@@ -144,7 +163,11 @@ export class UnifiedSDK {
   // ISABELLA OPERATIONS
   // ==========================================================================
 
-  async chatWithIsabella(message: string, userId: string, coords?: Coordenadas): Promise<ApiResponse<PipelineResult>> {
+  async chatWithIsabella(
+    message: string,
+    userId: string,
+    coords?: Coordenadas,
+  ): Promise<ApiResponse<PipelineResult>> {
     return this.queryTerritory(message, userId, coords);
   }
 
@@ -157,7 +180,7 @@ export class UnifiedSDK {
   }
 
   triggerAwakening() {
-    return awakeningProtocol.activate(['TWITTER', 'DISCORD', 'TELEGRAM']);
+    return awakeningProtocol.activate(["TWITTER", "DISCORD", "TELEGRAM"]);
   }
 
   // ==========================================================================
@@ -172,7 +195,10 @@ export class UnifiedSDK {
     return federationBus.getFederation(id);
   }
 
-  routeToFederation(intent: Parameters<typeof federationBus.ruteToFederation>[0], target: FederationId) {
+  routeToFederation(
+    intent: Parameters<typeof federationBus.ruteToFederation>[0],
+    target: FederationId,
+  ) {
     return federationBus.ruteToFederation(intent, target);
   }
 

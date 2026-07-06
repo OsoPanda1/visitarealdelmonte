@@ -168,7 +168,10 @@ const TAMVStatus = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 font-body text-xs">
-                  <Row k="Quantum Encryption" v={status.quantumEncryption ? "Activo" : "Inactivo"} />
+                  <Row
+                    k="Quantum Encryption"
+                    v={status.quantumEncryption ? "Activo" : "Inactivo"}
+                  />
                   <Row k="MSR Bridge" v={status.msrBridge} />
                   <Row k="BookPI" v={status.bookpiAnchor} />
                 </CardContent>

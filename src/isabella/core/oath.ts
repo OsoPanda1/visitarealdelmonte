@@ -72,7 +72,10 @@ export class JuramentoIsabella {
       if (config.inmutable) {
         const violacion = this.detectarViolacion(accion, principio);
         if (violacion) {
-          logger.error("[ISABELLA:JURAMENTO] Violación de principio inmutable", { principio, accion });
+          logger.error("[ISABELLA:JURAMENTO] Violación de principio inmutable", {
+            principio,
+            accion,
+          });
           return { aprobada: false, razon: `Violación del principio: ${config.definicion}` };
         }
       }
@@ -91,7 +94,7 @@ export class JuramentoIsabella {
     };
     const violators = patterns[principio as keyof typeof patterns];
     if (!violators) return false;
-    return violators.some(p => p.test(lower));
+    return violators.some((p) => p.test(lower));
   }
 
   getPrincipios(): Record<OathPrinciple, PrincipleConfig> {

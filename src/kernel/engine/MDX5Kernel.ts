@@ -113,7 +113,11 @@ export class MDX5Kernel {
       }
 
       if (!decision.approved) {
-        logger.info("[MDX5] Intent rechazado en fase", { id: intent.id, phase, reason: decision.reason });
+        logger.info("[MDX5] Intent rechazado en fase", {
+          id: intent.id,
+          phase,
+          reason: decision.reason,
+        });
         this.processed.push(intent);
         return;
       }
@@ -178,9 +182,10 @@ export class MDX5Kernel {
         ...base,
         approved: true,
         timeupVerdict: globalVerdict,
-        reason: globalVerdict === "PENDING_ISABELLA"
-          ? "TIME UP: Pendiente validación Isabella"
-          : "TIME UP: Evaluación completada",
+        reason:
+          globalVerdict === "PENDING_ISABELLA"
+            ? "TIME UP: Pendiente validación Isabella"
+            : "TIME UP: Evaluación completada",
       };
     }
 

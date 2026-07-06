@@ -72,7 +72,9 @@ export default function MapaView() {
               key={mode}
               onClick={() => setViewMode(mode)}
               className={`px-6 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase transition-all ${
-                viewMode === mode ? "bg-white text-black shadow-lg" : "text-white/50 hover:text-white"
+                viewMode === mode
+                  ? "bg-white text-black shadow-lg"
+                  : "text-white/50 hover:text-white"
               }`}
             >
               {mode} View
@@ -110,7 +112,12 @@ export default function MapaView() {
       <footer className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {[
           { label: "Active Federated Nodes", value: "124", icon: Layers, color: "text-blue-400" },
-          { label: "Kernel Frequency", value: "1.2 GHz", icon: Activity, color: "text-emerald-400" },
+          {
+            label: "Kernel Frequency",
+            value: "1.2 GHz",
+            icon: Activity,
+            color: "text-emerald-400",
+          },
           { label: "LSM Sync Matrix", value: "98.2%", icon: MapIcon, color: "text-slate-100" },
         ].map((stat) => (
           <div

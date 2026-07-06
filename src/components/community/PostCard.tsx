@@ -28,11 +28,20 @@ export function PostCard({ post }: { post: Post }) {
           <p className="text-sm text-muted-foreground line-clamp-4">{post.content}</p>
           <div className="flex items-center justify-between text-xs text-muted-foreground pt-2">
             <div className="flex items-center gap-4">
-              <span className="inline-flex items-center gap-1"><Heart className="h-3 w-3" />{post.likes_count ?? 0}</span>
-              <span className="inline-flex items-center gap-1"><MessageCircle className="h-3 w-3" />{post.comments_count ?? 0}</span>
+              <span className="inline-flex items-center gap-1">
+                <Heart className="h-3 w-3" />
+                {post.likes_count ?? 0}
+              </span>
+              <span className="inline-flex items-center gap-1">
+                <MessageCircle className="h-3 w-3" />
+                {post.comments_count ?? 0}
+              </span>
             </div>
             {post.location && (
-              <span className="inline-flex items-center gap-1"><MapPin className="h-3 w-3" />{post.location}</span>
+              <span className="inline-flex items-center gap-1">
+                <MapPin className="h-3 w-3" />
+                {post.location}
+              </span>
             )}
           </div>
         </CardContent>

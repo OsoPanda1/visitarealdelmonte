@@ -7,14 +7,43 @@ import mineTunnel from "@/assets/mine-tunnel.jpg";
 import { ElegantPagination } from "@/components/ElegantPagination";
 
 const TIMELINE = [
-  { year: "Siglo XVI", event: "Comienza la explotación de vetas argentíferas en la región de Pachuca-Real del Monte." },
-  { year: "1766", event: "Se registra una de las huelgas mineras más tempranas del continente en Real del Monte." },
-  { year: "1824", event: "Llegan mineros de Cornwall y se consolida el intercambio tecnológico y cultural con Hidalgo." },
-  { year: "S. XIX", event: "Se populariza el paste como alimento minero práctico y luego como identidad gastronómica local." },
-  { year: "1906", event: "Declive de ciclos mineros tradicionales y transición paulatina hacia nueva economía regional." },
-  { year: "2004", event: "Mineral del Monte es reconocido como Pueblo Mágico por su patrimonio histórico y turístico." },
-  { year: "2017", event: "La Comarca Minera se integra al programa de Geoparques Mundiales de UNESCO." },
-  { year: "Hoy", event: "El destino fusiona patrimonio industrial, turismo cultural, aventura de montaña y escapadas románticas." },
+  {
+    year: "Siglo XVI",
+    event: "Comienza la explotación de vetas argentíferas en la región de Pachuca-Real del Monte.",
+  },
+  {
+    year: "1766",
+    event: "Se registra una de las huelgas mineras más tempranas del continente en Real del Monte.",
+  },
+  {
+    year: "1824",
+    event:
+      "Llegan mineros de Cornwall y se consolida el intercambio tecnológico y cultural con Hidalgo.",
+  },
+  {
+    year: "S. XIX",
+    event:
+      "Se populariza el paste como alimento minero práctico y luego como identidad gastronómica local.",
+  },
+  {
+    year: "1906",
+    event:
+      "Declive de ciclos mineros tradicionales y transición paulatina hacia nueva economía regional.",
+  },
+  {
+    year: "2004",
+    event:
+      "Mineral del Monte es reconocido como Pueblo Mágico por su patrimonio histórico y turístico.",
+  },
+  {
+    year: "2017",
+    event: "La Comarca Minera se integra al programa de Geoparques Mundiales de UNESCO.",
+  },
+  {
+    year: "Hoy",
+    event:
+      "El destino fusiona patrimonio industrial, turismo cultural, aventura de montaña y escapadas románticas.",
+  },
 ];
 
 const PAGE_SIZE = 4;
@@ -56,7 +85,9 @@ export function HistorySection() {
             transition={{ duration: 0.8 }}
             ref={ref}
           >
-            <p className="mb-4 font-body text-sm uppercase tracking-[0.3em] text-accent">⛏️ Patrimonio Minero</p>
+            <p className="mb-4 font-body text-sm uppercase tracking-[0.3em] text-accent">
+              ⛏️ Patrimonio Minero
+            </p>
             <h2 className="font-display text-4xl font-bold leading-[0.9] md:text-7xl">
               Bajo estas montañas,
               <br />
@@ -75,7 +106,11 @@ export function HistorySection() {
               viewport={{ once: true }}
               className="col-span-2 h-[280px] overflow-hidden rounded-2xl"
             >
-              <img src={mineTunnel} alt="Túnel de mina" className="h-full w-full object-cover transition-transform duration-700 hover:scale-105" />
+              <img
+                src={mineTunnel}
+                alt="Túnel de mina"
+                className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+              />
             </motion.div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -84,7 +119,11 @@ export function HistorySection() {
               transition={{ delay: 0.1 }}
               className="h-[200px] overflow-hidden rounded-2xl"
             >
-              <img src={panteonIngles} alt="Panteón Inglés" className="h-full w-full object-cover transition-transform duration-700 hover:scale-105" />
+              <img
+                src={panteonIngles}
+                alt="Panteón Inglés"
+                className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+              />
             </motion.div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -93,19 +132,24 @@ export function HistorySection() {
               transition={{ delay: 0.2 }}
               className="h-[200px] overflow-hidden rounded-2xl"
             >
-              <img src={miningEquipment} alt="Equipo minero" className="h-full w-full object-cover transition-transform duration-700 hover:scale-105" />
+              <img
+                src={miningEquipment}
+                alt="Equipo minero"
+                className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+              />
             </motion.div>
           </div>
 
           <div className="flex flex-col justify-center">
             <p className="mb-5 font-body text-lg leading-relaxed text-foreground/70">
-              La historia de Real del Monte no es solo una línea de tiempo: es una red de oficios, migraciones,
-              luchas laborales y tecnología extractiva que transformó a Hidalgo durante siglos.
+              La historia de Real del Monte no es solo una línea de tiempo: es una red de oficios,
+              migraciones, luchas laborales y tecnología extractiva que transformó a Hidalgo durante
+              siglos.
             </p>
             <p className="mb-10 font-body text-base leading-relaxed text-foreground/70">
-              Esta narrativa conecta el origen minero, la huella cornish, la dimensión obrera y la reconversión
-              turística contemporánea para que el visitante entienda por qué el pueblo emociona más cuando se recorre
-              con contexto histórico.
+              Esta narrativa conecta el origen minero, la huella cornish, la dimensión obrera y la
+              reconversión turística contemporánea para que el visitante entienda por qué el pueblo
+              emociona más cuando se recorre con contexto histórico.
             </p>
 
             <div className="space-y-6">

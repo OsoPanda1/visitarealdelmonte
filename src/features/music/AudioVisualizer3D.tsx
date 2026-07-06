@@ -141,10 +141,7 @@ export function AudioVisualizer3D({
         // Scatter particles
         const angle = (i / segments) * Math.PI * 2 + timeRef.current * 0.2;
         const radius = 0.3 + freq * 0.4;
-        vertices.push(
-          Math.cos(angle) * radius,
-          Math.sin(angle) * radius,
-        );
+        vertices.push(Math.cos(angle) * radius, Math.sin(angle) * radius);
         frequencies.push(freq);
       } else if (mode === "terrain") {
         // Terrain-like visualization

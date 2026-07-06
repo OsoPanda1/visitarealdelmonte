@@ -37,14 +37,21 @@ export default function AlertsPanel() {
     };
     load();
     const id = setInterval(load, 20000);
-    return () => { cancel = true; clearInterval(id); };
+    return () => {
+      cancel = true;
+      clearInterval(id);
+    };
   }, []);
 
   return (
     <div className="glass-card rounded-2xl p-5 border border-border/20">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-[11px] font-mono uppercase tracking-widest text-muted-foreground">Centro de Alertas · Umbrales en vivo</h2>
-        <span className="text-[10px] font-mono text-muted-foreground/60">latencia &gt; 500ms · integrity &lt; 0.70 · offline &gt; 0</span>
+        <h2 className="text-[11px] font-mono uppercase tracking-widest text-muted-foreground">
+          Centro de Alertas · Umbrales en vivo
+        </h2>
+        <span className="text-[10px] font-mono text-muted-foreground/60">
+          latencia &gt; 500ms · integrity &lt; 0.70 · offline &gt; 0
+        </span>
       </div>
       {alerts.length === 0 ? (
         <div className="flex items-center gap-2 text-emerald-400 text-xs font-mono">
@@ -55,16 +62,28 @@ export default function AlertsPanel() {
           {alerts.map((a) => {
             const Icon = ICON[a.severity];
             return (
-              <li key={a.id} className={`flex items-start gap-3 rounded-xl border px-3 py-2.5 ${STYLE[a.severity]}`}>
+              <li
+                key={a.id}
+                className={`flex items-start gap-3 rounded-xl border px-3 py-2.5 ${STYLE[a.severity]}`}
+              >
                 <Icon className="h-4 w-4 mt-0.5 shrink-0" />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-0.5">
                     <p className="text-xs font-display font-semibold truncate">{a.title}</p>
-                    {a.federation_key && <span className="text-[9px] font-mono uppercase tracking-wider opacity-70">{a.federation_key}</span>}
+                    {a.federation_key && (
+                      <span className="text-[9px] font-mono uppercase tracking-wider opacity-70">
+                        {a.federation_key}
+                      </span>
+                    )}
                   </div>
                   <p className="text-[11px] opacity-80 line-clamp-2">{a.message}</p>
                 </div>
-                <span className="text-[9px] font-mono opacity-60 shrink-0">{new Date(a.created_at).toLocaleTimeString("es-MX", { hour: "2-digit", minute: "2-digit" })}</span>
+                <span className="text-[9px] font-mono opacity-60 shrink-0">
+                  {new Date(a.created_at).toLocaleTimeString("es-MX", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </span>
               </li>
             );
           })}

@@ -14,8 +14,15 @@ interface EditorialSectionProps {
 }
 
 const EditorialSection = ({
-  id, chapter, title, subtitle, body, image, imageAlt,
-  imagePosition = "left", accentColor = "gold",
+  id,
+  chapter,
+  title,
+  subtitle,
+  body,
+  image,
+  imageAlt,
+  imagePosition = "left",
+  accentColor = "gold",
 }: EditorialSectionProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -46,7 +53,9 @@ const EditorialSection = ({
       <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-background/80 to-transparent" />
       {/* Category badge */}
       <div className="absolute top-4 left-4 glass rounded-full px-3 py-1">
-        <span className="font-body text-[9px] tracking-[0.3em] uppercase text-gold">{chapter.split("·")[0]?.trim()}</span>
+        <span className="font-body text-[9px] tracking-[0.3em] uppercase text-gold">
+          {chapter.split("·")[0]?.trim()}
+        </span>
       </div>
     </motion.div>
   );
@@ -62,18 +71,21 @@ const EditorialSection = ({
         {chapter}
       </span>
 
-      <h2 className={`font-display text-4xl md:text-5xl lg:text-6xl tracking-tight mb-4 leading-tight ${accentClass}`}>
+      <h2
+        className={`font-display text-4xl md:text-5xl lg:text-6xl tracking-tight mb-4 leading-tight ${accentClass}`}
+      >
         {title}
       </h2>
 
       <div className={`w-16 h-px mb-6 ${lineColor}`} />
 
-      <p className="font-display text-lg md:text-xl text-platinum/70 italic mb-8">
-        {subtitle}
-      </p>
+      <p className="font-display text-lg md:text-xl text-platinum/70 italic mb-8">{subtitle}</p>
 
       {body.map((paragraph, i) => (
-        <p key={i} className="font-body text-sm md:text-base text-foreground/70 leading-relaxed mb-4 last:mb-0">
+        <p
+          key={i}
+          className="font-body text-sm md:text-base text-foreground/70 leading-relaxed mb-4 last:mb-0"
+        >
           {paragraph}
         </p>
       ))}

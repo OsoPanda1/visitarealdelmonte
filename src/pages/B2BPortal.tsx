@@ -10,15 +10,19 @@ const container = {
 };
 const item = {
   hidden: { opacity: 0, y: 25 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] as const } },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] as const },
+  },
 };
 
 const sectorBenefits: Record<string, string[]> = {
-  "Hoteles": ["Reservas directas sin OTA", "Analítica de visitantes", "Dashboard de estancias"],
-  "Bares": ["Happy Hour Digital geolocalizado", "Alertas de eventos en tiempo real"],
+  Hoteles: ["Reservas directas sin OTA", "Analítica de visitantes", "Dashboard de estancias"],
+  Bares: ["Happy Hour Digital geolocalizado", "Alertas de eventos en tiempo real"],
   "Pasterías/Platerías": ["Nodo de Energía para jugadores", "Métricas de conversión territorial"],
-  "Artesanías": ["Catálogo digital premium", "WhatsApp Business integrado"],
-  "Tiendas": ["Digitalización micro-negocio", "Analytics de ticket promedio"],
+  Artesanías: ["Catálogo digital premium", "WhatsApp Business integrado"],
+  Tiendas: ["Digitalización micro-negocio", "Analytics de ticket promedio"],
   "Góndolas/Semifijos": ["Geolocalización en mapa turístico", "Ubicación dinámica en tiempo real"],
 };
 
@@ -36,7 +40,12 @@ export default function B2BPortal() {
       </motion.div>
 
       {/* Plans grid */}
-      <motion.div variants={container} initial="hidden" animate="show" className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <motion.div
+        variants={container}
+        initial="hidden"
+        animate="show"
+        className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
+      >
         {b2bPlans.map((plan) => {
           const isTopTier = plan.sector === "Hoteles";
           return (
@@ -46,9 +55,7 @@ export default function B2BPortal() {
               whileHover={{ y: -6, transition: { duration: 0.2 } }}
               className={cn(
                 "relative rounded-2xl p-7 transition-all duration-300 cursor-pointer",
-                isTopTier
-                  ? "glass-gold shadow-gold"
-                  : "glass hover:border-gold/20"
+                isTopTier ? "glass-gold shadow-gold" : "glass hover:border-gold/20",
               )}
             >
               {isTopTier && (
@@ -60,7 +67,9 @@ export default function B2BPortal() {
               <div className="text-4xl mb-5">{plan.icon}</div>
               <h3 className="text-2xl font-display font-bold">{plan.sector}</h3>
               <div className="mt-3 flex items-baseline gap-1.5">
-                <span className="text-4xl font-display font-bold text-gradient-gold">${plan.price}</span>
+                <span className="text-4xl font-display font-bold text-gradient-gold">
+                  ${plan.price}
+                </span>
                 <span className="text-xs font-body text-muted-foreground">MXN/mes</span>
               </div>
               <p className="mt-2 text-[11px] font-mono text-muted-foreground">
@@ -80,7 +89,7 @@ export default function B2BPortal() {
                   "mt-6 w-full rounded-xl h-11 text-[13px] font-semibold transition-all duration-300",
                   isTopTier
                     ? "gradient-gold text-primary-foreground shadow-gold hover:shadow-elevated"
-                    : "bg-secondary/50 hover:bg-secondary text-foreground"
+                    : "bg-secondary/50 hover:bg-secondary text-foreground",
                 )}
               >
                 Suscribirse <ArrowRight className="h-3.5 w-3.5 ml-1" />
@@ -97,8 +106,10 @@ export default function B2BPortal() {
         transition={{ delay: 0.5 }}
         className="glass-teal rounded-3xl p-8 relative overflow-hidden"
       >
-        <div className="absolute top-0 right-0 w-64 h-64 rounded-full opacity-10"
-          style={{ background: 'radial-gradient(circle, hsl(174 62% 47%), transparent 70%)' }} />
+        <div
+          className="absolute top-0 right-0 w-64 h-64 rounded-full opacity-10"
+          style={{ background: "radial-gradient(circle, hsl(174 62% 47%), transparent 70%)" }}
+        />
         <div className="relative z-10 flex items-start gap-4">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-teal/10">
             <Building2 className="h-6 w-6 text-teal" />
@@ -106,9 +117,9 @@ export default function B2BPortal() {
           <div>
             <h3 className="text-2xl font-display font-bold text-teal">Gobernanza DAO RDM</h3>
             <p className="mt-2 text-sm font-body text-muted-foreground leading-relaxed max-w-2xl">
-              Las cuotas, beneficios y reglas comerciales son ajustadas por la DAO de Real del Monte,
-              sin modificar la arquitectura base TAMV. Los ingresos se liquidan y reportan en dashboards específicos de RDM,
-              garantizando soberanía económica total del territorio.
+              Las cuotas, beneficios y reglas comerciales son ajustadas por la DAO de Real del
+              Monte, sin modificar la arquitectura base TAMV. Los ingresos se liquidan y reportan en
+              dashboards específicos de RDM, garantizando soberanía económica total del territorio.
             </p>
           </div>
         </div>

@@ -1,8 +1,17 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Target, Trophy, Flame, Star, Clock, CheckCircle2,
-  ChevronRight, Zap, Shield, Pickaxe, Mountain
+  Target,
+  Trophy,
+  Flame,
+  Star,
+  Clock,
+  CheckCircle2,
+  ChevronRight,
+  Zap,
+  Shield,
+  Pickaxe,
+  Mountain,
 } from "lucide-react";
 import { getPlayerProfile } from "../api";
 import type { GamificationPlayerQuest, GamificationQuest, XpTrack } from "../types";
@@ -38,10 +47,12 @@ interface QuestPanelProps {
 }
 
 export function QuestPanel({ compact = false }: QuestPanelProps) {
-  const [quests, setQuests] = useState<(GamificationPlayerQuest & { quest: GamificationQuest })[]>([]);
+  const [quests, setQuests] = useState<(GamificationPlayerQuest & { quest: GamificationQuest })[]>(
+    [],
+  );
   const [player, setPlayer] = useState<{ total_xp: number; level: number } | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTrack, setActiveTrack] = useState<XpTrack | 'all'>('all');
+  const [activeTrack, setActiveTrack] = useState<XpTrack | "all">("all");
 
   useEffect(() => {
     getPlayerProfile().then((profile) => {
@@ -51,11 +62,10 @@ export function QuestPanel({ compact = false }: QuestPanelProps) {
     });
   }, []);
 
-  const filteredQuests = activeTrack === 'all'
-    ? quests
-    : quests.filter(q => q.quest.track === activeTrack);
+  const filteredQuests =
+    activeTrack === "all" ? quests : quests.filter((q) => q.quest.track === activeTrack);
 
-  const completedCount = quests.filter(q => q.status === 'completed').length;
+  const completedCount = quests.filter((q) => q.status === "completed").length;
   const totalCount = quests.length;
 
   if (loading) {
@@ -65,7 +75,7 @@ export function QuestPanel({ compact = false }: QuestPanelProps) {
           <div className="h-4 bg-white/10 rounded w-1/3" />
           <div className="h-3 bg-white/5 rounded w-2/3" />
           <div className="space-y-3">
-            {[1, 2, 3].map(i => (
+            {[1, 2, 3].map((i) => (
               <div key={i} className="h-16 bg-white/5 rounded-xl" />
             ))}
           </div>
@@ -117,16 +127,16 @@ export function QuestPanel({ compact = false }: QuestPanelProps) {
         {!compact && (
           <div className="flex gap-1">
             <button
-              onClick={() => setActiveTrack('all')}
+              onClick={() => setActiveTrack("all")}
               className={`px-3 py-1 rounded-full text-[10px] font-medium transition-all ${
-                activeTrack === 'all'
-                  ? 'bg-[hsl(var(--rdm-amber)/0.2)] text-[hsl(var(--rdm-amber))]'
-                  : 'bg-white/5 text-[hsl(var(--muted-foreground))] hover:bg-white/10'
+                activeTrack === "all"
+                  ? "bg-[hsl(var(--rdm-amber)/0.2)] text-[hsl(var(--rdm-amber))]"
+                  : "bg-white/5 text-[hsl(var(--muted-foreground))] hover:bg-white/10"
               }`}
             >
               Todas
             </button>
-            {(Object.keys(TRACK_COLORS) as XpTrack[]).map(track => {
+            {(Object.keys(TRACK_COLORS) as XpTrack[]).map((track) => {
               const Icon = TRACK_ICONS[track];
               return (
                 <button
@@ -134,10 +144,14 @@ export function QuestPanel({ compact = false }: QuestPanelProps) {
                   onClick={() => setActiveTrack(track)}
                   className={`px-3 py-1 rounded-full text-[10px] font-medium transition-all flex items-center gap-1 ${
                     activeTrack === track
-                      ? 'text-white'
-                      : 'bg-white/5 text-[hsl(var(--muted-foreground))] hover:bg-white/10'
+                      ? "text-white"
+                      : "bg-white/5 text-[hsl(var(--muted-foreground))] hover:bg-white/10"
                   }`}
-                  style={activeTrack === track ? { background: TRACK_COLORS[track] + '33', color: TRACK_COLORS[track] } : undefined}
+                  style={
+                    activeTrack === track
+                      ? { background: TRACK_COLORS[track] + "33", color: TRACK_COLORS[track] }
+                      : undefined
+                  }
                 >
                   <Icon className="w-3 h-3" />
                   {TRACK_LABELS[track]}
@@ -149,7 +163,9 @@ export function QuestPanel({ compact = false }: QuestPanelProps) {
       </div>
 
       {/* Quest List */}
-      <div className={`p-3 space-y-2 ${compact ? 'max-h-[300px]' : 'max-h-[500px]'} overflow-y-auto`}>
+      <div
+        className={`p-3 space-y-2 ${compact ? "max-h-[300px]" : "max-h-[500px]"} overflow-y-auto`}
+      >
         <AnimatePresence>
           {filteredQuests.map((pq, i) => (
             <motion.div
@@ -159,19 +175,22 @@ export function QuestPanel({ compact = false }: QuestPanelProps) {
               exit={{ opacity: 0, x: -20 }}
               transition={{ delay: i * 0.05 }}
               className={`relative p-3 rounded-xl border transition-all ${
-                pq.status === 'completed'
-                  ? 'bg-[hsl(var(--rdm-amber)/0.05)] border-[hsl(var(--rdm-amber)/0.2)]'
-                  : 'bg-white/[0.02] border-white/[0.06] hover:border-white/10 hover:bg-white/[0.04]'
+                pq.status === "completed"
+                  ? "bg-[hsl(var(--rdm-amber)/0.05)] border-[hsl(var(--rdm-amber)/0.2)]"
+                  : "bg-white/[0.02] border-white/[0.06] hover:border-white/10 hover:bg-white/[0.04]"
               }`}
             >
               <div className="flex items-start gap-3">
                 {/* Track indicator */}
                 <div
                   className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5"
-                  style={{ background: TRACK_COLORS[pq.quest.track] + '20' }}
+                  style={{ background: TRACK_COLORS[pq.quest.track] + "20" }}
                 >
-                  {pq.status === 'completed' ? (
-                    <CheckCircle2 className="w-4 h-4" style={{ color: TRACK_COLORS[pq.quest.track] }} />
+                  {pq.status === "completed" ? (
+                    <CheckCircle2
+                      className="w-4 h-4"
+                      style={{ color: TRACK_COLORS[pq.quest.track] }}
+                    />
                   ) : (
                     <Target className="w-4 h-4" style={{ color: TRACK_COLORS[pq.quest.track] }} />
                   )}
@@ -179,10 +198,15 @@ export function QuestPanel({ compact = false }: QuestPanelProps) {
 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <h4 className="text-sm font-medium truncate" style={{ fontFamily: "var(--font-display)" }}>
+                    <h4
+                      className="text-sm font-medium truncate"
+                      style={{ fontFamily: "var(--font-display)" }}
+                    >
                       {pq.quest.name}
                     </h4>
-                    <span className={`px-1.5 py-0.5 rounded text-[9px] font-medium ${DIFFICULTY_COLORS[pq.quest.difficulty]}`}>
+                    <span
+                      className={`px-1.5 py-0.5 rounded text-[9px] font-medium ${DIFFICULTY_COLORS[pq.quest.difficulty]}`}
+                    >
                       {pq.quest.difficulty}
                     </span>
                   </div>

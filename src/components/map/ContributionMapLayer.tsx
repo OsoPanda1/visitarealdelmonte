@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
-import type { UserContribution, TerritorialHeatPoint } from '@/core/territorial/types';
+import { useMemo } from "react";
+import type { UserContribution, TerritorialHeatPoint } from "@/core/territorial/types";
 
 interface ContributionMapLayerProps {
   contributions: UserContribution[];
@@ -9,31 +9,36 @@ interface ContributionMapLayerProps {
 }
 
 const TYPE_COLORS: Record<string, string> = {
-  checkin: '#22C55E',
-  review: '#3B82F6',
-  photo: '#F59E0B',
-  rating: '#8B5CF6',
-  tip: '#EC4899',
-  event_report: '#F97316',
-  route_trace: '#06B6D4',
-  poi_suggestion: '#14B8A6',
+  checkin: "#22C55E",
+  review: "#3B82F6",
+  photo: "#F59E0B",
+  rating: "#8B5CF6",
+  tip: "#EC4899",
+  event_report: "#F97316",
+  route_trace: "#06B6D4",
+  poi_suggestion: "#14B8A6",
 };
 
 const TYPE_LABELS: Record<string, string> = {
-  checkin: 'Check-in',
-  review: 'Resena',
-  photo: 'Foto',
-  rating: 'Calificacion',
-  tip: 'Consejo',
-  event_report: 'Reporte',
-  route_trace: 'Ruta',
-  poi_suggestion: 'Sugerencia',
+  checkin: "Check-in",
+  review: "Resena",
+  photo: "Foto",
+  rating: "Calificacion",
+  tip: "Consejo",
+  event_report: "Reporte",
+  route_trace: "Ruta",
+  poi_suggestion: "Sugerencia",
 };
 
-export function ContributionMapLayer({ contributions, heatMap, onContributionClick, maxVisible = 50 }: ContributionMapLayerProps) {
+export function ContributionMapLayer({
+  contributions,
+  heatMap,
+  onContributionClick,
+  maxVisible = 50,
+}: ContributionMapLayerProps) {
   const visibleContributions = useMemo(
     () => contributions.slice(0, maxVisible),
-    [contributions, maxVisible]
+    [contributions, maxVisible],
   );
 
   if (contributions.length === 0 && (!heatMap || heatMap.length === 0)) {
@@ -63,7 +68,7 @@ export function ContributionMapLayer({ contributions, heatMap, onContributionCli
                 <div
                   className="w-3 h-3 rounded-full flex-shrink-0"
                   style={{
-                    backgroundColor: TYPE_COLORS[point.type] ?? '#6366F1',
+                    backgroundColor: TYPE_COLORS[point.type] ?? "#6366F1",
                     opacity: 0.4 + point.intensity * 0.6,
                   }}
                 />
@@ -72,7 +77,8 @@ export function ContributionMapLayer({ contributions, heatMap, onContributionCli
                     {point.coords.lat.toFixed(4)}, {point.coords.lng.toFixed(4)}
                   </p>
                   <p className="text-[10px] text-muted-foreground">
-                    {point.count} {point.count === 1 ? 'interaccion' : 'interacciones'} · Ultima: {formatRelativeTime(point.lastActivity)}
+                    {point.count} {point.count === 1 ? "interaccion" : "interacciones"} · Ultima:{" "}
+                    {formatRelativeTime(point.lastActivity)}
                   </p>
                 </div>
                 <div className="text-xs font-mono text-foreground/60">
@@ -98,20 +104,22 @@ export function ContributionMapLayer({ contributions, heatMap, onContributionCli
               >
                 <div
                   className="w-2.5 h-2.5 rounded-full flex-shrink-0"
-                  style={{ backgroundColor: TYPE_COLORS[contribution.type] ?? '#6366F1' }}
+                  style={{ backgroundColor: TYPE_COLORS[contribution.type] ?? "#6366F1" }}
                 />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-medium text-foreground">
                       {TYPE_LABELS[contribution.type] ?? contribution.type}
                     </span>
-                    <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${
-                      contribution.status === 'verified'
-                        ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
-                        : contribution.status === 'flagged'
-                          ? 'bg-red-500/10 text-red-600 dark:text-red-400'
-                          : 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
-                    }`}>
+                    <span
+                      className={`text-[10px] px-1.5 py-0.5 rounded-full ${
+                        contribution.status === "verified"
+                          ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                          : contribution.status === "flagged"
+                            ? "bg-red-500/10 text-red-600 dark:text-red-400"
+                            : "bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                      }`}
+                    >
                       {contribution.status}
                     </span>
                   </div>
@@ -134,22 +142,31 @@ export function ContributionMapLayer({ contributions, heatMap, onContributionCli
 function summarizePayload(contribution: UserContribution): string {
   const p = contribution.payload;
   switch (p.type) {
-    case 'checkin': return p.poiName;
-    case 'review': return p.text.slice(0, 60) + (p.text.length > 60 ? '...' : '');
-    case 'rating': return `${p.category}: ${p.score}/5`;
-    case 'tip': return p.text.slice(0, 60) + (p.text.length > 60 ? '...' : '');
-    case 'photo': return p.caption ?? 'Foto sin descripcion';
-    case 'event_report': return p.eventName;
-    case 'route_trace': return `${p.waypoints.length} puntos · ${p.transportMode}`;
-    case 'poi_suggestion': return p.suggestedName;
-    default: return 'Contribucion';
+    case "checkin":
+      return p.poiName;
+    case "review":
+      return p.text.slice(0, 60) + (p.text.length > 60 ? "..." : "");
+    case "rating":
+      return `${p.category}: ${p.score}/5`;
+    case "tip":
+      return p.text.slice(0, 60) + (p.text.length > 60 ? "..." : "");
+    case "photo":
+      return p.caption ?? "Foto sin descripcion";
+    case "event_report":
+      return p.eventName;
+    case "route_trace":
+      return `${p.waypoints.length} puntos · ${p.transportMode}`;
+    case "poi_suggestion":
+      return p.suggestedName;
+    default:
+      return "Contribucion";
   }
 }
 
 function formatRelativeTime(date: Date): string {
   const diff = Date.now() - date.getTime();
   const minutes = Math.floor(diff / 60000);
-  if (minutes < 1) return 'ahora';
+  if (minutes < 1) return "ahora";
   if (minutes < 60) return `hace ${minutes} min`;
   const hours = Math.floor(minutes / 60);
   if (hours < 24) return `hace ${hours}h`;

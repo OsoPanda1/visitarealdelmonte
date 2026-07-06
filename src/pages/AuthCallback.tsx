@@ -28,7 +28,9 @@ export default function AuthCallback() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center space-y-4">
           <p className="text-destructive">Error de autenticación: {error}</p>
-          <button onClick={() => navigate("/auth")} className="text-primary underline">Volver al inicio de sesión</button>
+          <button onClick={() => navigate("/auth")} className="text-primary underline">
+            Volver al inicio de sesión
+          </button>
         </div>
       </div>
     );

@@ -5,7 +5,13 @@ import { Compass, Clock, Zap } from "lucide-react";
 import { ModuleCinematicIntro } from "@/components/ModuleCinematicIntro";
 import { PackageCard } from "@/components/packages/PackageCard";
 import { ElegantPagination } from "@/components/ElegantPagination";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import type { TourPackage } from "@/types/supabase";
 
@@ -28,13 +34,17 @@ export default function Paquetes() {
 
   useEffect(() => {
     async function load() {
-      const { data } = await supabase.from("packages").select("*").eq("status", "active").order("created_at", { ascending: false });
+      const { data } = await supabase
+        .from("packages")
+        .select("*")
+        .eq("status", "active")
+        .order("created_at", { ascending: false });
       if (data) setPackages(data);
     }
     load();
   }, []);
 
-  const filtered = type === "all" ? packages : packages.filter(p => p.type === type);
+  const filtered = type === "all" ? packages : packages.filter((p) => p.type === type);
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const paged = filtered.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
 
@@ -53,19 +63,39 @@ export default function Paquetes() {
     <RDMLayout>
       <div className="min-h-screen">
         <div className="container mx-auto px-4 md:px-8 pt-24 pb-16">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-10"
+          >
             <div className="flex items-center gap-3 mb-2">
               <Compass className="h-5 w-5 text-accent" />
-              <span className="text-xs tracking-[0.3em] uppercase text-muted-foreground">Experiencias</span>
+              <span className="text-xs tracking-[0.3em] uppercase text-muted-foreground">
+                Experiencias
+              </span>
             </div>
-            <h1 className="font-display text-4xl md:text-5xl text-foreground mb-4">Paquetes de Visita</h1>
+            <h1 className="font-display text-4xl md:text-5xl text-foreground mb-4">
+              Paquetes de Visita
+            </h1>
           </motion.div>
 
           <div className="flex gap-3 mb-8">
-            <Select value={type} onValueChange={v => { setType(v); setPage(0); }}>
-              <SelectTrigger className="w-52 rounded-xl bg-card/60 border-border/50"><SelectValue /></SelectTrigger>
+            <Select
+              value={type}
+              onValueChange={(v) => {
+                setType(v);
+                setPage(0);
+              }}
+            >
+              <SelectTrigger className="w-52 rounded-xl bg-card/60 border-border/50">
+                <SelectValue />
+              </SelectTrigger>
               <SelectContent>
-                {TYPES.map(t => <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>)}
+                {TYPES.map((t) => (
+                  <SelectItem key={t.value} value={t.value}>
+                    {t.label}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -77,7 +107,22 @@ export default function Paquetes() {
             </div>
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {paged.map(p => <PackageCard key={p.id} pkg={{ ...p, slug: p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''), duration_hours: null, intensity: null, price_from: p.price, hero_image: p.image_url }} />)}
+              {paged.map((p) => (
+                <PackageCard
+                  key={p.id}
+                  pkg={{
+                    ...p,
+                    slug: p.name
+                      .toLowerCase()
+                      .replace(/[^a-z0-9]+/g, "-")
+                      .replace(/(^-|-$)/g, ""),
+                    duration_hours: null,
+                    intensity: null,
+                    price_from: p.price,
+                    hero_image: p.image_url,
+                  }}
+                />
+              ))}
             </div>
           )}
 

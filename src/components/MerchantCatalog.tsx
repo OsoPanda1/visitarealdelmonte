@@ -67,8 +67,8 @@ const MerchantCatalog = () => {
             Únete a la <span className="text-gradient-gold">Federación</span>
           </h2>
           <p className="mt-4 text-muted-foreground max-w-xl">
-            Registra tu negocio en el ecosistema digital de Real del Monte.
-            Solo los comercios verificados aparecen en el Gemelo Digital y reciben recomendaciones de Realito AI.
+            Registra tu negocio en el ecosistema digital de Real del Monte. Solo los comercios
+            verificados aparecen en el Gemelo Digital y reciben recomendaciones de Realito AI.
           </p>
         </motion.div>
 
@@ -106,7 +106,10 @@ const MerchantCatalog = () => {
                   {merchant.tags.length > 0 && (
                     <div className="mt-3 flex flex-wrap gap-1">
                       {merchant.tags.slice(0, 3).map((tag) => (
-                        <span key={tag} className="text-[9px] px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
+                        <span
+                          key={tag}
+                          className="text-[9px] px-2 py-0.5 rounded-full bg-muted text-muted-foreground"
+                        >
                           {tag}
                         </span>
                       ))}
@@ -117,7 +120,10 @@ const MerchantCatalog = () => {
             </div>
             {activeMerchants.length > 6 && (
               <div className="mt-4 text-center">
-                <Link to="/catalogo" className="font-mono text-xs text-primary hover:text-foreground transition-colors">
+                <Link
+                  to="/catalogo"
+                  className="font-mono text-xs text-primary hover:text-foreground transition-colors"
+                >
                   Ver todos los comercios →
                 </Link>
               </div>

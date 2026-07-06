@@ -1,12 +1,21 @@
 import { useState, useCallback, createContext, useContext, ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  X, CheckCircle, AlertCircle, Info, AlertTriangle,
-  MapPin, Calendar, Utensils, MessageSquare, Heart
+import {
+  X,
+  CheckCircle,
+  AlertCircle,
+  Info,
+  AlertTriangle,
+  MapPin,
+  Calendar,
+  Utensils,
+  MessageSquare,
+  Heart,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-type NotificationType = "success" | "error" | "warning" | "info" | "event" | "food" | "place" | "message";
+type NotificationType =
+  "success" | "error" | "warning" | "info" | "event" | "food" | "place" | "message";
 
 interface Notification {
   id: string;
@@ -37,18 +46,21 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
     setNotifications((prev) => prev.filter((n) => n.id !== id));
   }, []);
 
-  const addNotification = useCallback((notification: Omit<Notification, "id">) => {
-    const id = crypto.randomUUID().slice(0, 8);
-    const newNotification = { ...notification, id };
-    
-    setNotifications((prev) => [newNotification, ...prev].slice(0, 5));
-    
-    if (notification.duration !== 0) {
-      setTimeout(() => {
-        removeNotification(id);
-      }, notification.duration || 5000);
-    }
-  }, [removeNotification]);
+  const addNotification = useCallback(
+    (notification: Omit<Notification, "id">) => {
+      const id = crypto.randomUUID().slice(0, 8);
+      const newNotification = { ...notification, id };
+
+      setNotifications((prev) => [newNotification, ...prev].slice(0, 5));
+
+      if (notification.duration !== 0) {
+        setTimeout(() => {
+          removeNotification(id);
+        }, notification.duration || 5000);
+      }
+    },
+    [removeNotification],
+  );
 
   const clearAll = useCallback(() => {
     setNotifications([]);
@@ -126,12 +138,18 @@ function NotificationItem({
       style={{ border: "1px solid hsla(210,100%,55%,0.15)" }}
     >
       <div className="flex items-start gap-3 p-4">
-        <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${gradientClass} flex items-center justify-center shrink-0 shadow-lg`}>
+        <div
+          className={`w-10 h-10 rounded-xl bg-gradient-to-br ${gradientClass} flex items-center justify-center shrink-0 shadow-lg`}
+        >
           <Icon className="w-5 h-5 text-white" />
         </div>
         <div className="flex-1 min-w-0">
-          <h4 className="font-semibold text-sm" style={{ color: "hsl(0,0%,95%)" }}>{notification.title}</h4>
-          <p className="text-xs mt-1 leading-relaxed" style={{ color: "hsl(210,20%,60%)" }}>{notification.message}</p>
+          <h4 className="font-semibold text-sm" style={{ color: "hsl(0,0%,95%)" }}>
+            {notification.title}
+          </h4>
+          <p className="text-xs mt-1 leading-relaxed" style={{ color: "hsl(210,20%,60%)" }}>
+            {notification.message}
+          </p>
           {notification.action && (
             <Button
               size="sm"
@@ -207,18 +225,26 @@ export const predefinedNotifications = {
 
 export function useNotificationHelpers() {
   const { addNotification } = useNotifications();
-  
+
   return {
     notifyWelcome: () => addNotification(predefinedNotifications.welcome()),
-    notifyFestival: (name: string, date: string) => addNotification(predefinedNotifications.festivalReminder(name, date)),
-    notifyRouteCompleted: (name: string) => addNotification(predefinedNotifications.routeCompleted(name)),
-    notifyNearbyPlace: (name: string) => addNotification(predefinedNotifications.newPlaceNearby(name)),
+    notifyFestival: (name: string, date: string) =>
+      addNotification(predefinedNotifications.festivalReminder(name, date)),
+    notifyRouteCompleted: (name: string) =>
+      addNotification(predefinedNotifications.routeCompleted(name)),
+    notifyNearbyPlace: (name: string) =>
+      addNotification(predefinedNotifications.newPlaceNearby(name)),
     notifyFood: (name: string) => addNotification(predefinedNotifications.foodRecommendation(name)),
-    notifyWeather: (condition: string) => addNotification(predefinedNotifications.weatherAlert(condition)),
+    notifyWeather: (condition: string) =>
+      addNotification(predefinedNotifications.weatherAlert(condition)),
     notifyMessage: (from: string) => addNotification(predefinedNotifications.messageReceived(from)),
-    notifySuccess: (title: string, message: string) => addNotification({ type: "success", title, message }),
-    notifyError: (title: string, message: string) => addNotification({ type: "error", title, message }),
-    notifyInfo: (title: string, message: string) => addNotification({ type: "info", title, message }),
-    notifyWarning: (title: string, message: string) => addNotification({ type: "warning", title, message }),
+    notifySuccess: (title: string, message: string) =>
+      addNotification({ type: "success", title, message }),
+    notifyError: (title: string, message: string) =>
+      addNotification({ type: "error", title, message }),
+    notifyInfo: (title: string, message: string) =>
+      addNotification({ type: "info", title, message }),
+    notifyWarning: (title: string, message: string) =>
+      addNotification({ type: "warning", title, message }),
   };
 }

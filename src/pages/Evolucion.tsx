@@ -79,7 +79,10 @@ const Evolucion = () => {
           transition={{ duration: 0.6 }}
           className="mx-auto mb-12 max-w-4xl text-center"
         >
-          <Badge variant="outline" className="mb-5 border-[hsl(var(--gold))]/40 bg-[hsl(var(--gold))]/5 px-4 py-2">
+          <Badge
+            variant="outline"
+            className="mb-5 border-[hsl(var(--gold))]/40 bg-[hsl(var(--gold))]/5 px-4 py-2"
+          >
             <Activity className="mr-2 h-4 w-4 text-[hsl(var(--gold))]" />
             <span className="font-body text-[10px] uppercase tracking-[0.28em] text-[hsl(var(--gold))]">
               Mega-análisis de evolución
@@ -89,8 +92,8 @@ const Evolucion = () => {
             Trayectoria del <span className="text-gradient-gold">ecosistema</span>
           </h1>
           <p className="mx-auto mt-5 max-w-2xl font-body text-base leading-relaxed text-muted-foreground">
-            Cómo RDM Digital pasó de un explorador local a una federación operativa
-            con gemelos digitales, IA soberana y economía local activable.
+            Cómo RDM Digital pasó de un explorador local a una federación operativa con gemelos
+            digitales, IA soberana y economía local activable.
           </p>
         </motion.div>
 
@@ -124,7 +127,9 @@ const Evolucion = () => {
                   className="mb-8 ml-6"
                 >
                   <span className="absolute -left-[7px] mt-1 h-3 w-3 rounded-full border border-[hsl(var(--gold))]/60 bg-background" />
-                  <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-cyan-100/70">{t.date}</p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-cyan-100/70">
+                    {t.date}
+                  </p>
                   <h3 className="mt-1 font-display text-lg text-foreground">{t.title}</h3>
                   <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{t.detail}</p>
                 </motion.li>

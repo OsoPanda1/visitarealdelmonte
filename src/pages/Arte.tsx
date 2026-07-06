@@ -13,31 +13,35 @@ const crafts = [
   {
     title: "Platería Tradicional",
     icon: Gem,
-    description: "Los artesanos de Real del Monte trabajan la plata utilizando técnicas heredadas de los mineros del siglo XIX. Desde aretes y collares hasta piezas de decoración, cada obra cuenta con minerales locales como adorno.",
+    description:
+      "Los artesanos de Real del Monte trabajan la plata utilizando técnicas heredadas de los mineros del siglo XIX. Desde aretes y collares hasta piezas de decoración, cada obra cuenta con minerales locales como adorno.",
     techniques: ["Filigrana", "Embossing", "Pulido tradicional", "Engaste de minerales"],
-    materials: ["Plata .925", "Pirita", "Cuarzo", "Plata nativa"]
+    materials: ["Plata .925", "Pirita", "Cuarzo", "Plata nativa"],
   },
   {
     title: "Textiles y Bordados",
     icon: Scissors,
-    description: "Las artesanas locales crean piezas únicas que combinan diseños otomíes con influencias inglesas. Mantas, cojines y prendas de vestir bordadas a mano son algunas de sus creaciones.",
+    description:
+      "Las artesanas locales crean piezas únicas que combinan diseños otomíes con influencias inglesas. Mantas, cojines y prendas de vestir bordadas a mano son algunas de sus creaciones.",
     techniques: ["Punto de cruz", "Bordado otomí", "Tejido en telar", "Ganchillo"],
-    materials: ["Lana natural", "Hilo de algodón", "Seda", "Tintes naturales"]
+    materials: ["Lana natural", "Hilo de algodón", "Seda", "Tintes naturales"],
   },
   {
     title: "Pintura y Escultura",
     icon: Brush,
-    description: "Artistas locales capturan la esencia del pueblo en sus obras. Paisajes neblinosos, escenas mineras y retratos de personajes locales son temas recurrentes.",
+    description:
+      "Artistas locales capturan la esencia del pueblo en sus obras. Paisajes neblinosos, escenas mineras y retratos de personajes locales son temas recurrentes.",
     techniques: ["Óleo", "Acrílico", "Acuarela", "Escultura en cantera"],
-    materials: ["Óleos", "Madera local", "Cantera", "Metal reciclado"]
+    materials: ["Óleos", "Madera local", "Cantera", "Metal reciclado"],
   },
   {
     title: "Trabajos en Metal",
     icon: CircleDot,
-    description: "Herreros y metalisteros crean desde herramientas decorativas hasta muebles y objetos de arte utilizando técnicas de forja tradicional.",
+    description:
+      "Herreros y metalisteros crean desde herramientas decorativas hasta muebles y objetos de arte utilizando técnicas de forja tradicional.",
     techniques: ["Forja al carbón", "Soldadura artística", "Pátinas", "Damasco"],
-    materials: ["Hierro", "Cobre", "Bronce", "Metal reciclado de minas"]
-  }
+    materials: ["Hierro", "Cobre", "Bronce", "Metal reciclado de minas"],
+  },
 ];
 
 const artists = [
@@ -45,23 +49,26 @@ const artists = [
     name: "Familia Sánchez",
     specialty: "Platería",
     generation: "4ta Generación",
-    description: "Maestros plateros con más de 100 años de tradición familiar creando joyería con minerales locales.",
-    awards: ["Premio Nacional de Artesanías 2019", "Reconocimiento Estatal 2020"]
+    description:
+      "Maestros plateros con más de 100 años de tradición familiar creando joyería con minerales locales.",
+    awards: ["Premio Nacional de Artesanías 2019", "Reconocimiento Estatal 2020"],
   },
   {
     name: "María Elena Torres",
     specialty: "Bordado Otomí",
     generation: "Artesana Master",
-    description: "Preservadora de técnicas ancestrales de bordado que ha enseñado a más de 50 jóvenes del pueblo.",
-    awards: ["Maestra Artesana Hidalgo", "Premio FONART 2018"]
+    description:
+      "Preservadora de técnicas ancestrales de bordado que ha enseñado a más de 50 jóvenes del pueblo.",
+    awards: ["Maestra Artesana Hidalgo", "Premio FONART 2018"],
   },
   {
     name: "Colectivo Minero",
     specialty: "Escultura en Metal",
     generation: "Grupo Fundado 2010",
-    description: "Ex-mineros que transforman herramientas de trabajo en obras de arte, contando la historia del pueblo.",
-    awards: ["Premio de Arte Contemporáneo", "Reconocimiento Municipal"]
-  }
+    description:
+      "Ex-mineros que transforman herramientas de trabajo en obras de arte, contando la historia del pueblo.",
+    awards: ["Premio de Arte Contemporáneo", "Reconocimiento Municipal"],
+  },
 ];
 
 const workshops = [
@@ -70,22 +77,23 @@ const workshops = [
     duration: "4 horas",
     price: "$850 MXN",
     includes: ["Materiales", "Herramientas", "Pieza terminada"],
-    description: "Aprende las técnicas básicas de trabajo con plata y crea tu propio anillo o aretes."
+    description:
+      "Aprende las técnicas básicas de trabajo con plata y crea tu propio anillo o aretes.",
   },
   {
     name: "Bordado Tradicional",
     duration: "3 horas",
     price: "$600 MXN",
     includes: ["Kit de bordado", "Diseños tradicionales", "Certificado"],
-    description: "Iniciación al bordado otomí-cornish con maestras artesanas locales."
+    description: "Iniciación al bordado otomí-cornish con maestras artesanas locales.",
   },
   {
     name: "Fotografía en la Neblina",
     duration: "6 horas",
     price: "$1,200 MXN",
     includes: ["Guía profesional", "Transporte", "Coffee break"],
-    description: "Captura la atmósfera única de Real del Monte con un fotógrafo profesional."
-  }
+    description: "Captura la atmósfera única de Real del Monte con un fotógrafo profesional.",
+  },
 ];
 
 const ArtePage = () => {
@@ -93,10 +101,10 @@ const ArtePage = () => {
     <RDMLayout>
       <div className="min-h-screen bg-background">
         <SEOMeta {...PAGE_SEO.arte} />
-        
+
         {/* Hero */}
         <div className="relative h-[60vh] min-h-[500px] overflow-hidden">
-          <div 
+          <div
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: `url(${callesImg})` }}
           />
@@ -116,8 +124,8 @@ const ArtePage = () => {
                   Arte y Artesanía
                 </h1>
                 <p className="text-lg text-muted-foreground max-w-2xl">
-                  Descubre el talento de artesanos que fusionan tradición minera, herencia otomí 
-                  y creatividad contemporánea en obras únicas.
+                  Descubre el talento de artesanos que fusionan tradición minera, herencia otomí y
+                  creatividad contemporánea en obras únicas.
                 </p>
               </motion.div>
             </div>
@@ -164,20 +172,30 @@ const ArtePage = () => {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <span className="text-xs text-muted-foreground uppercase tracking-wider">Técnicas</span>
+                      <span className="text-xs text-muted-foreground uppercase tracking-wider">
+                        Técnicas
+                      </span>
                       <div className="flex flex-wrap gap-1 mt-2">
                         {craft.techniques.map((tech) => (
-                          <span key={tech} className="px-2 py-0.5 rounded bg-muted text-xs text-muted-foreground">
+                          <span
+                            key={tech}
+                            className="px-2 py-0.5 rounded bg-muted text-xs text-muted-foreground"
+                          >
                             {tech}
                           </span>
                         ))}
                       </div>
                     </div>
                     <div>
-                      <span className="text-xs text-muted-foreground uppercase tracking-wider">Materiales</span>
+                      <span className="text-xs text-muted-foreground uppercase tracking-wider">
+                        Materiales
+                      </span>
                       <div className="flex flex-wrap gap-1 mt-2">
                         {craft.materials.map((mat) => (
-                          <span key={mat} className="px-2 py-0.5 rounded bg-muted text-xs text-muted-foreground">
+                          <span
+                            key={mat}
+                            className="px-2 py-0.5 rounded bg-muted text-xs text-muted-foreground"
+                          >
                             {mat}
                           </span>
                         ))}
@@ -220,14 +238,19 @@ const ArtePage = () => {
                   <div className="w-20 h-20 rounded-full bg-gradient-warm mx-auto mb-4 flex items-center justify-center">
                     <Palette className="w-10 h-10 text-primary-foreground" />
                   </div>
-                  <h3 className="font-serif text-lg font-bold text-foreground mb-1">{artist.name}</h3>
+                  <h3 className="font-serif text-lg font-bold text-foreground mb-1">
+                    {artist.name}
+                  </h3>
                   <span className="text-sm text-terracotta font-medium">{artist.specialty}</span>
                   <p className="text-xs text-muted-foreground mt-2 mb-4">{artist.generation}</p>
                   <p className="text-sm text-muted-foreground mb-4">{artist.description}</p>
-                  
+
                   <div className="space-y-1">
                     {artist.awards.map((award) => (
-                      <div key={award} className="flex items-center justify-center gap-1 text-xs text-muted-foreground">
+                      <div
+                        key={award}
+                        className="flex items-center justify-center gap-1 text-xs text-muted-foreground"
+                      >
                         <Award className="w-3 h-3 text-gold" />
                         <span>{award}</span>
                       </div>
@@ -270,9 +293,7 @@ const ArtePage = () => {
                     <h3 className="font-serif text-lg font-bold text-foreground mb-2">
                       {workshop.name}
                     </h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      {workshop.description}
-                    </p>
+                    <p className="text-sm text-muted-foreground mb-4">{workshop.description}</p>
 
                     <div className="flex items-center justify-between text-sm mb-4">
                       <span className="text-muted-foreground">
@@ -282,7 +303,9 @@ const ArtePage = () => {
                     </div>
 
                     <div className="space-y-1 mb-4">
-                      <span className="text-xs text-muted-foreground uppercase tracking-wider">Incluye:</span>
+                      <span className="text-xs text-muted-foreground uppercase tracking-wider">
+                        Incluye:
+                      </span>
                       <div className="flex flex-wrap gap-1">
                         {workshop.includes.map((item) => (
                           <span key={item} className="px-2 py-0.5 rounded bg-muted text-xs">
@@ -301,7 +324,6 @@ const ArtePage = () => {
             </div>
           </div>
         </section>
-
       </div>
     </RDMLayout>
   );

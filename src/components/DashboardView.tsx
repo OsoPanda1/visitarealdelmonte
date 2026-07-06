@@ -42,18 +42,19 @@ export function DashboardView() {
     return () => clearInterval(interval);
   }, []);
 
-  const categoryCounts = places.reduce((acc, p) => {
-    acc[p.category] = (acc[p.category] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
+  const categoryCounts = places.reduce(
+    (acc, p) => {
+      acc[p.category] = (acc[p.category] || 0) + 1;
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-display font-semibold tracking-tight">
-          Control Center
-        </h1>
+        <h1 className="text-2xl font-display font-semibold tracking-tight">Control Center</h1>
         <p className="text-sm text-muted-foreground mt-1">
           Real del Monte — Sistema operativo territorial en tiempo real
         </p>
@@ -62,11 +63,31 @@ export function DashboardView() {
       {/* Metrics Row */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
         {[
-          { label: "Usuarios Activos", value: metrics.activeUsers, icon: Users, color: "text-success" },
-          { label: "Latencia Kernel", value: `${metrics.kernelLatency}ms`, icon: Zap, color: "text-accent" },
-          { label: "Lugares Indexados", value: metrics.placesIndexed, icon: Database, color: "text-secondary" },
+          {
+            label: "Usuarios Activos",
+            value: metrics.activeUsers,
+            icon: Users,
+            color: "text-success",
+          },
+          {
+            label: "Latencia Kernel",
+            value: `${metrics.kernelLatency}ms`,
+            icon: Zap,
+            color: "text-accent",
+          },
+          {
+            label: "Lugares Indexados",
+            value: metrics.placesIndexed,
+            icon: Database,
+            color: "text-secondary",
+          },
           { label: "Uptime", value: `${metrics.uptime}%`, icon: Clock, color: "text-success" },
-          { label: "Intents Procesados", value: metrics.intentsProcessed, icon: TrendingUp, color: "text-accent" },
+          {
+            label: "Intents Procesados",
+            value: metrics.intentsProcessed,
+            icon: TrendingUp,
+            color: "text-accent",
+          },
         ].map((metric, i) => (
           <motion.div
             key={metric.label}
@@ -147,7 +168,10 @@ export function DashboardView() {
               { layer: "Data Orchestration", status: "SYNCED", color: "bg-success" },
               { layer: "Infrastructure", status: "ONLINE", color: "bg-success" },
             ].map((item) => (
-              <div key={item.layer} className="flex items-center justify-between py-1.5 border-b border-border last:border-0">
+              <div
+                key={item.layer}
+                className="flex items-center justify-between py-1.5 border-b border-border last:border-0"
+              >
                 <span className="text-foreground">{item.layer}</span>
                 <div className="flex items-center gap-1.5">
                   <span className={`w-1.5 h-1.5 rounded-full ${item.color} status-live`} />
@@ -174,14 +198,19 @@ export function DashboardView() {
                 <th className="pb-2 text-xs text-muted-foreground font-medium">Nombre</th>
                 <th className="pb-2 text-xs text-muted-foreground font-medium">Categoría</th>
                 <th className="pb-2 text-xs text-muted-foreground font-medium">Rating</th>
-                <th className="pb-2 text-xs text-muted-foreground font-medium hidden md:table-cell">Coordenadas</th>
+                <th className="pb-2 text-xs text-muted-foreground font-medium hidden md:table-cell">
+                  Coordenadas
+                </th>
               </tr>
             </thead>
             <tbody>
               {places.map((place) => {
                 const Icon = INTENT_ICONS[place.category] || MapPin;
                 return (
-                  <tr key={place.id} className="border-b border-border last:border-0 hover:bg-muted/50 transition-colors">
+                  <tr
+                    key={place.id}
+                    className="border-b border-border last:border-0 hover:bg-muted/50 transition-colors"
+                  >
                     <td className="py-2.5 font-medium">{place.name}</td>
                     <td className="py-2.5">
                       <div className="flex items-center gap-1.5">

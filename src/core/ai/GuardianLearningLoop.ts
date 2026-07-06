@@ -23,7 +23,11 @@ export class GuardianLearningLoop {
   private readonly maxHistory = 500;
   private readonly learningRate = 0.1;
 
-  recordOutcome(metrics: SystemMetrics, decision: IsabellaGuardianDecision, outcome: FeedbackSample["outcome"]): void {
+  recordOutcome(
+    metrics: SystemMetrics,
+    decision: IsabellaGuardianDecision,
+    outcome: FeedbackSample["outcome"],
+  ): void {
     const sample: FeedbackSample = {
       metrics,
       decision,
@@ -41,7 +45,7 @@ export class GuardianLearningLoop {
 
   getAdaptedThreshold(baseThreshold: number): number {
     const recent = this.feedbackHistory.slice(-50);
-    const negativeOutcomes = recent.filter(r => r.outcome === "NEGATIVE").length;
+    const negativeOutcomes = recent.filter((r) => r.outcome === "NEGATIVE").length;
     const total = recent.length || 1;
     const failureRate = negativeOutcomes / total;
 
@@ -58,10 +62,15 @@ export class GuardianLearningLoop {
     return [...this.patterns];
   }
 
-  getStats(): { totalSamples: number; patternsLearned: number; positiveRate: number; negativeRate: number } {
+  getStats(): {
+    totalSamples: number;
+    patternsLearned: number;
+    positiveRate: number;
+    negativeRate: number;
+  } {
     const total = this.feedbackHistory.length || 1;
-    const positive = this.feedbackHistory.filter(f => f.outcome === "POSITIVE").length;
-    const negative = this.feedbackHistory.filter(f => f.outcome === "NEGATIVE").length;
+    const positive = this.feedbackHistory.filter((f) => f.outcome === "POSITIVE").length;
+    const negative = this.feedbackHistory.filter((f) => f.outcome === "NEGATIVE").length;
     return {
       totalSamples: this.feedbackHistory.length,
       patternsLearned: this.patterns.length,
@@ -74,7 +83,7 @@ export class GuardianLearningLoop {
     const condition = this.extractCondition(sample.metrics);
     const action = sample.decision.actions.join(",");
 
-    const existing = this.patterns.find(p => p.condition === condition && p.action === action);
+    const existing = this.patterns.find((p) => p.condition === condition && p.action === action);
     if (existing) {
       if (sample.outcome === "POSITIVE") {
         existing.confidence = Math.min(1, existing.confidence + this.learningRate);
@@ -92,9 +101,7 @@ export class GuardianLearningLoop {
     }
 
     if (this.patterns.length > 100) {
-      this.patterns = this.patterns
-        .sort((a, b) => b.occurrences - a.occurrences)
-        .slice(0, 100);
+      this.patterns = this.patterns.sort((a, b) => b.occurrences - a.occurrences).slice(0, 100);
     }
 
     logger.debug("[GUARDIAN_LEARN] Patrón registrado", {

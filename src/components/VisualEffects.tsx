@@ -100,7 +100,15 @@ export const FogLayer = () => {
 };
 
 // Effect 3: Parallax Image
-export const ParallaxImage = ({ src, alt, className = "" }: { src: string; alt: string; className?: string }) => {
+export const ParallaxImage = ({
+  src,
+  alt,
+  className = "",
+}: {
+  src: string;
+  alt: string;
+  className?: string;
+}) => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -112,18 +120,19 @@ export const ParallaxImage = ({ src, alt, className = "" }: { src: string; alt: 
 
   return (
     <div ref={ref} className={`overflow-hidden ${className}`}>
-      <motion.img
-        src={src}
-        alt={alt}
-        style={{ y, scale }}
-        className="w-full h-full object-cover"
-      />
+      <motion.img src={src} alt={alt} style={{ y, scale }} className="w-full h-full object-cover" />
     </div>
   );
 };
 
 // Effect 4: Text Reveal on Scroll
-export const TextReveal = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => {
+export const TextReveal = ({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
@@ -138,7 +147,13 @@ export const TextReveal = ({ children, className = "" }: { children: React.React
 };
 
 // Effect 5: Magnetic Button
-export const MagneticButton = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => {
+export const MagneticButton = ({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
   const ref = useRef<HTMLButtonElement>(null);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -168,7 +183,13 @@ export const MagneticButton = ({ children, className = "" }: { children: React.R
 };
 
 // Effect 6: Shimmer Border
-export const ShimmerBorder = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => {
+export const ShimmerBorder = ({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
   return (
     <div className={`relative ${className}`}>
       <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-transparent via-[hsl(43,65%,52%)] to-transparent opacity-30 animate-pulse" />
@@ -219,7 +240,13 @@ export const VideoBackground = ({ src, poster }: { src: string; poster?: string 
 };
 
 // Effect 9: Staggered Fade In
-export const StaggerContainer = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => {
+export const StaggerContainer = ({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
   return (
     <motion.div
       initial="hidden"
@@ -240,7 +267,13 @@ export const StaggerContainer = ({ children, className = "" }: { children: React
   );
 };
 
-export const StaggerItem = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => {
+export const StaggerItem = ({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
   return (
     <motion.div
       variants={{
@@ -255,7 +288,13 @@ export const StaggerItem = ({ children, className = "" }: { children: React.Reac
 };
 
 // Effect 10: Glow Effect on Hover
-export const GlowCard = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => {
+export const GlowCard = ({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
   return (
     <motion.div
       whileHover={{ scale: 1.02 }}
@@ -273,7 +312,10 @@ export const MeshGradient = () => {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-[hsl(43,65%,52%)]/10 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[hsl(18,45%,48%)]/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
+      <div
+        className="absolute bottom-0 right-1/4 w-96 h-96 bg-[hsl(18,45%,48%)]/10 rounded-full blur-3xl animate-pulse"
+        style={{ animationDelay: "1s" }}
+      />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[hsl(145,25%,25%)]/5 rounded-full blur-3xl" />
     </div>
   );
@@ -286,7 +328,8 @@ export const AuroraBackground = ({ className = "" }: { className?: string }) => 
       <motion.div
         className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%]"
         style={{
-          background: "conic-gradient(from 0deg at 50% 50%, hsla(210,100%,55%,0.08) 0deg, hsla(43,80%,55%,0.06) 60deg, hsla(145,35%,28%,0.05) 120deg, hsla(18,45%,48%,0.06) 180deg, hsla(210,100%,55%,0.08) 240deg, hsla(43,80%,55%,0.04) 300deg, hsla(210,100%,55%,0.08) 360deg)",
+          background:
+            "conic-gradient(from 0deg at 50% 50%, hsla(210,100%,55%,0.08) 0deg, hsla(43,80%,55%,0.06) 60deg, hsla(145,35%,28%,0.05) 120deg, hsla(18,45%,48%,0.06) 180deg, hsla(210,100%,55%,0.08) 240deg, hsla(43,80%,55%,0.04) 300deg, hsla(210,100%,55%,0.08) 360deg)",
         }}
         animate={{ rotate: [0, 360] }}
         transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
@@ -298,13 +341,24 @@ export const AuroraBackground = ({ className = "" }: { className?: string }) => 
 };
 
 // Effect 13: Floating Orbs - Ambient decorative elements
-export const FloatingOrbs = ({ count = 5, className = "" }: { count?: number; className?: string }) => {
+export const FloatingOrbs = ({
+  count = 5,
+  className = "",
+}: {
+  count?: number;
+  className?: string;
+}) => {
   const orbs = Array.from({ length: count }, (_, i) => ({
     id: i,
     size: 60 + Math.random() * 200,
     left: `${10 + Math.random() * 80}%`,
     top: `${10 + Math.random() * 80}%`,
-    color: ["hsla(210,100%,55%,0.04)", "hsla(43,80%,55%,0.04)", "hsla(145,35%,28%,0.03)", "hsla(18,45%,48%,0.04)"][i % 4],
+    color: [
+      "hsla(210,100%,55%,0.04)",
+      "hsla(43,80%,55%,0.04)",
+      "hsla(145,35%,28%,0.03)",
+      "hsla(18,45%,48%,0.04)",
+    ][i % 4],
     delay: i * 1.5,
     duration: 8 + Math.random() * 6,
   }));
@@ -340,7 +394,13 @@ export const FloatingOrbs = ({ count = 5, className = "" }: { count?: number; cl
 };
 
 // Effect 14: Immersive Section Wrapper with ambient effects
-export const ImmersiveSection = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => {
+export const ImmersiveSection = ({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
   return (
     <section className={`relative overflow-hidden ${className}`}>
       <FloatingOrbs count={3} />
@@ -350,7 +410,17 @@ export const ImmersiveSection = ({ children, className = "" }: { children: React
 };
 
 // Effect 15: Animated Counter
-export const AnimatedCounter = ({ target, duration = 2, suffix = "", prefix = "" }: { target: number; duration?: number; suffix?: string; prefix?: string }) => {
+export const AnimatedCounter = ({
+  target,
+  duration = 2,
+  suffix = "",
+  prefix = "",
+}: {
+  target: number;
+  duration?: number;
+  suffix?: string;
+  prefix?: string;
+}) => {
   const ref = useRef<HTMLSpanElement>(null);
   const hasAnimated = useRef(false);
 
@@ -380,24 +450,35 @@ export const AnimatedCounter = ({ target, duration = 2, suffix = "", prefix = ""
           requestAnimationFrame(animate);
         }
       },
-      { threshold: 0.5 }
+      { threshold: 0.5 },
     );
 
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
   }, [target, duration, suffix, prefix]);
 
-  return <span ref={ref}>{prefix}0{suffix}</span>;
+  return (
+    <span ref={ref}>
+      {prefix}0{suffix}
+    </span>
+  );
 };
 
 // Effect 16: Gradient Border Card
-export const GradientBorderCard = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => {
+export const GradientBorderCard = ({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
   return (
     <div className={`relative group ${className}`}>
       <div
         className="absolute -inset-[1px] rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
         style={{
-          background: "linear-gradient(135deg, hsla(210,100%,55%,0.4), hsla(43,80%,55%,0.4), hsla(18,45%,48%,0.4))",
+          background:
+            "linear-gradient(135deg, hsla(210,100%,55%,0.4), hsla(43,80%,55%,0.4), hsla(18,45%,48%,0.4))",
           filter: "blur(2px)",
         }}
       />

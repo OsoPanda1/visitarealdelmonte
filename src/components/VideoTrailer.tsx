@@ -9,7 +9,7 @@ const VideoTrailer = () => {
     <section ref={ref} id="trailer" className="relative py-24 md:py-32 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-background via-night-900 to-background" />
       <div className="absolute inset-0 grid-pattern opacity-30 pointer-events-none" />
-      
+
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-background to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />

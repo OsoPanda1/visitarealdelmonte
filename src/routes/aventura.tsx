@@ -7,9 +7,16 @@ export const Route = createFileRoute("/aventura")({
   head: () => ({
     meta: [
       { title: "Aventura · Tirolesa, rappel, espeleología · RDM" },
-      { name: "description", content: "Actividades de montaña y aventura en Real del Monte y el Parque Nacional El Chico." },
+      {
+        name: "description",
+        content:
+          "Actividades de montaña y aventura en Real del Monte y el Parque Nacional El Chico.",
+      },
       { property: "og:title", content: "Aventura · Real del Monte" },
-      { property: "og:description", content: "Tirolesa, rappel, ciclismo de montaña y espeleología en la Comarca Minera." },
+      {
+        property: "og:description",
+        content: "Tirolesa, rappel, ciclismo de montaña y espeleología en la Comarca Minera.",
+      },
     ],
   }),
   component: AventuraPage,
@@ -33,12 +40,18 @@ function AventuraPage() {
       <section className="container mx-auto px-6 pb-24">
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
           {ADVENTURES.map((a) => (
-            <article key={a.title} className="group rounded-2xl border-hairline bg-card p-6 hover:shadow-sovereign transition-all">
+            <article
+              key={a.title}
+              className="group rounded-2xl border-hairline bg-card p-6 hover:shadow-sovereign transition-all"
+            >
               <Mountain className="w-5 h-5 text-accent mb-3" />
               <h3 className="font-display text-xl text-ink">{a.title}</h3>
               <p className="mt-2 text-sm text-muted-foreground">{a.desc}</p>
               <div className="mt-4 flex flex-wrap items-center gap-3 text-[11px] font-mono">
-                <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full" style={{ background: `${LEVEL_COLOR[a.level]}22`, color: LEVEL_COLOR[a.level] }}>
+                <span
+                  className="inline-flex items-center gap-1 px-2 py-1 rounded-full"
+                  style={{ background: `${LEVEL_COLOR[a.level]}22`, color: LEVEL_COLOR[a.level] }}
+                >
                   <Zap className="w-3 h-3" /> {a.level}
                 </span>
                 <span className="inline-flex items-center gap-1 text-muted-foreground">

@@ -1,4 +1,3 @@
-
 import React, { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
@@ -16,8 +15,9 @@ const PrismaticCard = ({
   className,
   ...props
 }: PrismaticCardProps) => {
-  const baseClasses = "rounded-lg backdrop-blur-md border p-4 transition-all duration-300 celestial-card";
-  
+  const baseClasses =
+    "rounded-lg backdrop-blur-md border p-4 transition-all duration-300 celestial-card";
+
   const variantClasses = {
     default: "bg-card/70 border-white/5 text-card-foreground shadow-quantum/20",
     quantum: "bg-quantum-600/70 border-quantum-300/20 text-quantum-100 shadow-quantum",
@@ -28,19 +28,10 @@ const PrismaticCard = ({
   const glowClasses = glow ? "crystal-glow" : "";
 
   return (
-    <div
-      className={cn(
-        baseClasses,
-        variantClasses[variant],
-        glowClasses,
-        className
-      )}
-      {...props}
-    >
+    <div className={cn(baseClasses, variantClasses[variant], glowClasses, className)} {...props}>
       {children}
     </div>
   );
 };
 
 export default PrismaticCard;
-

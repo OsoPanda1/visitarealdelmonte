@@ -46,11 +46,19 @@ export function ReviewPrompt() {
     <section className="px-6 pb-8">
       <div className="max-w-3xl mx-auto rounded-2xl border border-border/50 p-4 bg-card/70 space-y-3">
         <p className="font-medium">¿Me ayudas con una reseña rápida?</p>
-        <p className="text-xs text-muted-foreground">Tu opinión mejora la calidad turística de Real del Monte.</p>
+        <p className="text-xs text-muted-foreground">
+          Tu opinión mejora la calidad turística de Real del Monte.
+        </p>
 
         <div className="flex gap-2 items-center">
           <label className="text-sm">Rating:</label>
-          <input type="range" min={1} max={5} value={rating} onChange={(e) => setRating(Number(e.target.value))} />
+          <input
+            type="range"
+            min={1}
+            max={5}
+            value={rating}
+            onChange={(e) => setRating(Number(e.target.value))}
+          />
           <span className="text-sm">{rating}/5</span>
         </div>
 
@@ -63,7 +71,10 @@ export function ReviewPrompt() {
         />
 
         <div className="flex gap-2">
-          <button className="px-3 py-2 rounded-lg bg-accent text-accent-foreground text-sm" onClick={() => submit(true)}>
+          <button
+            className="px-3 py-2 rounded-lg bg-accent text-accent-foreground text-sm"
+            onClick={() => submit(true)}
+          >
             Sí, enviar
           </button>
           <button className="px-3 py-2 rounded-lg border text-sm" onClick={() => submit(false)}>

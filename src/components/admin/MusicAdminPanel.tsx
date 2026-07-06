@@ -126,52 +126,43 @@ export function MusicAdminPanel() {
       void loadTracks();
     } catch (error) {
       logger.error("Error uploading track", { error });
-      const message =
-        error instanceof Error ? error.message : "Error al subir la pista";
+      const message = error instanceof Error ? error.message : "Error al subir la pista";
       toast.error(message);
     } finally {
       setUploading(false);
     }
   }, [artist, file, title, loadTracks]);
 
-  const toggleActive = useCallback(
-    async (track: Track) => {
-      try {
-        const nextActive = !track.is_active;
-        const { error } = await supabase
-          .from("music_tracks")
-          .update({ is_active: nextActive })
-          .eq("id", track.id);
+  const toggleActive = useCallback(async (track: Track) => {
+    try {
+      const nextActive = !track.is_active;
+      const { error } = await supabase
+        .from("music_tracks")
+        .update({ is_active: nextActive })
+        .eq("id", track.id);
 
-        if (error) throw error;
+      if (error) throw error;
 
-        await logAudit("music.toggle", "music_tracks", {
-          id: track.id,
-          active: nextActive,
-        });
+      await logAudit("music.toggle", "music_tracks", {
+        id: track.id,
+        active: nextActive,
+      });
 
-        setTracks((prev) =>
-          prev.map((t) =>
-            t.id === track.id ? { ...t, is_active: nextActive } : t,
-          ),
-        );
-      } catch (error) {
-        logger.error("Error toggling track active state", { error });
-        toast.error("No se pudo actualizar el estado de la pista");
-      }
-    },
-    [],
-  );
+      setTracks((prev) =>
+        prev.map((t) => (t.id === track.id ? { ...t, is_active: nextActive } : t)),
+      );
+    } catch (error) {
+      logger.error("Error toggling track active state", { error });
+      toast.error("No se pudo actualizar el estado de la pista");
+    }
+  }, []);
 
   const remove = useCallback(async (track: Track) => {
     const confirmed = window.confirm(`¿Eliminar "${track.title}"?`);
     if (!confirmed) return;
 
     try {
-      const { error } = await supabase
-        .from("music_tracks")
-        .delete()
-        .eq("id", track.id);
+      const { error } = await supabase.from("music_tracks").delete().eq("id", track.id);
 
       if (error) throw error;
 
@@ -193,12 +184,10 @@ export function MusicAdminPanel() {
       <header className="flex items-center gap-2">
         <MusicIcon className="h-4 w-4 text-gold" />
         <div>
-          <h3 className="font-display text-sm font-semibold">
-            Playlist administrable
-          </h3>
+          <h3 className="font-display text-sm font-semibold">Playlist administrable</h3>
           <p className="text-[11px] text-muted-foreground">
-            Sube música original. Toda pista activa será escuchada por los
-            usuarios con un botón de donación visible (mín. 25 MXN).
+            Sube música original. Toda pista activa será escuchada por los usuarios con un botón de
+            donación visible (mín. 25 MXN).
           </p>
         </div>
       </header>
@@ -250,26 +239,16 @@ export function MusicAdminPanel() {
             Cargando playlist…
           </div>
         ) : tracks.length === 0 ? (
-          <p className="text-[11px] text-muted-foreground">
-            Aún no hay pistas publicadas.
-          </p>
+          <p className="text-[11px] text-muted-foreground">Aún no hay pistas publicadas.</p>
         ) : (
           <ul className="mt-2 divide-y divide-border/20">
             {tracks.map((track) => (
-              <li
-                key={track.id}
-                className="flex items-center justify-between gap-3 py-2.5"
-              >
+              <li key={track.id} className="flex items-center justify-between gap-3 py-2.5">
                 <div className="min-w-0">
-                  <p className="truncate font-body text-sm font-medium">
-                    {track.title}
-                  </p>
+                  <p className="truncate font-body text-sm font-medium">{track.title}</p>
                   <p className="truncate font-mono text-[10px] text-muted-foreground">
-                    {track.artist} ·{" "}
-                    {track.audio_url ? "audio disponible" : "sin audio"}
-                    {track.duration_seconds
-                      ? ` · ${track.duration_seconds}s`
-                      : null}
+                    {track.artist} · {track.audio_url ? "audio disponible" : "sin audio"}
+                    {track.duration_seconds ? ` · ${track.duration_seconds}s` : null}
                   </p>
                 </div>
                 <div className="flex shrink-0 items-center gap-2">

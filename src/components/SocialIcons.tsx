@@ -1,4 +1,3 @@
-
 import SocialLinks from "@/modules/constelacionInteractiva/SocialLinks";
 
 /**

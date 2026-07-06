@@ -59,7 +59,11 @@ function FoggyTerrain({ points }: { points: MapMarkerData[] }) {
       {points.map((point) => (
         <mesh
           key={point.id}
-          position={[(point.lng + GEO_LNG_OFFSET) * GEO_COORD_SCALE, 0.18, -(point.lat - GEO_LAT_OFFSET) * GEO_COORD_SCALE]}
+          position={[
+            (point.lng + GEO_LNG_OFFSET) * GEO_COORD_SCALE,
+            0.18,
+            -(point.lat - GEO_LAT_OFFSET) * GEO_COORD_SCALE,
+          ]}
           castShadow
         >
           <sphereGeometry args={[point.isPremium ? 0.18 : 0.13, 24, 24]} />
@@ -73,7 +77,6 @@ function FoggyTerrain({ points }: { points: MapMarkerData[] }) {
     </group>
   );
 }
-
 
 function FogPlane() {
   const material = useMemo(
@@ -157,15 +160,26 @@ export function Map3DTwin({ viewport, markers, onViewportChange }: Map3DTwinProp
     return (
       <div className="relative flex h-[420px] w-full flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-[#0a1222] via-[#101a2f] to-[#0a0f1f] p-5 md:h-[640px]">
         <div>
-          <p className="text-xs uppercase tracking-[0.2em] text-silver-500">Modo híbrido degradado</p>
-          <h3 className="mt-2 text-xl font-semibold text-silver-100">Visualización 3D no disponible en este entorno</h3>
-          <p className="mt-2 max-w-2xl text-sm text-silver-400">Se mantiene un mapa de nodos para Lovable/WebView y equipos sin WebGL habilitado.</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-silver-500">
+            Modo híbrido degradado
+          </p>
+          <h3 className="mt-2 text-xl font-semibold text-silver-100">
+            Visualización 3D no disponible en este entorno
+          </h3>
+          <p className="mt-2 max-w-2xl text-sm text-silver-400">
+            Se mantiene un mapa de nodos para Lovable/WebView y equipos sin WebGL habilitado.
+          </p>
         </div>
         <div className="grid gap-2 md:grid-cols-2">
           {markers.slice(0, 6).map((marker) => (
-            <div key={marker.id} className="rounded-xl border border-white/10 bg-white/5 p-3 text-sm text-silver-300">
+            <div
+              key={marker.id}
+              className="rounded-xl border border-white/10 bg-white/5 p-3 text-sm text-silver-300"
+            >
               <p className="font-medium text-silver-100">{marker.name}</p>
-              <p className="text-xs text-silver-400">{marker.category} · {marker.lat.toFixed(4)}, {marker.lng.toFixed(4)}</p>
+              <p className="text-xs text-silver-400">
+                {marker.category} · {marker.lat.toFixed(4)}, {marker.lng.toFixed(4)}
+              </p>
             </div>
           ))}
         </div>

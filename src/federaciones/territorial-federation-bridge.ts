@@ -1,27 +1,79 @@
-import { v4 as uuidv4 } from 'uuid';
-import { logger } from '@/lib/logger';
-import { federationBus } from './FederationBus';
-import type { FederationEvent } from './FederationBus';
-import type { FederationId, MDX5Intent } from '@/core/models';
-import type { UserContribution, TerritorialStats, TerritorialHeatPoint } from '@/core/territorial/types';
+import { v4 as uuidv4 } from "uuid";
+import { logger } from "@/lib/logger";
+import { federationBus } from "./FederationBus";
+import type { FederationEvent } from "./FederationBus";
+import type { FederationId, MDX5Intent } from "@/core/models";
+import type {
+  UserContribution,
+  TerritorialStats,
+  TerritorialHeatPoint,
+} from "@/core/territorial/types";
 
 export interface TerritorialFederationMap {
   contributionType: string;
   primaryFed: FederationId;
   secondaryFeds: FederationId[];
   eventType: string;
-  priority: 'low' | 'normal' | 'high' | 'critical';
+  priority: "low" | "normal" | "high" | "critical";
 }
 
 const TERRITORIAL_FEDERATION_MAP: TerritorialFederationMap[] = [
-  { contributionType: 'checkin',       primaryFed: 'CHRONOS',  secondaryFeds: ['DEKATEOTL', 'MDD_TAMV'], eventType: 'TERRITORIAL_CHECKIN', priority: 'normal' },
-  { contributionType: 'review',        primaryFed: 'ANUBIS',   secondaryFeds: ['DEKATEOTL'],             eventType: 'TERRITORIAL_REVIEW', priority: 'normal' },
-  { contributionType: 'photo',         primaryFed: 'KAOS_HYPERRENDER', secondaryFeds: ['DEKATEOTL'],     eventType: 'TERRITORIAL_PHOTO', priority: 'low' },
-  { contributionType: 'rating',        primaryFed: 'MDD_TAMV',  secondaryFeds: ['DEKATEOTL'],            eventType: 'TERRITORIAL_RATING', priority: 'normal' },
-  { contributionType: 'tip',           primaryFed: 'ANUBIS',   secondaryFeds: ['DEKATEOTL', 'CHRONOS'],  eventType: 'TERRITORIAL_TIP', priority: 'low' },
-  { contributionType: 'event_report',  primaryFed: 'PHOENIX',  secondaryFeds: ['DEKATEOTL', 'CHRONOS'],  eventType: 'TERRITORIAL_EVENT', priority: 'high' },
-  { contributionType: 'route_trace',   primaryFed: 'CHRONOS',  secondaryFeds: ['DEKATEOTL', 'KAOS_HYPERRENDER'], eventType: 'TERRITORIAL_ROUTE', priority: 'normal' },
-  { contributionType: 'poi_suggestion', primaryFed: 'DEKATEOTL', secondaryFeds: ['PHOENIX', 'CHRONOS'],   eventType: 'TERRITORIAL_POI_SUGGESTION', priority: 'high' },
+  {
+    contributionType: "checkin",
+    primaryFed: "CHRONOS",
+    secondaryFeds: ["DEKATEOTL", "MDD_TAMV"],
+    eventType: "TERRITORIAL_CHECKIN",
+    priority: "normal",
+  },
+  {
+    contributionType: "review",
+    primaryFed: "ANUBIS",
+    secondaryFeds: ["DEKATEOTL"],
+    eventType: "TERRITORIAL_REVIEW",
+    priority: "normal",
+  },
+  {
+    contributionType: "photo",
+    primaryFed: "KAOS_HYPERRENDER",
+    secondaryFeds: ["DEKATEOTL"],
+    eventType: "TERRITORIAL_PHOTO",
+    priority: "low",
+  },
+  {
+    contributionType: "rating",
+    primaryFed: "MDD_TAMV",
+    secondaryFeds: ["DEKATEOTL"],
+    eventType: "TERRITORIAL_RATING",
+    priority: "normal",
+  },
+  {
+    contributionType: "tip",
+    primaryFed: "ANUBIS",
+    secondaryFeds: ["DEKATEOTL", "CHRONOS"],
+    eventType: "TERRITORIAL_TIP",
+    priority: "low",
+  },
+  {
+    contributionType: "event_report",
+    primaryFed: "PHOENIX",
+    secondaryFeds: ["DEKATEOTL", "CHRONOS"],
+    eventType: "TERRITORIAL_EVENT",
+    priority: "high",
+  },
+  {
+    contributionType: "route_trace",
+    primaryFed: "CHRONOS",
+    secondaryFeds: ["DEKATEOTL", "KAOS_HYPERRENDER"],
+    eventType: "TERRITORIAL_ROUTE",
+    priority: "normal",
+  },
+  {
+    contributionType: "poi_suggestion",
+    primaryFed: "DEKATEOTL",
+    secondaryFeds: ["PHOENIX", "CHRONOS"],
+    eventType: "TERRITORIAL_POI_SUGGESTION",
+    priority: "high",
+  },
 ];
 
 export class TerritorialFederationBridge {
@@ -36,21 +88,21 @@ export class TerritorialFederationBridge {
     if (this.subscribed) return;
     this.subscribed = true;
 
-    federationBus.on('TERRITORIAL_EVENT', (event: FederationEvent) => {
-      logger.info('[TFB] Evento territorial recibido del bus', {
+    federationBus.on("TERRITORIAL_EVENT", (event: FederationEvent) => {
+      logger.info("[TFB] Evento territorial recibido del bus", {
         source: event.source,
         type: event.type,
         traceId: event.traceId,
       });
     });
 
-    logger.info('[TFB] Bridge conectado al Federation Bus');
+    logger.info("[TFB] Bridge conectado al Federation Bus");
   }
 
   routeContribution(contribution: UserContribution): void {
-    const map = this.maps.find(m => m.contributionType === contribution.type);
+    const map = this.maps.find((m) => m.contributionType === contribution.type);
     if (!map) {
-      logger.warn('[TFB] Sin mapeo federado para tipo', { type: contribution.type });
+      logger.warn("[TFB] Sin mapeo federado para tipo", { type: contribution.type });
       return;
     }
 
@@ -88,7 +140,7 @@ export class TerritorialFederationBridge {
       });
     }
 
-    logger.info('[TFB] Contribucion enrutada', {
+    logger.info("[TFB] Contribucion enrutada", {
       type: contribution.type,
       primary: map.primaryFed,
       secondary: map.secondaryFeds,
@@ -99,8 +151,8 @@ export class TerritorialFederationBridge {
   routeTerritorialStats(stats: TerritorialStats): void {
     const traceId = uuidv4();
     federationBus.emit({
-      type: 'TERRITORIAL_STATS_UPDATE',
-      source: 'DEKATEOTL',
+      type: "TERRITORIAL_STATS_UPDATE",
+      source: "DEKATEOTL",
       payload: { stats, traceId },
       traceId,
     });
@@ -109,18 +161,18 @@ export class TerritorialFederationBridge {
   routeHeatMapUpdate(points: TerritorialHeatPoint[]): void {
     const traceId = uuidv4();
     federationBus.emit({
-      type: 'HEATMAP_UPDATE',
-      source: 'KAOS_HYPERRENDER',
+      type: "HEATMAP_UPDATE",
+      source: "KAOS_HYPERRENDER",
       payload: { points, traceId },
       traceId,
     });
   }
 
   getFederationsForTerritory(territorio: string): FederationId[] {
-    if (territorio === 'RDM') {
-      return ['DEKATEOTL', 'ANUBIS', 'CHRONOS', 'KAOS_HYPERRENDER', 'MDD_TAMV'];
+    if (territorio === "RDM") {
+      return ["DEKATEOTL", "ANUBIS", "CHRONOS", "KAOS_HYPERRENDER", "MDD_TAMV"];
     }
-    return ['DEKATEOTL', 'CHRONOS'];
+    return ["DEKATEOTL", "CHRONOS"];
   }
 }
 

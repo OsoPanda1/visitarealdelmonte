@@ -29,7 +29,11 @@ export const Route = createFileRoute("/musica")({
   head: () => ({
     meta: [
       { title: "RDM Ecos Música · Archivo Sonoro Vivo · RDM Digital" },
-      { name: "description", content: "Ecosistema sonoro soberano de Real del Monte: FLAC lossless, visuales 3D, crónicas sonoras y economía comunitaria." },
+      {
+        name: "description",
+        content:
+          "Ecosistema sonoro soberano de Real del Monte: FLAC lossless, visuales 3D, crónicas sonoras y economía comunitaria.",
+      },
     ],
   }),
   component: MusicaPage,
@@ -87,7 +91,9 @@ function MusicaPage() {
   const [shuffle, setShuffle] = useState(false);
   const [repeat, setRepeat] = useState(false);
   const [liked, setLiked] = useState<Set<string>>(new Set());
-  const [activeTab, setActiveTab] = useState<"catalog" | "cronicles" | "mecenas" | "live">("catalog");
+  const [activeTab, setActiveTab] = useState<"catalog" | "cronicles" | "mecenas" | "live">(
+    "catalog",
+  );
   const [listeningMode, setListeningMode] = useState<"archive" | "space" | "metaverse">("archive");
   const [userId, setUserId] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -121,28 +127,31 @@ function MusicaPage() {
     fetchCronicles();
   }, []);
 
-  const playTrack = useCallback((track: Track) => {
-    setCurrentTrack(track);
-    setIsPlaying(true);
-    setProgress(0);
+  const playTrack = useCallback(
+    (track: Track) => {
+      setCurrentTrack(track);
+      setIsPlaying(true);
+      setProgress(0);
 
-    if (audioRef.current) {
-      audioRef.current.pause();
-    }
-    if (track.audio_url) {
-      const audio = new Audio(track.audio_url);
-      audio.volume = volume;
-      audioRef.current = audio;
-      audio.play().catch(() => {});
-      audio.ontimeupdate = () => {
-        if (audio.duration) setProgress(audio.currentTime / audio.duration);
-      };
-      audio.onended = () => {
-        setIsPlaying(false);
-        setProgress(0);
-      };
-    }
-  }, [volume]);
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+      if (track.audio_url) {
+        const audio = new Audio(track.audio_url);
+        audio.volume = volume;
+        audioRef.current = audio;
+        audio.play().catch(() => {});
+        audio.ontimeupdate = () => {
+          if (audio.duration) setProgress(audio.currentTime / audio.duration);
+        };
+        audio.onended = () => {
+          setIsPlaying(false);
+          setProgress(0);
+        };
+      }
+    },
+    [volume],
+  );
 
   const togglePlay = useCallback(() => {
     if (!currentTrack) return;
@@ -227,7 +236,9 @@ function MusicaPage() {
           </div>
           <div className="flex-1">
             <div className="font-mono text-[10px] tracking-sovereign text-accent">EN VIVO</div>
-            <div className="font-display text-lg text-ink">Radio Nodo Cero — Selección continua</div>
+            <div className="font-display text-lg text-ink">
+              Radio Nodo Cero — Selección continua
+            </div>
           </div>
           <button className="rounded-full bg-foreground text-background px-5 py-2.5 text-sm flex items-center gap-2">
             <Play className="w-4 h-4" /> Escuchar
@@ -238,12 +249,14 @@ function MusicaPage() {
       {/* Tab Navigation */}
       <section className="container mx-auto px-6">
         <div className="flex flex-wrap gap-2 mb-8 border-b border-hairline pb-4">
-          {([
-            { key: "catalog", label: "Catálogo", icon: Music2 },
-            { key: "cronicles", label: "Crónicas Sonoras", icon: Clock },
-            { key: "mecenas", label: "Mecenas", icon: Coins },
-            { key: "live", label: "Eventos en Vivo", icon: Users },
-          ] as const).map((tab) => (
+          {(
+            [
+              { key: "catalog", label: "Catálogo", icon: Music2 },
+              { key: "cronicles", label: "Crónicas Sonoras", icon: Clock },
+              { key: "mecenas", label: "Mecenas", icon: Coins },
+              { key: "live", label: "Eventos en Vivo", icon: Users },
+            ] as const
+          ).map((tab) => (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
@@ -288,7 +301,9 @@ function MusicaPage() {
                 ))}
               </div>
               <button onClick={() => toggleLike(currentTrack.id)} className="p-2">
-                <Heart className={`w-5 h-5 ${liked.has(currentTrack.id) ? "fill-accent text-accent" : "text-muted-foreground"}`} />
+                <Heart
+                  className={`w-5 h-5 ${liked.has(currentTrack.id) ? "fill-accent text-accent" : "text-muted-foreground"}`}
+                />
               </button>
               <button className="p-2">
                 <Share2 className="w-5 h-5 text-muted-foreground" />
@@ -298,33 +313,53 @@ function MusicaPage() {
           {/* Progress bar */}
           <div className="px-5 pb-4">
             <div className="h-1.5 rounded-full bg-secondary overflow-hidden">
-              <div className="h-full rounded-full bg-aurora transition-all" style={{ width: `${progress * 100}%` }} />
+              <div
+                className="h-full rounded-full bg-aurora transition-all"
+                style={{ width: `${progress * 100}%` }}
+              />
             </div>
             <div className="flex justify-between mt-1 text-[10px] font-mono text-muted-foreground">
-              <span>{currentTrack ? formatDuration(Math.floor(progress * currentTrack.duration_seconds)) : "0:00"}</span>
+              <span>
+                {currentTrack
+                  ? formatDuration(Math.floor(progress * currentTrack.duration_seconds))
+                  : "0:00"}
+              </span>
               <span>{currentTrack ? formatDuration(currentTrack.duration_seconds) : "0:00"}</span>
             </div>
           </div>
           {/* Playback Controls */}
           <div className="flex items-center justify-center gap-4 pb-5">
-            <button onClick={() => setShuffle(!shuffle)} className={`p-2 ${shuffle ? "text-accent" : "text-muted-foreground"}`}>
+            <button
+              onClick={() => setShuffle(!shuffle)}
+              className={`p-2 ${shuffle ? "text-accent" : "text-muted-foreground"}`}
+            >
               <Shuffle className="w-4 h-4" />
             </button>
             <button onClick={prevTrack} className="p-2 text-foreground">
               <SkipBack className="w-5 h-5" />
             </button>
-            <button onClick={togglePlay} className="w-12 h-12 rounded-full bg-foreground text-background flex items-center justify-center hover:scale-105 transition-transform">
+            <button
+              onClick={togglePlay}
+              className="w-12 h-12 rounded-full bg-foreground text-background flex items-center justify-center hover:scale-105 transition-transform"
+            >
               {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 ml-0.5" />}
             </button>
             <button onClick={nextTrack} className="p-2 text-foreground">
               <SkipForward className="w-5 h-5" />
             </button>
-            <button onClick={() => setRepeat(!repeat)} className={`p-2 ${repeat ? "text-accent" : "text-muted-foreground"}`}>
+            <button
+              onClick={() => setRepeat(!repeat)}
+              className={`p-2 ${repeat ? "text-accent" : "text-muted-foreground"}`}
+            >
               <Repeat className="w-4 h-4" />
             </button>
             <div className="flex items-center gap-2 ml-4">
               <button onClick={() => setIsMuted(!isMuted)} className="p-1">
-                {isMuted ? <VolumeX className="w-4 h-4 text-muted-foreground" /> : <Volume2 className="w-4 h-4 text-muted-foreground" />}
+                {isMuted ? (
+                  <VolumeX className="w-4 h-4 text-muted-foreground" />
+                ) : (
+                  <Volume2 className="w-4 h-4 text-muted-foreground" />
+                )}
               </button>
               <input
                 type="range"
@@ -332,7 +367,10 @@ function MusicaPage() {
                 max={1}
                 step={0.01}
                 value={isMuted ? 0 : volume}
-                onChange={(e) => { setVolume(parseFloat(e.target.value)); setIsMuted(false); }}
+                onChange={(e) => {
+                  setVolume(parseFloat(e.target.value));
+                  setIsMuted(false);
+                }}
                 className="w-20 accent-accent"
               />
             </div>
@@ -357,7 +395,9 @@ function MusicaPage() {
                     currentTrack?.id === track.id ? "bg-accent/5 border border-accent/20" : ""
                   }`}
                 >
-                  <div className="w-8 text-center font-mono text-sm text-muted-foreground">{i + 1}</div>
+                  <div className="w-8 text-center font-mono text-sm text-muted-foreground">
+                    {i + 1}
+                  </div>
                   <div className="w-10 h-10 rounded-lg bg-aurora flex items-center justify-center shrink-0">
                     <Music2 className="w-5 h-5 text-background" />
                   </div>
@@ -367,12 +407,27 @@ function MusicaPage() {
                   </div>
                   <div className="hidden md:flex items-center gap-2">
                     {track.tags.slice(0, 2).map((t) => (
-                      <span key={t} className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-secondary">{t}</span>
+                      <span
+                        key={t}
+                        className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-secondary"
+                      >
+                        {t}
+                      </span>
                     ))}
                   </div>
-                  <div className="text-sm text-muted-foreground">{formatDuration(track.duration_seconds)}</div>
-                  <button onClick={(e) => { e.stopPropagation(); toggleLike(track.id); }} className="p-1">
-                    <Heart className={`w-4 h-4 ${liked.has(track.id) ? "fill-accent text-accent" : "text-muted-foreground"}`} />
+                  <div className="text-sm text-muted-foreground">
+                    {formatDuration(track.duration_seconds)}
+                  </div>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleLike(track.id);
+                    }}
+                    className="p-1"
+                  >
+                    <Heart
+                      className={`w-4 h-4 ${liked.has(track.id) ? "fill-accent text-accent" : "text-muted-foreground"}`}
+                    />
                   </button>
                 </div>
               ))
@@ -387,28 +442,50 @@ function MusicaPage() {
               <div className="col-span-full text-center py-16 text-muted-foreground">
                 <Clock className="w-12 h-12 mx-auto mb-3 opacity-30" />
                 <p>Las Crónicas Sonoras serán creadas por la comunidad</p>
-                <p className="text-xs mt-2">Organiza tu colección en capítulos de narrativa sonora</p>
+                <p className="text-xs mt-2">
+                  Organiza tu colección en capítulos de narrativa sonora
+                </p>
               </div>
             ) : (
               cronicles.map((c) => (
-                <article key={c.id} className="rounded-2xl border-hairline bg-card p-5 hover:shadow-sovereign transition-all">
+                <article
+                  key={c.id}
+                  className="rounded-2xl border-hairline bg-card p-5 hover:shadow-sovereign transition-all"
+                >
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="font-mono text-[9px] tracking-sovereign text-accent">{c.kind.toUpperCase()}</span>
+                    <span className="font-mono text-[9px] tracking-sovereign text-accent">
+                      {c.kind.toUpperCase()}
+                    </span>
                     <span className="text-muted-foreground">·</span>
-                    <span className="font-mono text-[9px] text-muted-foreground">{c.track_ids.length} pistas</span>
+                    <span className="font-mono text-[9px] text-muted-foreground">
+                      {c.track_ids.length} pistas
+                    </span>
                   </div>
                   <h3 className="font-display text-xl text-ink">{c.title}</h3>
-                  {c.description && <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{c.description}</p>}
+                  {c.description && (
+                    <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
+                      {c.description}
+                    </p>
+                  )}
                   <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
-                    <span className="flex items-center gap-1"><Play className="w-3 h-3" /> {c.play_count}</span>
-                    <span className="flex items-center gap-1"><Heart className="w-3 h-3" /> {c.like_count}</span>
-                    <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {formatDuration(c.duration_seconds)}</span>
+                    <span className="flex items-center gap-1">
+                      <Play className="w-3 h-3" /> {c.play_count}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Heart className="w-3 h-3" /> {c.like_count}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-3 h-3" /> {formatDuration(c.duration_seconds)}
+                    </span>
                   </div>
                 </article>
               ))
             )}
             {userId && (
-              <Link to="/auth" className="rounded-2xl border-2 border-dashed border-hairline p-5 flex flex-col items-center justify-center text-muted-foreground hover:text-accent hover:border-accent transition-all">
+              <Link
+                to="/auth"
+                className="rounded-2xl border-2 border-dashed border-hairline p-5 flex flex-col items-center justify-center text-muted-foreground hover:text-accent hover:border-accent transition-all"
+              >
                 <Plus className="w-8 h-8 mb-2" />
                 <span className="text-sm">Crear Crónica Sonora</span>
               </Link>
@@ -422,15 +499,34 @@ function MusicaPage() {
             <div className="rounded-2xl border-hairline bg-card p-6">
               <h2 className="font-display text-2xl text-ink mb-2">Mecenas de la Historia Sonora</h2>
               <p className="text-sm text-muted-foreground mb-6">
-                Financia la infraestructura, los artistas locales y la preservación sonora de Real del Monte.
+                Financia la infraestructura, los artistas locales y la preservación sonora de Real
+                del Monte.
               </p>
               <div className="space-y-4">
                 {[
-                  { tier: "Oyente Comprometido", amount: "50 MXN/mes", desc: "Apoyo recurrente al archivo", icon: Music2 },
-                  { tier: "Mecenas del Patrimonio", amount: "200 MXN/mes", desc: "Financia grabaciones y remasterizaciones", icon: Coins },
-                  { tier: "Productor Comunitario", amount: "500 MXN/mes", desc: "Financia proyectos específicos de audio", icon: Headphones },
+                  {
+                    tier: "Oyente Comprometido",
+                    amount: "50 MXN/mes",
+                    desc: "Apoyo recurrente al archivo",
+                    icon: Music2,
+                  },
+                  {
+                    tier: "Mecenas del Patrimonio",
+                    amount: "200 MXN/mes",
+                    desc: "Financia grabaciones y remasterizaciones",
+                    icon: Coins,
+                  },
+                  {
+                    tier: "Productor Comunitario",
+                    amount: "500 MXN/mes",
+                    desc: "Financia proyectos específicos de audio",
+                    icon: Headphones,
+                  },
                 ].map((m) => (
-                  <div key={m.tier} className="rounded-xl border-hairline p-4 flex items-center gap-4 hover:bg-secondary/50 transition-colors">
+                  <div
+                    key={m.tier}
+                    className="rounded-xl border-hairline p-4 flex items-center gap-4 hover:bg-secondary/50 transition-colors"
+                  >
                     <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
                       <m.icon className="w-6 h-6 text-accent" />
                     </div>
@@ -451,23 +547,32 @@ function MusicaPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="rounded-xl bg-secondary p-4 text-center">
                   <div className="font-display text-3xl text-ink">0</div>
-                  <div className="font-mono text-[9px] tracking-sovereign text-muted-foreground mt-1">Mecenas activos</div>
+                  <div className="font-mono text-[9px] tracking-sovereign text-muted-foreground mt-1">
+                    Mecenas activos
+                  </div>
                 </div>
                 <div className="rounded-xl bg-secondary p-4 text-center">
                   <div className="font-display text-3xl text-ink">$0</div>
-                  <div className="font-mono text-[9px] tracking-sovereign text-muted-foreground mt-1">Recaudado este mes</div>
+                  <div className="font-mono text-[9px] tracking-sovereign text-muted-foreground mt-1">
+                    Recaudado este mes
+                  </div>
                 </div>
                 <div className="rounded-xl bg-secondary p-4 text-center">
                   <div className="font-display text-3xl text-ink">0</div>
-                  <div className="font-mono text-[9px] tracking-sovereign text-muted-foreground mt-1">Sesiones grabadas</div>
+                  <div className="font-mono text-[9px] tracking-sovereign text-muted-foreground mt-1">
+                    Sesiones grabadas
+                  </div>
                 </div>
                 <div className="rounded-xl bg-secondary p-4 text-center">
                   <div className="font-display text-3xl text-ink">0</div>
-                  <div className="font-mono text-[9px] tracking-sovereign text-muted-foreground mt-1">Artistas apoyados</div>
+                  <div className="font-mono text-[9px] tracking-sovereign text-muted-foreground mt-1">
+                    Artistas apoyados
+                  </div>
                 </div>
               </div>
               <p className="mt-4 text-xs text-muted-foreground">
-                Los fondos se destinan a: infraestructura (servidores, bandwidth FLAC), artistas locales, y proyectos educativos de preservación sonora.
+                Los fondos se destinan a: infraestructura (servidores, bandwidth FLAC), artistas
+                locales, y proyectos educativos de preservación sonora.
               </p>
             </div>
           </div>
@@ -477,15 +582,20 @@ function MusicaPage() {
         {activeTab === "live" && (
           <div className="space-y-4">
             <div className="rounded-2xl border-hairline bg-card p-6">
-              <h2 className="font-display text-2xl text-ink mb-2">Eventos de Escucha en Tiempo Real</h2>
+              <h2 className="font-display text-2xl text-ink mb-2">
+                Eventos de Escucha en Tiempo Real
+              </h2>
               <p className="text-sm text-muted-foreground">
-                Sesiones sincronizadas donde la comunidad escucha la misma pista o Crónica Sonora con interacción en vivo.
+                Sesiones sincronizadas donde la comunidad escucha la misma pista o Crónica Sonora
+                con interacción en vivo.
               </p>
             </div>
             <div className="text-center py-12 text-muted-foreground">
               <Users className="w-12 h-12 mx-auto mb-3 opacity-30" />
               <p>No hay eventos programados</p>
-              <p className="text-xs mt-2">Próximamente: sesiones de escucha colectiva y conciertos virtuales</p>
+              <p className="text-xs mt-2">
+                Próximamente: sesiones de escucha colectiva y conciertos virtuales
+              </p>
             </div>
           </div>
         )}
@@ -493,12 +603,35 @@ function MusicaPage() {
         {/* Bottom Categories */}
         <div className="mt-12 grid md:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { icon: Radio, title: "Radio Nodo Cero", desc: "Selección continua de música local y cápsulas históricas", meta: "En vivo" },
-            { icon: Music2, title: "Tradición y Fiesta", desc: "Bandas, repertorios comunitarios y celebraciones locales", meta: "Colección" },
-            { icon: Waves, title: "Paisajes Sonoros", desc: "Bosque, campanas, mina y lluvia para inmersión total", meta: "Ambient" },
-            { icon: Disc3, title: "Archivo Oral", desc: "Relatos, leyendas y voces que conservan la memoria", meta: "Patrimonio" },
+            {
+              icon: Radio,
+              title: "Radio Nodo Cero",
+              desc: "Selección continua de música local y cápsulas históricas",
+              meta: "En vivo",
+            },
+            {
+              icon: Music2,
+              title: "Tradición y Fiesta",
+              desc: "Bandas, repertorios comunitarios y celebraciones locales",
+              meta: "Colección",
+            },
+            {
+              icon: Waves,
+              title: "Paisajes Sonoros",
+              desc: "Bosque, campanas, mina y lluvia para inmersión total",
+              meta: "Ambient",
+            },
+            {
+              icon: Disc3,
+              title: "Archivo Oral",
+              desc: "Relatos, leyendas y voces que conservan la memoria",
+              meta: "Patrimonio",
+            },
           ].map((cat) => (
-            <article key={cat.title} className="rounded-2xl border-hairline bg-card p-5 hover:shadow-sovereign transition-all">
+            <article
+              key={cat.title}
+              className="rounded-2xl border-hairline bg-card p-5 hover:shadow-sovereign transition-all"
+            >
               <cat.icon className="w-5 h-5 text-accent" />
               <p className="mt-3 font-mono text-[9px] tracking-sovereign text-accent">{cat.meta}</p>
               <h3 className="font-display text-lg text-ink mt-1">{cat.title}</h3>

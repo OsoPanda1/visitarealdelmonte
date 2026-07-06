@@ -41,7 +41,9 @@ export default function RegistrarComercio() {
   });
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, s) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_e, s) => {
       setUser(s?.user ?? null);
       setAuthReady(true);
     });
@@ -120,8 +122,8 @@ export default function RegistrarComercio() {
             Registra tu negocio en <span className="text-gradient-gold">RDM Digital</span>
           </h1>
           <p className="mt-3 text-sm font-body text-muted-foreground max-w-xl mx-auto">
-            Visibilidad en el mapa oficial, recomendaciones por Realito AI y participación
-            en la economía Veta Soberana. Activación inmediata tras el pago.
+            Visibilidad en el mapa oficial, recomendaciones por Realito AI y participación en la
+            economía Veta Soberana. Activación inmediata tras el pago.
           </p>
         </motion.div>
 
@@ -291,8 +293,8 @@ function PlanCard({
         active
           ? "border-gold/50 bg-gold/10 shadow-gold"
           : highlighted
-          ? "border-gold/25 bg-background/40 hover:border-gold/40"
-          : "border-border/30 bg-background/40 hover:border-gold/30"
+            ? "border-gold/25 bg-background/40 hover:border-gold/40"
+            : "border-border/30 bg-background/40 hover:border-gold/30"
       }`}
     >
       <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">

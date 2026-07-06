@@ -11,7 +11,15 @@ interface EventCardProps {
   index?: number;
 }
 
-const EventCard = ({ name, date, time, location, description, image, index = 0 }: EventCardProps) => {
+const EventCard = ({
+  name,
+  date,
+  time,
+  location,
+  description,
+  image,
+  index = 0,
+}: EventCardProps) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}

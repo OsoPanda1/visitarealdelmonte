@@ -8,7 +8,7 @@
  * - Metaverso: Full spatial with XR effects
  */
 
-import type { SpatialMode, SpatialProfile, MusicTrack, NowPlaying } from './types';
+import type { SpatialMode, SpatialProfile, MusicTrack, NowPlaying } from "./types";
 
 // ============================================================================
 // AUDIO CONTEXT SINGLETON
@@ -23,7 +23,7 @@ let analyserNode: AnalyserNode | null = null;
 let eqFilters: BiquadFilterNode[] = [];
 
 const audioElement = new Audio();
-audioElement.crossOrigin = 'anonymous';
+audioElement.crossOrigin = "anonymous";
 
 export function getAudioContext(): AudioContext {
   if (!audioContext) {
@@ -34,14 +34,14 @@ export function getAudioContext(): AudioContext {
 
     // Create EQ filters (3-band)
     const low = audioContext.createBiquadFilter();
-    low.type = 'lowshelf';
+    low.type = "lowshelf";
     low.frequency.value = 200;
     const mid = audioContext.createBiquadFilter();
-    mid.type = 'peaking';
+    mid.type = "peaking";
     mid.frequency.value = 1000;
     mid.Q.value = 0.5;
     const high = audioContext.createBiquadFilter();
-    high.type = 'highshelf';
+    high.type = "highshelf";
     high.frequency.value = 3000;
     eqFilters = [low, mid, high];
 
@@ -65,7 +65,7 @@ export function applySpatialProfile(profile: SpatialProfile, mode: SpatialMode):
   // Disconnect previous nodes
   disconnectSpatial();
 
-  if (mode === 'archivo') {
+  if (mode === "archivo") {
     // Pure playback — no spatial processing
     return;
   }
@@ -85,15 +85,15 @@ export function applySpatialProfile(profile: SpatialProfile, mode: SpatialMode):
   // Create panner for 3D positioning
   if (profile.panorama) {
     pannerNode = ctx.createPanner();
-    pannerNode.panningModel = profile.hrtf ? 'HRTF' : 'equalpower';
-    pannerNode.distanceModel = 'inverse';
+    pannerNode.panningModel = profile.hrtf ? "HRTF" : "equalpower";
+    pannerNode.distanceModel = "inverse";
     pannerNode.refDistance = 1;
     pannerNode.maxDistance = 100;
     pannerNode.rolloffFactor = 1;
     // Start centered
     pannerNode.positionX.setValueAtTime(0, ctx.currentTime);
     pannerNode.positionY.setValueAtTime(0, ctx.currentTime);
-    pannerNode.positionZ.setValueAtTime(mode === 'metaverso' ? -2 : -1, ctx.currentTime);
+    pannerNode.positionZ.setValueAtTime(mode === "metaverso" ? -2 : -1, ctx.currentTime);
   }
 
   // Connect chain
@@ -117,7 +117,7 @@ export function applySpatialProfile(profile: SpatialProfile, mode: SpatialMode):
   }
 
   // Metaverso effects
-  if (mode === 'metaverso' && profile.effects) {
+  if (mode === "metaverso" && profile.effects) {
     for (const effect of profile.effects) {
       applyMetaversoEffect(effect);
     }
@@ -129,7 +129,7 @@ function applyMetaversoEffect(effect: string): void {
   if (!ctx) return;
 
   switch (effect) {
-    case 'chorus': {
+    case "chorus": {
       const delay = ctx.createDelay();
       delay.delayTime.value = 0.03;
       const lfo = ctx.createOscillator();
@@ -145,7 +145,7 @@ function applyMetaversoEffect(effect: string): void {
       }
       break;
     }
-    case 'echo': {
+    case "echo": {
       const delay = ctx.createDelay();
       delay.delayTime.value = 0.4;
       const feedback = ctx.createGain();
@@ -158,17 +158,17 @@ function applyMetaversoEffect(effect: string): void {
       }
       break;
     }
-    case 'rain':
-    case 'wind':
-    case 'dripping':
-    case 'mine_echo':
-    case 'mountain_echo':
-    case 'procession':
-    case 'church_bells':
-    case 'ambient_crowd':
-    case 'festive':
-    case 'spatial_walk':
-    case 'reverb_plaza':
+    case "rain":
+    case "wind":
+    case "dripping":
+    case "mine_echo":
+    case "mountain_echo":
+    case "procession":
+    case "church_bells":
+    case "ambient_crowd":
+    case "festive":
+    case "spatial_walk":
+    case "reverb_plaza":
       // These would be implemented with sample-based effects
       // For now, just increase reverb
       break;
@@ -191,11 +191,11 @@ function disconnectSpatial(): void {
 // PLAYBACK CONTROLS
 // ============================================================================
 
-export function playTrack(track: MusicTrack, mode: SpatialMode = 'archivo'): void {
+export function playTrack(track: MusicTrack, mode: SpatialMode = "archivo"): void {
   const ctx = getAudioContext();
 
   // Resume context if suspended
-  if (ctx.state === 'suspended') {
+  if (ctx.state === "suspended") {
     ctx.resume();
   }
 
@@ -205,7 +205,7 @@ export function playTrack(track: MusicTrack, mode: SpatialMode = 'archivo'): voi
   }
 
   // Set audio source (use MP3 for now, FLAC when available)
-  const src = track.file_mp3_320 || track.file_mp3_128 || track.file_flac || '';
+  const src = track.file_mp3_320 || track.file_mp3_128 || track.file_flac || "";
   if (src && audioElement.src !== src) {
     audioElement.src = src;
   }
@@ -280,25 +280,25 @@ export function getAverageFrequency(): number {
 // ============================================================================
 
 export function onTrackEnd(callback: () => void): void {
-  audioElement.addEventListener('ended', callback);
+  audioElement.addEventListener("ended", callback);
 }
 
 export function onTimeUpdate(callback: (timeMs: number) => void): void {
-  audioElement.addEventListener('timeupdate', () => {
+  audioElement.addEventListener("timeupdate", () => {
     callback(audioElement.currentTime * 1000);
   });
 }
 
 export function onError(callback: (error: string) => void): void {
-  audioElement.addEventListener('error', () => {
-    callback(audioElement.error?.message || 'Unknown error');
+  audioElement.addEventListener("error", () => {
+    callback(audioElement.error?.message || "Unknown error");
   });
 }
 
 // Clean up
 export function destroy(): void {
   audioElement.pause();
-  audioElement.src = '';
+  audioElement.src = "";
   disconnectSpatial();
   audioContext?.close();
   audioContext = null;

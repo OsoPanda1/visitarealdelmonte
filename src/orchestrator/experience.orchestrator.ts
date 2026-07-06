@@ -7,7 +7,14 @@ import { withinBBox } from "@/core/geo";
 import { fastDistance } from "@/core/geo";
 import { GeoLRUCache } from "@/core/geo";
 import { bus, type EventBus } from "@/core/infra/event-bus";
-import type { Coordenadas, BoundingBox, IsabellaDecision, RetentionIntent, TuristaEstado, ScoreBreakdown } from "@/core/models";
+import type {
+  Coordenadas,
+  BoundingBox,
+  IsabellaDecision,
+  RetentionIntent,
+  TuristaEstado,
+  ScoreBreakdown,
+} from "@/core/models";
 
 interface OrchestratorOptions {
   cacheCapacity?: number;
@@ -30,7 +37,7 @@ class LinearSpatialIndex {
   private entries: SpatialEntry[] = [];
 
   upsert(entry: SpatialEntry): void {
-    const idx = this.entries.findIndex(e => e.id === entry.id);
+    const idx = this.entries.findIndex((e) => e.id === entry.id);
     if (idx >= 0) this.entries[idx] = entry;
     else this.entries.push(entry);
   }
@@ -141,7 +148,8 @@ export class ExperienceOrchestrator {
       timestamp: new Date(this.clock.now()),
       score: fullScore,
       payload: {
-        titulo: retentionIntent === "SAFE_EXIT" ? "Salida segura sugerida" : "Experiencia desbloqueada",
+        titulo:
+          retentionIntent === "SAFE_EXIT" ? "Salida segura sugerida" : "Experiencia desbloqueada",
         mensaje:
           retentionIntent === "UPSELL"
             ? "Ultima experiencia local disponible antes de salir"

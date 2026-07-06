@@ -16,7 +16,16 @@ export async function POST(req: Request) {
       const client = new stripe.default(STRIPE_SECRET_KEY);
       const session = await client.checkout.sessions.create({
         payment_method_types: ["card"],
-        line_items: [{ price_data: { currency: "mxn", product_data: { name: "Donación RDM Digital" }, unit_amount: amount * 100 }, quantity: 1 }],
+        line_items: [
+          {
+            price_data: {
+              currency: "mxn",
+              product_data: { name: "Donación RDM Digital" },
+              unit_amount: amount * 100,
+            },
+            quantity: 1,
+          },
+        ],
         mode: "payment",
         success_url: `${BASE_URL}/gracias-donativo?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${BASE_URL}/donar`,

@@ -41,13 +41,17 @@ const EventSkeleton = () => (
 
 const LoadingSkeleton = ({ variant = "card", count = 4, className = "" }: LoadingSkeletonProps) => {
   const Skeleton = variant === "event" ? EventSkeleton : CardSkeleton;
-  
+
   return (
-    <div className={`grid gap-6 ${
-      variant === "event" ? "md:grid-cols-3" : 
-      count <= 2 ? "md:grid-cols-2" : 
-      "sm:grid-cols-2 lg:grid-cols-4"
-    } ${className}`}>
+    <div
+      className={`grid gap-6 ${
+        variant === "event"
+          ? "md:grid-cols-3"
+          : count <= 2
+            ? "md:grid-cols-2"
+            : "sm:grid-cols-2 lg:grid-cols-4"
+      } ${className}`}
+    >
       {Array.from({ length: count }).map((_, i) => (
         <motion.div
           key={i}

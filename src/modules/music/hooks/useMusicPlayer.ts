@@ -69,12 +69,17 @@ export function useMusicPlayer({ autoplay = false }: { autoplay?: boolean } = {}
 
   const registerPlay = useCallback(async (trackId?: string) => {
     if (!trackId) return;
-    try { await supabase.from("music_plays").insert({ track_id: trackId }); } catch {}
+    try {
+      await supabase.from("music_plays").insert({ track_id: trackId });
+    } catch { /* ignore */ }
   }, []);
 
   const play = useCallback(async () => {
     const a = ensureAudio();
-    if (!a) { setIsPlaying(true); return; } // sin audio_url: estado "playing" visual
+    if (!a) {
+      setIsPlaying(true);
+      return;
+    } // sin audio_url: estado "playing" visual
     try {
       await a.play();
       setIsPlaying(true);
@@ -97,7 +102,9 @@ export function useMusicPlayer({ autoplay = false }: { autoplay?: boolean } = {}
   const seek = useCallback((ratio: number) => {
     const a = audioRef.current;
     const r = Math.min(Math.max(ratio, 0), 1);
-    if (a && a.duration) { a.currentTime = a.duration * r; }
+    if (a && a.duration) {
+      a.currentTime = a.duration * r;
+    }
     setProgress(r);
   }, []);
 
@@ -108,22 +115,40 @@ export function useMusicPlayer({ autoplay = false }: { autoplay?: boolean } = {}
   }, []);
 
   const next = useCallback(() => {
-    pause(); setProgress(0);
+    pause();
+    setProgress(0);
     setCurrentIndex((i) => (i + 1) % tracks.length);
   }, [pause, tracks.length]);
 
   const previous = useCallback(() => {
-    pause(); setProgress(0);
+    pause();
+    setProgress(0);
     setCurrentIndex((i) => (i - 1 + tracks.length) % tracks.length);
   }, [pause, tracks.length]);
 
-  const selectBySlug = useCallback((slug: string) => {
-    const idx = tracks.findIndex((t) => t.slug === slug);
-    if (idx >= 0) { pause(); setProgress(0); setCurrentIndex(idx); }
-  }, [tracks, pause]);
+  const selectBySlug = useCallback(
+    (slug: string) => {
+      const idx = tracks.findIndex((t) => t.slug === slug);
+      if (idx >= 0) {
+        pause();
+        setProgress(0);
+        setCurrentIndex(idx);
+      }
+    },
+    [tracks, pause],
+  );
 
-  useEffect(() => () => { cancelRAF(); audioRef.current?.pause(); audioRef.current = null; }, []);
-  useEffect(() => { if (autoplay && tracks.length) play(); }, [autoplay, tracks.length, play]);
+  useEffect(
+    () => () => {
+      cancelRAF();
+      audioRef.current?.pause();
+      audioRef.current = null;
+    },
+    [],
+  );
+  useEffect(() => {
+    if (autoplay && tracks.length) play();
+  }, [autoplay, tracks.length, play]);
 
   // simulated progress when no audio_url
   useEffect(() => {
@@ -133,15 +158,46 @@ export function useMusicPlayer({ autoplay = false }: { autoplay?: boolean } = {}
       const elapsed = (Date.now() - start) / 1000;
       const p = Math.min(elapsed / currentTrack.duration_seconds, 1);
       setProgress(p);
-      if (p >= 1) { setIsPlaying(false); next(); }
+      if (p >= 1) {
+        setIsPlaying(false);
+        next();
+      }
     }, 250);
     return () => clearInterval(id);
   }, [isPlaying, currentTrack, next]); // eslint-disable-line
 
-  return useMemo(() => ({
-    tracks, currentTrack, currentIndex,
-    isPlaying, progress, volume,
-    play, pause, togglePlay, seek, setVolume: setPlayerVolume,
-    next, previous, selectBySlug,
-  }), [tracks, currentTrack, currentIndex, isPlaying, progress, volume, play, pause, togglePlay, seek, setPlayerVolume, next, previous, selectBySlug]);
+  return useMemo(
+    () => ({
+      tracks,
+      currentTrack,
+      currentIndex,
+      isPlaying,
+      progress,
+      volume,
+      play,
+      pause,
+      togglePlay,
+      seek,
+      setVolume: setPlayerVolume,
+      next,
+      previous,
+      selectBySlug,
+    }),
+    [
+      tracks,
+      currentTrack,
+      currentIndex,
+      isPlaying,
+      progress,
+      volume,
+      play,
+      pause,
+      togglePlay,
+      seek,
+      setPlayerVolume,
+      next,
+      previous,
+      selectBySlug,
+    ],
+  );
 }

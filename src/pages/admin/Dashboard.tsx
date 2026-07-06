@@ -1,9 +1,19 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { 
-  Store, TrendingUp, CheckCircle,
-  Clock, Star, MapPin, Phone,
-  Plus, Search, Edit, Trash2, Eye, EyeOff
+import {
+  Store,
+  TrendingUp,
+  CheckCircle,
+  Clock,
+  Star,
+  MapPin,
+  Phone,
+  Plus,
+  Search,
+  Edit,
+  Trash2,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -11,18 +21,23 @@ import PageTransition from "@/components/PageTransition";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { 
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
-import { 
-  Card, CardContent, CardDescription, CardHeader, CardTitle 
-} from "@/components/ui/card";
-import { 
-  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter 
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
 } from "@/components/ui/dialog";
-import { 
-  Tabs, TabsContent, TabsList, TabsTrigger 
-} from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -86,7 +101,10 @@ const AdminDashboard = () => {
   const [selectedBusiness, setSelectedBusiness] = useState<BusinessRow | null>(null);
 
   const refreshBusinesses = async () => {
-    const { data, error } = await supabase.from("businesses").select("*").order("created_at", { ascending: false });
+    const { data, error } = await supabase
+      .from("businesses")
+      .select("*")
+      .order("created_at", { ascending: false });
     if (error) {
       toast({ title: "Error", description: error.message, variant: "destructive" });
       return;
@@ -104,12 +122,14 @@ const AdminDashboard = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
-  
+
   function safeImageUrl(url: string): string {
     try {
       const parsed = new URL(url);
       if (parsed.protocol === "https:" || parsed.protocol === "http:") return url;
-    } catch { /* fall through */ }
+    } catch {
+      /* fall through */
+    }
     return "/placeholder.svg";
   }
 
@@ -134,20 +154,21 @@ const AdminDashboard = () => {
     facebook: "",
     instagram: "",
     tiktok: "",
-    price_range: "MODERADO"
+    price_range: "MODERADO",
   });
 
   // Stats
   const stats = {
     total: businesses.length,
-    active: businesses.filter(b => b.is_active).length,
-    pending: businesses.filter(b => !b.is_verified).length,
-    premium: businesses.filter(b => b.is_premium).length
+    active: businesses.filter((b) => b.is_active).length,
+    pending: businesses.filter((b) => !b.is_verified).length,
+    premium: businesses.filter((b) => b.is_premium).length,
   };
 
   // Filter businesses
-  const filteredBusinesses = businesses.filter(b => {
-    const matchesSearch = b.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  const filteredBusinesses = businesses.filter((b) => {
+    const matchesSearch =
+      b.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       b.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = categoryFilter === "all" || b.category === categoryFilter;
     return matchesSearch && matchesCategory;
@@ -156,12 +177,12 @@ const AdminDashboard = () => {
   // Handle form change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   // Handle select change
   const handleSelectChange = (name: string, value: string) => {
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   // Open new business dialog
@@ -187,7 +208,7 @@ const AdminDashboard = () => {
       facebook: "",
       instagram: "",
       tiktok: "",
-      price_range: "MODERADO"
+      price_range: "MODERADO",
     });
     setIsEditing(true);
   };
@@ -215,7 +236,7 @@ const AdminDashboard = () => {
       facebook: business.facebook || "",
       instagram: business.instagram || "",
       tiktok: business.tiktok || "",
-      price_range: business.price_range || "MODERADO"
+      price_range: business.price_range || "MODERADO",
     });
     setIsEditing(true);
   };
@@ -223,7 +244,11 @@ const AdminDashboard = () => {
   // Save business
   const handleSaveBusiness = async () => {
     if (!formData.name || !formData.description) {
-      toast({ title: "Error", description: "Por favor completa los campos requeridos", variant: "destructive" });
+      toast({
+        title: "Error",
+        description: "Por favor completa los campos requeridos",
+        variant: "destructive",
+      });
       return;
     }
 
@@ -251,12 +276,23 @@ const AdminDashboard = () => {
     };
 
     if (selectedBusiness) {
-      const { error } = await supabase.from("businesses").update(payload).eq("id", selectedBusiness.id);
-      if (error) { toast({ title: "Error", description: error.message, variant: "destructive" }); return; }
+      const { error } = await supabase
+        .from("businesses")
+        .update(payload)
+        .eq("id", selectedBusiness.id);
+      if (error) {
+        toast({ title: "Error", description: error.message, variant: "destructive" });
+        return;
+      }
       toast({ title: "Éxito", description: "Negocio actualizado correctamente" });
     } else {
-      const { error } = await supabase.from("businesses").insert({ ...payload, is_active: true, is_verified: false });
-      if (error) { toast({ title: "Error", description: error.message, variant: "destructive" }); return; }
+      const { error } = await supabase
+        .from("businesses")
+        .insert({ ...payload, is_active: true, is_verified: false });
+      if (error) {
+        toast({ title: "Error", description: error.message, variant: "destructive" });
+        return;
+      }
       toast({ title: "Éxito", description: "Negocio creado correctamente" });
     }
 
@@ -267,30 +303,48 @@ const AdminDashboard = () => {
 
   // Toggle business status
   const handleToggleStatus = async (id: string) => {
-    const biz = businesses.find(b => b.id === id);
+    const biz = businesses.find((b) => b.id === id);
     if (!biz) return;
-    const { error } = await supabase.from("businesses").update({ is_active: !biz.is_active }).eq("id", id);
-    if (error) { toast({ title: "Error", description: error.message, variant: "destructive" }); return; }
+    const { error } = await supabase
+      .from("businesses")
+      .update({ is_active: !biz.is_active })
+      .eq("id", id);
+    if (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+      return;
+    }
     await refreshBusinesses();
     toast({ title: "Estado actualizado" });
   };
 
   // Toggle premium
   const handleTogglePremium = async (id: string) => {
-    const biz = businesses.find(b => b.id === id);
+    const biz = businesses.find((b) => b.id === id);
     if (!biz) return;
-    const { error } = await supabase.from("businesses").update({ is_premium: !biz.is_premium }).eq("id", id);
-    if (error) { toast({ title: "Error", description: error.message, variant: "destructive" }); return; }
+    const { error } = await supabase
+      .from("businesses")
+      .update({ is_premium: !biz.is_premium })
+      .eq("id", id);
+    if (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+      return;
+    }
     await refreshBusinesses();
     toast({ title: "Premium actualizado" });
   };
 
   // Toggle featured
   const handleToggleFeatured = async (id: string) => {
-    const biz = businesses.find(b => b.id === id);
+    const biz = businesses.find((b) => b.id === id);
     if (!biz) return;
-    const { error } = await supabase.from("businesses").update({ is_featured: !biz.is_featured }).eq("id", id);
-    if (error) { toast({ title: "Error", description: error.message, variant: "destructive" }); return; }
+    const { error } = await supabase
+      .from("businesses")
+      .update({ is_featured: !biz.is_featured })
+      .eq("id", id);
+    if (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+      return;
+    }
     await refreshBusinesses();
     toast({ title: "Destacado actualizado" });
   };
@@ -298,7 +352,10 @@ const AdminDashboard = () => {
   // Delete business
   const handleDeleteBusiness = async (id: string) => {
     const { error } = await supabase.from("businesses").delete().eq("id", id);
-    if (error) { toast({ title: "Error", description: error.message, variant: "destructive" }); return; }
+    if (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+      return;
+    }
     await refreshBusinesses();
     toast({ title: "Eliminado" });
   };
@@ -307,14 +364,11 @@ const AdminDashboard = () => {
     <PageTransition>
       <div className="min-h-screen bg-background">
         <Navbar />
-        
+
         {/* Admin Header */}
         <div className="bg-gradient-to-r from-amber-600 to-orange-700 pt-28 pb-12">
           <div className="container mx-auto px-4 md:px-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
               <div className="flex items-center gap-3 mb-2">
                 <Store className="w-8 h-8 text-white" />
                 <h1 className="font-serif text-3xl md:text-4xl font-bold text-white">
@@ -322,9 +376,7 @@ const AdminDashboard = () => {
                 </h1>
               </div>
               <p className="text-white/80">
-                Gestiona los negocios, dicho
-
-s y contenido de RDM Digital
+                Gestiona los negocios, dicho s y contenido de RDM Digital
               </p>
             </motion.div>
           </div>
@@ -346,7 +398,7 @@ s y contenido de RDM Digital
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card className="bg-card border-0 shadow-lg">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
@@ -360,7 +412,7 @@ s y contenido de RDM Digital
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card className="bg-card border-0 shadow-lg">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
@@ -374,7 +426,7 @@ s y contenido de RDM Digital
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card className="bg-card border-0 shadow-lg">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
@@ -418,7 +470,7 @@ s y contenido de RDM Digital
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">Todas las categorías</SelectItem>
-                    {BUSINESS_CATEGORIES.map(cat => (
+                    {BUSINESS_CATEGORIES.map((cat) => (
                       <SelectItem key={cat.value} value={cat.value}>
                         {cat.icon} {cat.label}
                       </SelectItem>
@@ -439,13 +491,14 @@ s y contenido de RDM Digital
                       <div className="flex flex-col md:flex-row gap-4">
                         {/* Image */}
                         <div className="w-full md:w-32 h-24 rounded-lg overflow-hidden shrink-0">
-                          <img 
-                            src={business.image_url || "/placeholder.svg"} 
+                          <img
+                            src={business.image_url || "/placeholder.svg"}
                             alt={business.name}
-                            loading="lazy" className="w-full h-full object-cover"
+                            loading="lazy"
+                            className="w-full h-full object-cover"
                           />
                         </div>
-                        
+
                         {/* Info */}
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-2">
@@ -459,7 +512,10 @@ s y contenido de RDM Digital
                                   <Badge className="bg-blue-500">Destacado</Badge>
                                 )}
                                 {!business.is_verified && (
-                                  <Badge variant="outline" className="text-yellow-500 border-yellow-500">
+                                  <Badge
+                                    variant="outline"
+                                    className="text-yellow-500 border-yellow-500"
+                                  >
                                     Pendiente
                                   </Badge>
                                 )}
@@ -468,11 +524,11 @@ s y contenido de RDM Digital
                                 {business.short_description}
                               </p>
                             </div>
-                            
+
                             {/* Actions */}
                             <div className="flex items-center gap-1">
-                              <Button 
-                                variant="ghost" 
+                              <Button
+                                variant="ghost"
                                 size="icon"
                                 onClick={() => handleToggleStatus(business.id)}
                                 title={business.is_active ? "Desactivar" : "Activar"}
@@ -483,31 +539,35 @@ s y contenido de RDM Digital
                                   <EyeOff className="w-4 h-4" />
                                 )}
                               </Button>
-                              <Button 
-                                variant="ghost" 
+                              <Button
+                                variant="ghost"
                                 size="icon"
                                 onClick={() => handleTogglePremium(business.id)}
                                 title="Toggle Premium"
                               >
-                                <Star className={`w-4 h-4 ${business.is_premium ? "fill-amber-500 text-amber-500" : ""}`} />
+                                <Star
+                                  className={`w-4 h-4 ${business.is_premium ? "fill-amber-500 text-amber-500" : ""}`}
+                                />
                               </Button>
-                              <Button 
-                                variant="ghost" 
+                              <Button
+                                variant="ghost"
                                 size="icon"
                                 onClick={() => handleToggleFeatured(business.id)}
                                 title="Toggle Destacado"
                               >
-                                <TrendingUp className={`w-4 h-4 ${business.is_featured ? "text-blue-500" : ""}`} />
+                                <TrendingUp
+                                  className={`w-4 h-4 ${business.is_featured ? "text-blue-500" : ""}`}
+                                />
                               </Button>
-                              <Button 
-                                variant="ghost" 
+                              <Button
+                                variant="ghost"
                                 size="icon"
                                 onClick={() => handleEditBusiness(business)}
                               >
                                 <Edit className="w-4 h-4" />
                               </Button>
-                              <Button 
-                                variant="ghost" 
+                              <Button
+                                variant="ghost"
                                 size="icon"
                                 onClick={() => handleDeleteBusiness(business.id)}
                                 className="text-red-500 hover:text-red-600"
@@ -516,7 +576,7 @@ s y contenido de RDM Digital
                               </Button>
                             </div>
                           </div>
-                          
+
                           <div className="flex flex-wrap gap-4 mt-2 text-sm text-muted-foreground">
                             <span className="flex items-center gap-1">
                               <Phone className="w-3 h-3" />
@@ -544,33 +604,70 @@ s y contenido de RDM Digital
               <Card>
                 <CardHeader>
                   <CardTitle>Dichos del Pueblo</CardTitle>
-                  <CardDescription>Gestiona los dichos mineros y tradiciones de Real del Monte</CardDescription>
+                  <CardDescription>
+                    Gestiona los dichos mineros y tradiciones de Real del Monte
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <p className="text-sm text-muted-foreground">Dichos registrados: <strong>24</strong></p>
+                      <p className="text-sm text-muted-foreground">
+                        Dichos registrados: <strong>24</strong>
+                      </p>
                       <Button size="sm">+ Nuevo Dicho</Button>
                     </div>
                     <div className="grid gap-3">
                       {[
-                        { dicho: "El que nace pa' minero, del cielito le cae el pico", categoria: "Minería", estado: "Publicado" },
-                        { dicho: "Más vale paste en mano que cien en el horno", categoria: "Gastronomía", estado: "Publicado" },
-                        { dicho: "Cuando la niebla baja, el minero trabaja", categoria: "Minería", estado: "Publicado" },
-                        { dicho: "Plata que brilla no es siempre la mejor", categoria: "Sabiduría", estado: "Borrador" },
-                        { dicho: "El que come paste sin chile, no sabe lo que se pierde", categoria: "Gastronomía", estado: "Publicado" },
+                        {
+                          dicho: "El que nace pa' minero, del cielito le cae el pico",
+                          categoria: "Minería",
+                          estado: "Publicado",
+                        },
+                        {
+                          dicho: "Más vale paste en mano que cien en el horno",
+                          categoria: "Gastronomía",
+                          estado: "Publicado",
+                        },
+                        {
+                          dicho: "Cuando la niebla baja, el minero trabaja",
+                          categoria: "Minería",
+                          estado: "Publicado",
+                        },
+                        {
+                          dicho: "Plata que brilla no es siempre la mejor",
+                          categoria: "Sabiduría",
+                          estado: "Borrador",
+                        },
+                        {
+                          dicho: "El que come paste sin chile, no sabe lo que se pierde",
+                          categoria: "Gastronomía",
+                          estado: "Publicado",
+                        },
                       ].map((d, i) => (
-                        <div key={i} className="flex items-center justify-between p-3 rounded-lg border border-border text-sm">
+                        <div
+                          key={i}
+                          className="flex items-center justify-between p-3 rounded-lg border border-border text-sm"
+                        >
                           <div className="flex-1 min-w-0">
                             <p className="font-medium truncate">«{d.dicho}»</p>
                             <div className="flex gap-2 mt-1">
-                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground">{d.categoria}</span>
-                              <span className={`text-[10px] px-1.5 py-0.5 rounded ${d.estado === "Publicado" ? "bg-emerald-500/10 text-emerald-500" : "bg-amber-500/10 text-amber-500"}`}>{d.estado}</span>
+                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
+                                {d.categoria}
+                              </span>
+                              <span
+                                className={`text-[10px] px-1.5 py-0.5 rounded ${d.estado === "Publicado" ? "bg-emerald-500/10 text-emerald-500" : "bg-amber-500/10 text-amber-500"}`}
+                              >
+                                {d.estado}
+                              </span>
                             </div>
                           </div>
                           <div className="flex gap-1 shrink-0 ml-2">
-                            <Button variant="ghost" size="sm">Editar</Button>
-                            <Button variant="ghost" size="sm" className="text-red-500">Eliminar</Button>
+                            <Button variant="ghost" size="sm">
+                              Editar
+                            </Button>
+                            <Button variant="ghost" size="sm" className="text-red-500">
+                              Eliminar
+                            </Button>
                           </div>
                         </div>
                       ))}
@@ -594,7 +691,7 @@ s y contenido de RDM Digital
                       { label: "Negocios", value: "47", change: "+3" },
                       { label: "Lugares", value: "52", change: "+5" },
                       { label: "Visitas hoy", value: "1,234", change: "+28%" },
-                    ].map(s => (
+                    ].map((s) => (
                       <div key={s.label} className="p-4 rounded-xl border border-border">
                         <p className="text-xs text-muted-foreground">{s.label}</p>
                         <p className="text-2xl font-bold mt-1">{s.value}</p>
@@ -629,17 +726,14 @@ s y contenido de RDM Digital
         <Dialog open={isEditing} onOpenChange={setIsEditing}>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>
-                {selectedBusiness ? "Editar Negocio" : "Nuevo Negocio"}
-              </DialogTitle>
+              <DialogTitle>{selectedBusiness ? "Editar Negocio" : "Nuevo Negocio"}</DialogTitle>
               <DialogDescription>
-                {selectedBusiness 
-                  ? "Actualiza la información del negocio" 
-                  : "Completa los datos del nuevo negocio para el directorio"
-                }
+                {selectedBusiness
+                  ? "Actualiza la información del negocio"
+                  : "Completa los datos del nuevo negocio para el directorio"}
               </DialogDescription>
             </DialogHeader>
-            
+
             <div className="space-y-4 py-4">
               {/* Basic Info */}
               <div className="space-y-2">
@@ -655,15 +749,15 @@ s y contenido de RDM Digital
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Categoría *</label>
-                  <Select 
-                    value={formData.category} 
+                  <Select
+                    value={formData.category}
                     onValueChange={(v) => handleSelectChange("category", v)}
                   >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {BUSINESS_CATEGORIES.map(cat => (
+                      {BUSINESS_CATEGORIES.map((cat) => (
                         <SelectItem key={cat.value} value={cat.value}>
                           {cat.icon} {cat.label}
                         </SelectItem>
@@ -671,18 +765,18 @@ s y contenido de RDM Digital
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Rango de Precio</label>
-                  <Select 
-                    value={formData.price_range} 
+                  <Select
+                    value={formData.price_range}
                     onValueChange={(v) => handleSelectChange("price_range", v)}
                   >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {PRICE_RANGES.map(pr => (
+                      {PRICE_RANGES.map((pr) => (
                         <SelectItem key={pr.value} value={pr.value}>
                           {pr.label}
                         </SelectItem>
@@ -805,7 +899,7 @@ s y contenido de RDM Digital
                 <label className="text-sm font-medium">
                   Imágenes <span className="text-muted-foreground">(Máx 3)</span>
                 </label>
-              <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-3 gap-2">
                   <div className="space-y-1">
                     <Input
                       name="image_url"
@@ -815,7 +909,12 @@ s y contenido de RDM Digital
                     />
                     {formData.image_url && (
                       <div className="w-full h-16 rounded overflow-hidden">
-                        <img src={safeImageUrl(formData.image_url)} alt="" loading="lazy" className="w-full h-full object-cover" />
+                        <img
+                          src={safeImageUrl(formData.image_url)}
+                          alt=""
+                          loading="lazy"
+                          className="w-full h-full object-cover"
+                        />
                       </div>
                     )}
                   </div>
@@ -826,9 +925,14 @@ s y contenido de RDM Digital
                       onChange={handleInputChange}
                       placeholder="URL Imagen 2"
                     />
-                      {formData.image_url2 && (
+                    {formData.image_url2 && (
                       <div className="w-full h-16 rounded overflow-hidden">
-                        <img src={safeImageUrl(formData.image_url2)} alt="" loading="lazy" className="w-full h-full object-cover" />
+                        <img
+                          src={safeImageUrl(formData.image_url2)}
+                          alt=""
+                          loading="lazy"
+                          className="w-full h-full object-cover"
+                        />
                       </div>
                     )}
                   </div>
@@ -841,7 +945,12 @@ s y contenido de RDM Digital
                     />
                     {formData.image_url3 && (
                       <div className="w-full h-16 rounded overflow-hidden">
-                        <img src={safeImageUrl(formData.image_url3)} alt="" loading="lazy" className="w-full h-full object-cover" />
+                        <img
+                          src={safeImageUrl(formData.image_url3)}
+                          alt=""
+                          loading="lazy"
+                          className="w-full h-full object-cover"
+                        />
                       </div>
                     )}
                   </div>
@@ -852,23 +961,23 @@ s y contenido de RDM Digital
                 <label className="text-sm font-medium">
                   Video <span className="text-muted-foreground">(Máx 60 segundos)</span>
                 </label>
-                  <Input
-                    name="video_url"
-                    value={formData.video_url}
-                    onChange={handleInputChange}
-                    placeholder="URL del video (YouTube, Vimeo)"
-                  />
+                <Input
+                  name="video_url"
+                  value={formData.video_url}
+                  onChange={handleInputChange}
+                  placeholder="URL del video (YouTube, Vimeo)"
+                />
               </div>
 
               {/* Schedule */}
               <div className="space-y-2">
                 <label className="text-sm font-medium">Horario</label>
-                  <Input
-                    name="schedule_display"
-                    value={formData.schedule_display}
-                    onChange={handleInputChange}
-                    placeholder="Lun-Vie: 9:00 - 18:00, Sáb: 10:00 - 14:00"
-                  />
+                <Input
+                  name="schedule_display"
+                  value={formData.schedule_display}
+                  onChange={handleInputChange}
+                  placeholder="Lun-Vie: 9:00 - 18:00, Sáb: 10:00 - 14:00"
+                />
               </div>
 
               {/* Social Media */}

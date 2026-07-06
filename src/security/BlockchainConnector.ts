@@ -54,7 +54,11 @@ export class BlockchainConnector {
   }
 
   async anchorToChain(data: string, chain: ChainType = "POLYGON"): Promise<BlockchainTransaction> {
-    const hash = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(data)))).map((b) => b.toString(16).padStart(2, "0")).join("");
+    const hash = Array.from(
+      new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(data))),
+    )
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
 
     const tx: BlockchainTransaction = {
       id: crypto.randomUUID(),
@@ -89,7 +93,11 @@ export class BlockchainConnector {
   ): Promise<BlockchainTransaction> {
     const payload = { bookId, contentHash, metadata };
     const data = JSON.stringify(payload);
-    const hash = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(data)))).map((b) => b.toString(16).padStart(2, "0")).join("");
+    const hash = Array.from(
+      new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(data))),
+    )
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
 
     const tx: BlockchainTransaction = {
       id: crypto.randomUUID(),
@@ -117,7 +125,7 @@ export class BlockchainConnector {
   }
 
   verifyTransaction(txId: string): BlockchainTransaction | null {
-    return this.transactions.find(t => t.id === txId) ?? null;
+    return this.transactions.find((t) => t.id === txId) ?? null;
   }
 
   getChainConfig(chain: ChainType): ChainConfig {
@@ -125,7 +133,7 @@ export class BlockchainConnector {
   }
 
   getTransactionHistory(chain?: ChainType): BlockchainTransaction[] {
-    if (chain) return this.transactions.filter(t => t.chain === chain);
+    if (chain) return this.transactions.filter((t) => t.chain === chain);
     return [...this.transactions];
   }
 
@@ -134,7 +142,7 @@ export class BlockchainConnector {
     const delay = 200 + Math.random() * 800;
     await new Promise<void>((resolve) => setTimeout(resolve, delay));
     const success = Math.random() > 0.1;
-    const txIndex = this.transactions.findIndex(t => t.id === tx.id);
+    const txIndex = this.transactions.findIndex((t) => t.id === tx.id);
     if (txIndex !== -1) {
       this.transactions[txIndex] = {
         ...this.transactions[txIndex],
@@ -143,7 +151,12 @@ export class BlockchainConnector {
         timestamp: new Date(),
       };
     }
-    logger.info("[BLOCKCHAIN] Transacción procesada", { id: tx.id, chain: tx.chain, success, durationMs: Date.now() - start });
+    logger.info("[BLOCKCHAIN] Transacción procesada", {
+      id: tx.id,
+      chain: tx.chain,
+      success,
+      durationMs: Date.now() - start,
+    });
   }
 }
 

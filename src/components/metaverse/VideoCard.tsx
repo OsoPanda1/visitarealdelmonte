@@ -27,7 +27,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
   duration,
   isLive,
   isFeatured,
-  onClick
+  onClick,
 }) => {
   const formatNumber = (num: number) => {
     if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
@@ -44,19 +44,19 @@ const VideoCard: React.FC<VideoCardProps> = ({
         "relative group cursor-pointer rounded-xl overflow-hidden",
         "bg-card/50 backdrop-blur-sm border border-border/30",
         "transition-all duration-300",
-        isFeatured && "col-span-2 row-span-2"
+        isFeatured && "col-span-2 row-span-2",
       )}
     >
       {/* Thumbnail */}
       <div className="relative aspect-video overflow-hidden">
-        <div 
+        <div
           className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
           style={{ backgroundImage: `url(${thumbnail})` }}
         />
-        
+
         {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-        
+
         {/* Play button */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
@@ -88,7 +88,12 @@ const VideoCard: React.FC<VideoCardProps> = ({
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-accent to-primary overflow-hidden">
             {creatorAvatar ? (
-              <img src={creatorAvatar} alt={creator} loading="lazy" className="w-full h-full object-cover" />
+              <img
+                src={creatorAvatar}
+                alt={creator}
+                loading="lazy"
+                className="w-full h-full object-cover"
+              />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-white font-bold text-sm">
                 {creator[0]}
@@ -147,24 +152,22 @@ interface VideoGridProps {
   showFeatured?: boolean;
 }
 
-export const VideoGrid: React.FC<VideoGridProps> = ({ 
-  videos, 
+export const VideoGrid: React.FC<VideoGridProps> = ({
+  videos,
   columns = 5,
-  showFeatured = true 
+  showFeatured = true,
 }) => {
   return (
-    <div className={cn(
-      "grid gap-4",
-      columns === 5 && "grid-cols-2 md:grid-cols-3 lg:grid-cols-5",
-      columns === 4 && "grid-cols-2 md:grid-cols-4",
-      columns === 3 && "grid-cols-1 md:grid-cols-3"
-    )}>
+    <div
+      className={cn(
+        "grid gap-4",
+        columns === 5 && "grid-cols-2 md:grid-cols-3 lg:grid-cols-5",
+        columns === 4 && "grid-cols-2 md:grid-cols-4",
+        columns === 3 && "grid-cols-1 md:grid-cols-3",
+      )}
+    >
       {videos.map((video, index) => (
-        <VideoCard 
-          key={video.id} 
-          {...video} 
-          isFeatured={showFeatured && index === 0}
-        />
+        <VideoCard key={video.id} {...video} isFeatured={showFeatured && index === 0} />
       ))}
     </div>
   );

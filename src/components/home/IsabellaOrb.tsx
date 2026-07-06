@@ -3,31 +3,31 @@
  * Orbe 3D que se transforma en ventana de chat
  */
 
-import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, X, Send, Sparkles, Volume2, VolumeX } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { useIsabella } from '@/hooks/useIsabella';
+import React, { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { MessageCircle, X, Send, Sparkles, Volume2, VolumeX } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useIsabella } from "@/hooks/useIsabella";
 
 const IsabellaOrb: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [voiceEnabled, setVoiceEnabled] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  
+
   const { messages, isLoading, sendMessage, error } = useIsabella();
 
   // Dibujar orbe animado
   useEffect(() => {
     if (isOpen) return;
-    
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     canvas.width = 120;
@@ -38,7 +38,7 @@ const IsabellaOrb: React.FC = () => {
 
     const drawOrb = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
+
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2;
       const baseRadius = 40;
@@ -47,7 +47,7 @@ const IsabellaOrb: React.FC = () => {
       for (let i = 0; i < 3; i++) {
         const pulseRadius = baseRadius + 10 + Math.sin(time * 0.02 + i * 0.5) * 8;
         const alpha = 0.3 - i * 0.1;
-        
+
         ctx.beginPath();
         ctx.arc(centerX, centerY, pulseRadius + i * 8, 0, Math.PI * 2);
         ctx.strokeStyle = `rgba(0, 240, 255, ${alpha})`;
@@ -57,12 +57,16 @@ const IsabellaOrb: React.FC = () => {
 
       // Gradiente central
       const gradient = ctx.createRadialGradient(
-        centerX - 10, centerY - 10, 5,
-        centerX, centerY, baseRadius
+        centerX - 10,
+        centerY - 10,
+        5,
+        centerX,
+        centerY,
+        baseRadius,
       );
-      gradient.addColorStop(0, 'rgba(100, 200, 255, 0.9)');
-      gradient.addColorStop(0.5, 'rgba(0, 150, 255, 0.7)');
-      gradient.addColorStop(1, 'rgba(0, 80, 200, 0.5)');
+      gradient.addColorStop(0, "rgba(100, 200, 255, 0.9)");
+      gradient.addColorStop(0.5, "rgba(0, 150, 255, 0.7)");
+      gradient.addColorStop(1, "rgba(0, 80, 200, 0.5)");
 
       ctx.beginPath();
       ctx.arc(centerX, centerY, baseRadius, 0, Math.PI * 2);
@@ -71,21 +75,21 @@ const IsabellaOrb: React.FC = () => {
 
       // Partículas orbitando
       for (let i = 0; i < 6; i++) {
-        const angle = (time * 0.03) + (i * Math.PI / 3);
+        const angle = time * 0.03 + (i * Math.PI) / 3;
         const orbitRadius = 35 + Math.sin(time * 0.02 + i) * 5;
         const px = centerX + Math.cos(angle) * orbitRadius;
         const py = centerY + Math.sin(angle) * orbitRadius;
-        
+
         ctx.beginPath();
         ctx.arc(px, py, 3, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(155, 135, 245, 0.8)';
+        ctx.fillStyle = "rgba(155, 135, 245, 0.8)";
         ctx.fill();
       }
 
       // Core brillante
       ctx.beginPath();
       ctx.arc(centerX, centerY, 15, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+      ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
       ctx.fill();
 
       time++;
@@ -101,13 +105,13 @@ const IsabellaOrb: React.FC = () => {
 
   // Auto scroll a nuevos mensajes
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   const handleSend = () => {
     if (!input.trim() || isLoading) return;
     sendMessage(input);
-    setInput('');
+    setInput("");
   };
 
   return (
@@ -123,7 +127,7 @@ const IsabellaOrb: React.FC = () => {
             onClick={() => setIsOpen(true)}
           >
             <canvas ref={canvasRef} className="w-[120px] h-[120px]" />
-            
+
             {/* Label */}
             <div className="absolute -top-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
               <div className="bg-background/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs whitespace-nowrap">
@@ -193,17 +197,17 @@ const IsabellaOrb: React.FC = () => {
                   </p>
                 </div>
               )}
-              
+
               {messages.map((msg) => (
                 <div
                   key={msg.id}
-                  className={`mb-4 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}
+                  className={`mb-4 ${msg.role === "user" ? "text-right" : "text-left"}`}
                 >
                   <div
                     className={`inline-block max-w-[85%] px-4 py-2 rounded-2xl ${
-                      msg.role === 'user'
-                        ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white'
-                        : 'bg-muted'
+                      msg.role === "user"
+                        ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white"
+                        : "bg-muted"
                     }`}
                   >
                     <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
@@ -213,24 +217,33 @@ const IsabellaOrb: React.FC = () => {
                   </p>
                 </div>
               ))}
-              
+
               {isLoading && (
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <div className="flex gap-1">
-                    <div className="w-2 h-2 rounded-full bg-cyan-400 animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <div className="w-2 h-2 rounded-full bg-cyan-400 animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <div className="w-2 h-2 rounded-full bg-cyan-400 animate-bounce" style={{ animationDelay: '300ms' }} />
+                    <div
+                      className="w-2 h-2 rounded-full bg-cyan-400 animate-bounce"
+                      style={{ animationDelay: "0ms" }}
+                    />
+                    <div
+                      className="w-2 h-2 rounded-full bg-cyan-400 animate-bounce"
+                      style={{ animationDelay: "150ms" }}
+                    />
+                    <div
+                      className="w-2 h-2 rounded-full bg-cyan-400 animate-bounce"
+                      style={{ animationDelay: "300ms" }}
+                    />
                   </div>
                   <span className="text-xs">Isabella está escribiendo...</span>
                 </div>
               )}
-              
+
               {error && (
                 <div className="text-center py-2">
                   <p className="text-xs text-destructive">{error}</p>
                 </div>
               )}
-              
+
               <div ref={messagesEndRef} />
             </ScrollArea>
 
@@ -242,7 +255,7 @@ const IsabellaOrb: React.FC = () => {
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Escribe un mensaje..."
                   className="flex-1 bg-background/50 border-border/50"
-                  onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                  onKeyDown={(e) => e.key === "Enter" && handleSend()}
                   disabled={isLoading}
                 />
                 <Button

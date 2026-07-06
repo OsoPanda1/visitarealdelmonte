@@ -31,7 +31,9 @@ export default function AtlasCapitulos() {
           {Object.entries(territoryStats).map(([k, v]) => (
             <div key={k} className="rounded-xl border border-border bg-card p-6">
               <div className="text-2xl font-bold text-primary">{v}</div>
-              <div className="text-xs uppercase tracking-widest text-muted-foreground mt-1">{k}</div>
+              <div className="text-xs uppercase tracking-widest text-muted-foreground mt-1">
+                {k}
+              </div>
             </div>
           ))}
         </div>

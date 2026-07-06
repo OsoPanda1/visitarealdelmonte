@@ -3,7 +3,7 @@
  * Optimizaciones geoespaciales con cache LRU y TTL
  */
 
-import type { Coordenadas, BoundingBox, GeoCacheEntry, LRUCacheConfig } from '../models';
+import type { Coordenadas, BoundingBox, GeoCacheEntry, LRUCacheConfig } from "../models";
 
 // ============================================================================
 // CONSTANTES
@@ -35,17 +35,16 @@ export function withinBBox(coords: Coordenadas, bbox: BoundingBox): boolean {
 export function fastDistance(a: Coordenadas, b: Coordenadas): number {
   const dLat = (b.lat - a.lat) * DEG_TO_RAD;
   const dLng = (b.lng - a.lng) * DEG_TO_RAD;
-  
+
   const sinDLat = Math.sin(dLat / 2);
   const sinDLng = Math.sin(dLng / 2);
-  
-  const aVal = sinDLat * sinDLat + 
-    Math.cos(a.lat * DEG_TO_RAD) * 
-    Math.cos(b.lat * DEG_TO_RAD) * 
-    sinDLng * sinDLng;
-  
+
+  const aVal =
+    sinDLat * sinDLat +
+    Math.cos(a.lat * DEG_TO_RAD) * Math.cos(b.lat * DEG_TO_RAD) * sinDLng * sinDLng;
+
   const c = 2 * Math.atan2(Math.sqrt(aVal), Math.sqrt(1 - aVal));
-  
+
   return EARTH_RADIUS_KM * c * 1000; // Convertir a metros
 }
 
@@ -56,7 +55,7 @@ export function createBBox(center: Coordenadas, radiusMeters: number): BoundingB
   const radiusKm = radiusMeters / 1000;
   const latDelta = radiusKm / 111.32; // 1 grado lat ≈ 111.32 km
   const lngDelta = radiusKm / (111.32 * Math.cos(center.lat * DEG_TO_RAD));
-  
+
   return {
     minLat: center.lat - latDelta,
     maxLat: center.lat + latDelta,
@@ -72,11 +71,12 @@ export function calculateBearing(from: Coordenadas, to: Coordenadas): number {
   const dLng = (to.lng - from.lng) * DEG_TO_RAD;
   const fromLatRad = from.lat * DEG_TO_RAD;
   const toLatRad = to.lat * DEG_TO_RAD;
-  
+
   const y = Math.sin(dLng) * Math.cos(toLatRad);
-  const x = Math.cos(fromLatRad) * Math.sin(toLatRad) - 
+  const x =
+    Math.cos(fromLatRad) * Math.sin(toLatRad) -
     Math.sin(fromLatRad) * Math.cos(toLatRad) * Math.cos(dLng);
-  
+
   const bearing = Math.atan2(y, x) * (180 / Math.PI);
   return (bearing + 360) % 360;
 }
@@ -107,31 +107,31 @@ export class GeoLRUCache {
   get(a: Coordenadas, b: Coordenadas): number | null {
     const key = this.makeKey(a, b);
     const entry = this.cache.get(key);
-    
+
     if (!entry) return null;
-    
+
     // Verificar TTL
     if (Date.now() > entry.expiresAt.getTime()) {
       this.cache.delete(key);
       return null;
     }
-    
+
     // Move to end (LRU behavior)
     this.cache.delete(key);
     this.cache.set(key, entry);
-    
+
     return entry.distance;
   }
 
   set(a: Coordenadas, b: Coordenadas, distance: number): void {
     const key = this.makeKey(a, b);
-    
+
     // Evict oldest if at capacity
     if (this.cache.size >= this.maxSize) {
       const oldestKey = this.cache.keys().next().value;
       if (oldestKey) this.cache.delete(oldestKey);
     }
-    
+
     const now = new Date();
     this.cache.set(key, {
       key,
@@ -147,7 +147,7 @@ export class GeoLRUCache {
   getOrCompute(a: Coordenadas, b: Coordenadas): number {
     const cached = this.get(a, b);
     if (cached !== null) return cached;
-    
+
     const distance = fastDistance(a, b);
     this.set(a, b, distance);
     return distance;
@@ -171,14 +171,14 @@ export class GeoLRUCache {
   prune(): number {
     const now = Date.now();
     let pruned = 0;
-    
+
     for (const [key, entry] of this.cache.entries()) {
       if (now > entry.expiresAt.getTime()) {
         this.cache.delete(key);
         pruned++;
       }
     }
-    
+
     return pruned;
   }
 }
@@ -226,24 +226,24 @@ export class MovementFilter {
 export function findNearestPoint<T extends { coords: Coordenadas }>(
   from: Coordenadas,
   points: T[],
-  geoCache?: GeoLRUCache
+  geoCache?: GeoLRUCache,
 ): { point: T; distance: number } | null {
   if (points.length === 0) return null;
-  
+
   let nearest: T | null = null;
   let minDistance = Infinity;
-  
+
   for (const point of points) {
-    const distance = geoCache 
+    const distance = geoCache
       ? geoCache.getOrCompute(from, point.coords)
       : fastDistance(from, point.coords);
-    
+
     if (distance < minDistance) {
       minDistance = distance;
       nearest = point;
     }
   }
-  
+
   return nearest ? { point: nearest, distance: minDistance } : null;
 }
 
@@ -254,15 +254,15 @@ export function filterPointsInRadius<T extends { coords: Coordenadas }>(
   center: Coordenadas,
   points: T[],
   radiusMeters: number,
-  geoCache?: GeoLRUCache
+  geoCache?: GeoLRUCache,
 ): Array<{ point: T; distance: number }> {
   const bbox = createBBox(center, radiusMeters);
-  
+
   return points
-    .filter(p => withinBBox(p.coords, bbox))
-    .map(point => ({
+    .filter((p) => withinBBox(p.coords, bbox))
+    .map((point) => ({
       point,
-      distance: geoCache 
+      distance: geoCache
         ? geoCache.getOrCompute(center, point.coords)
         : fastDistance(center, point.coords),
     }))
@@ -277,13 +277,11 @@ export function calculateSpeed(
   from: Coordenadas,
   to: Coordenadas,
   timeDeltaMs: number,
-  geoCache?: GeoLRUCache
+  geoCache?: GeoLRUCache,
 ): number {
   if (timeDeltaMs <= 0) return 0;
-  
-  const distance = geoCache 
-    ? geoCache.getOrCompute(from, to)
-    : fastDistance(from, to);
-  
+
+  const distance = geoCache ? geoCache.getOrCompute(from, to) : fastDistance(from, to);
+
   return distance / (timeDeltaMs / 1000); // m/s
 }

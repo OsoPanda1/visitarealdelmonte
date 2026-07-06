@@ -3,22 +3,13 @@
  * API unificada para interactuar con el sistema de inteligencia territorial
  */
 
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import { supabase } from "@/integrations/supabase/client";
-import type {
-  TuristaEstado,
-  IsabellaDecision,
-  Coordenadas,
-  KernelOutput,
-} from '@/core/models';
-import { orchestrator, ExperienceOrchestrator } from '@/core/orchestrator/ExperienceOrchestrator';
-import { runRealitoKernel, getSystemMetrics, getAllPlaces } from './kernel';
+import type { TuristaEstado, IsabellaDecision, Coordenadas, KernelOutput } from "@/core/models";
+import { orchestrator, ExperienceOrchestrator } from "@/core/orchestrator/ExperienceOrchestrator";
+import { runRealitoKernel, getSystemMetrics, getAllPlaces } from "./kernel";
 import { logger } from "@/lib/logger";
-import {
-  applyDecisionToHeptafederation,
-  getGlobalHealth,
-  getTelemetry,
-} from './heptafederation';
+import { applyDecisionToHeptafederation, getGlobalHealth, getTelemetry } from "./heptafederation";
 
 // ============================================================================
 // TIPOS DE LA FACHADA
@@ -51,7 +42,7 @@ export async function evaluarTurista(context: IsabellaContext): Promise<Isabella
   // Construir estado del turista
   const state: TuristaEstado = {
     id: context.turistaId,
-    territory: 'RDM',
+    territory: "RDM",
     coords: context.coords,
     stayTimeHours: (Date.now() - context.sessionStartTime.getTime()) / 3600000,
     activityTimestamps: {
@@ -90,10 +81,10 @@ export async function evaluarTurista(context: IsabellaContext): Promise<Isabella
 export async function procesarMensaje(
   message: string,
   turistaId?: string,
-  coords?: Coordenadas
+  coords?: Coordenadas,
 ): Promise<{
   respuesta: string;
-  recomendaciones: KernelOutput['recommendations'];
+  recomendaciones: KernelOutput["recommendations"];
   decision?: IsabellaDecision;
 }> {
   const kernel = runRealitoKernel(message);
@@ -129,9 +120,7 @@ function construirRespuesta(kernel: KernelOutput, decision?: IsabellaDecision): 
 
   // Agregar recomendaciones si hay
   if (kernel.recommendations.length > 0) {
-    const lugares = kernel.recommendations
-      .map(r => `- ${r.name} (${r.rating}/5)`)
-      .join('\n');
+    const lugares = kernel.recommendations.map((r) => `- ${r.name} (${r.rating}/5)`).join("\n");
     response += `\n\nTe recomiendo:\n${lugares}`;
   }
 
@@ -157,9 +146,9 @@ export function registrarFeedback(
   decisionTraceId: string,
   rating: number,
   feedback?: string,
-  consentimiento?: boolean
+  consentimiento?: boolean,
 ): void {
-  logger.info('[Isabella] Feedback registrado:', {
+  logger.info("[Isabella] Feedback registrado:", {
     traceId: decisionTraceId,
     rating,
     feedback,
@@ -167,22 +156,25 @@ export function registrarFeedback(
     timestamp: new Date().toISOString(),
   });
 
-  supabase.from("isabella_feedback").insert({
-    decision_trace_id: decisionTraceId,
-    rating,
-    feedback: feedback ?? null,
-    consentimiento: consentimiento ?? null,
-    created_at: new Date().toISOString(),
-  }).then(({ error }: { error: unknown }) => {
-    if (error) logger.error("[Isabella] Error al persistir feedback", { error });
-  });
+  supabase
+    .from("isabella_feedback")
+    .insert({
+      decision_trace_id: decisionTraceId,
+      rating,
+      feedback: feedback ?? null,
+      consentimiento: consentimiento ?? null,
+      created_at: new Date().toISOString(),
+    })
+    .then(({ error }: { error: unknown }) => {
+      if (error) logger.error("[Isabella] Error al persistir feedback", { error });
+    });
 }
 
 /**
  * Obtiene el estado actual del sistema
  */
 export function getSystemStatus(): {
-  orchestratorStats: ReturnType<ExperienceOrchestrator['getStats']>;
+  orchestratorStats: ReturnType<ExperienceOrchestrator["getStats"]>;
   federationHealth: number;
   systemMetrics: ReturnType<typeof getSystemMetrics>;
   placesCount: number;
@@ -198,9 +190,7 @@ export function getSystemStatus(): {
 /**
  * Suscribe a decisiones en tiempo real
  */
-export function suscribirDecisiones(
-  callback: (decision: IsabellaDecision) => void
-): () => void {
+export function suscribirDecisiones(callback: (decision: IsabellaDecision) => void): () => void {
   return orchestrator.subscribeToDecisions(callback);
 }
 
@@ -222,7 +212,11 @@ export function generarSesionTurista(): string {
 // FUNCION ADICIONAL para compatibilidad con barrel exports
 // ============================================================================
 
-let _lastDecision: { traceId: string; territory: string; decision?: import('@/core/models').IsabellaDecision } | null = null;
+let _lastDecision: {
+  traceId: string;
+  territory: string;
+  decision?: import("@/core/models").IsabellaDecision;
+} | null = null;
 
 export function getLastDecision() {
   return _lastDecision;
@@ -245,9 +239,4 @@ export {
   getTelemetry,
 };
 
-export type {
-  TuristaEstado,
-  IsabellaDecision,
-  KernelOutput,
-  Coordenadas,
-};
+export type { TuristaEstado, IsabellaDecision, KernelOutput, Coordenadas };

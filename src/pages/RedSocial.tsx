@@ -6,32 +6,62 @@ const servicios = [
   {
     icon: Video,
     title: "Videos HD/4K/8K",
-    items: ["Edición avanzada integrada", "Reels interactivos con elementos 3D/4D", "Historias persistentes con línea temporal", "Streaming 4K/8K nativo"],
+    items: [
+      "Edición avanzada integrada",
+      "Reels interactivos con elementos 3D/4D",
+      "Historias persistentes con línea temporal",
+      "Streaming 4K/8K nativo",
+    ],
   },
   {
     icon: MessageCircle,
     title: "Comunicación Cifrada",
-    items: ["Chats privados con cifrado cuántico", "Grupos temáticos hasta 100K miembros", "Canales de difusión premium", "Muro global con algoritmo ético"],
+    items: [
+      "Chats privados con cifrado cuántico",
+      "Grupos temáticos hasta 100K miembros",
+      "Canales de difusión premium",
+      "Muro global con algoritmo ético",
+    ],
   },
   {
     icon: Gift,
     title: "Sistema CGIFTS",
-    items: ["30+ regalos virtuales ($1–$300)", "Mini Anubis Ultra (subasta blockchain)", "NFT minting para regalos especiales", "Isabella AI recomienda regalos"],
+    items: [
+      "30+ regalos virtuales ($1–$300)",
+      "Mini Anubis Ultra (subasta blockchain)",
+      "NFT minting para regalos especiales",
+      "Isabella AI recomienda regalos",
+    ],
   },
   {
     icon: Gamepad2,
     title: "Entretenimiento",
-    items: ["Conciertos sensoriales XR", "Gaming integral (Casual, MMO, Esports)", "Mascotas digitales con IA genética", "Lotería TAMV blockchain transparente"],
+    items: [
+      "Conciertos sensoriales XR",
+      "Gaming integral (Casual, MMO, Esports)",
+      "Mascotas digitales con IA genética",
+      "Lotería TAMV blockchain transparente",
+    ],
   },
   {
     icon: Globe,
     title: "Dream Spaces",
-    items: ["Espacios privados customizables", "Mundos temáticos comunitarios", "Arquitectura imposible (física cuántica)", "Colaboración en tiempo real"],
+    items: [
+      "Espacios privados customizables",
+      "Mundos temáticos comunitarios",
+      "Arquitectura imposible (física cuántica)",
+      "Colaboración en tiempo real",
+    ],
   },
   {
     icon: Shield,
     title: "ID-NVIDA Verificada",
-    items: ["Avatares con biometría avanzada", "Certificaciones profesionales blockchain", "Sistema de reputación verificable", "Privacidad selectiva y revelación controlada"],
+    items: [
+      "Avatares con biometría avanzada",
+      "Certificaciones profesionales blockchain",
+      "Sistema de reputación verificable",
+      "Privacidad selectiva y revelación controlada",
+    ],
   },
 ];
 
@@ -50,8 +80,9 @@ const RedSocial = () => (
     subtitle="Plataforma social federada superior — Videos, Chats, CGIFTS, Dream Spaces y más"
   >
     <InfoBox type="info" title="Ecosistema Social Completo">
-      La red social TAMV integra comunicación cifrada, contenido inmersivo XR, economía de regalos CGIFTS, 
-      espacios virtuales Dream Spaces e identidad soberana ID-NVIDA en una única plataforma ética y federada.
+      La red social TAMV integra comunicación cifrada, contenido inmersivo XR, economía de regalos
+      CGIFTS, espacios virtuales Dream Spaces e identidad soberana ID-NVIDA en una única plataforma
+      ética y federada.
     </InfoBox>
 
     <Section title="Servicios del Ecosistema Social" icon={Users}>
@@ -96,10 +127,18 @@ const RedSocial = () => (
     <Section title="Programa de Referidos 500">
       <InfoBox type="success">
         <ul className="space-y-1.5">
-          <li><strong>$1,000 USD</strong> por alcanzar 500 seguidores con membresía</li>
-          <li><strong>Bonos escalonados</strong> hasta $500,000 USD</li>
-          <li><strong>Beneficios exclusivos:</strong> Equity, partnerships, embajadas</li>
-          <li><strong>Crecimiento exponencial</strong> con sistema de incentivos masivo</li>
+          <li>
+            <strong>$1,000 USD</strong> por alcanzar 500 seguidores con membresía
+          </li>
+          <li>
+            <strong>Bonos escalonados</strong> hasta $500,000 USD
+          </li>
+          <li>
+            <strong>Beneficios exclusivos:</strong> Equity, partnerships, embajadas
+          </li>
+          <li>
+            <strong>Crecimiento exponencial</strong> con sistema de incentivos masivo
+          </li>
         </ul>
       </InfoBox>
     </Section>
@@ -107,7 +146,10 @@ const RedSocial = () => (
     <Section title="Métricas de Rendimiento">
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         {metricas.map((m) => (
-          <div key={m.label} className="rounded-lg border border-border/50 bg-card/30 p-4 text-center">
+          <div
+            key={m.label}
+            className="rounded-lg border border-border/50 bg-card/30 p-4 text-center"
+          >
             <div className="text-2xl font-bold text-primary">{m.value}</div>
             <div className="text-xs text-muted-foreground mt-1">{m.label}</div>
           </div>
@@ -124,7 +166,10 @@ const RedSocial = () => (
           "Hackathons mensuales con premios",
           "Bolsa de trabajo exclusiva global",
         ].map((item) => (
-          <div key={item} className="flex items-center gap-3 rounded-md border border-border/50 bg-muted/20 px-3 py-2">
+          <div
+            key={item}
+            className="flex items-center gap-3 rounded-md border border-border/50 bg-muted/20 px-3 py-2"
+          >
             <span className="text-primary">◆</span>
             <span className="text-sm text-muted-foreground">{item}</span>
           </div>

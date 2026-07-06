@@ -2,14 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { PageHero } from "@/components/site/PageHero";
-import {
-  getUnifiedFederationHealth,
-  initEventBusBridge,
-} from "@/core/yun/event-bus-bridge";
+import { getUnifiedFederationHealth, initEventBusBridge } from "@/core/yun/event-bus-bridge";
 import { federationBus } from "@/federaciones/FederationBus";
-import {
-  runHealthCheck,
-} from "@/core/yun/observability";
+import { runHealthCheck } from "@/core/yun/observability";
 import {
   Shield,
   Activity,
@@ -88,12 +83,12 @@ function FederacionDashboard() {
 
     try {
       const yunHealth = await runHealthCheck();
-      const checksMap = new Map(yunHealth.checks.map(c => [c.name, c.status]));
+      const checksMap = new Map(yunHealth.checks.map((c) => [c.name, c.status]));
       setSystemHealth({
-        eventBus: checksMap.get('event_bus') === 'ok',
-        rateLimiter: checksMap.get('rate_limiter') === 'ok',
-        circuitBreakers: checksMap.get('circuit_breakers') === 'ok',
-        logging: checksMap.get('log_buffer') === 'ok' || checksMap.get('log_buffer') === 'warn',
+        eventBus: checksMap.get("event_bus") === "ok",
+        rateLimiter: checksMap.get("rate_limiter") === "ok",
+        circuitBreakers: checksMap.get("circuit_breakers") === "ok",
+        logging: checksMap.get("log_buffer") === "ok" || checksMap.get("log_buffer") === "warn",
       });
     } catch {
       // Health check may fail in certain environments
@@ -117,9 +112,10 @@ function FederacionDashboard() {
 
   const healthyCount = federations.filter((f) => f.status === "ACTIVE").length;
   const degradedCount = federations.filter((f) => f.status === "DEGRADED").length;
-  const overallHealth = federations.length > 0
-    ? federations.reduce((sum, f) => sum + f.health, 0) / federations.length
-    : 0;
+  const overallHealth =
+    federations.length > 0
+      ? federations.reduce((sum, f) => sum + f.health, 0) / federations.length
+      : 0;
 
   if (loading) {
     return (
@@ -199,10 +195,10 @@ function FederacionDashboard() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {Object.entries(systemHealth).map(([key, healthy]) => (
               <div key={key} className="flex items-center gap-2">
-                <div className={`w-3 h-3 rounded-full ${healthy ? "bg-emerald-500" : "bg-red-500"}`} />
-                <span className="text-sm capitalize">
-                  {key.replace(/([A-Z])/g, " $1").trim()}
-                </span>
+                <div
+                  className={`w-3 h-3 rounded-full ${healthy ? "bg-emerald-500" : "bg-red-500"}`}
+                />
+                <span className="text-sm capitalize">{key.replace(/([A-Z])/g, " $1").trim()}</span>
               </div>
             ))}
           </div>
@@ -217,19 +213,23 @@ function FederacionDashboard() {
                 key={fed.tamvId}
                 className="rounded-xl border bg-card overflow-hidden hover:shadow-lg transition-shadow"
               >
-                <div className={`bg-gradient-to-r ${FEDERATION_COLORS[fed.tamvId] ?? "from-gray-500 to-gray-600"} p-4 text-white`}>
+                <div
+                  className={`bg-gradient-to-r ${FEDERATION_COLORS[fed.tamvId] ?? "from-gray-500 to-gray-600"} p-4 text-white`}
+                >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       {FEDERATION_ICONS[fed.tamvId] ?? <Globe className="w-5 h-5" />}
                       <span className="font-semibold">{fed.tamvId}</span>
                     </div>
-                    <span className={`px-2 py-0.5 rounded-full text-xs ${
-                      fed.status === "ACTIVE"
-                        ? "bg-white/20"
-                        : fed.status === "DEGRADED"
-                          ? "bg-amber-500/30"
-                          : "bg-red-500/30"
-                    }`}>
+                    <span
+                      className={`px-2 py-0.5 rounded-full text-xs ${
+                        fed.status === "ACTIVE"
+                          ? "bg-white/20"
+                          : fed.status === "DEGRADED"
+                            ? "bg-amber-500/30"
+                            : "bg-red-500/30"
+                      }`}
+                    >
                       {fed.status}
                     </span>
                   </div>

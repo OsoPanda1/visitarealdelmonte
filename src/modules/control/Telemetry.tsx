@@ -34,10 +34,10 @@ const sev = (v: number, t1 = 50, t2 = 75, t3 = 90) =>
   v >= t3
     ? "text-red-400"
     : v >= t2
-    ? "text-amber-400"
-    : v >= t1
-    ? "text-gold"
-    : "text-emerald-400";
+      ? "text-amber-400"
+      : v >= t1
+        ? "text-gold"
+        : "text-emerald-400";
 
 const cardVariants = {
   initial: { opacity: 0, y: 10 },
@@ -56,56 +56,43 @@ export default function Telemetry() {
         const sinceMin = new Date(Date.now() - 60_000).toISOString();
         const sinceHr = new Date(Date.now() - 3_600_000).toISOString();
 
-        const [events1m, eventsHr, tracksRes, placesRes, healthRes] =
-          await Promise.all([
-            supabase
-              .from("tracking_events")
-              .select("id, created_at", { count: "exact", head: false })
-              .gte("created_at", sinceMin)
-              .limit(500),
-            supabase
-              .from("tracking_events")
-              .select("id, created_at, route", { count: "exact" })
-              .gte("created_at", sinceHr)
-              .limit(200),
-            supabase
-              .from("music_tracks")
-              .select("id, title", { count: "exact", head: false }),
-            supabase
-              .from("places")
-              .select("id, name, category", { count: "exact" })
-              .limit(50),
-            supabase.functions.invoke("federation-health"),
-          ]);
+        const [events1m, eventsHr, tracksRes, placesRes, healthRes] = await Promise.all([
+          supabase
+            .from("tracking_events")
+            .select("id, created_at", { count: "exact", head: false })
+            .gte("created_at", sinceMin)
+            .limit(500),
+          supabase
+            .from("tracking_events")
+            .select("id, created_at, route", { count: "exact" })
+            .gte("created_at", sinceHr)
+            .limit(200),
+          supabase.from("music_tracks").select("id, title", { count: "exact", head: false }),
+          supabase.from("places").select("id, name, category", { count: "exact" }).limit(50),
+          supabase.functions.invoke("federation-health"),
+        ]);
 
         if (cancel) return;
 
         const reqMin = events1m.count ?? 0;
         const reqHr = eventsHr.count ?? 0;
 
-        const healthData = (healthRes.data ??
-          null) as FederationHealthResponse | null;
+        const healthData = (healthRes.data ?? null) as FederationHealthResponse | null;
         const fedSummary = healthData?.summary;
 
         const latency = fedSummary?.avg_latency_ms ?? 120;
 
         // Modelo determinista simple para CPU/RAM basado en carga.
         const loadFactor = Math.min(1, reqHr / 1200);
-        const cpu = Math.round(
-          15 + loadFactor * 70 + (latency > 200 ? 10 : 0),
-        );
+        const cpu = Math.round(15 + loadFactor * 70 + (latency > 200 ? 10 : 0));
         const mem = Math.round(35 + loadFactor * 50);
 
-        const meshTotal =
-          (tracksRes.count ?? 0) + (placesRes.count ?? 0) || 1;
+        const meshTotal = (tracksRes.count ?? 0) + (placesRes.count ?? 0) || 1;
         const meshOnline = fedSummary
           ? Math.round((fedSummary.online / fedSummary.total) * meshTotal)
           : meshTotal;
 
-        const bandwidth = Math.max(
-          8,
-          Math.round(reqMin * 0.4 + (tracksRes.count ?? 0) * 0.2),
-        );
+        const bandwidth = Math.max(8, Math.round(reqMin * 0.4 + (tracksRes.count ?? 0) * 0.2));
 
         const recent = (eventsHr.data as TrackingEvent[] | null) ?? [];
         const recentSlice = recent.slice(0, 10);
@@ -118,10 +105,7 @@ export default function Telemetry() {
           `[${nowIso}] tracking.events → ${reqMin}/min · ${reqHr}/hr`,
           `[${nowIso}] mesh.bandwidth → ${bandwidth} MB/s`,
           ...recentSlice.map(
-            (e) =>
-              `[${e.created_at}] route ${
-                e.route && e.route !== "" ? e.route : "-"
-              }`,
+            (e) => `[${e.created_at}] route ${e.route && e.route !== "" ? e.route : "-"}`,
           ),
         ];
 
@@ -209,8 +193,7 @@ export default function Telemetry() {
   }
 
   const meshSlots = Math.min(48, sample.meshTotal);
-  const onlineThreshold =
-    (sample.meshOnline * meshSlots) / (sample.meshTotal || 1);
+  const onlineThreshold = (sample.meshOnline * meshSlots) / (sample.meshTotal || 1);
 
   return (
     <div className="space-y-6">
@@ -236,17 +219,13 @@ export default function Telemetry() {
                 Kernel observability
               </span>
             </div>
-            <p
-              className={`mt-2 text-2xl font-display font-bold leading-none ${c.color}`}
-            >
+            <p className={`mt-2 text-2xl font-display font-bold leading-none ${c.color}`}>
               {c.value}
             </p>
             <p className="mt-1 text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
               {c.label}
             </p>
-            <p className="mt-1 text-[10px] font-mono text-muted-foreground/70">
-              {c.hint}
-            </p>
+            <p className="mt-1 text-[10px] font-mono text-muted-foreground/70">{c.hint}</p>
           </motion.div>
         ))}
       </div>
@@ -257,8 +236,7 @@ export default function Telemetry() {
           <div className="flex items-center gap-2 text-[11px] font-mono uppercase tracking-wider">
             <Wifi className="h-3 w-3 text-emerald-400" />
             <span>
-              Red Mesh soberana — {sample.meshOnline}/{sample.meshTotal}{" "}
-              entidades
+              Red Mesh soberana — {sample.meshOnline}/{sample.meshTotal} entidades
             </span>
           </div>
           <div className="flex items-center gap-2 text-[10px] font-mono text-muted-foreground">
@@ -275,15 +253,9 @@ export default function Telemetry() {
               <div key={i} className="text-center">
                 <motion.div
                   className={`mx-auto h-3 w-3 rounded-full ${
-                    on
-                      ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.7)]"
-                      : "bg-muted/40"
+                    on ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.7)]" : "bg-muted/40"
                   }`}
-                  animate={
-                    on
-                      ? { scale: [1, 1.1, 1] }
-                      : { scale: 1 }
-                  }
+                  animate={on ? { scale: [1, 1.1, 1] } : { scale: 1 }}
                   transition={
                     on
                       ? {
@@ -316,10 +288,7 @@ export default function Telemetry() {
         </div>
         <div className="max-h-48 space-y-1 overflow-y-auto font-mono text-[10px] text-muted-foreground">
           {sample.logs.map((l, i) => (
-            <p
-              key={i}
-              className="border-l-2 border-gold/30 pl-2 text-left"
-            >
+            <p key={i} className="border-l-2 border-gold/30 pl-2 text-left">
               {l}
             </p>
           ))}

@@ -10,7 +10,13 @@ interface MapSyncContextValue {
 
 const MapSyncContext = createContext<MapSyncContextValue | null>(null);
 
-export function MapSyncProvider({ children, initial = DEFAULT_MAP_VIEWPORT }: { children: ReactNode; initial?: MapViewportState }) {
+export function MapSyncProvider({
+  children,
+  initial = DEFAULT_MAP_VIEWPORT,
+}: {
+  children: ReactNode;
+  initial?: MapViewportState;
+}) {
   const [viewport, setViewport] = useState<MapViewportState>(initial);
 
   const syncFrom2D = useCallback((next: Partial<MapViewportState>) => {

@@ -46,7 +46,7 @@ export type TelemObject = {
   // nombre breve amigable para la UI
   nombre: string;
   // categoría para filtrar: `performance`, `error`, `engagement`, `offline`
-  categoría: 'performance' | 'error' | 'engagement' | 'offline';
+  categoría: "performance" | "error" | "engagement" | "offline";
   // región del usuario cuando está disponible
   region: string;
   // datos ocultos para cada métrica
@@ -54,33 +54,47 @@ export type TelemObject = {
 };
 
 // Modelos de fábrica de métricas para mantener DRY
-const build = <T extends object>(id: string, categoría: TelemObject['categoría'], data: T): TelemObject => (
-  {
+const build = <T extends object>(
+  id: string,
+  categoría: TelemObject["categoría"],
+  data: T,
+): TelemObject =>
+  ({
     id,
     ts: new Date().toISOString(),
     nombre: id,
     categoría,
-    region: 'MX',
+    region: "MX",
     data,
-  } as const
-);
+  }) as const;
 
 // Helpers especializados para métricas habituales
 export const telemetryExamples = {
   // Ejemplo de métrica de rendimiento (FPS)
-  fps: () => build('fps', 'performance', { fps: typeof window !== 'undefined' ? Math.round((window.performance as any)?.now?.() ?? 60) : 60 }),
+  fps: () =>
+    build("fps", "performance", {
+      fps:
+        typeof window !== "undefined" ? Math.round((window.performance as any)?.now?.() ?? 60) : 60,
+    }),
 
   // Ejemplo de error (falso, para pruebas)
-  errorPage: () => build('error_page_view', 'error', { page: window.location.pathname, error: 'sin_conexion' }),
+  errorPage: () =>
+    build("error_page_view", "error", { page: window.location.pathname, error: "sin_conexion" }),
 
   // Ejemplo de actividad de usuario (click rápido)
-  quickClick: () => build('link_click', 'engagement', { url: window.location.href, time: Date.now() }),
+  quickClick: () =>
+    build("link_click", "engagement", { url: window.location.href, time: Date.now() }),
 
   // Métrica de memoria de visualización en el cliente para budgets de RAM
-  memory: () => build('client_memory_mb', 'performance', {
-    used: (typeof window !== 'undefined' && (window.performance as any)?.memory?.usedJSHeapSize) ?? 0 / 1048576,
-    total: (typeof window !== 'undefined' && (window.performance as any)?.memory?.jsHeapSizeLimit) ?? 0 / 1048576,
-  }),
+  memory: () =>
+    build("client_memory_mb", "performance", {
+      used:
+        (typeof window !== "undefined" && (window.performance as any)?.memory?.usedJSHeapSize) ??
+        0 / 1048576,
+      total:
+        (typeof window !== "undefined" && (window.performance as any)?.memory?.jsHeapSizeLimit) ??
+        0 / 1048576,
+    }),
 };
 
 // Registro de métricas a una función reportadora central (puede ser fuente de datos, beacon, o logger)
@@ -117,12 +131,12 @@ export const reportMetric = (metric: TelemObject): void => {
   // Enviado a Supabase usando `telemeta` (productos de Supabase pga datos públicos)
   if (import.meta.env.VITE_SUPABASE_URL) {
     fetch(`${import.meta.env.VITE_SUPABASE_URL}/rest/v1/telemeta`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? '',
-        'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? ''}`,
-        'Prefer': 'return=representation',
+        "Content-Type": "application/json",
+        apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? "",
+        Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? ""}`,
+        Prefer: "return=representation",
       },
       body: JSON.stringify(metric),
     }).catch(() => {});

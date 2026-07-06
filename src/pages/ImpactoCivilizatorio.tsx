@@ -29,17 +29,29 @@ const ImpactoCivilizatorio = () => (
     subtitle="25 Países Activos — Métricas Globales — Reconocimientos Internacionales"
   >
     <InfoBox type="success" title="Primer Sistema Antifrágil Federado Transgeneracional">
-      TAMV busca inscripción histórica, elevación de dignidad, redistribución de riqueza 
-      y construir el primer legado digital antifrágil que trascienda generaciones.
+      TAMV busca inscripción histórica, elevación de dignidad, redistribución de riqueza y construir
+      el primer legado digital antifrágil que trascienda generaciones.
     </InfoBox>
 
     <Section title="Objetivos Civilizatorios" icon={Globe}>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {[
-          { title: "Inscripción Histórica", desc: "Registro vivo de comunidades olvidadas con memoria defensiva" },
-          { title: "Elevación de Dignidad", desc: "Transformar vulnerabilidad en liderazgo tecnológico" },
-          { title: "Redistribución de Riqueza", desc: "Elevar millonarios del 0.75% al 10% mundial" },
-          { title: "Legado Transgeneracional", desc: "Primer sistema antifrágil federado que hereden las generaciones futuras" },
+          {
+            title: "Inscripción Histórica",
+            desc: "Registro vivo de comunidades olvidadas con memoria defensiva",
+          },
+          {
+            title: "Elevación de Dignidad",
+            desc: "Transformar vulnerabilidad en liderazgo tecnológico",
+          },
+          {
+            title: "Redistribución de Riqueza",
+            desc: "Elevar millonarios del 0.75% al 10% mundial",
+          },
+          {
+            title: "Legado Transgeneracional",
+            desc: "Primer sistema antifrágil federado que hereden las generaciones futuras",
+          },
         ].map((obj) => (
           <div key={obj.title} className="rounded-md border border-border/50 bg-primary/5 p-4">
             <div className="font-semibold text-foreground text-sm mb-1">{obj.title}</div>
@@ -61,7 +73,10 @@ const ImpactoCivilizatorio = () => (
       <h4 className="font-semibold text-foreground mt-4">Próxima Expansión (Q1 2026)</h4>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-2">
         {expansion.map((e) => (
-          <div key={e.region} className="rounded-md border border-border/50 bg-card/30 p-3 text-center">
+          <div
+            key={e.region}
+            className="rounded-md border border-border/50 bg-card/30 p-3 text-center"
+          >
             <div className="text-2xl mb-1">{e.emoji}</div>
             <div className="text-xs text-muted-foreground">{e.region}</div>
           </div>
@@ -72,7 +87,10 @@ const ImpactoCivilizatorio = () => (
     <Section title="Reconocimientos" icon={Award}>
       <div className="space-y-2">
         {premios.map((p) => (
-          <div key={p} className="flex items-center gap-3 rounded-md border border-border/50 bg-muted/20 px-3 py-2">
+          <div
+            key={p}
+            className="flex items-center gap-3 rounded-md border border-border/50 bg-muted/20 px-3 py-2"
+          >
             <span className="text-primary">🏆</span>
             <span className="text-sm text-muted-foreground">{p}</span>
           </div>
@@ -105,7 +123,9 @@ const ImpactoCivilizatorio = () => (
         </div>
         <div className="rounded-md border border-border/50 bg-muted/20 p-4">
           <div className="font-semibold text-foreground text-sm">Especificaciones Técnicas</div>
-          <div className="text-xs text-muted-foreground mt-1">Open Specification License + Apache 2.0</div>
+          <div className="text-xs text-muted-foreground mt-1">
+            Open Specification License + Apache 2.0
+          </div>
         </div>
       </div>
     </Section>

@@ -42,9 +42,7 @@ export default function RFCDetail() {
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="font-mono text-sm text-muted-foreground">{rfc.id}</span>
-              <Badge className={RFC_COLORS[rfc.status]}>
-                {statusLabels[rfc.status]}
-              </Badge>
+              <Badge className={RFC_COLORS[rfc.status]}>{statusLabels[rfc.status]}</Badge>
             </div>
             <h1 className="text-2xl font-bold">{rfc.title}</h1>
           </div>
@@ -68,7 +66,9 @@ export default function RFCDetail() {
               <CardTitle className="text-lg">Contenido</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-foreground/90 leading-relaxed whitespace-pre-line">{rfc.content}</p>
+              <p className="text-foreground/90 leading-relaxed whitespace-pre-line">
+                {rfc.content}
+              </p>
             </CardContent>
           </Card>
         )}

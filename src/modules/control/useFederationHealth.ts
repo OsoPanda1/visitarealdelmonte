@@ -12,7 +12,14 @@ export type FederationStatus = {
 
 export type HealthSnapshot = {
   timestamp: string;
-  summary: { online: number; degraded: number; offline: number; total: number; avg_latency_ms: number; integrity: number };
+  summary: {
+    online: number;
+    degraded: number;
+    offline: number;
+    total: number;
+    avg_latency_ms: number;
+    integrity: number;
+  };
   federations: FederationStatus[];
 };
 
@@ -38,7 +45,10 @@ export function useFederationHealth(intervalMs = 15000) {
     };
     load();
     const id = setInterval(load, intervalMs);
-    return () => { cancel = true; clearInterval(id); };
+    return () => {
+      cancel = true;
+      clearInterval(id);
+    };
   }, [intervalMs]);
 
   return { data, loading, error };

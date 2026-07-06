@@ -17,8 +17,15 @@ const FloatingParticles = () => {
     window.addEventListener("resize", resize);
 
     interface Particle {
-      x: number; y: number; size: number; speedY: number; speedX: number;
-      opacity: number; color: string; pulse: number; pulseSpeed: number;
+      x: number;
+      y: number;
+      size: number;
+      speedY: number;
+      speedX: number;
+      opacity: number;
+      color: string;
+      pulse: number;
+      pulseSpeed: number;
     }
 
     const particles: Particle[] = [];
@@ -47,8 +54,13 @@ const FloatingParticles = () => {
         p.pulse += p.pulseSpeed;
         const currentOpacity = p.opacity * (0.5 + 0.5 * Math.sin(p.pulse));
 
-        if (p.y > canvas.height + 10) { p.y = -10; p.x = Math.random() * canvas.width; }
-        if (p.y < -10) { p.y = canvas.height + 10; }
+        if (p.y > canvas.height + 10) {
+          p.y = -10;
+          p.x = Math.random() * canvas.width;
+        }
+        if (p.y < -10) {
+          p.y = canvas.height + 10;
+        }
         if (p.x > canvas.width + 10) p.x = -10;
         if (p.x < -10) p.x = canvas.width + 10;
 

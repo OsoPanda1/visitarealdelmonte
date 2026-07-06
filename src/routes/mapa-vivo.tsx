@@ -15,7 +15,8 @@ export const Route = createFileRoute("/mapa-vivo")({
       { property: "og:title", content: "Mapa Vivo · Real del Monte" },
       {
         property: "og:description",
-        content: "Mapa interactivo de puntos de interés turístico, gastronomía, historia y naturaleza.",
+        content:
+          "Mapa interactivo de puntos de interés turístico, gastronomía, historia y naturaleza.",
       },
     ],
   }),
@@ -35,16 +36,117 @@ interface POI {
 }
 
 const allPois: POI[] = [
-  { id: "1", name: "Mina de Acosta", description: "Desciende 400 metros al corazón de la montaña. La experiencia más emblemática del pueblo.", x: 35, y: 40, category: "historia", rating: 4.9, time: "2h", energy: "Alta" },
-  { id: "2", name: "Panteón Inglés", description: "El único cementerio en México con tumbas que miran hacia Cornwall, Inglaterra.", x: 62, y: 28, category: "historia", rating: 4.8, time: "1h", energy: "Baja" },
-  { id: "3", name: "Pastes El Portal", description: "Los pastes más antiguos del pueblo. Receta familiar de 4 generaciones.", x: 48, y: 55, category: "gastronomia", rating: 4.8, time: "30min", energy: "Baja" },
-  { id: "4", name: "Parroquia de la Asunción", description: "Cantera labrada del siglo XVIII que desafía la niebla desde lo alto.", x: 45, y: 45, category: "arquitectura", rating: 4.7, time: "45min", energy: "Baja" },
-  { id: "5", name: "Peña del Cuervo", description: "El mirador más alto. Vista panorámica de 360° sobre el valle.", x: 78, y: 35, category: "naturaleza", rating: 4.6, time: "2.5h", energy: "Alta" },
-  { id: "6", name: "Museo de Medicina", description: "Historia de la salud en un pueblo donde la altitud dictaba las reglas.", x: 28, y: 60, category: "historia", rating: 4.3, time: "1h", energy: "Baja" },
-  { id: "7", name: "Platería La Veta", description: "Joyería artesanal en plata con diseños inspirados en la herencia minera.", x: 52, y: 50, category: "comercio", rating: 4.5, time: "30min", energy: "Baja" },
-  { id: "8", name: "Hotel Mina Real", description: "Boutique hotel en antigua casona minera con vista panorámica.", x: 40, y: 48, category: "comercio", rating: 4.9, time: "—", energy: "Baja" },
-  { id: "9", name: "Cascada Estanzuela", description: "Sendero entre oyameles que lleva a una cascada cristalina.", x: 85, y: 60, category: "naturaleza", rating: 4.5, time: "3h", energy: "Alta" },
-  { id: "10", name: "Centro Cultural", description: "Exposiciones temporales, talleres y eventos culturales.", x: 43, y: 42, category: "arquitectura", rating: 4.2, time: "1.5h", energy: "Baja" },
+  {
+    id: "1",
+    name: "Mina de Acosta",
+    description:
+      "Desciende 400 metros al corazón de la montaña. La experiencia más emblemática del pueblo.",
+    x: 35,
+    y: 40,
+    category: "historia",
+    rating: 4.9,
+    time: "2h",
+    energy: "Alta",
+  },
+  {
+    id: "2",
+    name: "Panteón Inglés",
+    description: "El único cementerio en México con tumbas que miran hacia Cornwall, Inglaterra.",
+    x: 62,
+    y: 28,
+    category: "historia",
+    rating: 4.8,
+    time: "1h",
+    energy: "Baja",
+  },
+  {
+    id: "3",
+    name: "Pastes El Portal",
+    description: "Los pastes más antiguos del pueblo. Receta familiar de 4 generaciones.",
+    x: 48,
+    y: 55,
+    category: "gastronomia",
+    rating: 4.8,
+    time: "30min",
+    energy: "Baja",
+  },
+  {
+    id: "4",
+    name: "Parroquia de la Asunción",
+    description: "Cantera labrada del siglo XVIII que desafía la niebla desde lo alto.",
+    x: 45,
+    y: 45,
+    category: "arquitectura",
+    rating: 4.7,
+    time: "45min",
+    energy: "Baja",
+  },
+  {
+    id: "5",
+    name: "Peña del Cuervo",
+    description: "El mirador más alto. Vista panorámica de 360° sobre el valle.",
+    x: 78,
+    y: 35,
+    category: "naturaleza",
+    rating: 4.6,
+    time: "2.5h",
+    energy: "Alta",
+  },
+  {
+    id: "6",
+    name: "Museo de Medicina",
+    description: "Historia de la salud en un pueblo donde la altitud dictaba las reglas.",
+    x: 28,
+    y: 60,
+    category: "historia",
+    rating: 4.3,
+    time: "1h",
+    energy: "Baja",
+  },
+  {
+    id: "7",
+    name: "Platería La Veta",
+    description: "Joyería artesanal en plata con diseños inspirados en la herencia minera.",
+    x: 52,
+    y: 50,
+    category: "comercio",
+    rating: 4.5,
+    time: "30min",
+    energy: "Baja",
+  },
+  {
+    id: "8",
+    name: "Hotel Mina Real",
+    description: "Boutique hotel en antigua casona minera con vista panorámica.",
+    x: 40,
+    y: 48,
+    category: "comercio",
+    rating: 4.9,
+    time: "—",
+    energy: "Baja",
+  },
+  {
+    id: "9",
+    name: "Cascada Estanzuela",
+    description: "Sendero entre oyameles que lleva a una cascada cristalina.",
+    x: 85,
+    y: 60,
+    category: "naturaleza",
+    rating: 4.5,
+    time: "3h",
+    energy: "Alta",
+  },
+  {
+    id: "10",
+    name: "Centro Cultural",
+    description: "Exposiciones temporales, talleres y eventos culturales.",
+    x: 43,
+    y: 42,
+    category: "arquitectura",
+    rating: 4.2,
+    time: "1.5h",
+    energy: "Baja",
+  },
 ];
 
 const categoryInfo: Record<POI["category"], { color: string; label: string }> = {
@@ -127,7 +229,9 @@ function MapaVivo() {
       <div className="container mx-auto px-4 pb-8">
         <div className="flex items-center gap-3 py-4">
           <div>
-            <p className="font-mono text-[9px] tracking-sovereign text-accent">Plano 1 · Territorio</p>
+            <p className="font-mono text-[9px] tracking-sovereign text-accent">
+              Plano 1 · Territorio
+            </p>
             <h1 className="font-display text-2xl md:text-3xl text-ink">Mapa Vivo</h1>
           </div>
           <div className="flex-1" />
@@ -166,20 +270,22 @@ function MapaVivo() {
           >
             <Layers className="w-3 h-3" /> Todos
           </button>
-          {(Object.entries(categoryInfo) as [POI["category"], { color: string; label: string }][]).map(
-            ([key, info]) => (
-              <button
-                key={key}
-                onClick={() => setActiveCategory(activeCategory === key ? null : key)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] tracking-widest uppercase transition-all border-hairline ${
-                  activeCategory === key ? "bg-secondary text-foreground" : "bg-card text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: info.color }} />
-                {info.label}
-              </button>
-            ),
-          )}
+          {(
+            Object.entries(categoryInfo) as [POI["category"], { color: string; label: string }][]
+          ).map(([key, info]) => (
+            <button
+              key={key}
+              onClick={() => setActiveCategory(activeCategory === key ? null : key)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] tracking-widest uppercase transition-all border-hairline ${
+                activeCategory === key
+                  ? "bg-secondary text-foreground"
+                  : "bg-card text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: info.color }} />
+              {info.label}
+            </button>
+          ))}
         </div>
 
         <div className="relative rounded-2xl overflow-hidden border-hairline bg-card aspect-[16/10]">
@@ -196,10 +302,19 @@ function MapaVivo() {
                   "radial-gradient(circle at 30% 40%, hsla(43,60%,55%,0.25), transparent 50%), radial-gradient(circle at 70% 65%, hsla(145,40%,45%,0.25), transparent 55%), linear-gradient(135deg, hsl(220,20%,12%), hsl(220,25%,8%))",
               }}
             >
-              <svg className="absolute inset-0 w-full h-full opacity-30" preserveAspectRatio="none" viewBox="0 0 100 60">
+              <svg
+                className="absolute inset-0 w-full h-full opacity-30"
+                preserveAspectRatio="none"
+                viewBox="0 0 100 60"
+              >
                 <defs>
                   <pattern id="grid" width="4" height="4" patternUnits="userSpaceOnUse">
-                    <path d="M 4 0 L 0 0 0 4" fill="none" stroke="currentColor" strokeWidth="0.15" />
+                    <path
+                      d="M 4 0 L 0 0 0 4"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="0.15"
+                    />
                   </pattern>
                 </defs>
                 <rect width="100" height="60" fill="url(#grid)" className="text-accent/40" />
@@ -229,7 +344,10 @@ function MapaVivo() {
                     className={`w-4 h-4 rounded-full transition-transform shadow-[0_0_12px_currentColor] ${
                       selectedPOI?.id === poi.id ? "scale-150" : "group-hover:scale-125"
                     }`}
-                    style={{ backgroundColor: categoryInfo[poi.category].color, color: categoryInfo[poi.category].color }}
+                    style={{
+                      backgroundColor: categoryInfo[poi.category].color,
+                      color: categoryInfo[poi.category].color,
+                    }}
                   />
                   <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-[9px] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity bg-background/80 backdrop-blur rounded px-1.5 py-0.5 text-foreground">
                     {poi.name}
@@ -297,7 +415,9 @@ function MapaVivo() {
                 </span>
               </div>
               <h3 className="font-display text-xl text-ink mb-2">{selectedPOI.name}</h3>
-              <p className="text-xs text-muted-foreground leading-relaxed mb-3">{selectedPOI.description}</p>
+              <p className="text-xs text-muted-foreground leading-relaxed mb-3">
+                {selectedPOI.description}
+              </p>
               <div className="flex items-center gap-4 text-muted-foreground">
                 {selectedPOI.rating && (
                   <span className="flex items-center gap-1 text-[10px]">
@@ -324,7 +444,9 @@ function MapaVivo() {
                 {Object.entries(categoryInfo).map(([key, info]) => (
                   <div key={key} className="flex items-center gap-1.5">
                     <div className="w-2 h-2 rounded-full" style={{ backgroundColor: info.color }} />
-                    <span className="text-[9px] text-muted-foreground uppercase tracking-wider">{info.label}</span>
+                    <span className="text-[9px] text-muted-foreground uppercase tracking-wider">
+                      {info.label}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -333,9 +455,10 @@ function MapaVivo() {
         </div>
 
         <p className="mt-4 text-[11px] text-muted-foreground max-w-2xl">
-          Ported from the <em>real-del-monte-digital-hub</em> repo (`MapaVivo`): mecánica de niebla interactiva
-          adaptada al kernel LTOS. Los datos y coordenadas relativas de los POIs se mantienen para la primera
-          iteración; en el siguiente plano se reemplaza el gradiente por tile map (Leaflet) y datos desde Cloud.
+          Ported from the <em>real-del-monte-digital-hub</em> repo (`MapaVivo`): mecánica de niebla
+          interactiva adaptada al kernel LTOS. Los datos y coordenadas relativas de los POIs se
+          mantienen para la primera iteración; en el siguiente plano se reemplaza el gradiente por
+          tile map (Leaflet) y datos desde Cloud.
         </p>
       </div>
     </div>

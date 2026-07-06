@@ -147,10 +147,7 @@ export interface DittoProtocolMessage {
   value: Record<string, string | number | boolean>;
 }
 
-export function meshTelemetryToDitto(
-  mqttTopic: string,
-  payload: string,
-): DittoProtocolMessage {
+export function meshTelemetryToDitto(mqttTopic: string, payload: string): DittoProtocolMessage {
   const parts = mqttTopic.split("/");
   const nodeId = parts[2];
   const data = JSON.parse(payload);

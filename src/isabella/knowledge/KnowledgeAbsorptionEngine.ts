@@ -55,26 +55,28 @@ export class KnowledgeAbsorptionEngine {
   query(query: string, limit = 5): KnowledgeEntry[] {
     const lower = query.toLowerCase();
     return this.knowledgeBase
-      .map(entry => ({
+      .map((entry) => ({
         entry,
         score: this.relevanceScore(entry, lower),
       }))
-      .filter(r => r.score > 0.1)
+      .filter((r) => r.score > 0.1)
       .sort((a, b) => b.score - a.score)
       .slice(0, limit)
-      .map(r => r.entry);
+      .map((r) => r.entry);
   }
 
   getKnowledgeByTags(tags: string[]): KnowledgeEntry[] {
-    return this.knowledgeBase.filter(entry =>
-      tags.some(tag => entry.tags.includes(tag)),
-    );
+    return this.knowledgeBase.filter((entry) => tags.some((tag) => entry.tags.includes(tag)));
   }
 
   getStats(): { totalEntries: number; totalSources: number; lastFetch: Date | null } {
-    const lastFetch = this.knowledgeBase.length > 0
-      ? this.knowledgeBase.reduce((latest, e) => e.timestamp > latest ? e.timestamp : latest, this.knowledgeBase[0].timestamp)
-      : null;
+    const lastFetch =
+      this.knowledgeBase.length > 0
+        ? this.knowledgeBase.reduce(
+            (latest, e) => (e.timestamp > latest ? e.timestamp : latest),
+            this.knowledgeBase[0].timestamp,
+          )
+        : null;
     return {
       totalEntries: this.knowledgeBase.length,
       totalSources: this.sources.length,
@@ -115,7 +117,7 @@ export class KnowledgeAbsorptionEngine {
     }
 
     const hash = await getPQC().hash(content);
-    if (this.knowledgeBase.some(e => e.hash === hash)) return;
+    if (this.knowledgeBase.some((e) => e.hash === hash)) return;
 
     const entry: KnowledgeEntry = {
       id: crypto.randomUUID(),
@@ -131,10 +133,16 @@ export class KnowledgeAbsorptionEngine {
 
     this.knowledgeBase.push(entry);
     if (this.knowledgeBase.length > this.maxEntries) {
-      this.knowledgeBase = this.knowledgeBase.sort((a, b) => b.relevance - a.relevance).slice(0, this.maxEntries);
+      this.knowledgeBase = this.knowledgeBase
+        .sort((a, b) => b.relevance - a.relevance)
+        .slice(0, this.maxEntries);
     }
 
-    logger.info("[KNOWLEDGE] Entrada absorbida", { url: source.url, title: entry.title, tags: source.tags });
+    logger.info("[KNOWLEDGE] Entrada absorbida", {
+      url: source.url,
+      title: entry.title,
+      tags: source.tags,
+    });
   }
 
   private relevanceScore(entry: KnowledgeEntry, query: string): number {
@@ -147,7 +155,7 @@ export class KnowledgeAbsorptionEngine {
     if (lowerSummary.includes(query)) score += 0.3;
     if (lowerContent.includes(query)) score += 0.2;
 
-    const tagMatch = entry.tags.filter(t => t.toLowerCase().includes(query)).length;
+    const tagMatch = entry.tags.filter((t) => t.toLowerCase().includes(query)).length;
     score += tagMatch * 0.1;
 
     return Math.min(1, score);
@@ -161,7 +169,9 @@ export class KnowledgeAbsorptionEngine {
       const parsed = JSON.parse(content);
       if (parsed.title) return String(parsed.title).slice(0, 200);
       if (parsed.name) return String(parsed.name).slice(0, 200);
-    } catch { /* JSON parse expected to fail for non-JSON content */ }
+    } catch {
+      /* JSON parse expected to fail for non-JSON content */
+    }
 
     return url.split("/").pop()?.split(".")[0]?.replace(/[-_]/g, " ") || url;
   }

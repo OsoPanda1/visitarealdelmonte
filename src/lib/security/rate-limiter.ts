@@ -17,7 +17,10 @@ const DEFAULT_CONFIG: RateLimitConfig = {
 
 const buckets = new Map<string, Bucket>();
 
-export function checkRateLimit(key: string, config: Partial<RateLimitConfig> = {}): { allowed: boolean; remaining: number; resetMs: number } {
+export function checkRateLimit(
+  key: string,
+  config: Partial<RateLimitConfig> = {},
+): { allowed: boolean; remaining: number; resetMs: number } {
   const cfg = { ...DEFAULT_CONFIG, ...config };
   const now = Date.now();
   let bucket = buckets.get(key);
@@ -39,22 +42,32 @@ export function checkRateLimit(key: string, config: Partial<RateLimitConfig> = {
     return { allowed: true, remaining: bucket.tokens, resetMs: cfg.refillIntervalMs };
   }
 
-  return { allowed: false, remaining: 0, resetMs: cfg.refillIntervalMs - (now - bucket.lastRefill) };
+  return {
+    allowed: false,
+    remaining: 0,
+    resetMs: cfg.refillIntervalMs - (now - bucket.lastRefill),
+  };
 }
 
 export function createRateLimitMiddleware(config?: Partial<RateLimitConfig>) {
   return (key: string): Response | null => {
     const result = checkRateLimit(key, config);
     if (!result.allowed) {
-      return new Response(JSON.stringify({ success: false, error: 'Demasiadas solicitudes. Intenta de nuevo más tarde.' }), {
-        status: 429,
-        headers: {
-          'Content-Type': 'application/json',
-          'Retry-After': String(Math.ceil(result.resetMs / 1000)),
-          'X-RateLimit-Remaining': '0',
-          'X-RateLimit-Reset': String(Date.now() + result.resetMs),
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: "Demasiadas solicitudes. Intenta de nuevo más tarde.",
+        }),
+        {
+          status: 429,
+          headers: {
+            "Content-Type": "application/json",
+            "Retry-After": String(Math.ceil(result.resetMs / 1000)),
+            "X-RateLimit-Remaining": "0",
+            "X-RateLimit-Reset": String(Date.now() + result.resetMs),
+          },
         },
-      });
+      );
     }
     return null;
   };

@@ -6,14 +6,13 @@ import SEOMeta from "@/components/SEOMeta";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import {
-  OPERATIVE_MODULES,
-  overallCompletion,
-  summarizeByDomain,
-} from "@/data/operativo-modules";
+import { OPERATIVE_MODULES, overallCompletion, summarizeByDomain } from "@/data/operativo-modules";
 import type { ModuleStatus } from "@/lib/types/operativo";
 
-const statusMeta: Record<ModuleStatus, { label: string; className: string; Icon: typeof CheckCircle2 }> = {
+const statusMeta: Record<
+  ModuleStatus,
+  { label: string; className: string; Icon: typeof CheckCircle2 }
+> = {
   done: {
     label: "Listo",
     className: "border-emerald-300/30 bg-emerald-300/10 text-emerald-100",
@@ -49,7 +48,10 @@ const Operativo = () => {
           transition={{ duration: 0.6 }}
           className="mx-auto mb-12 max-w-4xl text-center"
         >
-          <Badge variant="outline" className="mb-5 border-[hsl(var(--gold))]/40 bg-[hsl(var(--gold))]/5 px-4 py-2">
+          <Badge
+            variant="outline"
+            className="mb-5 border-[hsl(var(--gold))]/40 bg-[hsl(var(--gold))]/5 px-4 py-2"
+          >
             <Layers3 className="mr-2 h-4 w-4 text-[hsl(var(--gold))]" />
             <span className="font-body text-[10px] uppercase tracking-[0.28em] text-[hsl(var(--gold))]">
               Documento maestro operativo
@@ -59,8 +61,9 @@ const Operativo = () => {
             Estado <span className="text-gradient-gold">operativo</span> del ecosistema
           </h1>
           <p className="mx-auto mt-5 max-w-2xl font-body text-base leading-relaxed text-muted-foreground">
-            Refleja el contrato de cada módulo derivado de <code className="text-cyan-100/80">docs/</code>:
-            qué está listo para producción, qué está en progreso y dónde aún queda diseño por bajar a código.
+            Refleja el contrato de cada módulo derivado de{" "}
+            <code className="text-cyan-100/80">docs/</code>: qué está listo para producción, qué
+            está en progreso y dónde aún queda diseño por bajar a código.
           </p>
         </motion.div>
 
@@ -141,7 +144,11 @@ const Operativo = () => {
                   <CardContent>
                     <Progress value={m.completion} />
                     <p className="mt-2 text-xs text-muted-foreground">{m.completion}% completado</p>
-                    {m.notes && <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{m.notes}</p>}
+                    {m.notes && (
+                      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                        {m.notes}
+                      </p>
+                    )}
                     <div className="mt-4 flex flex-wrap items-center gap-3">
                       {m.spec && (
                         <code className="rounded-md bg-black/25 px-2 py-1 text-[11px] text-slate-200">

@@ -74,18 +74,25 @@ export function RoutesView() {
               <span className="flex items-center gap-1">
                 <Compass className="w-3 h-3" /> {route.stops} paradas
               </span>
-              <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${
-                route.difficulty === "Alta" ? "bg-destructive/10 text-destructive" :
-                route.difficulty === "Moderada" ? "bg-accent/10 text-accent" :
-                "bg-success/10 text-success"
-              }`}>
+              <span
+                className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${
+                  route.difficulty === "Alta"
+                    ? "bg-destructive/10 text-destructive"
+                    : route.difficulty === "Moderada"
+                      ? "bg-accent/10 text-accent"
+                      : "bg-success/10 text-success"
+                }`}
+              >
                 {route.difficulty}
               </span>
             </div>
 
             <div className="flex flex-wrap gap-1.5">
               {route.highlights.map((h) => (
-                <span key={h} className="text-[10px] px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
+                <span
+                  key={h}
+                  className="text-[10px] px-2 py-0.5 rounded-full bg-muted text-muted-foreground"
+                >
                   {h}
                 </span>
               ))}

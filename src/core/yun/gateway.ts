@@ -6,7 +6,7 @@
  * Provides: rate limiting, circuit breaker, request validation, auth middleware.
  */
 
-import type { YunGatewayConfig } from './types';
+import type { YunGatewayConfig } from "./types";
 
 // ============================================================================
 // DEFAULT CONFIGURATION
@@ -24,12 +24,8 @@ const DEFAULT_CONFIG: YunGatewayConfig = {
     halfOpenMax: 3,
   },
   tls: {
-    minVersion: 'TLSv1.2',
-    ciphers: [
-      'TLS_AES_256_GCM_SHA384',
-      'TLS_CHACHA20_POLY1305_SHA256',
-      'TLS_AES_128_GCM_SHA256',
-    ],
+    minVersion: "TLSv1.2",
+    ciphers: ["TLS_AES_256_GCM_SHA384", "TLS_CHACHA20_POLY1305_SHA256", "TLS_AES_128_GCM_SHA256"],
   },
 };
 
@@ -57,7 +53,7 @@ const userRateLimits: Map<string, UserRateLimitEntry> = new Map();
 export function checkRateLimit(
   endpoint: string,
   userId: string,
-  config: YunGatewayConfig['rateLimit'] = DEFAULT_CONFIG.rateLimit,
+  config: YunGatewayConfig["rateLimit"] = DEFAULT_CONFIG.rateLimit,
 ): { allowed: boolean; remaining: number; resetAt: number } {
   const now = Date.now();
   const windowStart = now - config.windowMs;
@@ -91,8 +87,8 @@ export function checkRateLimit(
     userRateLimits.set(userKey, { count: 1, resetAt: now + config.windowMs });
   }
 
-  const globalRemaining = (globalRateLimits.get(globalKey)?.count ?? 1);
-  const userRemaining = (userRateLimits.get(userKey)?.count ?? 1);
+  const globalRemaining = globalRateLimits.get(globalKey)?.count ?? 1;
+  const userRemaining = userRateLimits.get(userKey)?.count ?? 1;
 
   return {
     allowed: true,
@@ -120,9 +116,11 @@ export function getRateLimitHeaders(
   result: ReturnType<typeof checkRateLimit>,
 ): Record<string, string> {
   return {
-    'X-RateLimit-Remaining': String(result.remaining),
-    'X-RateLimit-Reset': String(Math.ceil(result.resetAt / 1000)),
-    ...(result.allowed ? {} : { 'Retry-After': String(Math.ceil((result.resetAt - Date.now()) / 1000)) }),
+    "X-RateLimit-Remaining": String(result.remaining),
+    "X-RateLimit-Reset": String(Math.ceil(result.resetAt / 1000)),
+    ...(result.allowed
+      ? {}
+      : { "Retry-After": String(Math.ceil((result.resetAt - Date.now()) / 1000)) }),
   };
 }
 
@@ -130,7 +128,7 @@ export function getRateLimitHeaders(
 // CIRCUIT BREAKER
 // ============================================================================
 
-type CircuitState = 'closed' | 'open' | 'half-open';
+type CircuitState = "closed" | "open" | "half-open";
 
 interface CircuitBreakerEntry {
   state: CircuitState;
@@ -147,10 +145,10 @@ const circuits: Map<string, CircuitBreakerEntry> = new Map();
  */
 export function recordFailure(
   circuitId: string,
-  config: YunGatewayConfig['circuitBreaker'] = DEFAULT_CONFIG.circuitBreaker,
+  config: YunGatewayConfig["circuitBreaker"] = DEFAULT_CONFIG.circuitBreaker,
 ): void {
   const entry = circuits.get(circuitId) ?? {
-    state: 'closed' as CircuitState,
+    state: "closed" as CircuitState,
     failureCount: 0,
     successCount: 0,
     lastFailureTime: 0,
@@ -160,8 +158,8 @@ export function recordFailure(
   entry.failureCount++;
   entry.lastFailureTime = Date.now();
 
-  if (entry.failureCount >= config.failureThreshold && entry.state === 'closed') {
-    entry.state = 'open';
+  if (entry.failureCount >= config.failureThreshold && entry.state === "closed") {
+    entry.state = "open";
     entry.lastStateChange = Date.now();
   }
 
@@ -175,15 +173,15 @@ export function recordSuccess(circuitId: string): void {
   const entry = circuits.get(circuitId);
   if (!entry) return;
 
-  if (entry.state === 'half-open') {
+  if (entry.state === "half-open") {
     entry.successCount++;
     if (entry.successCount >= DEFAULT_CONFIG.circuitBreaker.halfOpenMax) {
-      entry.state = 'closed';
+      entry.state = "closed";
       entry.failureCount = 0;
       entry.successCount = 0;
       entry.lastStateChange = Date.now();
     }
-  } else if (entry.state === 'closed') {
+  } else if (entry.state === "closed") {
     entry.failureCount = Math.max(0, entry.failureCount - 1);
   }
 
@@ -195,36 +193,36 @@ export function recordSuccess(circuitId: string): void {
  */
 export function checkCircuit(
   circuitId: string,
-  config: YunGatewayConfig['circuitBreaker'] = DEFAULT_CONFIG.circuitBreaker,
+  config: YunGatewayConfig["circuitBreaker"] = DEFAULT_CONFIG.circuitBreaker,
 ): { allowed: boolean; state: CircuitState; retryAfterMs?: number } {
   const entry = circuits.get(circuitId);
 
   if (!entry) {
-    return { allowed: true, state: 'closed' };
+    return { allowed: true, state: "closed" };
   }
 
   switch (entry.state) {
-    case 'closed':
-      return { allowed: true, state: 'closed' };
+    case "closed":
+      return { allowed: true, state: "closed" };
 
-    case 'open': {
+    case "open": {
       const elapsed = Date.now() - entry.lastStateChange;
       if (elapsed >= config.resetTimeoutMs) {
-        entry.state = 'half-open';
+        entry.state = "half-open";
         entry.lastStateChange = Date.now();
         entry.successCount = 0;
         circuits.set(circuitId, entry);
-        return { allowed: true, state: 'half-open' };
+        return { allowed: true, state: "half-open" };
       }
       return {
         allowed: false,
-        state: 'open',
+        state: "open",
         retryAfterMs: config.resetTimeoutMs - elapsed,
       };
     }
 
-    case 'half-open':
-      return { allowed: true, state: 'half-open' };
+    case "half-open":
+      return { allowed: true, state: "half-open" };
   }
 }
 
@@ -245,7 +243,7 @@ export function getCircuitStates(): Map<string, CircuitState> {
 export function resetCircuit(circuitId: string): void {
   const entry = circuits.get(circuitId);
   if (entry) {
-    entry.state = 'closed';
+    entry.state = "closed";
     entry.failureCount = 0;
     entry.successCount = 0;
     entry.lastStateChange = Date.now();
@@ -259,7 +257,7 @@ export function resetCircuit(circuitId: string): void {
 
 export interface ValidationRule {
   field: string;
-  type: 'string' | 'number' | 'boolean' | 'email' | 'uuid' | 'json';
+  type: "string" | "number" | "boolean" | "email" | "uuid" | "json";
   required?: boolean;
   minLength?: number;
   maxLength?: number;
@@ -296,8 +294,8 @@ export function validateRequest(
 
     // Type checks
     switch (rule.type) {
-      case 'string':
-        if (typeof value !== 'string') {
+      case "string":
+        if (typeof value !== "string") {
           errors.push(`${rule.field} must be a string`);
         } else {
           if (rule.minLength !== undefined && value.length < rule.minLength) {
@@ -312,8 +310,8 @@ export function validateRequest(
         }
         break;
 
-      case 'number':
-        if (typeof value !== 'number' || !Number.isFinite(value)) {
+      case "number":
+        if (typeof value !== "number" || !Number.isFinite(value)) {
           errors.push(`${rule.field} must be a finite number`);
         } else {
           if (rule.min !== undefined && value < rule.min) {
@@ -325,29 +323,29 @@ export function validateRequest(
         }
         break;
 
-      case 'boolean':
-        if (typeof value !== 'boolean') {
+      case "boolean":
+        if (typeof value !== "boolean") {
           errors.push(`${rule.field} must be a boolean`);
         }
         break;
 
-      case 'email':
-        if (typeof value !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+      case "email":
+        if (typeof value !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
           errors.push(`${rule.field} must be a valid email`);
         }
         break;
 
-      case 'uuid':
+      case "uuid":
         if (
-          typeof value !== 'string' ||
+          typeof value !== "string" ||
           !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value)
         ) {
           errors.push(`${rule.field} must be a valid UUID`);
         }
         break;
 
-      case 'json':
-        if (typeof value === 'string') {
+      case "json":
+        if (typeof value === "string") {
           try {
             JSON.parse(value);
           } catch {
@@ -400,14 +398,14 @@ export async function processRequest(
   const headers: Record<string, string> = {};
 
   // 1. Rate limiting
-  const userId = request.userId ?? 'anonymous';
+  const userId = request.userId ?? "anonymous";
   const rateResult = checkRateLimit(request.path, userId, config.rateLimit);
   Object.assign(headers, getRateLimitHeaders(rateResult));
 
   if (!rateResult.allowed) {
     return {
       status: 429,
-      body: { error: 'Rate limit exceeded', retryAfterMs: rateResult.resetAt - Date.now() },
+      body: { error: "Rate limit exceeded", retryAfterMs: rateResult.resetAt - Date.now() },
       headers,
     };
   }
@@ -419,11 +417,14 @@ export async function processRequest(
       return {
         status: 503,
         body: {
-          error: 'Service temporarily unavailable',
+          error: "Service temporarily unavailable",
           state: circuitResult.state,
           retryAfterMs: circuitResult.retryAfterMs,
         },
-        headers: { ...headers, 'Retry-After': String(Math.ceil((circuitResult.retryAfterMs ?? 0) / 1000)) },
+        headers: {
+          ...headers,
+          "Retry-After": String(Math.ceil((circuitResult.retryAfterMs ?? 0) / 1000)),
+        },
       };
     }
   }
@@ -437,7 +438,7 @@ export async function processRequest(
     if (!validationResult.valid) {
       return {
         status: 400,
-        body: { error: 'Validation failed', details: validationResult.errors },
+        body: { error: "Validation failed", details: validationResult.errors },
         headers,
       };
     }
@@ -447,7 +448,7 @@ export async function processRequest(
   if (!request.userId) {
     return {
       status: 401,
-      body: { error: 'Authentication required' },
+      body: { error: "Authentication required" },
       headers,
     };
   }

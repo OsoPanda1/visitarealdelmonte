@@ -12,7 +12,11 @@ function stripControlChars(s: string): string {
 }
 
 function stripSqlMetacharacters(s: string): string {
-  return s.replace(/['";\\]/g, "").replace(/--/g, "").replace(/\/\*/g, "").replace(/\*\//g, "");
+  return s
+    .replace(/['";\\]/g, "")
+    .replace(/--/g, "")
+    .replace(/\/\*/g, "")
+    .replace(/\*\//g, "");
 }
 
 function stripHtml(s: string): string {
@@ -25,7 +29,10 @@ function stripHtml(s: string): string {
 }
 
 function stripShellMetacharacters(s: string): string {
-  return s.replace(/[|&;$`\\]/g, "").replace(/\|\|/g, "").replace(/&&/g, "");
+  return s
+    .replace(/[|&;$`\\]/g, "")
+    .replace(/\|\|/g, "")
+    .replace(/&&/g, "");
 }
 
 function stripPathTraversal(s: string): string {
@@ -78,7 +85,8 @@ export function validateEmail(email: string): ValidationResult {
     return { valid: false, sanitized: "", errors };
   }
 
-  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  const emailRegex =
+    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
   if (!emailRegex.test(sanitized)) {
     errors.push("Invalid email format");
     return { valid: false, sanitized, errors };
@@ -92,7 +100,11 @@ export function validateEmail(email: string): ValidationResult {
   return { valid: true, sanitized, errors };
 }
 
-export function validateNumeric(input: string, min?: number, max?: number): ValidationResult & { value?: number } {
+export function validateNumeric(
+  input: string,
+  min?: number,
+  max?: number,
+): ValidationResult & { value?: number } {
   const errors: string[] = [];
   const clean = input.trim();
 
@@ -118,7 +130,10 @@ export function validateNumeric(input: string, min?: number, max?: number): Vali
   };
 }
 
-export function sanitizeObject<T extends Record<string, unknown>>(obj: T, schema: Record<string, { type: string; required?: boolean; maxLength?: number }>): { valid: boolean; data: Partial<T>; errors: string[] } {
+export function sanitizeObject<T extends Record<string, unknown>>(
+  obj: T,
+  schema: Record<string, { type: string; required?: boolean; maxLength?: number }>,
+): { valid: boolean; data: Partial<T>; errors: string[] } {
   const errors: string[] = [];
   const data: Partial<T> = {};
 

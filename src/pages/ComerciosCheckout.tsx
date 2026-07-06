@@ -19,9 +19,17 @@ export default function ComerciosCheckout() {
 
   useEffect(() => {
     if (!merchantId) return;
-    supabase.from("merchant_payments").select("*").eq("provider_session_id", sessionId).maybeSingle()
+    supabase
+      .from("merchant_payments")
+      .select("*")
+      .eq("provider_session_id", sessionId)
+      .maybeSingle()
       .then(({ data }) => setPayment(data));
-    supabase.from("merchant_registrations").select("*").eq("id", merchantId).maybeSingle()
+    supabase
+      .from("merchant_registrations")
+      .select("*")
+      .eq("id", merchantId)
+      .maybeSingle()
       .then(({ data }) => setMerchant(data));
   }, [sessionId, merchantId]);
 
@@ -32,7 +40,11 @@ export default function ComerciosCheckout() {
       const r = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ session_id: sessionId, status: "succeeded", payment_id: `manual_${Date.now()}` }),
+        body: JSON.stringify({
+          session_id: sessionId,
+          status: "succeeded",
+          payment_id: `manual_${Date.now()}`,
+        }),
       });
       if (!r.ok) throw new Error(await r.text());
       toast.success("Pago confirmado. Tu negocio ya está publicado.");
@@ -53,19 +65,37 @@ export default function ComerciosCheckout() {
           <p className="text-muted-foreground mt-4">Cargando información…</p>
         ) : (
           <div className="glass-surface p-6 mt-6 space-y-3">
-            <p><strong>Negocio:</strong> {merchant.name}</p>
-            <p><strong>Categoría:</strong> {merchant.category_id}</p>
-            <p><strong>Monto:</strong> ${payment.amount_mxn} MXN</p>
-            <p><strong>Estado:</strong> {payment.status}</p>
+            <p>
+              <strong>Negocio:</strong> {merchant.name}
+            </p>
+            <p>
+              <strong>Categoría:</strong> {merchant.category_id}
+            </p>
+            <p>
+              <strong>Monto:</strong> ${payment.amount_mxn} MXN
+            </p>
+            <p>
+              <strong>Estado:</strong> {payment.status}
+            </p>
             <hr className="my-4 border-border" />
             <p className="text-sm text-muted-foreground">
-              Cuando se conecte el proveedor de pagos, esta pantalla redirigirá automáticamente a su checkout.
-              En modo de configuración inicial puedes simular la confirmación:
+              Cuando se conecte el proveedor de pagos, esta pantalla redirigirá automáticamente a su
+              checkout. En modo de configuración inicial puedes simular la confirmación:
             </p>
-            <Button onClick={simulatePaid} disabled={loading || payment.status === "succeeded"} className="w-full">
-              {payment.status === "succeeded" ? "Ya pagado" : loading ? "Confirmando…" : "Confirmar pago (modo manual)"}
+            <Button
+              onClick={simulatePaid}
+              disabled={loading || payment.status === "succeeded"}
+              className="w-full"
+            >
+              {payment.status === "succeeded"
+                ? "Ya pagado"
+                : loading
+                  ? "Confirmando…"
+                  : "Confirmar pago (modo manual)"}
             </Button>
-            <Link to="/catalogo" className="text-sm underline block text-center">Volver al catálogo</Link>
+            <Link to="/catalogo" className="text-sm underline block text-center">
+              Volver al catálogo
+            </Link>
           </div>
         )}
       </main>

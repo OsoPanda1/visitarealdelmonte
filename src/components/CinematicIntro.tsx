@@ -24,20 +24,23 @@ export const CinematicIntro: React.FC<CinematicIntroProps> = ({
     userInteractedRef.current = true;
 
     audio.volume = 0.01;
-    audio.play().then(() => {
-      setAudioBlocked(false);
-      const fadeIn = () => {
-        const target = isAudioEnabled ? 0.7 : 0;
-        if (audio.volume < target) {
-          audio.volume = Math.min(audio.volume + 0.05, target);
-          requestAnimationFrame(fadeIn);
-        }
-      };
-      requestAnimationFrame(fadeIn);
-    }).catch((err: DOMException) => {
-      console.warn("[CinematicIntro] Autoplay bloqueado:", err.message);
-      setAudioBlocked(true);
-    });
+    audio
+      .play()
+      .then(() => {
+        setAudioBlocked(false);
+        const fadeIn = () => {
+          const target = isAudioEnabled ? 0.7 : 0;
+          if (audio.volume < target) {
+            audio.volume = Math.min(audio.volume + 0.05, target);
+            requestAnimationFrame(fadeIn);
+          }
+        };
+        requestAnimationFrame(fadeIn);
+      })
+      .catch((err: DOMException) => {
+        console.warn("[CinematicIntro] Autoplay bloqueado:", err.message);
+        setAudioBlocked(true);
+      });
   }, [isAudioEnabled]);
 
   useEffect(() => {
@@ -54,9 +57,13 @@ export const CinematicIntro: React.FC<CinematicIntroProps> = ({
     document.addEventListener("touchstart", onInteraction, { once: true });
     document.addEventListener("keydown", onInteraction, { once: true });
 
-    audio.addEventListener("canplaythrough", () => {
-      if (autoPlayAudio) startAudio();
-    }, { once: true });
+    audio.addEventListener(
+      "canplaythrough",
+      () => {
+        if (autoPlayAudio) startAudio();
+      },
+      { once: true },
+    );
 
     if (audio.readyState >= 3 && autoPlayAudio) {
       startAudio();
@@ -188,8 +195,8 @@ export const CinematicIntro: React.FC<CinematicIntroProps> = ({
           Real del Monte Digital Hub
         </h1>
         <p className="mt-3 max-w-xl text-sm md:text-base text-slate-300">
-          El pulso vivo de un pueblo mágico en tiempo real. Historias,
-          personas, comercios y datos latiendo en un mismo territorio.
+          El pulso vivo de un pueblo mágico en tiempo real. Historias, personas, comercios y datos
+          latiendo en un mismo territorio.
         </p>
       </motion.div>
 
@@ -209,8 +216,8 @@ export const CinematicIntro: React.FC<CinematicIntroProps> = ({
           Entrar al territorio
         </motion.button>
         <p className="max-w-md text-xs md:text-sm text-slate-400">
-          Descubre cómo late Real del Monte ahora mismo. Puedes silenciar la
-          banda sonora cuando lo necesites.
+          Descubre cómo late Real del Monte ahora mismo. Puedes silenciar la banda sonora cuando lo
+          necesites.
         </p>
 
         <button
@@ -221,7 +228,11 @@ export const CinematicIntro: React.FC<CinematicIntroProps> = ({
           <span className="inline-block h-4 w-4 rounded-full border border-slate-500 flex items-center justify-center">
             <span
               className={`h-2 w-2 rounded-full ${
-                audioBlocked ? "bg-amber-400 animate-pulse" : isAudioEnabled ? "bg-emerald-400" : "bg-slate-600"
+                audioBlocked
+                  ? "bg-amber-400 animate-pulse"
+                  : isAudioEnabled
+                    ? "bg-emerald-400"
+                    : "bg-slate-600"
               }`}
             />
           </span>
@@ -229,8 +240,8 @@ export const CinematicIntro: React.FC<CinematicIntroProps> = ({
             {audioBlocked
               ? "Toca la pantalla para activar sonido"
               : isAudioEnabled
-              ? "Sonido activado"
-              : "Sonido desactivado"}
+                ? "Sonido activado"
+                : "Sonido desactivado"}
           </span>
         </button>
       </motion.div>

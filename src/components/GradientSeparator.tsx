@@ -6,7 +6,11 @@ interface GradientSeparatorProps {
   variant?: "gold" | "electric" | "full" | "default";
 }
 
-const GradientSeparator = ({ className = "", animated = false, variant = "default" }: GradientSeparatorProps) => {
+const GradientSeparator = ({
+  className = "",
+  animated = false,
+  variant = "default",
+}: GradientSeparatorProps) => {
   if (animated || variant === "full") {
     return (
       <div className={`relative w-full my-0 ${className}`}>
@@ -21,11 +25,12 @@ const GradientSeparator = ({ className = "", animated = false, variant = "defaul
     );
   }
 
-  const gradientStyle = variant === "gold"
-    ? "linear-gradient(90deg, transparent 0%, hsl(43,80%,55%) 20%, hsl(25,55%,45%) 80%, transparent 100%)"
-    : variant === "electric"
-    ? "linear-gradient(90deg, transparent 0%, hsl(210,100%,55%) 20%, hsl(210,100%,45%) 80%, transparent 100%)"
-    : undefined;
+  const gradientStyle =
+    variant === "gold"
+      ? "linear-gradient(90deg, transparent 0%, hsl(43,80%,55%) 20%, hsl(25,55%,45%) 80%, transparent 100%)"
+      : variant === "electric"
+        ? "linear-gradient(90deg, transparent 0%, hsl(210,100%,55%) 20%, hsl(210,100%,45%) 80%, transparent 100%)"
+        : undefined;
 
   return (
     <div

@@ -7,7 +7,7 @@
 // MODELOS Y TIPOS
 // ============================================================================
 
-export * from './models';
+export * from "./models";
 
 // ============================================================================
 // UTILIDADES GEOESPACIALES
@@ -23,7 +23,7 @@ export {
   filterPointsInRadius,
   GeoLRUCache,
   MovementFilter,
-} from './geo';
+} from "./geo";
 
 // ============================================================================
 // SISTEMA DE METRICAS
@@ -60,9 +60,9 @@ export {
   // Utilidades
   ALLOWED_TERRITORIES,
   sanitizeTerritory,
-} from './metrics/prometheus';
+} from "./metrics/prometheus";
 
-export type { AllowedTerritory } from './metrics/prometheus';
+export type { AllowedTerritory } from "./metrics/prometheus";
 
 // ============================================================================
 // MOTOR DE SCORING
@@ -79,7 +79,7 @@ export {
   nearbyPOIsRule,
   zoneSaturationRule,
   DEFAULT_RULES,
-} from './engine/ScoringEngine';
+} from "./engine/ScoringEngine";
 
 // ============================================================================
 // ORQUESTADOR DE EXPERIENCIAS
@@ -91,15 +91,15 @@ export {
   SystemClock,
   FixedClock,
   orchestrator,
-} from './orchestrator/ExperienceOrchestrator';
+} from "./orchestrator/ExperienceOrchestrator";
 
-export type { Clock } from './orchestrator/ExperienceOrchestrator';
+export type { Clock } from "./orchestrator/ExperienceOrchestrator";
 
 // ============================================================================
 // GUARDIAN AI
 // ============================================================================
 
-export { GuardianLearningLoop, guardianLearningLoop } from './ai/GuardianLearningLoop';
+export { GuardianLearningLoop, guardianLearningLoop } from "./ai/GuardianLearningLoop";
 
 // ============================================================================
 // SISTEMA TERRITORIAL
@@ -113,7 +113,7 @@ export {
   initializeRDMZones,
   fusionEngine,
   TerritorialFusionEngine,
-} from './territorial';
+} from "./territorial";
 
 export type {
   UserContribution,
@@ -126,7 +126,7 @@ export type {
   TerritorialZone,
   ZoneEvent,
   ZoneAlert,
-} from './territorial/types';
+} from "./territorial/types";
 
 // ============================================================================
 // SISTEMA UNIFICADO (GEN-8.0)
@@ -141,7 +141,7 @@ export {
   UnifiedPersistence,
   unifiedSDK,
   UnifiedSDK,
-} from './unified';
+} from "./unified";
 
 export type {
   GlobalSystemState,
@@ -150,4 +150,4 @@ export type {
   UnifiedEventType,
   ApiResponse,
   UnifiedConfig,
-} from './unified';
+} from "./unified";

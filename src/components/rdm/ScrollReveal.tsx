@@ -52,10 +52,7 @@ export function ScrollReveal({
 
   return (
     // @ts-expect-error Tag is a valid HTML element
-    <Tag
-      ref={ref}
-      className={`${dirClass} ${stagger ? "rdm-stagger" : ""} ${className}`}
-    >
+    <Tag ref={ref} className={`${dirClass} ${stagger ? "rdm-stagger" : ""} ${className}`}>
       {children}
     </Tag>
   );
@@ -79,7 +76,9 @@ export function ParallaxSection({
       className={`rdm-parallax-section relative ${className}`}
       style={bgImage ? { backgroundImage: `url(${bgImage})` } : undefined}
     >
-      {overlay && <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background/80 z-[1]" />}
+      {overlay && (
+        <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background/80 z-[1]" />
+      )}
       <div className="relative z-10">{children}</div>
     </div>
   );
@@ -101,15 +100,10 @@ export function CinematicBanner({
   className = "",
 }: CinematicBannerProps) {
   return (
-    <div
-      className={`rdm-cinematic-banner ${className}`}
-      style={{ height, minHeight: "400px" }}
-    >
+    <div className={`rdm-cinematic-banner ${className}`} style={{ height, minHeight: "400px" }}>
       <img src={image} alt={alt} loading="lazy" />
       {children && (
-        <div className="absolute inset-0 z-10 flex items-end p-8 md:p-16">
-          {children}
-        </div>
+        <div className="absolute inset-0 z-10 flex items-end p-8 md:p-16">{children}</div>
       )}
     </div>
   );
@@ -124,10 +118,7 @@ export function FloatingParticles({ count = 6, color }: FloatingParticlesProps) 
   return (
     <div className="rdm-particles">
       {Array.from({ length: count }).map((_, i) => (
-        <span
-          key={i}
-          style={color ? { background: color } : undefined}
-        />
+        <span key={i} style={color ? { background: color } : undefined} />
       ))}
     </div>
   );

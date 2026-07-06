@@ -27,11 +27,20 @@ export async function locateNode(
     .maybeSingle();
 
   if (!node) {
-    const alignment = evaluateAlignment({ federationId: targetFederationId, themeId: targetThemeId, abstractionLevel: 1 as AbstractionLevel });
+    const alignment = evaluateAlignment({
+      federationId: targetFederationId,
+      themeId: targetThemeId,
+      abstractionLevel: 1 as AbstractionLevel,
+    });
     return {
       node: null,
       alignment,
-      timeUp: { allowed: false, reason: "Nodo no encontrado en la ontología", containedFederation: null, violatedRule: "node_not_found" },
+      timeUp: {
+        allowed: false,
+        reason: "Nodo no encontrado en la ontología",
+        containedFederation: null,
+        violatedRule: "node_not_found",
+      },
       children: [],
       path: [],
     };
@@ -62,8 +71,10 @@ export async function locateNode(
     .select("*")
     .eq("parent_node_id", mapped.nodeId);
 
-  const { data: ancestors } = await supabase
-    .rpc("get_ontology_ancestors" as never, { node_uuid: mapped.nodeId } as never);
+  const { data: ancestors } = await supabase.rpc(
+    "get_ontology_ancestors" as never,
+    { node_uuid: mapped.nodeId } as never,
+  );
 
   return {
     node: mapped,

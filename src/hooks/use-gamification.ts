@@ -126,7 +126,12 @@ export function useGamification() {
   }, []);
 
   const recordEvent = useCallback(
-    async (userId: string, eventType: string, points: number, metadata?: Record<string, unknown>) => {
+    async (
+      userId: string,
+      eventType: string,
+      points: number,
+      metadata?: Record<string, unknown>,
+    ) => {
       await supabase.from("gamification_events").insert({
         user_id: userId,
         event_type: eventType,

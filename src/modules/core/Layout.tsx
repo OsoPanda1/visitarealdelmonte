@@ -14,10 +14,7 @@ type LayoutProps = {
  * Layout principal de TAMV Online Network
  * Núcleo visual compartido (TAMVTRIX 3.0, Header y contenedor de contenido)
  */
-const Layout: React.FC<LayoutProps> = ({
-  children,
-  showTAMVtrixEffect = true,
-}) => {
+const Layout: React.FC<LayoutProps> = ({ children, showTAMVtrixEffect = true }) => {
   return (
     <TooltipProvider>
       <div className="flex flex-col min-h-screen bg-gradient-to-b from-background via-background/95 to-background/90 relative overflow-hidden perspective-1000">
@@ -38,9 +35,7 @@ const Layout: React.FC<LayoutProps> = ({
         <Header />
 
         {/* Contenido principal */}
-        <main className="flex-1 relative z-10">
-          {children}
-        </main>
+        <main className="flex-1 relative z-10">{children}</main>
 
         <Toaster />
         <Sonner />

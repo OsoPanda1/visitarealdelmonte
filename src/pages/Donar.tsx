@@ -41,7 +41,11 @@ export default function Donar() {
       <NavBar />
       {/* Hero Banner */}
       <div className="relative h-56 w-full overflow-hidden">
-        <img src="/images/plaza-noche.jpg" alt="Plaza de Real del Monte de noche" className="h-full w-full object-cover" />
+        <img
+          src="/images/plaza-noche.jpg"
+          alt="Plaza de Real del Monte de noche"
+          className="h-full w-full object-cover"
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
         <div className="absolute bottom-8 left-8 text-white">
           <h1 className="text-3xl font-bold">Apoya a Real del Monte</h1>
@@ -52,8 +56,8 @@ export default function Donar() {
         <section className="max-w-2xl mx-auto glass-surface-strong p-8 space-y-6">
           <h1 className="text-3xl font-bold">Asegura el brillo de nuestro legado</h1>
           <p className="text-muted-foreground">
-            Apoyo para RDM Digital — tu donativo fortalece el patrimonio cultural, la narrativa viva y la visibilidad de
-            los comercios locales.
+            Apoyo para RDM Digital — tu donativo fortalece el patrimonio cultural, la narrativa viva
+            y la visibilidad de los comercios locales.
           </p>
           <div className="flex flex-wrap gap-3">
             {suggestedAmounts.map((value) => (
@@ -61,7 +65,9 @@ export default function Donar() {
                 key={value}
                 onClick={() => setAmount(value)}
                 className={`px-4 py-2 rounded-full border transition-colors ${
-                  amount === value ? "border-primary bg-primary/20 text-foreground" : "border-border text-muted-foreground"
+                  amount === value
+                    ? "border-primary bg-primary/20 text-foreground"
+                    : "border-border text-muted-foreground"
                 }`}
               >
                 ${value} MXN

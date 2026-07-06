@@ -1,11 +1,5 @@
 export type Federation =
-  | "DEKATEOTL"
-  | "ANUBIS"
-  | "BOOKPI"
-  | "PHOENIX"
-  | "MDD_TAMV"
-  | "KAOS"
-  | "CHRONOS";
+  "DEKATEOTL" | "ANUBIS" | "BOOKPI" | "PHOENIX" | "MDD_TAMV" | "KAOS" | "CHRONOS";
 
 export type CivicEventType =
   | "TOURISM_INTERACTION"

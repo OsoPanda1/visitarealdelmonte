@@ -3,7 +3,7 @@
  * Orquestacion determinista con reloj inyectable y throttling
  */
 
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import type {
   TuristaEstado,
   IsabellaDecision,
@@ -13,9 +13,16 @@ import type {
   OrchestratorConfig,
   BusEvent,
   Coordenadas,
-} from '../models';
-import { GeoLRUCache, MovementFilter, findNearestPoint, filterPointsInRadius, calculateSpeed, withinBBox } from '../geo';
-import { ScoringEngine, defaultScoringEngine } from '../engine/ScoringEngine';
+} from "../models";
+import {
+  GeoLRUCache,
+  MovementFilter,
+  findNearestPoint,
+  filterPointsInRadius,
+  calculateSpeed,
+  withinBBox,
+} from "../geo";
+import { ScoringEngine, defaultScoringEngine } from "../engine/ScoringEngine";
 import { logger } from "@/lib/logger";
 import {
   isabellaTerritorialDecisionLatencyMs,
@@ -26,7 +33,7 @@ import {
   eventsDroppedTotal,
   eventQueueSize,
   sanitizeTerritory,
-} from '../metrics/prometheus';
+} from "../metrics/prometheus";
 
 // ============================================================================
 // TIPOS DE RELOJ (INYECTABLE)
@@ -65,9 +72,14 @@ export class EventBus {
     this.maxQueueSize = maxQueueSize;
   }
 
-  emit<T>(channel: string, payload: T, priority: BusEvent['priority'] = 'normal', traceId?: string): boolean {
+  emit<T>(
+    channel: string,
+    payload: T,
+    priority: BusEvent["priority"] = "normal",
+    traceId?: string,
+  ): boolean {
     if (this.queue.length >= this.maxQueueSize) {
-      eventsDroppedTotal.inc({ channel, reason: 'backpressure' });
+      eventsDroppedTotal.inc({ channel, reason: "backpressure" });
       return false;
     }
 
@@ -81,7 +93,7 @@ export class EventBus {
     };
 
     // Insertar segun prioridad
-    if (priority === 'critical') {
+    if (priority === "critical") {
       this.queue.unshift(event);
     } else {
       this.queue.push(event);
@@ -94,7 +106,7 @@ export class EventBus {
       try {
         listener(event as BusEvent);
       } catch (error) {
-        logger.error('[EventBus] Error en listener:', error);
+        logger.error("[EventBus] Error en listener:", error);
       }
     }
 
@@ -141,7 +153,7 @@ export class ExperienceOrchestrator {
   constructor(
     config: Partial<OrchestratorConfig> = {},
     clock: Clock = new SystemClock(),
-    scoringEngine: ScoringEngine = defaultScoringEngine
+    scoringEngine: ScoringEngine = defaultScoringEngine,
   ) {
     this.config = {
       throttleWindowMs: 60000, // 1 minuto entre decisiones por turista
@@ -166,24 +178,24 @@ export class ExperienceOrchestrator {
   private initDefaultExitPoints(): void {
     this.exitPoints = [
       {
-        id: 'exit_main',
-        name: 'Salida Principal - Plaza Central',
+        id: "exit_main",
+        name: "Salida Principal - Plaza Central",
         coords: { lat: 20.1386, lng: -98.6707 },
-        type: 'main',
+        type: "main",
         boundingBox: { minLat: 20.1376, maxLat: 20.1396, minLng: -98.6717, maxLng: -98.6697 },
       },
       {
-        id: 'exit_mina',
-        name: 'Salida Mina de Acosta',
+        id: "exit_mina",
+        name: "Salida Mina de Acosta",
         coords: { lat: 20.1396, lng: -98.6761 },
-        type: 'secondary',
+        type: "secondary",
         boundingBox: { minLat: 20.1386, maxLat: 20.1406, minLng: -98.6771, maxLng: -98.6751 },
       },
       {
-        id: 'exit_panteon',
-        name: 'Salida Panteon Ingles',
+        id: "exit_panteon",
+        name: "Salida Panteon Ingles",
         coords: { lat: 20.137, lng: -98.67 },
-        type: 'secondary',
+        type: "secondary",
         boundingBox: { minLat: 20.136, maxLat: 20.138, minLng: -98.671, maxLng: -98.669 },
       },
     ];
@@ -191,16 +203,86 @@ export class ExperienceOrchestrator {
 
   private initDefaultPOIs(): void {
     this.pointsOfInterest = [
-      { id: '1', name: 'Mina de Acosta', category: 'historia', coords: { lat: 20.138, lng: -98.671 }, rating: 4.8, description: 'Mina historica del siglo XVIII' },
-      { id: '2', name: 'Museo de Medicina Laboral', category: 'cultura', coords: { lat: 20.139, lng: -98.673 }, rating: 4.6, description: 'Historia medica de los mineros' },
-      { id: '3', name: 'Panteon Ingles', category: 'historia', coords: { lat: 20.137, lng: -98.67 }, rating: 4.9, description: 'Cementerio historico britanico' },
-      { id: '4', name: 'Pastes El Portal', category: 'gastronomia', coords: { lat: 20.14, lng: -98.672 }, rating: 4.7, description: 'Pastes tradicionales cornish' },
-      { id: '5', name: 'Pastes Kikos', category: 'gastronomia', coords: { lat: 20.139, lng: -98.674 }, rating: 4.5, description: 'Pastes artesanales desde 1940' },
-      { id: '6', name: 'Hotel Real del Monte', category: 'hospedaje', coords: { lat: 20.141, lng: -98.675 }, rating: 4.3, description: 'Hospedaje colonial' },
-      { id: '7', name: 'Pena del Cuervo', category: 'aventura', coords: { lat: 20.135, lng: -98.668 }, rating: 4.8, description: 'Mirador natural' },
-      { id: '8', name: 'Iglesia de la Asuncion', category: 'cultura', coords: { lat: 20.14, lng: -98.671 }, rating: 4.6, description: 'Templo del siglo XVIII' },
-      { id: '9', name: 'Centro Cultural Nicolas Zavala', category: 'cultura', coords: { lat: 20.138, lng: -98.672 }, rating: 4.4, description: 'Galeria de arte' },
-      { id: '10', name: 'Sendero de las Minas', category: 'aventura', coords: { lat: 20.136, lng: -98.669 }, rating: 4.7, description: 'Recorrido por antiguas minas' },
+      {
+        id: "1",
+        name: "Mina de Acosta",
+        category: "historia",
+        coords: { lat: 20.138, lng: -98.671 },
+        rating: 4.8,
+        description: "Mina historica del siglo XVIII",
+      },
+      {
+        id: "2",
+        name: "Museo de Medicina Laboral",
+        category: "cultura",
+        coords: { lat: 20.139, lng: -98.673 },
+        rating: 4.6,
+        description: "Historia medica de los mineros",
+      },
+      {
+        id: "3",
+        name: "Panteon Ingles",
+        category: "historia",
+        coords: { lat: 20.137, lng: -98.67 },
+        rating: 4.9,
+        description: "Cementerio historico britanico",
+      },
+      {
+        id: "4",
+        name: "Pastes El Portal",
+        category: "gastronomia",
+        coords: { lat: 20.14, lng: -98.672 },
+        rating: 4.7,
+        description: "Pastes tradicionales cornish",
+      },
+      {
+        id: "5",
+        name: "Pastes Kikos",
+        category: "gastronomia",
+        coords: { lat: 20.139, lng: -98.674 },
+        rating: 4.5,
+        description: "Pastes artesanales desde 1940",
+      },
+      {
+        id: "6",
+        name: "Hotel Real del Monte",
+        category: "hospedaje",
+        coords: { lat: 20.141, lng: -98.675 },
+        rating: 4.3,
+        description: "Hospedaje colonial",
+      },
+      {
+        id: "7",
+        name: "Pena del Cuervo",
+        category: "aventura",
+        coords: { lat: 20.135, lng: -98.668 },
+        rating: 4.8,
+        description: "Mirador natural",
+      },
+      {
+        id: "8",
+        name: "Iglesia de la Asuncion",
+        category: "cultura",
+        coords: { lat: 20.14, lng: -98.671 },
+        rating: 4.6,
+        description: "Templo del siglo XVIII",
+      },
+      {
+        id: "9",
+        name: "Centro Cultural Nicolas Zavala",
+        category: "cultura",
+        coords: { lat: 20.138, lng: -98.672 },
+        rating: 4.4,
+        description: "Galeria de arte",
+      },
+      {
+        id: "10",
+        name: "Sendero de las Minas",
+        category: "aventura",
+        coords: { lat: 20.136, lng: -98.669 },
+        rating: 4.7,
+        description: "Recorrido por antiguas minas",
+      },
     ];
   }
 
@@ -232,11 +314,11 @@ export class ExperienceOrchestrator {
       state.coords,
       this.pointsOfInterest,
       500,
-      this.geoCache
-    ).map(r => r.point);
+      this.geoCache,
+    ).map((r) => r.point);
 
     // Obtener saturacion de zona
-    const zoneSaturation = this.zoneSaturations.get(state.territory ?? 'RDM') ?? 0;
+    const zoneSaturation = this.zoneSaturations.get(state.territory ?? "RDM") ?? 0;
 
     // Construir contexto de scoring
     const context: ScoringContext = {
@@ -269,7 +351,7 @@ export class ExperienceOrchestrator {
     // Construir decision
     const decision: IsabellaDecision = {
       traceId,
-      territory: sanitizeTerritory(state.territory ?? 'RDM'),
+      territory: sanitizeTerritory(state.territory ?? "RDM"),
       level,
       retentionIntent,
       score,
@@ -285,7 +367,12 @@ export class ExperienceOrchestrator {
     this.lastDecisionTime.set(state.id, startTime);
 
     // Emitir al bus
-    this.eventBus.emit('ISABELLA_DECISION', decision, level === 'CRITICO' ? 'critical' : 'normal', traceId);
+    this.eventBus.emit(
+      "ISABELLA_DECISION",
+      decision,
+      level === "CRITICO" ? "critical" : "normal",
+      traceId,
+    );
 
     // Registrar latencia
     if (this.config.enableMetrics) {
@@ -300,7 +387,7 @@ export class ExperienceOrchestrator {
 
   private findNearestExit(coords: Coordenadas): { point: ExitPoint; distance: number } | null {
     // Primero filtrar por BBox para optimizacion
-    const candidateExits = this.exitPoints.filter(exit => {
+    const candidateExits = this.exitPoints.filter((exit) => {
       // Crear BBox ampliado para busqueda inicial
       const expandedBBox = {
         minLat: exit.boundingBox.minLat - 0.01,
@@ -340,32 +427,37 @@ export class ExperienceOrchestrator {
   }
 
   private buildPayload(
-    intent: IsabellaDecision['retentionIntent'],
-    pattern: IsabellaDecision['pattern'],
-    nearbyPOIs: PointOfInterest[]
-  ): IsabellaDecision['payload'] {
+    intent: IsabellaDecision["retentionIntent"],
+    pattern: IsabellaDecision["pattern"],
+    nearbyPOIs: PointOfInterest[],
+  ): IsabellaDecision["payload"] {
     const suggestedPOI = nearbyPOIs[0];
 
-    const messages: Record<IsabellaDecision['retentionIntent'], { titulo: string; mensaje: string }> = {
+    const messages: Record<
+      IsabellaDecision["retentionIntent"],
+      { titulo: string; mensaje: string }
+    > = {
       SAFE_EXIT: {
-        titulo: 'Salida Segura',
-        mensaje: 'Te acompano con una salida segura: caminemos por rutas visibles con paradas culturales breves.',
+        titulo: "Salida Segura",
+        mensaje:
+          "Te acompano con una salida segura: caminemos por rutas visibles con paradas culturales breves.",
       },
       UPSELL: {
-        titulo: 'Experiencia Premium',
-        mensaje: 'Antes de irte, te propongo una experiencia de alto valor cerca de ti.',
+        titulo: "Experiencia Premium",
+        mensaje: "Antes de irte, te propongo una experiencia de alto valor cerca de ti.",
       },
       DISCOVERY: {
-        titulo: 'Descubre Mas',
-        mensaje: 'Modo descubrimiento activo: tengo opciones cercanas con equilibrio entre historia, paisaje y gastronomia.',
+        titulo: "Descubre Mas",
+        mensaje:
+          "Modo descubrimiento activo: tengo opciones cercanas con equilibrio entre historia, paisaje y gastronomia.",
       },
       RETENTION: {
-        titulo: 'Quédate un Poco Mas',
-        mensaje: 'Hay algo especial cerca que no querras perderte.',
+        titulo: "Quédate un Poco Mas",
+        mensaje: "Hay algo especial cerca que no querras perderte.",
       },
       ENGAGEMENT: {
-        titulo: 'Momento Perfecto',
-        mensaje: 'Este es el momento perfecto para una experiencia unica.',
+        titulo: "Momento Perfecto",
+        mensaje: "Este es el momento perfecto para una experiencia unica.",
       },
     };
 
@@ -374,22 +466,23 @@ export class ExperienceOrchestrator {
     return {
       titulo,
       mensaje,
-      ruta_ar_activada: intent === 'DISCOVERY' || pattern === 'EXPLORING',
+      ruta_ar_activada: intent === "DISCOVERY" || pattern === "EXPLORING",
       experiencia_sugerida: suggestedPOI?.name,
-      federacion_destino: suggestedPOI?.federacion ?? this.mapCategoryToFederation(suggestedPOI?.category),
+      federacion_destino:
+        suggestedPOI?.federacion ?? this.mapCategoryToFederation(suggestedPOI?.category),
     };
   }
 
   private mapCategoryToFederation(category?: string): string {
     const mapping: Record<string, string> = {
-      gastronomia: 'FED_GASTRONOMIA',
-      hospedaje: 'FED_HOSPEDAJE',
-      historia: 'FED_TURISMO',
-      aventura: 'FED_TURISMO',
-      cultura: 'FED_TURISMO',
-      comercio: 'FED_COMERCIO',
+      gastronomia: "FED_GASTRONOMIA",
+      hospedaje: "FED_HOSPEDAJE",
+      historia: "FED_TURISMO",
+      aventura: "FED_TURISMO",
+      cultura: "FED_TURISMO",
+      comercio: "FED_COMERCIO",
     };
-    return category ? mapping[category] ?? 'FED_TURISMO' : 'FED_TURISMO';
+    return category ? (mapping[category] ?? "FED_TURISMO") : "FED_TURISMO";
   }
 
   // ============================================================================
@@ -418,7 +511,7 @@ export class ExperienceOrchestrator {
 
   subscribeToDecisions(callback: (decision: IsabellaDecision) => void): () => void {
     return this.eventBus.subscribe((event) => {
-      if (event.channel === 'ISABELLA_DECISION') {
+      if (event.channel === "ISABELLA_DECISION") {
         callback(event.payload as IsabellaDecision);
       }
     });

@@ -30,11 +30,11 @@ const Tenochtitlan = () => {
       selectedCluster === "all"
         ? NODES_MIRROR
         : NODES_MIRROR.filter((n) => n.cluster === selectedCluster),
-    [selectedCluster]
+    [selectedCluster],
   );
   const onlineSentinels = SENTINELS_MIRROR.filter((s) => s.status === "online").length;
   const avgHealth = Math.round(
-    NODES_MIRROR.reduce((acc, n) => acc + n.health, 0) / NODES_MIRROR.length
+    NODES_MIRROR.reduce((acc, n) => acc + n.health, 0) / NODES_MIRROR.length,
   );
   const totalDetections = RADARS_MIRROR.reduce((a, r) => a + r.detections, 0);
 
@@ -45,15 +45,19 @@ const Tenochtitlan = () => {
         description="Dashboard en vivo del Sistema Tenochtitlán: 9 centinelas, 6 radares y 48 nodos funcionales del Nodo Cero RDM Digital."
         url="/tenochtitlan"
       />
-        <NavBar />
+      <NavBar />
 
-        {/* Hero Banner */}
-        <div className="relative h-48 w-full overflow-hidden">
-          <img src="/images/plaza-principal.jpg" alt="Plaza principal de Real del Monte" className="h-full w-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
-        </div>
+      {/* Hero Banner */}
+      <div className="relative h-48 w-full overflow-hidden">
+        <img
+          src="/images/plaza-principal.jpg"
+          alt="Plaza principal de Real del Monte"
+          className="h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+      </div>
 
-        <main className="pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto">
+      <main className="pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto">
         <Link
           to="/"
           className="inline-flex items-center gap-2 font-body text-[11px] tracking-[0.2em] uppercase text-muted-foreground hover:text-[hsl(var(--gold))] transition-colors mb-10"
@@ -68,8 +72,7 @@ const Tenochtitlan = () => {
           transition={{ duration: 0.8 }}
           className="relative rounded-3xl overflow-hidden border border-[hsl(var(--gold))]/20 p-10 md:p-14 mb-12"
           style={{
-            background:
-              "linear-gradient(135deg, hsla(220,40%,5%,0.95), hsla(220,30%,8%,0.85))",
+            background: "linear-gradient(135deg, hsla(220,40%,5%,0.95), hsla(220,30%,8%,0.85))",
           }}
         >
           <div className="absolute inset-0 grid-pattern opacity-20 pointer-events-none" />
@@ -84,22 +87,35 @@ const Tenochtitlan = () => {
               System Tenochtitlán
             </h1>
             <p className="font-body text-base md:text-lg text-foreground/75 max-w-3xl mb-8 leading-relaxed">
-              Capital lógica de RDM Digital. Orquesta los <strong>9 centinelas</strong>
-              {" "}del panteón TAMV, los <strong>6 radares</strong> en vigilancia continua y los
-              {" "}<strong>48 nodos funcionales</strong> que sostienen el doble pipeline hexagonal,
-              {" "}MD-X4 render, BookPI, ID-NVIDA y la Constitución TAMV-DM-X4.
+              Capital lógica de RDM Digital. Orquesta los <strong>9 centinelas</strong> del panteón
+              TAMV, los <strong>6 radares</strong> en vigilancia continua y los{" "}
+              <strong>48 nodos funcionales</strong> que sostienen el doble pipeline hexagonal, MD-X4
+              render, BookPI, ID-NVIDA y la Constitución TAMV-DM-X4.
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { icon: Shield, label: "Centinelas online", value: `${onlineSentinels}/${SENTINELS_MIRROR.length}` },
+                {
+                  icon: Shield,
+                  label: "Centinelas online",
+                  value: `${onlineSentinels}/${SENTINELS_MIRROR.length}`,
+                },
                 { icon: Eye, label: "Detecciones radar", value: totalDetections.toLocaleString() },
                 { icon: Cpu, label: "Salud promedio", value: `${avgHealth}%` },
-                { icon: Network, label: "Nodos funcionales", value: NODES_MIRROR.length.toString() },
+                {
+                  icon: Network,
+                  label: "Nodos funcionales",
+                  value: NODES_MIRROR.length.toString(),
+                },
               ].map((kpi) => (
-                <div key={kpi.label} className="rounded-xl border border-[hsl(var(--gold))]/15 bg-background/40 p-4">
+                <div
+                  key={kpi.label}
+                  className="rounded-xl border border-[hsl(var(--gold))]/15 bg-background/40 p-4"
+                >
                   <kpi.icon className="w-4 h-4 text-[hsl(var(--gold))] mb-2" />
                   <div className="font-display text-2xl text-foreground">{kpi.value}</div>
-                  <div className="font-body text-[10px] tracking-[0.2em] uppercase text-muted-foreground mt-1">{kpi.label}</div>
+                  <div className="font-body text-[10px] tracking-[0.2em] uppercase text-muted-foreground mt-1">
+                    {kpi.label}
+                  </div>
                 </div>
               ))}
             </div>
@@ -111,7 +127,9 @@ const Tenochtitlan = () => {
           <div className="flex items-center gap-3 mb-6">
             <Shield className="w-4 h-4 text-[hsl(var(--gold))]" />
             <h2 className="font-display text-2xl md:text-3xl">Panteón Centinela</h2>
-            <span className="font-body text-[10px] tracking-[0.3em] uppercase text-muted-foreground">9 sistemas activos</span>
+            <span className="font-body text-[10px] tracking-[0.3em] uppercase text-muted-foreground">
+              9 sistemas activos
+            </span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {SENTINELS_MIRROR.map((s, i) => (
@@ -127,19 +145,28 @@ const Tenochtitlan = () => {
                     <span className="text-2xl">{s.glyph}</span>
                     <div>
                       <h3 className="font-display text-base leading-tight">{s.name}</h3>
-                      <span className="font-body text-[9px] tracking-[0.25em] uppercase text-muted-foreground">{s.id}</span>
+                      <span className="font-body text-[9px] tracking-[0.25em] uppercase text-muted-foreground">
+                        {s.id}
+                      </span>
                     </div>
                   </div>
                   <span
                     className="inline-flex items-center gap-1.5 font-body text-[9px] tracking-[0.2em] uppercase px-2 py-1 rounded-full"
-                    style={{ background: `${STATUS_COLOR[s.status]}15`, color: STATUS_COLOR[s.status] }}
+                    style={{
+                      background: `${STATUS_COLOR[s.status]}15`,
+                      color: STATUS_COLOR[s.status],
+                    }}
                   >
                     <Activity className="w-2.5 h-2.5" /> {s.status}
                   </span>
                 </div>
-                <p className="font-body text-xs text-foreground/70 leading-relaxed mb-4">{s.mission}</p>
+                <p className="font-body text-xs text-foreground/70 leading-relaxed mb-4">
+                  {s.mission}
+                </p>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="font-body text-[9px] tracking-[0.2em] uppercase text-muted-foreground">Carga</span>
+                  <span className="font-body text-[9px] tracking-[0.2em] uppercase text-muted-foreground">
+                    Carga
+                  </span>
                   <span className="font-mono text-xs text-foreground/80">{s.load}%</span>
                 </div>
                 <div className="h-1 rounded-full bg-[hsl(var(--gold))]/10 overflow-hidden mb-4">
@@ -150,7 +177,10 @@ const Tenochtitlan = () => {
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {s.powers.map((p) => (
-                    <span key={p} className="font-body text-[9px] tracking-[0.2em] uppercase px-2 py-0.5 rounded-full border border-[hsl(var(--gold))]/20 text-[hsl(var(--gold))]/80">
+                    <span
+                      key={p}
+                      className="font-body text-[9px] tracking-[0.2em] uppercase px-2 py-0.5 rounded-full border border-[hsl(var(--gold))]/20 text-[hsl(var(--gold))]/80"
+                    >
                       {p}
                     </span>
                   ))}
@@ -165,7 +195,9 @@ const Tenochtitlan = () => {
           <div className="flex items-center gap-3 mb-6">
             <Eye className="w-4 h-4 text-[hsl(var(--electric))]" />
             <h2 className="font-display text-2xl md:text-3xl">Radares Activos</h2>
-            <span className="font-body text-[10px] tracking-[0.3em] uppercase text-muted-foreground">Ojo de Ra · Quetzalcóatl · MOS · Dekateotl · Laberinto</span>
+            <span className="font-body text-[10px] tracking-[0.3em] uppercase text-muted-foreground">
+              Ojo de Ra · Quetzalcóatl · MOS · Dekateotl · Laberinto
+            </span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {RADARS_MIRROR.map((r, i) => (
@@ -178,20 +210,30 @@ const Tenochtitlan = () => {
               >
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="font-display text-base">{r.codename}</h3>
-                  <span className="font-body text-[9px] tracking-[0.2em] uppercase text-[hsl(var(--electric))]/70">{r.scope}</span>
+                  <span className="font-body text-[9px] tracking-[0.2em] uppercase text-[hsl(var(--electric))]/70">
+                    {r.scope}
+                  </span>
                 </div>
                 <div className="grid grid-cols-3 gap-3 mb-4">
                   <div>
                     <div className="font-display text-xl">{r.detections}</div>
-                    <div className="font-body text-[9px] tracking-[0.2em] uppercase text-muted-foreground">detecciones</div>
+                    <div className="font-body text-[9px] tracking-[0.2em] uppercase text-muted-foreground">
+                      detecciones
+                    </div>
                   </div>
                   <div>
-                    <div className="font-display text-xl text-[hsl(var(--terracotta))]">{r.anomalies}</div>
-                    <div className="font-body text-[9px] tracking-[0.2em] uppercase text-muted-foreground">anomalías</div>
+                    <div className="font-display text-xl text-[hsl(var(--terracotta))]">
+                      {r.anomalies}
+                    </div>
+                    <div className="font-body text-[9px] tracking-[0.2em] uppercase text-muted-foreground">
+                      anomalías
+                    </div>
                   </div>
                   <div>
                     <div className="font-display text-xl">{r.coverage}%</div>
-                    <div className="font-body text-[9px] tracking-[0.2em] uppercase text-muted-foreground">cobertura</div>
+                    <div className="font-body text-[9px] tracking-[0.2em] uppercase text-muted-foreground">
+                      cobertura
+                    </div>
                   </div>
                 </div>
                 <div className="h-1 rounded-full bg-[hsl(var(--electric))]/10 overflow-hidden">
@@ -213,7 +255,9 @@ const Tenochtitlan = () => {
           <div className="flex flex-wrap items-center gap-3 mb-6">
             <Network className="w-4 h-4 text-[hsl(var(--gold))]" />
             <h2 className="font-display text-2xl md:text-3xl">48 Nodos Funcionales</h2>
-            <span className="font-body text-[10px] tracking-[0.3em] uppercase text-muted-foreground">Filtra por clúster</span>
+            <span className="font-body text-[10px] tracking-[0.3em] uppercase text-muted-foreground">
+              Filtra por clúster
+            </span>
           </div>
           <div className="flex flex-wrap gap-2 mb-6">
             {clusters.map((c) => (
@@ -226,7 +270,7 @@ const Tenochtitlan = () => {
                     : "border-[hsl(var(--gold))]/15 text-muted-foreground hover:border-[hsl(var(--gold))]/30"
                 }`}
               >
-                {c === "all" ? "Todos" : CLUSTER_LABEL[c] ?? c}
+                {c === "all" ? "Todos" : (CLUSTER_LABEL[c] ?? c)}
               </button>
             ))}
           </div>
@@ -240,17 +284,26 @@ const Tenochtitlan = () => {
                 className="rounded-xl border border-[hsl(var(--gold))]/12 bg-background/40 p-4 hover:border-[hsl(var(--gold))]/35 transition-colors"
               >
                 <div className="flex items-center justify-between mb-2">
-                  <span className="font-mono text-[10px] tracking-wider text-[hsl(var(--gold))]/70">{n.code}</span>
+                  <span className="font-mono text-[10px] tracking-wider text-[hsl(var(--gold))]/70">
+                    {n.code}
+                  </span>
                   <span className="font-mono text-[10px] text-foreground/70">{n.health}%</span>
                 </div>
                 <h3 className="font-display text-sm leading-tight mb-1">{n.name}</h3>
-                <p className="font-body text-[10px] text-muted-foreground leading-snug mb-3">{n.description}</p>
+                <p className="font-body text-[10px] text-muted-foreground leading-snug mb-3">
+                  {n.description}
+                </p>
                 <div className="h-1 rounded-full bg-[hsl(var(--gold))]/10 overflow-hidden">
                   <div
                     className="h-full rounded-full"
                     style={{
                       width: `${n.health}%`,
-                      background: n.health > 90 ? "hsl(var(--gold))" : n.health > 75 ? "hsl(var(--electric))" : "hsl(var(--terracotta))",
+                      background:
+                        n.health > 90
+                          ? "hsl(var(--gold))"
+                          : n.health > 75
+                            ? "hsl(var(--electric))"
+                            : "hsl(var(--terracotta))",
                     }}
                   />
                 </div>
@@ -269,11 +322,11 @@ const Tenochtitlan = () => {
             <h2 className="font-display text-2xl">Doble Pipeline Hexagonal</h2>
           </div>
           <p className="font-body text-sm text-foreground/70 leading-relaxed mb-6 max-w-3xl">
-            Cada solicitud entra por el API Gateway, se replica en los gemelos <strong>MOS-A</strong> y
-            {" "}<strong>MOS-B</strong>, ambos consultan el kernel Isabella DMX4, y el <strong>Consensor</strong>
-            {" "}compara hashes SHA-256 de cada respuesta antes de servirla. Cualquier divergencia
-            {" "}se sella en <strong>BookPI</strong> y notifica a <strong>Anubis</strong>, <strong>Horus</strong>
-            {" "}y <strong>Dekateotl</strong>.
+            Cada solicitud entra por el API Gateway, se replica en los gemelos{" "}
+            <strong>MOS-A</strong> y <strong>MOS-B</strong>, ambos consultan el kernel Isabella
+            DMX4, y el <strong>Consensor</strong> compara hashes SHA-256 de cada respuesta antes de
+            servirla. Cualquier divergencia se sella en <strong>BookPI</strong> y notifica a{" "}
+            <strong>Anubis</strong>, <strong>Horus</strong> y <strong>Dekateotl</strong>.
           </p>
           <pre className="font-mono text-[11px] leading-relaxed text-foreground/80 bg-background/60 rounded-xl p-5 overflow-x-auto border border-[hsl(var(--gold))]/10">{`
                  ┌──────────────────────┐

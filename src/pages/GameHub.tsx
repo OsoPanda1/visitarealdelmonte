@@ -1,8 +1,17 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import {
-  Gamepad2, Trophy, Target, Star, Users, Flame,
-  ChevronRight, Shield, Zap, MapPin, Compass
+  Gamepad2,
+  Trophy,
+  Target,
+  Star,
+  Users,
+  Flame,
+  ChevronRight,
+  Shield,
+  Zap,
+  MapPin,
+  Compass,
 } from "lucide-react";
 import { RDMLayout } from "@/components/rdm/RDMLayout";
 import { SEOMeta } from "@/components/SEOMeta";
@@ -12,10 +21,38 @@ import { PlayerProfile } from "@/features/gamification/components/PlayerProfile"
 import { ScrollReveal, CinematicBanner, FloatingParticles } from "@/components/rdm/ScrollReveal";
 
 const QUICK_QUESTS = [
-  { icon: MapPin, label: "Explorar Mapa", desc: "Visita el mapa interactivo", to: "/mapa", xp: 50, color: "hsl(43, 80%, 55%)" },
-  { icon: Compass, label: "Ruta Minera", desc: "Completa la ruta historica", to: "/rutas", xp: 150, color: "hsl(15, 65%, 50%)" },
-  { icon: Shield, label: "Panteon Ingles", desc: "Descubre la leyenda", to: "/historia", xp: 200, color: "hsl(270, 40%, 50%)" },
-  { icon: Flame, label: "Festival del Paste", desc: "Vota por tu paste favorito", to: "/gastronomia", xp: 100, color: "hsl(25, 80%, 50%)" },
+  {
+    icon: MapPin,
+    label: "Explorar Mapa",
+    desc: "Visita el mapa interactivo",
+    to: "/mapa",
+    xp: 50,
+    color: "hsl(43, 80%, 55%)",
+  },
+  {
+    icon: Compass,
+    label: "Ruta Minera",
+    desc: "Completa la ruta historica",
+    to: "/rutas",
+    xp: 150,
+    color: "hsl(15, 65%, 50%)",
+  },
+  {
+    icon: Shield,
+    label: "Panteon Ingles",
+    desc: "Descubre la leyenda",
+    to: "/historia",
+    xp: 200,
+    color: "hsl(270, 40%, 50%)",
+  },
+  {
+    icon: Flame,
+    label: "Festival del Paste",
+    desc: "Vota por tu paste favorito",
+    to: "/gastronomia",
+    xp: 100,
+    color: "hsl(25, 80%, 50%)",
+  },
 ];
 
 const GAME_FEATURES = [
@@ -50,7 +87,7 @@ const GAME_FEATURES = [
 ];
 
 export default function GameHubPage() {
-  const [activeTab, setActiveTab] = useState<'quests' | 'leaderboard' | 'profile'>('quests');
+  const [activeTab, setActiveTab] = useState<"quests" | "leaderboard" | "profile">("quests");
 
   return (
     <RDMLayout>
@@ -75,7 +112,9 @@ export default function GameHubPage() {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[hsl(var(--rdm-amber)/0.15)] backdrop-blur-sm border border-[hsl(var(--rdm-amber)/0.3)] mb-4"
           >
             <Gamepad2 className="w-4 h-4 text-[hsl(var(--rdm-amber))]" />
-            <span className="text-xs font-medium text-[hsl(var(--rdm-amber))]">Metajuego Territorial</span>
+            <span className="text-xs font-medium text-[hsl(var(--rdm-amber))]">
+              Metajuego Territorial
+            </span>
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
@@ -93,7 +132,8 @@ export default function GameHubPage() {
             className="text-lg text-white/70 max-w-xl"
             style={{ fontFamily: "var(--font-body)" }}
           >
-            Mas que un juego: un motor de participacion territorial que conecta identidad, economia y cultura.
+            Mas que un juego: un motor de participacion territorial que conecta identidad, economia
+            y cultura.
           </motion.p>
         </div>
       </CinematicBanner>
@@ -103,10 +143,16 @@ export default function GameHubPage() {
         <div className="max-w-6xl mx-auto">
           <ScrollReveal>
             <div className="text-center mb-12">
-              <p className="text-sm tracking-[0.3em] uppercase text-[hsl(var(--rdm-amber))] mb-3" style={{ fontFamily: "var(--font-body)" }}>
+              <p
+                className="text-sm tracking-[0.3em] uppercase text-[hsl(var(--rdm-amber))] mb-3"
+                style={{ fontFamily: "var(--font-body)" }}
+              >
                 Arquitectura del Juego
               </p>
-              <h2 className="text-3xl md:text-4xl font-bold" style={{ fontFamily: "var(--font-display)" }}>
+              <h2
+                className="text-3xl md:text-4xl font-bold"
+                style={{ fontFamily: "var(--font-display)" }}
+              >
                 Tres capas de <span className="text-[hsl(var(--rdm-amber))]">experiencia</span>
               </h2>
             </div>
@@ -125,7 +171,10 @@ export default function GameHubPage() {
                   >
                     <feature.icon className="w-6 h-6" style={{ color: feature.color }} />
                   </div>
-                  <h3 className="text-sm font-bold mb-2" style={{ fontFamily: "var(--font-display)" }}>
+                  <h3
+                    className="text-sm font-bold mb-2"
+                    style={{ fontFamily: "var(--font-display)" }}
+                  >
                     {feature.title}
                   </h3>
                   <p className="text-[11px] text-[hsl(var(--muted-foreground))] leading-relaxed mb-3">
@@ -134,13 +183,21 @@ export default function GameHubPage() {
                   <span
                     className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-medium"
                     style={{
-                      background: feature.status === 'Activo' ? 'hsl(152, 60%, 45% / 0.15)' : 'hsl(43, 80%, 55% / 0.15)',
-                      color: feature.status === 'Activo' ? 'hsl(152, 60%, 45%)' : 'hsl(43, 80%, 55%)',
+                      background:
+                        feature.status === "Activo"
+                          ? "hsl(152, 60%, 45% / 0.15)"
+                          : "hsl(43, 80%, 55% / 0.15)",
+                      color:
+                        feature.status === "Activo" ? "hsl(152, 60%, 45%)" : "hsl(43, 80%, 55%)",
                     }}
                   >
-                    <span className="w-1.5 h-1.5 rounded-full" style={{
-                      background: feature.status === 'Activo' ? 'hsl(152, 60%, 45%)' : 'hsl(43, 80%, 55%)',
-                    }} />
+                    <span
+                      className="w-1.5 h-1.5 rounded-full"
+                      style={{
+                        background:
+                          feature.status === "Activo" ? "hsl(152, 60%, 45%)" : "hsl(43, 80%, 55%)",
+                      }}
+                    />
                     {feature.status}
                   </span>
                 </motion.div>
@@ -178,16 +235,23 @@ export default function GameHubPage() {
                       <quest.icon className="w-5 h-5" style={{ color: quest.color }} />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-sm font-semibold group-hover:text-[hsl(var(--rdm-amber))] transition-colors" style={{ fontFamily: "var(--font-display)" }}>
+                      <h3
+                        className="text-sm font-semibold group-hover:text-[hsl(var(--rdm-amber))] transition-colors"
+                        style={{ fontFamily: "var(--font-display)" }}
+                      >
                         {quest.label}
                       </h3>
-                      <p className="text-[10px] text-[hsl(var(--muted-foreground))]">{quest.desc}</p>
+                      <p className="text-[10px] text-[hsl(var(--muted-foreground))]">
+                        {quest.desc}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1">
                       <Star className="w-3 h-3 text-[hsl(var(--rdm-amber))]" />
-                      <span className="text-[10px] font-medium text-[hsl(var(--rdm-amber))]">+{quest.xp} XP</span>
+                      <span className="text-[10px] font-medium text-[hsl(var(--rdm-amber))]">
+                        +{quest.xp} XP
+                      </span>
                     </div>
                     <ChevronRight className="w-4 h-4 text-[hsl(var(--muted-foreground)/0.3)] group-hover:text-[hsl(var(--rdm-amber))] transition-colors" />
                   </div>
@@ -204,17 +268,17 @@ export default function GameHubPage() {
           {/* Tab Navigation */}
           <div className="flex gap-2 mb-8 justify-center">
             {[
-              { key: 'quests' as const, label: 'Misiones', icon: Target },
-              { key: 'leaderboard' as const, label: 'Leaderboard', icon: Trophy },
-              { key: 'profile' as const, label: 'Mi Perfil', icon: User },
-            ].map(tab => (
+              { key: "quests" as const, label: "Misiones", icon: Target },
+              { key: "leaderboard" as const, label: "Leaderboard", icon: Trophy },
+              { key: "profile" as const, label: "Mi Perfil", icon: User },
+            ].map((tab) => (
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
                 className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
                   activeTab === tab.key
-                    ? 'bg-[hsl(var(--rdm-amber))] text-[hsl(var(--navy-dark))]'
-                    : 'bg-white/5 text-[hsl(var(--muted-foreground))] hover:bg-white/10'
+                    ? "bg-[hsl(var(--rdm-amber))] text-[hsl(var(--navy-dark))]"
+                    : "bg-white/5 text-[hsl(var(--muted-foreground))] hover:bg-white/10"
                 }`}
               >
                 <tab.icon className="w-4 h-4" />
@@ -226,13 +290,17 @@ export default function GameHubPage() {
           {/* Content */}
           <div className="grid lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
-              {activeTab === 'quests' && <QuestPanel />}
-              {activeTab === 'leaderboard' && <Leaderboard showSeason />}
-              {activeTab === 'profile' && <PlayerProfile />}
+              {activeTab === "quests" && <QuestPanel />}
+              {activeTab === "leaderboard" && <Leaderboard showSeason />}
+              {activeTab === "profile" && <PlayerProfile />}
             </div>
             <div className="hidden lg:block">
-              {activeTab !== 'leaderboard' && <Leaderboard compact />}
-              {activeTab !== 'profile' && <div className="mt-6"><PlayerProfile /></div>}
+              {activeTab !== "leaderboard" && <Leaderboard compact />}
+              {activeTab !== "profile" && (
+                <div className="mt-6">
+                  <PlayerProfile />
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -242,12 +310,18 @@ export default function GameHubPage() {
       <section className="py-16 px-6 text-center rdm-section-dark">
         <ScrollReveal>
           <Gamepad2 className="w-10 h-10 mx-auto text-[hsl(var(--rdm-amber))] mb-4" />
-          <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "var(--font-display)" }}>
+          <h2
+            className="text-3xl md:text-4xl font-bold mb-4"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
             Tu impacto <span className="text-gradient-gold">va mas alla</span> del juego
           </h2>
-          <p className="text-[hsl(var(--muted-foreground))] max-w-lg mx-auto mb-8" style={{ fontFamily: "var(--font-body)" }}>
-            Cada accion en el juego se convierte en un evento de vida del territorio.
-            Tu XP se traduce en reputacion comunitaria, acceso a roles federados y experiencias reales.
+          <p
+            className="text-[hsl(var(--muted-foreground))] max-w-lg mx-auto mb-8"
+            style={{ fontFamily: "var(--font-body)" }}
+          >
+            Cada accion en el juego se convierte en un evento de vida del territorio. Tu XP se
+            traduce en reputacion comunitaria, acceso a roles federados y experiencias reales.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a

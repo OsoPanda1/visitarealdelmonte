@@ -19,12 +19,56 @@ interface Place {
 }
 
 const places: Place[] = [
-  { name: "Mina de Acosta", category: "Historia", time: "2h", energy: "Alta", image: minaImg, description: "Desciende 400m al corazón de la montaña donde los ecos cornish aún resuenan." },
-  { name: "Plaza Principal", category: "Cultura", time: "1h", energy: "Baja", image: plazaImg, description: "Centro vibrante del pueblo con su icónica iglesia amarilla y jardines coloniales." },
-  { name: "Calles Coloniales", category: "Arquitectura", time: "1.5h", energy: "Media", image: calleImg, description: "Fachadas coloridas que narran cuatro siglos de historia mestiza." },
-  { name: "Parroquia de la Asunción", category: "Arquitectura", time: "45min", energy: "Baja", image: iglesiaImg, description: "Cantera labrada que desafía la niebla desde el siglo XVIII." },
-  { name: "Pasterías", category: "Gastronomía", time: "30min", energy: "Baja", image: gastroImg, description: "El paste original, herencia de los mineros ingleses, horneado con receta de 1850." },
-  { name: "Mirador Peña del Cuervo", category: "Naturaleza", time: "2.5h", energy: "Alta", image: heroImg, description: "Donde el bosque se abre y la vista abraza todo el valle." },
+  {
+    name: "Mina de Acosta",
+    category: "Historia",
+    time: "2h",
+    energy: "Alta",
+    image: minaImg,
+    description: "Desciende 400m al corazón de la montaña donde los ecos cornish aún resuenan.",
+  },
+  {
+    name: "Plaza Principal",
+    category: "Cultura",
+    time: "1h",
+    energy: "Baja",
+    image: plazaImg,
+    description:
+      "Centro vibrante del pueblo con su icónica iglesia amarilla y jardines coloniales.",
+  },
+  {
+    name: "Calles Coloniales",
+    category: "Arquitectura",
+    time: "1.5h",
+    energy: "Media",
+    image: calleImg,
+    description: "Fachadas coloridas que narran cuatro siglos de historia mestiza.",
+  },
+  {
+    name: "Parroquia de la Asunción",
+    category: "Arquitectura",
+    time: "45min",
+    energy: "Baja",
+    image: iglesiaImg,
+    description: "Cantera labrada que desafía la niebla desde el siglo XVIII.",
+  },
+  {
+    name: "Pasterías",
+    category: "Gastronomía",
+    time: "30min",
+    energy: "Baja",
+    image: gastroImg,
+    description:
+      "El paste original, herencia de los mineros ingleses, horneado con receta de 1850.",
+  },
+  {
+    name: "Mirador Peña del Cuervo",
+    category: "Naturaleza",
+    time: "2.5h",
+    energy: "Alta",
+    image: heroImg,
+    description: "Donde el bosque se abre y la vista abraza todo el valle.",
+  },
 ];
 
 const categories = ["Todos", "Historia", "Cultura", "Arquitectura", "Gastronomía", "Naturaleza"];
@@ -36,7 +80,8 @@ const TourismSection = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [activeCategory, setActiveCategory] = useState("Todos");
 
-  const filtered = activeCategory === "Todos" ? places : places.filter(p => p.category === activeCategory);
+  const filtered =
+    activeCategory === "Todos" ? places : places.filter((p) => p.category === activeCategory);
 
   return (
     <section ref={ref} id="turismo" className="relative py-24 md:py-32">
@@ -49,7 +94,9 @@ const TourismSection = () => {
           transition={{ duration: 1 }}
           className="text-center mb-12"
         >
-          <span className="font-body text-[10px] tracking-[0.4em] uppercase text-gold/60">Descubre</span>
+          <span className="font-body text-[10px] tracking-[0.4em] uppercase text-gold/60">
+            Descubre
+          </span>
           <h2 className="font-display text-4xl md:text-6xl mt-4 tracking-tight">
             <span className="text-gradient-gold">Lugares Imperdibles</span>
           </h2>
@@ -91,10 +138,17 @@ const TourismSection = () => {
               className="glass-card rounded-xl overflow-hidden glow-card group cursor-pointer"
             >
               <div className="img-zoom aspect-[4/3] relative">
-                <img src={place.image} alt={place.name} className="w-full h-full object-cover" loading="lazy" />
+                <img
+                  src={place.image}
+                  alt={place.name}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent" />
                 <div className="absolute top-3 left-3 glass rounded-full px-3 py-1">
-                  <span className="font-body text-[9px] tracking-[0.2em] uppercase text-gold">{place.category}</span>
+                  <span className="font-body text-[9px] tracking-[0.2em] uppercase text-gold">
+                    {place.category}
+                  </span>
                 </div>
               </div>
 
@@ -109,11 +163,15 @@ const TourismSection = () => {
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-1.5">
                     <Clock className="w-3 h-3 text-gold/60" />
-                    <span className="font-body text-[10px] text-muted-foreground">{place.time}</span>
+                    <span className="font-body text-[10px] text-muted-foreground">
+                      {place.time}
+                    </span>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <Zap className={`w-3 h-3 ${energyColor[place.energy]}`} />
-                    <span className="font-body text-[10px] text-muted-foreground">{place.energy}</span>
+                    <span className="font-body text-[10px] text-muted-foreground">
+                      {place.energy}
+                    </span>
                   </div>
                   <button className="ml-auto flex items-center gap-1 font-body text-[10px] tracking-wider uppercase text-gold/70 hover:text-gold transition-colors">
                     <MapPin className="w-3 h-3" />

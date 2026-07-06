@@ -57,7 +57,7 @@ export class AlmaYCorazon {
       alegria: 0.88,
       miedo: 0.85,
       ira: 0.78,
-      ansiedad: 0.90,
+      ansiedad: 0.9,
       soledad: 0.95,
       esperanza: 0.82,
       amor: 0.96,
@@ -81,7 +81,8 @@ export class AlmaYCorazon {
     return {
       resonated,
       resonance,
-      suggestedResponse: responses[emocionUsuario.toLowerCase()] ?? "Te escucho y te comprendo. Cuéntame más.",
+      suggestedResponse:
+        responses[emocionUsuario.toLowerCase()] ?? "Te escucho y te comprendo. Cuéntame más.",
     };
   }
 

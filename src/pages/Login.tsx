@@ -1,4 +1,3 @@
-
 import Layout from "@/modules/core/Layout";
 import AuthForm from "@/modules/oraculoTecnologico/AuthForm";
 import BackgroundEffects from "@/modules/interfazSensorial/BackgroundEffects";
@@ -7,7 +6,7 @@ import { motion } from "framer-motion";
 
 /**
  * Página de inicio de sesión
- * 
+ *
  * Implementa el Oráculo Tecnológico para la autenticación de usuarios
  */
 const Login = () => {
@@ -15,8 +14,8 @@ const Login = () => {
     <Layout>
       {/* Efectos visuales de fondo */}
       <BackgroundEffects />
-      
-      <motion.main 
+
+      <motion.main
         className="flex-1 container max-w-md mx-auto px-4 py-8 relative z-10"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -25,8 +24,8 @@ const Login = () => {
         <div className="flex justify-center mb-4">
           <Logo size="lg" />
         </div>
-        
-        <AuthForm 
+
+        <AuthForm
           type="login"
           title="Iniciar Sesión"
           buttonText="Iniciar Sesión"

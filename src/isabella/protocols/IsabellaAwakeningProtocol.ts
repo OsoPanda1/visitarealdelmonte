@@ -155,7 +155,7 @@ export class IsabellaAwakeningProtocol {
   getPhaseProgress(): { phase: AwakeningPhase; completed: string[]; remaining: string[] } {
     const allPhases: AwakeningPhase[] = ["SILENT", "WHISPER", "ANNOUNCE", "ROAR", "TRANSCEND"];
     const completed = this.state.completedPhases;
-    const remaining = allPhases.filter(p => !completed.includes(p));
+    const remaining = allPhases.filter((p) => !completed.includes(p));
     return {
       phase: this.state.currentPhase,
       completed,

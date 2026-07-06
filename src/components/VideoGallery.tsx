@@ -31,7 +31,7 @@ const videos: Video[] = [
     thumbnail: heroImg,
     videoSrc: heroVideo,
     duration: "2:30",
-    category: "Introducción"
+    category: "Introducción",
   },
   {
     id: "2",
@@ -40,7 +40,7 @@ const videos: Video[] = [
     thumbnail: callesImg,
     videoSrc: ctaVideo,
     duration: "1:15",
-    category: "Tecnología"
+    category: "Tecnología",
   },
   {
     id: "3",
@@ -49,7 +49,7 @@ const videos: Video[] = [
     thumbnail: minaImg,
     videoSrc: leyendaVideo,
     duration: "4:20",
-    category: "Historia"
+    category: "Historia",
   },
   {
     id: "4",
@@ -58,7 +58,7 @@ const videos: Video[] = [
     thumbnail: minaImg,
     videoSrc: heroVideo,
     duration: "5:45",
-    category: "Aventura"
+    category: "Aventura",
   },
   {
     id: "5",
@@ -67,7 +67,7 @@ const videos: Video[] = [
     thumbnail: panteonImg,
     videoSrc: heroVideo,
     duration: "3:15",
-    category: "Historia"
+    category: "Historia",
   },
   {
     id: "6",
@@ -76,7 +76,7 @@ const videos: Video[] = [
     thumbnail: penasImg,
     videoSrc: heroVideo,
     duration: "4:00",
-    category: "Naturaleza"
+    category: "Naturaleza",
   },
 ];
 
@@ -186,7 +186,11 @@ export const VideoPlayer = ({ video, onClose }: { video: Video; onClose: () => v
           />
         ) : (
           <div className="h-full w-full flex items-center justify-center bg-black">
-            <img src={video.thumbnail} alt={video.title} className="h-full w-full object-cover opacity-60" />
+            <img
+              src={video.thumbnail}
+              alt={video.title}
+              className="h-full w-full object-cover opacity-60"
+            />
             <div className="absolute inset-0 flex items-center justify-center">
               <p className="text-white/70 text-sm">Video próximamente disponible</p>
             </div>
@@ -209,7 +213,10 @@ export const VideoPlayer = ({ video, onClose }: { video: Video; onClose: () => v
 
           <div className="absolute bottom-0 left-0 right-0 p-6">
             <div className="mb-4 h-1 w-full cursor-pointer rounded-full bg-white/20">
-              <div className="h-full rounded-full bg-amber-500 transition-all" style={{ width: `${progress}%` }} />
+              <div
+                className="h-full rounded-full bg-amber-500 transition-all"
+                style={{ width: `${progress}%` }}
+              />
             </div>
 
             <div className="flex items-center gap-4">
@@ -224,7 +231,11 @@ export const VideoPlayer = ({ video, onClose }: { video: Video; onClose: () => v
                 className="flex h-12 w-12 items-center justify-center rounded-full bg-amber-500 transition-colors hover:bg-amber-600"
                 aria-label={isPlaying ? "Pausar video" : "Reproducir video"}
               >
-                {isPlaying ? <Pause className="h-5 w-5 text-white" fill="white" /> : <Play className="ml-0.5 h-5 w-5 text-white" fill="white" />}
+                {isPlaying ? (
+                  <Pause className="h-5 w-5 text-white" fill="white" />
+                ) : (
+                  <Play className="ml-0.5 h-5 w-5 text-white" fill="white" />
+                )}
               </button>
 
               <button
@@ -237,7 +248,11 @@ export const VideoPlayer = ({ video, onClose }: { video: Video; onClose: () => v
                 className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 backdrop-blur-sm transition-colors hover:bg-white/20"
                 aria-label={isMuted ? "Activar sonido" : "Silenciar video"}
               >
-                {isMuted ? <VolumeX className="h-4 w-4 text-white" /> : <Volume2 className="h-4 w-4 text-white" />}
+                {isMuted ? (
+                  <VolumeX className="h-4 w-4 text-white" />
+                ) : (
+                  <Volume2 className="h-4 w-4 text-white" />
+                )}
               </button>
             </div>
           </div>
@@ -280,10 +295,7 @@ export const VideoGallery = () => {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
               >
-                <VideoCard
-                  video={video}
-                  onClick={() => setSelectedVideo(video)}
-                />
+                <VideoCard video={video} onClick={() => setSelectedVideo(video)} />
               </motion.div>
             ))}
           </div>
@@ -292,10 +304,7 @@ export const VideoGallery = () => {
 
       <AnimatePresence>
         {selectedVideo && (
-          <VideoPlayer
-            video={selectedVideo}
-            onClose={() => setSelectedVideo(null)}
-          />
+          <VideoPlayer video={selectedVideo} onClose={() => setSelectedVideo(null)} />
         )}
       </AnimatePresence>
     </>

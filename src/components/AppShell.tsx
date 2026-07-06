@@ -16,5 +16,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     return "bg-bg-day text-slate-900";
   }, [visualState]);
 
-  return <div className={`${className} min-h-screen transition-colors duration-700`}>{children}</div>;
+  return (
+    <div className={`${className} min-h-screen transition-colors duration-700`}>{children}</div>
+  );
 }

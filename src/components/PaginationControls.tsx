@@ -34,8 +34,18 @@ const PaginationControls = ({ meta, onPageChange }: PaginationControlsProps) => 
         </p>
 
         <div className="flex flex-wrap items-center gap-1.5">
-          <PagerButton label="Primera" onClick={() => onPageChange(1)} disabled={meta.page <= 1} icon={<ChevronsLeft className="h-3.5 w-3.5" />} />
-          <PagerButton label="Anterior" onClick={() => onPageChange(meta.page - 1)} disabled={meta.page <= 1} icon={<ChevronLeft className="h-3.5 w-3.5" />} />
+          <PagerButton
+            label="Primera"
+            onClick={() => onPageChange(1)}
+            disabled={meta.page <= 1}
+            icon={<ChevronsLeft className="h-3.5 w-3.5" />}
+          />
+          <PagerButton
+            label="Anterior"
+            onClick={() => onPageChange(meta.page - 1)}
+            disabled={meta.page <= 1}
+            icon={<ChevronLeft className="h-3.5 w-3.5" />}
+          />
 
           {start > 1 && <GapMarker />}
 
@@ -55,8 +65,20 @@ const PaginationControls = ({ meta, onPageChange }: PaginationControlsProps) => 
 
           {end < meta.totalPages && <GapMarker />}
 
-          <PagerButton label="Siguiente" onClick={() => onPageChange(meta.page + 1)} disabled={meta.page >= meta.totalPages} icon={<ChevronRight className="h-3.5 w-3.5" />} iconRight />
-          <PagerButton label="Última" onClick={() => onPageChange(meta.totalPages)} disabled={meta.page >= meta.totalPages} icon={<ChevronsRight className="h-3.5 w-3.5" />} iconRight />
+          <PagerButton
+            label="Siguiente"
+            onClick={() => onPageChange(meta.page + 1)}
+            disabled={meta.page >= meta.totalPages}
+            icon={<ChevronRight className="h-3.5 w-3.5" />}
+            iconRight
+          />
+          <PagerButton
+            label="Última"
+            onClick={() => onPageChange(meta.totalPages)}
+            disabled={meta.page >= meta.totalPages}
+            icon={<ChevronsRight className="h-3.5 w-3.5" />}
+            iconRight
+          />
         </div>
       </div>
     </motion.nav>

@@ -13,7 +13,7 @@ import type {
   DecisionLevel,
   RetentionIntent,
   TouristPattern,
-} from '../models';
+} from "../models";
 
 // ============================================================================
 // REGLAS DE SCORING PREDEFINIDAS
@@ -24,8 +24,8 @@ import type {
  * Puntuacion alta cuando el turista esta cerca de un punto de salida
  */
 export const proximityToExitRule: ScoreRule = {
-  id: 'proximity_to_exit',
-  name: 'Proximidad a Salida',
+  id: "proximity_to_exit",
+  name: "Proximidad a Salida",
   weight: 0.35,
   evaluate: (_state, context) => {
     const distance = context.distanceToNearestExit;
@@ -41,8 +41,8 @@ export const proximityToExitRule: ScoreRule = {
  * Velocidad alta indica intencion de salir
  */
 export const movementSpeedRule: ScoreRule = {
-  id: 'movement_speed',
-  name: 'Velocidad de Movimiento',
+  id: "movement_speed",
+  name: "Velocidad de Movimiento",
   weight: 0.2,
   evaluate: (_state, context) => {
     const speed = context.speedMps;
@@ -58,8 +58,8 @@ export const movementSpeedRule: ScoreRule = {
  * Alta inactividad puede indicar perdida de interes
  */
 export const inactivityRule: ScoreRule = {
-  id: 'inactivity',
-  name: 'Inactividad',
+  id: "inactivity",
+  name: "Inactividad",
   weight: 0.15,
   evaluate: (_state, context) => {
     const mins = context.inactivityMinutes;
@@ -75,8 +75,8 @@ export const inactivityRule: ScoreRule = {
  * Visitas muy cortas pueden indicar salida prematura
  */
 export const shortVisitRule: ScoreRule = {
-  id: 'short_visit',
-  name: 'Visita Corta',
+  id: "short_visit",
+  name: "Visita Corta",
   weight: 0.15,
   evaluate: (_state, context) => {
     const hours = context.visitDurationHours;
@@ -92,15 +92,15 @@ export const shortVisitRule: ScoreRule = {
  * Si hay POIs cercanos, hay oportunidad de retencion
  */
 export const nearbyPOIsRule: ScoreRule = {
-  id: 'nearby_pois',
-  name: 'POIs Cercanos',
+  id: "nearby_pois",
+  name: "POIs Cercanos",
   weight: 0.1,
   evaluate: (_state, context) => {
     const pois = context.nearbyPOIs.length;
     // Si hay POIs cercanos, menor urgencia de intervencion
     if (pois === 0) return 0.8;
     if (pois >= 5) return 0.0;
-    return 0.8 - (pois * 0.16);
+    return 0.8 - pois * 0.16;
   },
 };
 
@@ -109,8 +109,8 @@ export const nearbyPOIsRule: ScoreRule = {
  * Alta saturacion puede indicar necesidad de redistribucion
  */
 export const zoneSaturationRule: ScoreRule = {
-  id: 'zone_saturation',
-  name: 'Saturacion de Zona',
+  id: "zone_saturation",
+  name: "Saturacion de Zona",
   weight: 0.05,
   evaluate: (_state, context) => {
     const saturation = context.currentZoneSaturation;
@@ -142,7 +142,7 @@ export class ScoringEngine {
 
   constructor(
     rules: ScoreRule[] = DEFAULT_RULES,
-    thresholds: ThresholdConfig = { critical: 0.7, alert: 0.5, info: 0.3 }
+    thresholds: ThresholdConfig = { critical: 0.7, alert: 0.5, info: 0.3 },
   ) {
     this.rules = rules;
     this.thresholds = thresholds;
@@ -152,11 +152,9 @@ export class ScoringEngine {
   private validateWeights(): void {
     const totalWeight = this.rules.reduce((sum, r) => sum + r.weight, 0);
     if (Math.abs(totalWeight - 1.0) > 0.01) {
-      logger.warn(
-        `[ScoringEngine] Pesos no suman 1.0 (actual: ${totalWeight}). Normalizando...`
-      );
+      logger.warn(`[ScoringEngine] Pesos no suman 1.0 (actual: ${totalWeight}). Normalizando...`);
       // Normalizar pesos
-      this.rules = this.rules.map(r => ({
+      this.rules = this.rules.map((r) => ({
         ...r,
         weight: r.weight / totalWeight,
       }));
@@ -194,70 +192,64 @@ export class ScoringEngine {
    * Determina el nivel de decision basado en el score
    */
   determineLevel(score: number): DecisionLevel {
-    if (score >= this.thresholds.critical) return 'CRITICO';
-    if (score >= this.thresholds.alert) return 'ALERTA';
-    if (score >= this.thresholds.info) return 'INFO';
-    return 'SUGERENCIA';
+    if (score >= this.thresholds.critical) return "CRITICO";
+    if (score >= this.thresholds.alert) return "ALERTA";
+    if (score >= this.thresholds.info) return "INFO";
+    return "SUGERENCIA";
   }
 
   /**
    * Determina la intencion de retencion basada en el contexto
    */
-  determineIntent(
-    score: ScoreBreakdown,
-    context: ScoringContext
-  ): RetentionIntent {
+  determineIntent(score: ScoreBreakdown, context: ScoringContext): RetentionIntent {
     const { factors } = score;
 
     // Si esta muy cerca de la salida y moviéndose rapido
     if (factors.proximity_to_exit > 0.8 && factors.movement_speed > 0.6) {
-      return 'SAFE_EXIT';
+      return "SAFE_EXIT";
     }
 
     // Si hay POIs cercanos y visita corta
     if (factors.short_visit > 0.5 && context.nearbyPOIs.length > 0) {
-      return 'UPSELL';
+      return "UPSELL";
     }
 
     // Si esta inactivo pero no cerca de salida
     if (factors.inactivity > 0.5 && factors.proximity_to_exit < 0.3) {
-      return 'ENGAGEMENT';
+      return "ENGAGEMENT";
     }
 
     // Si la visita es larga y hay oportunidades
     if (factors.short_visit < 0.3 && context.nearbyPOIs.length > 2) {
-      return 'DISCOVERY';
+      return "DISCOVERY";
     }
 
-    return 'RETENTION';
+    return "RETENTION";
   }
 
   /**
    * Determina el patron de comportamiento del turista
    */
-  determinePattern(
-    score: ScoreBreakdown,
-    context: ScoringContext
-  ): TouristPattern {
+  determinePattern(score: ScoreBreakdown, context: ScoringContext): TouristPattern {
     const { factors } = score;
 
     if (factors.proximity_to_exit > 0.6 && factors.movement_speed > 0.4) {
-      return 'EXITING';
+      return "EXITING";
     }
 
     if (factors.inactivity > 0.6) {
-      return 'IDLE';
+      return "IDLE";
     }
 
     if (factors.movement_speed > 0.3 && factors.inactivity < 0.3) {
-      return 'EXPLORING';
+      return "EXPLORING";
     }
 
     if (context.visitDurationHours > 2 && factors.short_visit < 0.2) {
-      return 'LINGERING';
+      return "LINGERING";
     }
 
-    return 'RETURNING';
+    return "RETURNING";
   }
 
   /**

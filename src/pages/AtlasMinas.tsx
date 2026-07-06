@@ -21,7 +21,9 @@ export default function AtlasMinas() {
       <section className="mx-auto max-w-4xl px-6 pb-24">
         <div className="grid gap-12 md:grid-cols-12">
           <div className="md:col-span-4">
-            <div className="text-xs uppercase tracking-[0.3em] text-primary/80">Memoria operacional</div>
+            <div className="text-xs uppercase tracking-[0.3em] text-primary/80">
+              Memoria operacional
+            </div>
           </div>
           <div className="md:col-span-8">
             <p className="text-lg leading-relaxed text-foreground/85">
@@ -48,10 +50,15 @@ export default function AtlasMinas() {
               <div className="md:col-span-8">
                 <p className="text-foreground/85 leading-relaxed">{m.description}</p>
                 <div className="mt-6">
-                  <div className="text-xs uppercase tracking-[0.3em] text-primary/80">Conexiones</div>
+                  <div className="text-xs uppercase tracking-[0.3em] text-primary/80">
+                    Conexiones
+                  </div>
                   <div className="mt-3 flex flex-wrap gap-2">
                     {m.connections.map((c) => (
-                      <span key={c} className="rounded-md border border-border bg-card px-3 py-1 text-xs">
+                      <span
+                        key={c}
+                        className="rounded-md border border-border bg-card px-3 py-1 text-xs"
+                      >
                         {c}
                       </span>
                     ))}

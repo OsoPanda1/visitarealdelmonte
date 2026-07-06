@@ -25,7 +25,9 @@ export function TourismInnovationSection() {
         viewport={{ once: true }}
         className="mb-10 text-center"
       >
-        <p className="mb-4 font-body text-sm uppercase tracking-[0.3em] text-accent">🧠 Turismo Digital Avanzado</p>
+        <p className="mb-4 font-body text-sm uppercase tracking-[0.3em] text-accent">
+          🧠 Turismo Digital Avanzado
+        </p>
         <h2 className="font-display text-4xl font-bold md:text-6xl">
           30 capacidades globales
           <br />
@@ -33,7 +35,8 @@ export function TourismInnovationSection() {
         </h2>
         <p className="mx-auto mt-6 max-w-3xl font-body text-base leading-relaxed text-foreground/70">
           Investigación comparativa de estándares en plataformas turísticas internacionales,
-          aterrizada en un roadmap ejecutable para RDM Digital con enfoque en valor real para visitantes.
+          aterrizada en un roadmap ejecutable para RDM Digital con enfoque en valor real para
+          visitantes.
         </p>
       </motion.div>
 
@@ -41,7 +44,9 @@ export function TourismInnovationSection() {
         <div className="rounded-2xl border border-border bg-card/70 p-6 backdrop-blur-sm">
           <p className="text-sm text-muted-foreground">Capacidades implementadas</p>
           <p className="mt-2 font-display text-4xl font-bold text-accent">{implementedCount}/30</p>
-          <p className="mt-2 text-sm text-foreground/70">Base productiva activa con navegación, IA, telemetría y narrativa inmersiva.</p>
+          <p className="mt-2 text-sm text-foreground/70">
+            Base productiva activa con navegación, IA, telemetría y narrativa inmersiva.
+          </p>
         </div>
         <div className="rounded-2xl border border-border bg-card/70 p-6 backdrop-blur-sm">
           <p className="text-sm text-muted-foreground">Checklist pre-producción</p>
@@ -64,7 +69,9 @@ export function TourismInnovationSection() {
             className="rounded-2xl border border-border bg-card/70 p-5 backdrop-blur-sm"
           >
             <div className="mb-3 flex items-center justify-between">
-              <span className="font-body text-xs uppercase tracking-[0.2em] text-muted-foreground">{feature.id}</span>
+              <span className="font-body text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                {feature.id}
+              </span>
               {feature.implemented ? (
                 <span className="inline-flex items-center gap-1 rounded-full bg-accent/15 px-2 py-1 text-xs font-medium text-accent">
                   <CheckCircle2 className="h-3.5 w-3.5" /> Activo

@@ -3,14 +3,7 @@
 // recomendador y futuros gemelos digitales.
 
 export type POICategory =
-  | "historico"
-  | "mineria"
-  | "geologico"
-  | "plaza"
-  | "mercado"
-  | "templo"
-  | "panteon"
-  | "mirador";
+  "historico" | "mineria" | "geologico" | "plaza" | "mercado" | "templo" | "panteon" | "mirador";
 
 export interface POI {
   id: string;
@@ -98,7 +91,7 @@ export const pois: POI[] = [
 
 export function haversineKm(
   a: { lat: number; lng: number },
-  b: { lat: number; lng: number }
+  b: { lat: number; lng: number },
 ): number {
   const R = 6371;
   const toRad = (d: number) => (d * Math.PI) / 180;
@@ -106,7 +99,6 @@ export function haversineKm(
   const dLng = toRad(b.lng - a.lng);
   const lat1 = toRad(a.lat);
   const lat2 = toRad(b.lat);
-  const h =
-    Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
   return R * 2 * Math.asin(Math.sqrt(h));
 }

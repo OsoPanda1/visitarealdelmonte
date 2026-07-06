@@ -25,11 +25,14 @@ export default function ShuttleCDMX() {
         .select("*, shuttle_companies(name)")
         .eq("status", "active")
         .order("departure_time");
-      if (data) setRoutes(data.map(r => ({
-        ...r,
-        company_name: r.shuttle_companies?.name ?? null,
-        days_of_week: Array.isArray(r.days_of_week) ? r.days_of_week : [],
-      })));
+      if (data)
+        setRoutes(
+          data.map((r) => ({
+            ...r,
+            company_name: r.shuttle_companies?.name ?? null,
+            days_of_week: Array.isArray(r.days_of_week) ? r.days_of_week : [],
+          })),
+        );
     }
     load();
   }, []);
@@ -38,7 +41,10 @@ export default function ShuttleCDMX() {
   const paged = routes.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
 
   const handleBook = () => {
-    toast({ title: "Reserva", description: "Sistema de reservas próximamente. Contacta a la empresa directamente." });
+    toast({
+      title: "Reserva",
+      description: "Sistema de reservas próximamente. Contacta a la empresa directamente.",
+    });
   };
 
   if (showIntro) {
@@ -56,13 +62,23 @@ export default function ShuttleCDMX() {
     <RDMLayout>
       <div className="min-h-screen">
         <div className="container mx-auto px-4 md:px-8 pt-24 pb-16">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-10"
+          >
             <div className="flex items-center gap-3 mb-2">
               <Bus className="h-5 w-5 text-accent" />
-              <span className="text-xs tracking-[0.3em] uppercase text-muted-foreground">Conectividad</span>
+              <span className="text-xs tracking-[0.3em] uppercase text-muted-foreground">
+                Conectividad
+              </span>
             </div>
-            <h1 className="font-display text-4xl md:text-5xl text-foreground mb-4">Shuttle CDMX ↔ Real del Monte</h1>
-            <p className="text-muted-foreground max-w-2xl">Rutas de transporte directo entre la capital y nuestro Pueblo Mágico.</p>
+            <h1 className="font-display text-4xl md:text-5xl text-foreground mb-4">
+              Shuttle CDMX ↔ Real del Monte
+            </h1>
+            <p className="text-muted-foreground max-w-2xl">
+              Rutas de transporte directo entre la capital y nuestro Pueblo Mágico.
+            </p>
           </motion.div>
 
           {paged.length === 0 ? (
@@ -72,7 +88,9 @@ export default function ShuttleCDMX() {
             </div>
           ) : (
             <div className="grid sm:grid-cols-2 gap-6">
-              {paged.map(r => <ShuttleRouteCard key={r.id} route={r} onBook={handleBook} />)}
+              {paged.map((r) => (
+                <ShuttleRouteCard key={r.id} route={r} onBook={handleBook} />
+              ))}
             </div>
           )}
 

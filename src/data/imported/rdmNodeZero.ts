@@ -33,8 +33,7 @@ export const NODE_ZERO_REPOS: NodeZeroRepo[] = [
     url: "https://github.com/OsoPanda1/RDM-Digital-X",
     family: "RDM",
     status: "absorbed",
-    focus:
-      "Manifiesto RDM·X, páginas operativas, estado TAMV y contrato de fusión.",
+    focus: "Manifiesto RDM·X, páginas operativas, estado TAMV y contrato de fusión.",
     absorbedImprovements: [
       "Registro explícito de repos y capacidades federadas.",
       "Lectura del ecosistema como sistema operativo, no como landing aislada.",
@@ -60,8 +59,7 @@ export const NODE_ZERO_REPOS: NodeZeroRepo[] = [
     url: "https://github.com/OsoPanda1/real-del-monte-explorer-7b2783c6",
     family: "RDM",
     status: "absorbed",
-    focus:
-      "Exploración cultural, sitios, relatos y navegación de experiencias.",
+    focus: "Exploración cultural, sitios, relatos y navegación de experiencias.",
     absorbedImprovements: [
       "Estructura de páginas culturales especializadas.",
       "Patrón de tarjetas por experiencia territorial.",
@@ -87,8 +85,7 @@ export const NODE_ZERO_REPOS: NodeZeroRepo[] = [
     url: "https://github.com/OsoPanda1/real-del-monte-twin",
     family: "Smart City",
     status: "absorbed",
-    focus:
-      "Gemelo digital, telemetría, capas geoespaciales y lectura territorial.",
+    focus: "Gemelo digital, telemetría, capas geoespaciales y lectura territorial.",
     absorbedImprovements: [
       "Matriz de gemelo territorial conectada a mapa y dashboard.",
       "Vocabulario de sensores, saturación, flujos y cuidado patrimonial.",
@@ -101,8 +98,7 @@ export const NODE_ZERO_REPOS: NodeZeroRepo[] = [
     url: "https://github.com/OsoPanda1/rdm-smart-city-os",
     family: "Smart City",
     status: "orchestrated",
-    focus:
-      "Paquetes de ciudad inteligente, conectividad, seguridad y operación municipal.",
+    focus: "Paquetes de ciudad inteligente, conectividad, seguridad y operación municipal.",
     absorbedImprovements: [
       "Fases de conectividad soberana y telemetría urbana.",
       "Indicadores de operación para pasar de visión a ejecución.",
@@ -115,8 +111,7 @@ export const NODE_ZERO_REPOS: NodeZeroRepo[] = [
     url: "https://github.com/OsoPanda1/rdm-digital-nodo-cero",
     family: "Documentación",
     status: "absorbed",
-    focus:
-      "Nodo Cero soberano, tesis, identidad, protocolos y constitución funcional.",
+    focus: "Nodo Cero soberano, tesis, identidad, protocolos y constitución funcional.",
     absorbedImprovements: [
       "Nodo Cero como comando verificable y no solo declaración.",
       "Anclaje de identidad, BookPI, Phoenix 20/30/50 y auditoría BABAS.",
@@ -155,8 +150,7 @@ export const NODE_ZERO_REPOS: NodeZeroRepo[] = [
     url: "https://github.com/OsoPanda1/tamv-sovereign-hub",
     family: "TAMV",
     status: "reference",
-    focus:
-      "Hub soberano con economía, wallet, universidad, gobernanza y dream spaces.",
+    focus: "Hub soberano con economía, wallet, universidad, gobernanza y dream spaces.",
     absorbedImprovements: [
       "Visión de economía soberana y universidad digital como capas futuras.",
       "Governance, achievements y marketplace como destinos de expansión.",
@@ -182,8 +176,7 @@ export const NODE_ZERO_CAPABILITIES: NodeZeroCapability[] = [
   {
     id: "shell",
     title: "Shell turístico-comercial soberano",
-    signal:
-      "Visitante, comercio, cultura y donativo entran por una sola superficie pública.",
+    signal: "Visitante, comercio, cultura y donativo entran por una sola superficie pública.",
     implementation:
       "Home, rutas, catálogo, directorio, mapa, eventos y REALITO ya se exponen como producto unificado.",
     routes: ["/", "/rutas", "/catalogo", "/directorio", "/mapa"],
@@ -202,8 +195,7 @@ export const NODE_ZERO_CAPABILITIES: NodeZeroCapability[] = [
   {
     id: "isabella",
     title: "Isabella / REALITO contextual",
-    signal:
-      "La IA responde desde memoria cultural, retención turística y cuidado del territorio.",
+    signal: "La IA responde desde memoria cultural, retención turística y cuidado del territorio.",
     implementation:
       "Asistente flotante, motor Isabella, corpus RDM y decisiones auditables operan como una capa transversal.",
     routes: ["/tamv", "/tamv/api", "/corpus", "/admin/isabella"],
@@ -232,8 +224,7 @@ export const NODE_ZERO_CAPABILITIES: NodeZeroCapability[] = [
   {
     id: "execution",
     title: "Ejecución Nodo Cero",
-    signal:
-      "La visión se convierte en secuencia: absorber, normalizar, exponer, medir y escalar.",
+    signal: "La visión se convierte en secuencia: absorber, normalizar, exponer, medir y escalar.",
     implementation:
       "El home ahora muestra el panel de ejecución y Fusion dejó de ser una lista pasiva de repos.",
     routes: ["/fusion", "/admin", "/dashboard"],
@@ -255,8 +246,7 @@ export const NODE_ZERO_PROTOCOL: NodeZeroProtocolStep[] = [
     title: "Absorber",
     description:
       "Traer al repo actual la matriz de fusión, el lenguaje operativo y la lectura de capacidades por madurez.",
-    evidence:
-      "NODE_ZERO_REPOS y NODE_ZERO_CAPABILITIES quedan como contrato fuente del panel.",
+    evidence: "NODE_ZERO_REPOS y NODE_ZERO_CAPABILITIES quedan como contrato fuente del panel.",
   },
   {
     id: "unify",
@@ -271,27 +261,18 @@ export const NODE_ZERO_PROTOCOL: NodeZeroProtocolStep[] = [
     title: "Ejecutar Nodo Cero",
     description:
       "Publicar consola visual con estado, avances, comandos de navegación y próximos contratos técnicos.",
-    evidence:
-      "NodoCeroCommandCenter se renderiza en home y se reutiliza en Fusion.",
+    evidence: "NodoCeroCommandCenter se renderiza en home y se reutiliza en Fusion.",
   },
 ];
 
 export const getNodeZeroCompletion = () => {
-  const absorbed = NODE_ZERO_REPOS.filter(
-    (repo) => repo.status === "absorbed",
-  ).length;
-  const weighted = NODE_ZERO_CAPABILITIES.reduce(
-    (sum, cap) => sum + cap.maturity,
-    0,
-  );
+  const absorbed = NODE_ZERO_REPOS.filter((repo) => repo.status === "absorbed").length;
+  const weighted = NODE_ZERO_CAPABILITIES.reduce((sum, cap) => sum + cap.maturity, 0);
   return {
     repos: NODE_ZERO_REPOS.length,
     absorbed,
-    orchestrated: NODE_ZERO_REPOS.filter(
-      (repo) => repo.status === "orchestrated",
-    ).length,
-    reference: NODE_ZERO_REPOS.filter((repo) => repo.status === "reference")
-      .length,
+    orchestrated: NODE_ZERO_REPOS.filter((repo) => repo.status === "orchestrated").length,
+    reference: NODE_ZERO_REPOS.filter((repo) => repo.status === "reference").length,
     maturity: Math.round(weighted / NODE_ZERO_CAPABILITIES.length),
   };
 };

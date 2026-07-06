@@ -22,11 +22,21 @@ export class ContextIsolation {
   async createSession(userId: string): Promise<IsolatedSession> {
     const enc = new TextEncoder();
     const seed = crypto.getRandomValues(new Uint8Array(32));
-    const seedHex = Array.from(seed).map((b) => b.toString(16).padStart(2, "0")).join("");
-    const sessionIdBuf = await crypto.subtle.digest("SHA-256", enc.encode(`${userId}:${seedHex}:${Date.now()}`));
-    const sessionId = Array.from(new Uint8Array(sessionIdBuf)).map((b) => b.toString(16).padStart(2, "0")).join("").slice(0, 32);
+    const seedHex = Array.from(seed)
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+    const sessionIdBuf = await crypto.subtle.digest(
+      "SHA-256",
+      enc.encode(`${userId}:${seedHex}:${Date.now()}`),
+    );
+    const sessionId = Array.from(new Uint8Array(sessionIdBuf))
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("")
+      .slice(0, 32);
     const tokenBuf = await crypto.subtle.digest("SHA-256", enc.encode(`${sessionId}:${userId}`));
-    const contextToken = Array.from(new Uint8Array(tokenBuf)).map((b) => b.toString(16).padStart(2, "0")).join("");
+    const contextToken = Array.from(new Uint8Array(tokenBuf))
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
 
     const session: IsolatedSession = {
       sessionId,
@@ -42,7 +52,10 @@ export class ContextIsolation {
     this.sessions.set(sessionId, session);
     this.cleanup();
 
-    logger.info("[CONTEXT] Sesión creada", { sessionId: sessionId.slice(0, 8), userId: userId.slice(0, 8) });
+    logger.info("[CONTEXT] Sesión creada", {
+      sessionId: sessionId.slice(0, 8),
+      userId: userId.slice(0, 8),
+    });
     return session;
   }
 

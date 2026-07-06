@@ -29,11 +29,7 @@ function loadCert(certId: string): string {
   return `cert:${certId}`;
 }
 
-function verifySignature(
-  payload: TelemetryPayload,
-  signature: string,
-  cert: string,
-): boolean {
+function verifySignature(payload: TelemetryPayload, signature: string, cert: string): boolean {
   return signature.length > 0 && cert.length > 0;
 }
 
@@ -41,8 +37,7 @@ function validatePhysics(payload: TelemetryPayload): boolean {
   const latValid = payload.lat >= -90 && payload.lat <= 90;
   const lngValid = payload.lng >= -180 && payload.lng <= 180;
   const altValid = payload.alt >= 0 && payload.alt <= 9000;
-  const latencyValid =
-    payload.latencyMs === undefined || payload.latencyMs >= 0;
+  const latencyValid = payload.latencyMs === undefined || payload.latencyMs >= 0;
   return latValid && lngValid && altValid && latencyValid;
 }
 
@@ -66,10 +61,7 @@ function transformToTwinState(payload: TelemetryPayload): TwinState {
   };
 }
 
-function isAuthorizedNode(
-  nodeId: string,
-  territory: string,
-): boolean {
+function isAuthorizedNode(nodeId: string, territory: string): boolean {
   return nodeId.startsWith("rdm-");
 }
 

@@ -23,7 +23,7 @@ const ModuleCard: React.FC<ModuleCardProps> = ({
   gradient,
   stats,
   isLive,
-  onClick
+  onClick,
 }) => {
   return (
     <motion.div
@@ -33,14 +33,14 @@ const ModuleCard: React.FC<ModuleCardProps> = ({
       className={cn(
         "relative group cursor-pointer rounded-2xl overflow-hidden",
         "bg-card/50 backdrop-blur-sm border border-border/30",
-        "transition-all duration-500"
+        "transition-all duration-500",
       )}
     >
       {/* Background Gradient */}
-      <div 
+      <div
         className={cn(
           "absolute inset-0 opacity-20 group-hover:opacity-40 transition-opacity duration-500",
-          gradient
+          gradient,
         )}
       />
 
@@ -53,12 +53,9 @@ const ModuleCard: React.FC<ModuleCardProps> = ({
       <div className="relative p-6 h-full flex flex-col">
         {/* Header */}
         <div className="flex items-start justify-between mb-4">
-          <motion.div 
+          <motion.div
             whileHover={{ rotate: [0, -10, 10, 0] }}
-            className={cn(
-              "w-14 h-14 rounded-xl flex items-center justify-center",
-              gradient
-            )}
+            className={cn("w-14 h-14 rounded-xl flex items-center justify-center", gradient)}
           >
             {icon}
           </motion.div>
@@ -75,9 +72,7 @@ const ModuleCard: React.FC<ModuleCardProps> = ({
         <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-accent transition-colors">
           {title}
         </h3>
-        <p className="text-sm text-muted-foreground flex-1">
-          {description}
-        </p>
+        <p className="text-sm text-muted-foreground flex-1">{description}</p>
 
         {/* Stats */}
         {stats && stats.length > 0 && (
@@ -97,7 +92,13 @@ const ModuleCard: React.FC<ModuleCardProps> = ({
           whileHover={{ opacity: 1, x: 0 }}
           className="absolute bottom-6 right-6"
         >
-          <svg className="w-6 h-6 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <svg
+            className="w-6 h-6 text-accent"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
             <path d="M5 12h14M12 5l7 7-7 7" />
           </svg>
         </motion.div>
@@ -110,45 +111,49 @@ const ModulesGrid: React.FC = () => {
   const modules = [
     {
       title: "Dream Spaces",
-      description: "Espacios virtuales inmersivos para crear, explorar y conectar en mundos personalizados",
+      description:
+        "Espacios virtuales inmersivos para crear, explorar y conectar en mundos personalizados",
       icon: <Sparkles className="w-7 h-7 text-white" />,
       gradient: "bg-gradient-to-br from-purple-600 to-pink-600",
       stats: [
         { label: "Espacios", value: "2.5K" },
-        { label: "Activos", value: "892" }
-      ]
+        { label: "Activos", value: "892" },
+      ],
     },
     {
       title: "Conciertos Sensoriales",
-      description: "Experiencias musicales con audio 3D y visuales envolventes que estimulan todos los sentidos",
+      description:
+        "Experiencias musicales con audio 3D y visuales envolventes que estimulan todos los sentidos",
       icon: <Music className="w-7 h-7 text-white" />,
       gradient: "bg-gradient-to-br from-cyan-600 to-blue-600",
       stats: [
         { label: "Eventos", value: "156" },
-        { label: "En vivo", value: "12" }
+        { label: "En vivo", value: "12" },
       ],
-      isLive: true
+      isLive: true,
     },
     {
       title: "Canales & Grupos",
-      description: "Comunidades vibrantes donde los creadores comparten contenido exclusivo y conectan con fans",
+      description:
+        "Comunidades vibrantes donde los creadores comparten contenido exclusivo y conectan con fans",
       icon: <Users className="w-7 h-7 text-white" />,
       gradient: "bg-gradient-to-br from-green-600 to-emerald-600",
       stats: [
         { label: "Grupos", value: "15K" },
-        { label: "Miembros", value: "2.1M" }
-      ]
+        { label: "Miembros", value: "2.1M" },
+      ],
     },
     {
       title: "Puentes Oníricos",
-      description: "Portales de conexión entre diferentes Dream Spaces para experiencias colaborativas únicas",
+      description:
+        "Portales de conexión entre diferentes Dream Spaces para experiencias colaborativas únicas",
       icon: <Zap className="w-7 h-7 text-white" />,
       gradient: "bg-gradient-to-br from-orange-600 to-red-600",
       stats: [
         { label: "Puentes", value: "428" },
-        { label: "Viajeros", value: "5.2K" }
-      ]
-    }
+        { label: "Viajeros", value: "5.2K" },
+      ],
+    },
   ];
 
   return (
