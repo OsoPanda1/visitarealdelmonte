@@ -1,7 +1,7 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { RDMLayout } from "@/components/rdm/RDMLayout";
 import { SEOMeta } from "@/components/SEOMeta";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import {
   Play,
   Pause,
@@ -178,6 +178,19 @@ const PLAYLIST: Track[] = [
 
 const DONATION_AMOUNTS = [50, 100, 200, 500, 1000];
 
+const MOOD_COLORS: Record<string, string> = {
+  Triste: "#FF1744",
+  Intenso: "#FF1744",
+  Energético: "#00D4FF",
+  Épico: "#00D4FF",
+  Melancólico: "#A7F300",
+  Emotivo: "#A7F300",
+  Pasional: "#A7F300",
+  Nocturno: "#A7F300",
+  Nostálgico: "#A7F300",
+  Inspirador: "#A7F300",
+};
+
 function formatDuration(secs: number): string {
   const m = Math.floor(secs / 60);
   const s = secs % 60;
@@ -202,21 +215,16 @@ function TrackRow({
   onPlay: () => void;
 }) {
   const [expanded, setExpanded] = useState(false);
-  const open = expanded || (isActive && isPlaying);
+  const open = expanded || isActive;
+  const prefersReducedMotion = useReducedMotion();
 
-  // Colores de mood (verde limón / rojo cereza / azul eléctrico)
-  const moodColor =
-    track.mood === "Triste" || track.mood === "Intenso"
-      ? "#FF1744" // rojo cereza
-      : track.mood === "Energético" || track.mood === "Épico"
-        ? "#00D4FF" // azul eléctrico
-        : "#A7F300"; // verde limón por defecto
+  const moodColor = MOOD_COLORS[track.mood ?? ""] ?? "#A7F300";
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 8 }}
+      initial={prefersReducedMotion ? false : { opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.03 }}
+      transition={prefersReducedMotion ? { duration: 0 } : { delay: index * 0.03 }}
       className={`group rounded-2xl border transition-all duration-200 will-change-transform will-change-opacity ${
         isActive
           ? "border-[#00D4FF] bg-[#F3F4F6] shadow-[0_12px_35px_rgba(0,212,255,0.35)]"
@@ -418,11 +426,19 @@ function EcosMusicaSection() {
   );
   const [trackIndex, setTrackIndex] = useState(0);
   const [xpToast, setXpToast] = useState<string | null>(null);
+  const xpTimerRef = useRef<ReturnType<typeof setTimeout>>();
 
-  const handleXpEarned = (xp: number) => {
+  const handleXpEarned = useCallback((xp: number) => {
     setXpToast(`+${xp} XP Cultura`);
-    setTimeout(() => setXpToast(null), 2500);
-  };
+    if (xpTimerRef.current) clearTimeout(xpTimerRef.current);
+    xpTimerRef.current = setTimeout(() => setXpToast(null), 2500);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (xpTimerRef.current) clearTimeout(xpTimerRef.current);
+    };
+  }, []);
 
   const handleNextTrack = () => {
     const next = (trackIndex + 1) % recommendedTracks.length;
@@ -698,10 +714,17 @@ export default function Musica() {
   const [donationAmount, setDonationAmount] = useState<number | null>(null);
   const [customAmount, setCustomAmount] = useState("");
   const [donating, setDonating] = useState(false);
+  const [donationError, setDonationError] = useState<string | null>(null);
 
   const handleDonation = async () => {
-    const amount = donationAmount ?? (customAmount ? parseInt(customAmount) : null);
+    const parsed = customAmount ? parseInt(customAmount, 10) : null;
+    if (customAmount && (isNaN(parsed!) || parsed! <= 0)) {
+      setDonationError("Ingresa una cantidad válida en MXN.");
+      return;
+    }
+    const amount = donationAmount ?? parsed;
     if (!amount || amount <= 0) return;
+    setDonationError(null);
     setDonating(true);
     try {
       const res = await fetch("/api/donations/checkout", {
@@ -710,12 +733,14 @@ export default function Musica() {
         body: JSON.stringify({ amount }),
       });
       if (!res.ok) {
+        setDonationError("Error al procesar el pago. Intenta de nuevo.");
         setDonating(false);
         return;
       }
       const { url } = await res.json();
       if (url) window.location.href = url;
     } catch {
+      setDonationError("Error de conexión. Verifica tu internet e intenta de nuevo.");
       setDonating(false);
     }
   };
@@ -887,6 +912,12 @@ export default function Musica() {
                     contigo, considera hacer una contribución.
                   </p>
 
+                  {donationError && (
+                    <p className="mb-3 text-[11px] text-[#FF1744] flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#FF1744]" />
+                      {donationError}
+                    </p>
+                  )}
                   <DonationControls
                     donationAmount={donationAmount}
                     setDonationAmount={setDonationAmount}
