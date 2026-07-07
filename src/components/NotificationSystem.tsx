@@ -1,4 +1,4 @@
-import { useState, useCallback, createContext, useContext, ReactNode } from "react";
+import { useState, useCallback, createContext, useContext, ReactNode, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -11,11 +11,16 @@ import {
   Utensils,
   MessageSquare,
   Heart,
+  Bell,
+  BellOff,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useNotificationAudio } from "@/hooks/useNotificationAudio";
+import { getPriorityForEvent } from "@/notifications";
 
 type NotificationType =
-  "success" | "error" | "warning" | "info" | "event" | "food" | "place" | "message";
+  | "success" | "error" | "warning" | "info"
+  | "event" | "food" | "place" | "message";
 
 interface Notification {
   id: string;
@@ -24,6 +29,9 @@ interface Notification {
   message: string;
   icon?: React.ElementType;
   duration?: number;
+  priority?: "low" | "normal" | "high";
+  soundUrl?: string;
+  eventType?: string;
   action?: {
     label: string;
     onClick: () => void;
@@ -35,12 +43,16 @@ interface NotificationContextType {
   addNotification: (notification: Omit<Notification, "id">) => void;
   removeNotification: (id: string) => void;
   clearAll: () => void;
+  muted: boolean;
+  setMuted: (v: boolean) => void;
 }
 
 const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
 
 export function NotificationProvider({ children }: { children: ReactNode }) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const { play, muted, setMuted } = useNotificationAudio();
+  const processedRef = useRef<Set<string>>(new Set());
 
   const removeNotification = useCallback((id: string) => {
     setNotifications((prev) => prev.filter((n) => n.id !== id));
@@ -53,13 +65,22 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
 
       setNotifications((prev) => [newNotification, ...prev].slice(0, 5));
 
+      if (notification.soundUrl && !processedRef.current.has(id)) {
+        processedRef.current.add(id);
+        const priority = notification.priority || getPriorityForEvent(notification.eventType || "");
+        play(notification.soundUrl, { priority, soundId: notification.eventType || notification.type });
+      }
+
       if (notification.duration !== 0) {
         setTimeout(() => {
           removeNotification(id);
+          processedRef.current.delete(id);
         }, notification.duration || 5000);
       }
+
+      return id;
     },
-    [removeNotification],
+    [removeNotification, play],
   );
 
   const clearAll = useCallback(() => {
@@ -68,20 +89,22 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
 
   return (
     <NotificationContext.Provider
-      value={{ notifications, addNotification, removeNotification, clearAll }}
+      value={{ notifications, addNotification, removeNotification, clearAll, muted, setMuted }}
     >
       {children}
-      {/* Notifications rendered inline, no separate component with ref issues */}
       <div className="fixed top-20 right-4 z-[60] flex flex-col gap-2 w-[380px] max-w-[calc(100vw-32px)]">
-        <AnimatePresence mode="popLayout">
-          {notifications.map((notification) => (
-            <NotificationItem
-              key={notification.id}
-              notification={notification}
-              onRemove={() => removeNotification(notification.id)}
-            />
-          ))}
-        </AnimatePresence>
+        <div className="relative">
+          <MuteToggle />
+          <AnimatePresence mode="popLayout">
+            {notifications.map((notification) => (
+              <NotificationItem
+                key={notification.id}
+                notification={notification}
+                onRemove={() => removeNotification(notification.id)}
+              />
+            ))}
+          </AnimatePresence>
+        </div>
       </div>
     </NotificationContext.Provider>
   );
@@ -93,6 +116,24 @@ export function useNotifications() {
     throw new Error("useNotifications must be used within NotificationProvider");
   }
   return context;
+}
+
+export function useNotificationsWithAudio() {
+  const { addNotification, muted, setMuted } = useNotifications();
+  const { play } = useNotificationAudio();
+
+  const notifyWithSound = useCallback(
+    (n: Omit<Notification, "id">, soundUrl?: string) => {
+      if (soundUrl) {
+        const priority = n.priority || getPriorityForEvent(n.eventType || "");
+        play(soundUrl, { priority, soundId: n.eventType || n.type });
+      }
+      addNotification(n);
+    },
+    [addNotification, play],
+  );
+
+  return { notifyWithSound, muted, setMuted };
 }
 
 const notificationIcons: Record<NotificationType, React.ElementType> = {
@@ -126,6 +167,7 @@ function NotificationItem({
 }) {
   const Icon: any = notification.icon || notificationIcons[notification.type];
   const gradientClass = notificationColors[notification.type];
+  const priorityLabel = notification.priority === "high" ? "★" : notification.priority === "low" ? "·" : "";
 
   return (
     <motion.div
@@ -134,7 +176,9 @@ function NotificationItem({
       animate={{ opacity: 1, x: 0, scale: 1 }}
       exit={{ opacity: 0, x: 80, scale: 0.85 }}
       transition={{ type: "spring", stiffness: 400, damping: 30 }}
-      className="glass-dark rounded-2xl overflow-hidden shadow-elevated"
+      className={`glass-dark rounded-2xl overflow-hidden shadow-elevated ${
+        notification.priority === "high" ? "ring-1 ring-electric/40" : ""
+      }`}
       style={{ border: "1px solid hsla(210,100%,55%,0.15)" }}
     >
       <div className="flex items-start gap-3 p-4">
@@ -144,9 +188,14 @@ function NotificationItem({
           <Icon className="w-5 h-5 text-white" />
         </div>
         <div className="flex-1 min-w-0">
-          <h4 className="font-semibold text-sm" style={{ color: "hsl(0,0%,95%)" }}>
-            {notification.title}
-          </h4>
+          <div className="flex items-center gap-2">
+            <h4 className="font-semibold text-sm" style={{ color: "hsl(0,0%,95%)" }}>
+              {notification.title}
+            </h4>
+            {priorityLabel && (
+              <span className="text-xs text-electric/70">{priorityLabel}</span>
+            )}
+          </div>
           <p className="text-xs mt-1 leading-relaxed" style={{ color: "hsl(210,20%,60%)" }}>
             {notification.message}
           </p>
@@ -181,6 +230,19 @@ function NotificationItem({
   );
 }
 
+function MuteToggle() {
+  const { muted, setMuted } = useNotifications();
+  return (
+    <button
+      onClick={() => setMuted(!muted)}
+      className="absolute -top-1 -right-1 w-7 h-7 rounded-full bg-card border border-border flex items-center justify-center hover:bg-muted transition-colors shadow-sm"
+      title={muted ? "Activar sonido" : "Silenciar"}
+    >
+      {muted ? <BellOff className="w-3.5 h-3.5 text-muted-foreground" /> : <Bell className="w-3.5 h-3.5 text-electric" />}
+    </button>
+  );
+}
+
 // Predefined notifications for common scenarios
 export const predefinedNotifications = {
   welcome: () => ({
@@ -188,38 +250,52 @@ export const predefinedNotifications = {
     title: "¡Bienvenido a Real del Monte!",
     message: "Descubre la magia de este Pueblo Mágico único en el mundo.",
     icon: Heart,
+    eventType: "system.update_available",
+    priority: "normal" as const,
   }),
   festivalReminder: (festivalName: string, date: string) => ({
     type: "event" as NotificationType,
     title: "Próximo Festival",
     message: `${festivalName} se aproxima. Marca en tu calendario: ${date}`,
     icon: Calendar,
+    eventType: "event.live_now",
+    priority: "normal" as const,
   }),
   routeCompleted: (routeName: string) => ({
     type: "success" as NotificationType,
     title: "¡Ruta Completada!",
     message: `Has terminado la ${routeName}. Esperamos que hayas disfrutado la experiencia.`,
+    eventType: "tour.booking_confirmed",
+    priority: "normal" as const,
   }),
   newPlaceNearby: (placeName: string) => ({
     type: "place" as NotificationType,
     title: "Lugar Cercano",
     message: `Estás cerca de ${placeName}. ¿Te gustaría visitarlo?`,
     icon: MapPin,
+    eventType: "event.reminder_30min",
+    priority: "low" as const,
   }),
   foodRecommendation: (dishName: string) => ({
     type: "food" as NotificationType,
     title: "Recomendación Gastronómica",
     message: `No te vayas sin probar ${dishName}, un platillo único de Real del Monte.`,
+    eventType: "digest.daily_summary",
+    priority: "low" as const,
   }),
   weatherAlert: (condition: string) => ({
     type: "warning" as NotificationType,
     title: "Alerta Climática",
     message: `Se espera ${condition} en las próximas horas. Toma precauciones.`,
+    eventType: "gov.alert_minor",
+    priority: "normal" as const,
   }),
   messageReceived: (from: string) => ({
     type: "message" as NotificationType,
     title: "Nuevo Mensaje",
     message: `Has recibido un mensaje de ${from}`,
+    eventType: "community.new_message",
+    priority: "normal" as const,
   }),
 };
 
