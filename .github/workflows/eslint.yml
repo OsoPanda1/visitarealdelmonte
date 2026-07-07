@@ -19,7 +19,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -31,7 +31,7 @@ jobs:
           cache: 'maven'
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '20'
           cache: 'npm'
@@ -63,7 +63,7 @@ jobs:
 
       - name: Upload SARIF to GitHub
         if: steps.sarif_check.outputs.exists == 'true'
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: eslint-results.sarif
           wait-for-processing: true
@@ -75,7 +75,7 @@ jobs:
 
     steps:
       - name: Download Build Artifact
-        uses: actions/download-artifact@v3.1.0
+        uses: actions/download-artifact@v8.0.1
         with:
           name: build
           path: ./artifacts
