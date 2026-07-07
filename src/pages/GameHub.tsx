@@ -19,6 +19,7 @@ import { QuestPanel } from "@/features/gamification/components/QuestPanel";
 import { Leaderboard } from "@/features/gamification/components/Leaderboard";
 import { PlayerProfile } from "@/features/gamification/components/PlayerProfile";
 import { ScrollReveal, CinematicBanner, FloatingParticles } from "@/components/rdm/ScrollReveal";
+import rdm_aerial_pueblo from "@/assets/images/rdm-aerial-pueblo.jpg";
 
 const QUICK_QUESTS = [
   {
@@ -98,7 +99,7 @@ export default function GameHubPage() {
 
       {/* Hero Banner */}
       <CinematicBanner
-        image="/images/rdm-aerial-pueblo.jpg"
+        image=rdm_aerial_pueblo
         alt="Game Hub RDM"
         height="50vh"
         className="mt-0"

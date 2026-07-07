@@ -2,13 +2,18 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { ChevronDown, Mountain, MapPin, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
+import hero_realdelmonte from "@/assets/images/hero-realdelmonte.jpg";
+import rdm_aerial_pueblo from "@/assets/images/rdm-aerial-pueblo.jpg";
+import rdm_bosque_niebla from "@/assets/images/rdm-bosque-niebla.jpg";
+import rdm_calles_coloridas from "@/assets/images/rdm-calles-coloridas.jpg";
+import rdm_mirador_sunset from "@/assets/images/rdm-mirador-sunset.jpg";
 
 const HERO_IMAGES = [
-  "/images/hero-realdelmonte.jpg",
-  "/images/rdm-aerial-pueblo.jpg",
-  "/images/rdm-bosque-niebla.jpg",
-  "/images/rdm-calles-coloridas.jpg",
-  "/images/rdm-mirador-sunset.jpg",
+  hero_realdelmonte,
+  rdm_aerial_pueblo,
+  rdm_bosque_niebla,
+  rdm_calles_coloridas,
+  rdm_mirador_sunset,
 ];
 
 export function RDMHero() {

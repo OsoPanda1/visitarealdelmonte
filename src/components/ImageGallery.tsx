@@ -3,26 +3,26 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, ZoomIn, Camera } from "lucide-react";
 
 // Import ALL available real RDM images
-import minaImg from "@/assets/mina-acosta.webp";
-import panteonImg from "@/assets/panteon-ingles.webp";
-import callesImg from "@/assets/calles-colonial.webp";
-import heroImg from "@/assets/hero-real-del-monte.webp";
-import penasImg from "@/assets/penas-cargadas.webp";
-import pasteImg from "@/assets/paste.webp";
-import rdm1 from "@/assets/rdm1.jpeg";
-import rdm2 from "@/assets/rdm2.jpeg";
-import rdm01 from "@/assets/rdm01.jpg";
-import rdm02 from "@/assets/rdm02.jpg";
-import rdm03 from "@/assets/rdm03.jpg";
-import rdm04 from "@/assets/rdm04.jpg";
-import rdm05 from "@/assets/rdm05.jpg";
-import rdm06 from "@/assets/rdm06.jpeg";
-import rdm7 from "@/assets/rdm7.jpeg";
-import rdm07 from "@/assets/rdm07.avif";
-import rdm08 from "@/assets/rdm08.jpeg";
-import rmd5 from "@/assets/rmd5.jpeg";
-import rmd6 from "@/assets/rmd6.jpeg";
-import mapaRdm from "@/assets/Mapardm.png";
+import minaImg from "@/assets/images/mina-acosta.webp";
+import panteonImg from "@/assets/images/panteon-ingles.webp";
+import callesImg from "@/assets/images/calles-colonial.webp";
+import heroImg from "@/assets/images/hero-real-del-monte.webp";
+import penasImg from "@/assets/images/penas-cargadas.webp";
+import pasteImg from "@/assets/images/paste.webp";
+import rdm1 from "@/assets/images/rdm1.jpeg";
+import rdm2 from "@/assets/images/rdm2.jpeg";
+import rdm01 from "@/assets/images/rdm01.jpg";
+import rdm02 from "@/assets/images/rdm02.jpg";
+import rdm03 from "@/assets/images/rdm03.jpg";
+import rdm04 from "@/assets/images/rdm04.jpg";
+import rdm05 from "@/assets/images/rdm05.jpg";
+import rdm06 from "@/assets/images/rdm06.jpeg";
+import rdm7 from "@/assets/images/rdm7.jpeg";
+import rdm07 from "@/assets/images/rdm07.avif";
+import rdm08 from "@/assets/images/rdm08.jpeg";
+import rmd5 from "@/assets/images/rmd5.jpeg";
+import rmd6 from "@/assets/images/rmd6.jpeg";
+import mapaRdm from "@/assets/images/Mapardm.png";
 
 interface Image {
   id: string;

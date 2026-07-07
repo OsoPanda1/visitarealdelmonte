@@ -1,13 +1,14 @@
 import { WikiPage } from "@/components/WikiPage";
 import { Section } from "@/components/WikiElements";
 import { Users, Code, Building, Globe } from "lucide-react";
+import heroprincipal from "@/assets/images/heroprincipal.png";
 
 const Introduccion = () => (
   <WikiPage title="Introducción" subtitle="¿Qué es TAMV y por qué existe?">
     {/* Hero Banner */}
     <div className="relative h-48 w-full overflow-hidden">
       <img
-        src="/images/heroprincipal.png"
+        src=heroprincipal
         alt="Hero principal de TAMV"
         className="h-full w-full object-cover"
       />

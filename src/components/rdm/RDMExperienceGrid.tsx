@@ -2,9 +2,9 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Pickaxe, Utensils, Mountain, Bed, Palette } from "lucide-react";
 import { Link } from "react-router-dom";
-import pasteriasImg from "@/assets/pasterias.png";
-import plateriasImg from "@/assets/platerias.png";
-import artesaniasImg from "@/assets/artesanias.png";
+import pasteriasImg from "@/assets/images/pasterias.png";
+import plateriasImg from "@/assets/images/platerias.png";
+import artesaniasImg from "@/assets/images/artesanias.png";
 
 const EXPERIENCES = [
   {

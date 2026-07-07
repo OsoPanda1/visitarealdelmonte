@@ -35,15 +35,15 @@ import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 
 // Assets
-import heroImg from "@/assets/hero-real-del-monte.webp";
-import minaImg from "@/assets/mina-acosta.webp";
-import panteonImg from "@/assets/panteon-ingles.webp";
-import penasImg from "@/assets/penas-cargadas.webp";
-import callesImg from "@/assets/calles-colonial.webp";
-import rdm1 from "@/assets/rdm1.jpeg";
-import rdm2 from "@/assets/rdm2.jpeg";
-import rdm3 from "@/assets/rdm01.jpg";
-import rdm4 from "@/assets/rdm02.jpg";
+import heroImg from "@/assets/images/hero-real-del-monte.webp";
+import minaImg from "@/assets/images/mina-acosta.webp";
+import panteonImg from "@/assets/images/panteon-ingles.webp";
+import penasImg from "@/assets/images/penas-cargadas.webp";
+import callesImg from "@/assets/images/calles-colonial.webp";
+import rdm1 from "@/assets/images/rdm1.jpeg";
+import rdm2 from "@/assets/images/rdm2.jpeg";
+import rdm3 from "@/assets/images/rdm01.jpg";
+import rdm4 from "@/assets/images/rdm02.jpg";
 
 // Route types definition
 interface RouteStop {

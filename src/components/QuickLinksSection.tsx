@@ -1,13 +1,13 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import historiaImg from "@/assets/historia-hero.jpg";
-import gastronomiaImg from "@/assets/gastronomia-hero.jpg";
-import rutasImg from "@/assets/hero-rdm.jpg";
-import eventosImg from "@/assets/eventos-hero.jpg";
-import ecoturismoImg from "@/assets/ecoturismo-hero.jpg";
-import mitosImg from "@/assets/relatos-hero.jpg";
-import arteImg from "@/assets/arte-hero.jpg";
-import comunidadImg from "@/assets/cultura-hero.jpg";
+import historiaImg from "@/assets/images/historia-hero.jpg";
+import gastronomiaImg from "@/assets/images/gastronomia-hero.jpg";
+import rutasImg from "@/assets/images/hero-rdm.jpg";
+import eventosImg from "@/assets/images/eventos-hero.jpg";
+import ecoturismoImg from "@/assets/images/ecoturismo-hero.jpg";
+import mitosImg from "@/assets/images/relatos-hero.jpg";
+import arteImg from "@/assets/images/arte-hero.jpg";
+import comunidadImg from "@/assets/images/cultura-hero.jpg";
 
 const quickLinks = [
   {

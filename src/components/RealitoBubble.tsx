@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Loader2, Volume2, VolumeX, MapPin, Sparkles } from "lucide-react";
 import ReactMarkdown from "react-markdown";
-import logoImg from "@/assets/rdm-logo.png";
+import logoImg from "@/assets/images/rdm-logo.png";
 
 interface Message {
   id: string;

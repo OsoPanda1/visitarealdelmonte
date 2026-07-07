@@ -1,6 +1,7 @@
 import { WikiPage } from "@/components/WikiPage";
 import { Section, InfoBox } from "@/components/WikiElements";
 import { Link2, Shield, Code2, Database } from "lucide-react";
+import landscape_fog from "@/assets/images/landscape-fog.jpg";
 
 const BlockchainMSR = () => (
   <WikiPage
@@ -10,7 +11,7 @@ const BlockchainMSR = () => (
     {/* Hero Banner */}
     <div className="relative h-48 w-full overflow-hidden">
       <img
-        src="/images/landscape-fog.jpg"
+        src=landscape_fog
         alt="Paisaje con neblina de Real del Monte"
         className="h-full w-full object-cover"
       />

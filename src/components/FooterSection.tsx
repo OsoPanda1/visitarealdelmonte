@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Mountain, MapPin, Mail, Phone, Heart } from "lucide-react";
-import mistyMountains from "@/assets/misty-mountains.jpg";
+import mistyMountains from "@/assets/images/misty-mountains.jpg";
 
 export function FooterSection() {
   return (

@@ -3,19 +3,19 @@ import PlaceCard from "@/components/PlaceCard";
 import { SEOMeta, PAGE_SEO } from "@/components/SEOMeta";
 import { motion } from "framer-motion";
 
-import pasteImg from "@/assets/paste.webp";
-import panteonImg from "@/assets/panteon-ingles.webp";
-import minaImg from "@/assets/mina-acosta.webp";
-import penasImg from "@/assets/penas-cargadas.webp";
-import callesImg from "@/assets/calles-colonial.webp";
-import heroImg from "@/assets/hero-real-del-monte.webp";
-import rdm1 from "@/assets/rdm1.jpeg";
-import rdm2 from "@/assets/rdm2.jpeg";
-import plazaPrincipalImg from "@/assets/plaza_principal.jpg";
-import plazaDosImg from "@/assets/plaza_dos.jpg";
-import museoMedicinaImg from "@/assets/museo_medicina.jpg";
-import miradorPurisimaImg from "@/assets/mirador_purisima.jpg";
-import monumentoMineroImg from "@/assets/monumento_minero.jpg";
+import pasteImg from "@/assets/images/paste.webp";
+import panteonImg from "@/assets/images/panteon-ingles.webp";
+import minaImg from "@/assets/images/mina-acosta.webp";
+import penasImg from "@/assets/images/penas-cargadas.webp";
+import callesImg from "@/assets/images/calles-colonial.webp";
+import heroImg from "@/assets/images/hero-real-del-monte.webp";
+import rdm1 from "@/assets/images/rdm1.jpeg";
+import rdm2 from "@/assets/images/rdm2.jpeg";
+import plazaPrincipalImg from "@/assets/images/plaza_principal.jpg";
+import plazaDosImg from "@/assets/images/plaza_dos.jpg";
+import museoMedicinaImg from "@/assets/images/museo_medicina.jpg";
+import miradorPurisimaImg from "@/assets/images/mirador_purisima.jpg";
+import monumentoMineroImg from "@/assets/images/monumento_minero.jpg";
 
 const allPlaces = [
   {

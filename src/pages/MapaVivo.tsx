@@ -6,7 +6,7 @@ import BrumaHeader from "@/components/BrumaHeader";
 import FloatingParticles from "@/components/FloatingParticles";
 import RealitoBubble from "@/components/RealitoBubble";
 
-import aerialImg from "@/assets/aerial-realmont.jpg";
+import aerialImg from "@/assets/images/aerial-realmont.jpg";
 
 interface POI {
   id: string;

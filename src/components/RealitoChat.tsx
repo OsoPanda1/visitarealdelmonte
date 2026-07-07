@@ -2,9 +2,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { MessageCircle, Send, Sparkles, X } from "lucide-react";
 import { logger } from "@/lib/logger";
+import realito_likes from "@/assets/images/realito-likes.png";
 
 // Use public image path for REALITO avatar
-const logoRdm = "/images/realito-likes.png";
+const logoRdm = realito_likes;
 
 interface Message {
   id: string;

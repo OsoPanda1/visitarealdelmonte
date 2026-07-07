@@ -2,7 +2,7 @@ import MainLayout from "@/components/layout/MainLayout";
 import SEOMeta from "@/components/SEOMeta";
 import { AtlasPageHeader } from "@/components/atlas/AtlasPageHeader";
 import { streets } from "@/data/atlas-territory";
-import img from "@/assets/chapter-calles.jpg";
+import img from "@/assets/images/chapter-calles.jpg";
 
 export default function AtlasCalles() {
   return (

@@ -16,6 +16,7 @@ import type {
 import type { PostGameEventResponse } from "../gamification/types";
 import { musicActionToGameEvent } from "./engine";
 import { processGameEvent } from "../gamification/engine";
+import placeholderImg from "@/assets/images/panteon-ingles.webp";
 
 const API_BASE = import.meta.env.VITE_API_URL || "/api/v1";
 
@@ -31,7 +32,7 @@ export const MOCK_ARTISTS: MusicArtist[] = [
     bio: "Coro comunitario de Real del Monte, guardián de las tradiciones mineras y cornish.",
     origin: "Real del Monte, Hidalgo",
     era: "minero",
-    avatar_url: "/images/10.webp",
+    avatar_url: placeholderImg,
     status: "active",
     metadata: {},
     created_at: "2025-01-01T00:00:00Z",
@@ -43,7 +44,7 @@ export const MOCK_ARTISTS: MusicArtist[] = [
     bio: "Grupo de tamborileros que mantienen viva la música tradicional de procesión.",
     origin: "Real del Monte, Hidalgo",
     era: "colonial",
-    avatar_url: "/images/11.webp",
+    avatar_url: placeholderImg,
     status: "active",
     metadata: {},
     created_at: "2025-01-01T00:00:00Z",
@@ -55,7 +56,7 @@ export const MOCK_ARTISTS: MusicArtist[] = [
     bio: "Colectivo de archival sonoro que preserva grabaciones históricas del siglo XIX.",
     origin: "Real del Monte, Hidalgo",
     era: "colonial",
-    avatar_url: "/images/12.webp",
+    avatar_url: placeholderImg,
     status: "active",
     metadata: {},
     created_at: "2025-01-01T00:00:00Z",
@@ -67,7 +68,7 @@ export const MOCK_ARTISTS: MusicArtist[] = [
     bio: "Archivo oficial de sonidos del territorio: campanas, viento, lluvia en minas.",
     origin: "Real del Monte, Hidalgo",
     era: "modern",
-    avatar_url: "/images/13.webp",
+    avatar_url: placeholderImg,
     status: "active",
     metadata: {},
     created_at: "2025-01-01T00:00:00Z",
@@ -79,7 +80,7 @@ export const MOCK_ARTISTS: MusicArtist[] = [
     bio: "Fusión de gastronomía y música: los pastes cantan.",
     origin: "Real del Monte, Hidalgo",
     era: "contemporary",
-    avatar_url: "/images/14.webp",
+    avatar_url: placeholderImg,
     status: "active",
     metadata: {},
     created_at: "2025-01-01T00:00:00Z",
@@ -91,7 +92,7 @@ export const MOCK_ARTISTS: MusicArtist[] = [
     bio: "Música cornish tradicional adaptada para el contexto mexicano.",
     origin: "Real del Monte, Hidalgo",
     era: "cornish",
-    avatar_url: "/images/15.webp",
+    avatar_url: placeholderImg,
     status: "active",
     metadata: {},
     created_at: "2025-01-01T00:00:00Z",
@@ -382,7 +383,7 @@ export const MOCK_CRONICAS: (MusicCronica & { trackCount?: number })[] = [
     title: "Ruta de las Minas",
     slug: "ruta-de-las-minas",
     description: "Recorrido sonoro por las minas históricas de RDM.",
-    cover_url: "/images/10.webp",
+    cover_url: placeholderImg,
     cronica_type: "ruta",
     route_id: null,
     canonical_level: "historical",
@@ -401,7 +402,7 @@ export const MOCK_CRONICAS: (MusicCronica & { trackCount?: number })[] = [
     title: "Memoria del Cornish",
     slug: "memoria-del-cornish",
     description: "La historia de los mineros cornish contada a través de la música.",
-    cover_url: "/images/11.webp",
+    cover_url: placeholderImg,
     cronica_type: "memoria",
     route_id: null,
     canonical_level: "historical",
@@ -420,7 +421,7 @@ export const MOCK_CRONICAS: (MusicCronica & { trackCount?: number })[] = [
     title: "Ambiental: Cerro y Valle",
     slug: "ambiental-cerro-y-valle",
     description: "Paisaje sonoro del Cerro de San Miguel y el Valle de Pachuca.",
-    cover_url: "/images/12.webp",
+    cover_url: placeholderImg,
     cronica_type: "ambiental",
     route_id: null,
     canonical_level: "artistic",

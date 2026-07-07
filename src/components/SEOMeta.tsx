@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import rdm_hero from "@/assets/images/rdm-hero.png";
 
 interface SEOMetaProps {
   title?: string;
@@ -15,7 +16,7 @@ const DEFAULT_META = {
   title: "RDM Digital - Real del Monte | Pueblo Mágico",
   description:
     "Explora Real del Monte, Hidalgo: historia, cultura, ecoturismo, gastronomía y más. Descubre los mejores lugares, eventos y rutas turísticas.",
-  image: "/images/rdm-hero.png",
+  image: rdm_hero,
   siteName: "RDM Digital",
   siteUrl: "https://visitarealdelmonte.online",
 };

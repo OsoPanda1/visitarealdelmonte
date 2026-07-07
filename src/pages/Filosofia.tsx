@@ -1,5 +1,6 @@
 import { WikiPage } from "@/components/WikiPage";
 import { Section } from "@/components/WikiElements";
+import rooftops_sunrise from "@/assets/images/rooftops-sunrise.jpg";
 
 const Filosofia = () => (
   <WikiPage
@@ -9,7 +10,7 @@ const Filosofia = () => (
     {/* Hero Banner */}
     <div className="relative h-48 w-full overflow-hidden">
       <img
-        src="/images/rooftops-sunrise.jpg"
+        src=rooftops_sunrise
         alt="Azoteas al amanecer en Real del Monte"
         className="h-full w-full object-cover"
       />

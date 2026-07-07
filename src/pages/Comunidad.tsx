@@ -30,12 +30,12 @@ import {
   LogIn,
 } from "lucide-react";
 
-import pasteImg from "@/assets/paste.webp";
-import panteonImg from "@/assets/panteon-ingles.webp";
-import minaImg from "@/assets/mina-acosta.webp";
-import penasImg from "@/assets/penas-cargadas.webp";
-import callesImg from "@/assets/calles-colonial.webp";
-import heroImg from "@/assets/hero-real-del-monte.webp";
+import pasteImg from "@/assets/images/paste.webp";
+import panteonImg from "@/assets/images/panteon-ingles.webp";
+import minaImg from "@/assets/images/mina-acosta.webp";
+import penasImg from "@/assets/images/penas-cargadas.webp";
+import callesImg from "@/assets/images/calles-colonial.webp";
+import heroImg from "@/assets/images/hero-real-del-monte.webp";
 
 const categories = [
   { id: "all", label: "Todos", icon: Sparkles },

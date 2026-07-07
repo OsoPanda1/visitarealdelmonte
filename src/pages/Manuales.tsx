@@ -2,6 +2,7 @@ import { WikiPage } from "@/components/WikiPage";
 import { Section } from "@/components/WikiElements";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BookOpen, Users, Shield, Code, Rocket, HelpCircle, Crown, Building } from "lucide-react";
+import mine_tunnel from "@/assets/images/mine-tunnel.jpg";
 
 const Manuales = () => (
   <WikiPage
@@ -11,7 +12,7 @@ const Manuales = () => (
     {/* Hero Banner */}
     <div className="relative h-48 w-full overflow-hidden">
       <img
-        src="/images/mine-tunnel.jpg"
+        src=mine_tunnel
         alt="Túnel de la mina histórica"
         className="h-full w-full object-cover"
       />

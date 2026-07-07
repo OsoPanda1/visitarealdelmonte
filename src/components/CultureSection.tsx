@@ -1,11 +1,11 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import diaMuertos from "@/assets/dia-muertos.jpg";
-import artisanWorkshop from "@/assets/artisan-workshop.jpg";
-import churchAsuncion from "@/assets/church-asuncion.jpg";
-import plazaNight from "@/assets/plaza-night.jpg";
-import streetsColonial from "@/assets/streets-colonial.jpg";
-import rooftopsSunrise from "@/assets/rooftops-sunrise.jpg";
+import diaMuertos from "@/assets/images/dia-muertos.jpg";
+import artisanWorkshop from "@/assets/images/artisan-workshop.jpg";
+import churchAsuncion from "@/assets/images/church-asuncion.jpg";
+import plazaNight from "@/assets/images/plaza-night.jpg";
+import streetsColonial from "@/assets/images/streets-colonial.jpg";
+import rooftopsSunrise from "@/assets/images/rooftops-sunrise.jpg";
 
 export function CultureSection() {
   const ref = useRef<HTMLDivElement>(null);

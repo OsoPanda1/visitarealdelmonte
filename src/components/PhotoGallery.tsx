@@ -1,14 +1,14 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
-import heroImg from "@/assets/hero-realmont.jpg";
-import aerialImg from "@/assets/aerial-realmont.jpg";
-import gastroImg from "@/assets/gastronomia-pastes.jpg";
-import historiaImg from "@/assets/historia-mina.jpg";
-import arqImg from "@/assets/arquitectura-iglesia.jpg";
-import fogImg from "@/assets/landscape-fog.jpg";
-import plazaImg from "@/assets/rdm-plaza.jpeg";
-import calleImg from "@/assets/rdm-calle.jpeg";
-import minaImg from "@/assets/rdm-mina.jpeg";
+import heroImg from "@/assets/images/hero-realmont.jpg";
+import aerialImg from "@/assets/images/aerial-realmont.jpg";
+import gastroImg from "@/assets/images/gastronomia-pastes.jpg";
+import historiaImg from "@/assets/images/historia-mina.jpg";
+import arqImg from "@/assets/images/arquitectura-iglesia.jpg";
+import fogImg from "@/assets/images/landscape-fog.jpg";
+import plazaImg from "@/assets/images/rdm-plaza.jpeg";
+import calleImg from "@/assets/images/rdm-calle.jpeg";
+import minaImg from "@/assets/images/rdm-mina.jpeg";
 
 const photos = [
   {

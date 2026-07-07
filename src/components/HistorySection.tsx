@@ -1,9 +1,9 @@
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { useMemo, useRef, useState } from "react";
-import mineEntrance from "@/assets/mine-entrance.jpg";
-import panteonIngles from "@/assets/panteon-ingles.jpg";
-import miningEquipment from "@/assets/mining-equipment.jpg";
-import mineTunnel from "@/assets/mine-tunnel.jpg";
+import mineEntrance from "@/assets/images/mine-entrance.jpg";
+import panteonIngles from "@/assets/images/panteon-ingles.jpg";
+import miningEquipment from "@/assets/images/mining-equipment.jpg";
+import mineTunnel from "@/assets/images/mine-tunnel.jpg";
 import { ElegantPagination } from "@/components/ElegantPagination";
 
 const TIMELINE = [

@@ -38,7 +38,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
-import rdmLogo from "@/assets/rdm-logo.png";
+import rdmLogo from "@/assets/images/rdm-logo.png";
 
 type Item = { path: string; label: string; icon: any; tag?: string };
 type Group = { id: string; label: string; icon: any; items: Item[] };

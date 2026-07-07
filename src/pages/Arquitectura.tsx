@@ -15,6 +15,7 @@ import {
   Lock,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import church_asuncion from "@/assets/images/church-asuncion.jpg";
 
 const FEDERACIONES = [
   {
@@ -90,7 +91,7 @@ const Arquitectura = () => (
     {/* Hero Banner */}
     <div className="relative h-48 w-full overflow-hidden">
       <img
-        src="/images/church-asuncion.jpg"
+        src=church_asuncion
         alt="Iglesia de la Asunción en Real del Monte"
         className="h-full w-full object-cover"
       />

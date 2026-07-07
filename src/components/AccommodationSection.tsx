@@ -8,8 +8,8 @@ import {
   CloudFog,
   ThermometerSun,
 } from "lucide-react";
-import hotelColonial from "@/assets/hotel-colonial.jpg";
-import courtyardColonial from "@/assets/courtyard-colonial.jpg";
+import hotelColonial from "@/assets/images/hotel-colonial.jpg";
+import courtyardColonial from "@/assets/images/courtyard-colonial.jpg";
 
 const HOTELS = [
   {

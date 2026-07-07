@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, HelpCircle, Search, MessageCircle } from "lucide-react";
 import MainLayout from "@/components/layout/MainLayout";
 import { SEOMeta } from "@/components/SEOMeta";
+import landscape_fog from "@/assets/images/landscape-fog.jpg";
 
 type FaqItemData = { q: string; a: string };
 type FaqGroup = { group: string; key: string; items: FaqItemData[] };
@@ -165,7 +166,7 @@ export default function FAQ() {
       {/* Hero Banner */}
       <div className="relative h-48 w-full overflow-hidden">
         <img
-          src="/images/landscape-fog.jpg"
+          src=landscape_fog
           alt="Paisaje de Real del Monte"
           className="h-full w-full object-cover"
         />

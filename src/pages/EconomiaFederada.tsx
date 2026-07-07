@@ -1,6 +1,7 @@
 import { WikiPage } from "@/components/WikiPage";
 import { Section, InfoBox } from "@/components/WikiElements";
 import { Coins, TrendingUp, Users, Building2, Briefcase, Heart } from "lucide-react";
+import aerial_realmont from "@/assets/images/aerial-realmont.jpg";
 
 const categorias = [
   {
@@ -82,7 +83,7 @@ const EconomiaFederada = () => (
     {/* Hero Banner */}
     <div className="relative h-48 w-full overflow-hidden">
       <img
-        src="/images/aerial-realmont.jpg"
+        src=aerial_realmont
         alt="Vista aérea de Real del Monte"
         className="h-full w-full object-cover"
       />

@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import NavBar from "@/components/Navbar";
 import { FooterSection } from "@/components/FooterSection";
 import { RealitoOrb } from "@/components/RealitoOrb";
-import ceoTamvImg from "@/assets/ceo_tamv.jpg";
+import ceoTamvImg from "@/assets/images/ceo_tamv.jpg";
 
 const ORCID_ID = "0009-0008-5050-1539";
 

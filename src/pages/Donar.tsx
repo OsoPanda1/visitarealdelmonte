@@ -2,6 +2,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import NavBar from "@/components/Navbar";
 import { FooterSection } from "@/components/FooterSection";
+import plaza_noche from "@/assets/images/plaza-noche.jpg";
 
 const suggestedAmounts = [50, 100, 250, 500];
 
@@ -42,7 +43,7 @@ export default function Donar() {
       {/* Hero Banner */}
       <div className="relative h-56 w-full overflow-hidden">
         <img
-          src="/images/plaza-noche.jpg"
+          src=plaza_noche
           alt="Plaza de Real del Monte de noche"
           className="h-full w-full object-cover"
         />

@@ -2,12 +2,12 @@ import { motion } from "framer-motion";
 import { Palette, Gem, Scissors, Brush, CircleDot, Award } from "lucide-react";
 import { RDMLayout } from "@/components/rdm/RDMLayout";
 import { SEOMeta, PAGE_SEO } from "@/components/SEOMeta";
-import callesImg from "@/assets/calles-colonial.webp";
-import minaImg from "@/assets/mina-acosta.webp";
-import rdm1 from "@/assets/rdm1.jpeg";
-import rdm2 from "@/assets/rdm2.jpeg";
-import rdm3 from "@/assets/rdm01.jpg";
-import rdm4 from "@/assets/rdm02.jpg";
+import callesImg from "@/assets/images/calles-colonial.webp";
+import minaImg from "@/assets/images/mina-acosta.webp";
+import rdm1 from "@/assets/images/rdm1.jpeg";
+import rdm2 from "@/assets/images/rdm2.jpeg";
+import rdm3 from "@/assets/images/rdm01.jpg";
+import rdm4 from "@/assets/images/rdm02.jpg";
 
 const crafts = [
   {

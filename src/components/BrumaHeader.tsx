@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 import { Heart } from "lucide-react";
-import logoImg from "@/assets/rdm-logo.png";
+import logoImg from "@/assets/images/rdm-logo.png";
 
 const navItems = [
   { label: "Historia", path: "/historia" },

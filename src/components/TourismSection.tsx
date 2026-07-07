@@ -2,12 +2,12 @@ import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import { MapPin, Clock, Zap } from "lucide-react";
 
-import plazaImg from "@/assets/rdm-plaza.jpeg";
-import calleImg from "@/assets/rdm-calle.jpeg";
-import minaImg from "@/assets/rdm-mina.jpeg";
-import iglesiaImg from "@/assets/rdm-iglesia.jpeg";
-import gastroImg from "@/assets/gastronomia-pastes.jpg";
-import heroImg from "@/assets/hero-realmont.jpg";
+import plazaImg from "@/assets/images/rdm-plaza.jpeg";
+import calleImg from "@/assets/images/rdm-calle.jpeg";
+import minaImg from "@/assets/images/rdm-mina.jpeg";
+import iglesiaImg from "@/assets/images/rdm-iglesia.jpeg";
+import gastroImg from "@/assets/images/gastronomia-pastes.jpg";
+import heroImg from "@/assets/images/hero-realmont.jpg";
 
 interface Place {
   name: string;

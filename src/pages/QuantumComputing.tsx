@@ -1,6 +1,7 @@
 import { WikiPage } from "@/components/WikiPage";
 import { Section, InfoBox } from "@/components/WikiElements";
 import { Atom, Cpu, Shield, FlaskConical } from "lucide-react";
+import misty_mountains from "@/assets/images/misty-mountains.jpg";
 
 const QuantumComputing = () => (
   <WikiPage
@@ -10,7 +11,7 @@ const QuantumComputing = () => (
     {/* Hero Banner */}
     <div className="relative h-48 w-full overflow-hidden">
       <img
-        src="/images/misty-mountains.jpg"
+        src=misty_mountains
         alt="Montañas neblinosas de Real del Monte"
         className="h-full w-full object-cover"
       />

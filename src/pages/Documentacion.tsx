@@ -2,6 +2,7 @@ import { WikiPage } from "@/components/WikiPage";
 import { Section } from "@/components/WikiElements";
 import { FileText, BookOpen, Layers, ClipboardList } from "lucide-react";
 import { Link } from "react-router-dom";
+import museo_mina from "@/assets/images/museo-mina.jpg";
 
 const templates = [
   {
@@ -34,7 +35,7 @@ const Documentacion = () => (
     {/* Hero Banner */}
     <div className="relative h-48 w-full overflow-hidden">
       <img
-        src="/images/museo-mina.jpg"
+        src=museo_mina
         alt="Museo de la Mina de Real del Monte"
         className="h-full w-full object-cover"
       />

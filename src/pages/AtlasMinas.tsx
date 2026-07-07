@@ -2,7 +2,7 @@ import MainLayout from "@/components/layout/MainLayout";
 import SEOMeta from "@/components/SEOMeta";
 import { AtlasPageHeader } from "@/components/atlas/AtlasPageHeader";
 import { mines } from "@/data/atlas-territory";
-import img from "@/assets/chapter-minas.jpg";
+import img from "@/assets/images/chapter-minas.jpg";
 
 export default function AtlasMinas() {
   return (

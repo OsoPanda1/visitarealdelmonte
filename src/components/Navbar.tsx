@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Heart, ChevronDown, User, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
-import rdmLogo from "@/assets/rdm-digital-nexus-logo.png";
+import rdmLogo from "@/assets/images/rdm-digital-nexus-logo.png";
 
 type NavChild = { label: string; path: string; preview: string };
 type Plano = { id: string; title: string; subtitle: string; items: NavChild[] };

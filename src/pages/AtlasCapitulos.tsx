@@ -3,7 +3,7 @@ import MainLayout from "@/components/layout/MainLayout";
 import SEOMeta from "@/components/SEOMeta";
 import { AtlasPageHeader } from "@/components/atlas/AtlasPageHeader";
 import { chapters, territoryStats } from "@/data/atlas-territory";
-import hero from "@/assets/hero-realdelmonte.jpg";
+import hero from "@/assets/images/hero-realdelmonte.jpg";
 
 const slugToRoute: Record<string, string> = {
   minas: "/capitulos/minas",

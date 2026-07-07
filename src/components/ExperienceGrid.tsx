@@ -1,11 +1,11 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Pickaxe, Utensils, Mountain, Bed, Palette } from "lucide-react";
-import mineEntrance from "@/assets/mine-entrance.jpg";
-import pastesFood from "@/assets/pastes-food.jpg";
-import sierraAdventure from "@/assets/sierra-adventure.jpg";
-import hotelColonial from "@/assets/hotel-colonial.jpg";
-import diaMuertos from "@/assets/dia-muertos.jpg";
+import mineEntrance from "@/assets/images/mine-entrance.jpg";
+import pastesFood from "@/assets/images/pastes-food.jpg";
+import sierraAdventure from "@/assets/images/sierra-adventure.jpg";
+import hotelColonial from "@/assets/images/hotel-colonial.jpg";
+import diaMuertos from "@/assets/images/dia-muertos.jpg";
 
 const EXPERIENCES = [
   {

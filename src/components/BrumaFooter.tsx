@@ -2,8 +2,8 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { MapPin, Heart, Mail, Phone, Sparkles } from "lucide-react";
-import fogImg from "@/assets/landscape-fog.jpg";
-import logoImg from "@/assets/rdm-logo.png";
+import fogImg from "@/assets/images/landscape-fog.jpg";
+import logoImg from "@/assets/images/rdm-logo.png";
 
 const footerLinks = [
   { label: "Historia", path: "/historia" },

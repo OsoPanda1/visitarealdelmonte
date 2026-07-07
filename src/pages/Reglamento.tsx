@@ -1,6 +1,7 @@
 import { RDMLayout } from "@/components/rdm/RDMLayout";
 import { SEOMeta } from "@/components/SEOMeta";
 import { Shield, Heart, AlertTriangle, FileText, Mail } from "lucide-react";
+import streets_colonial from "@/assets/images/streets-colonial.jpg";
 
 const Reglamento = () => {
   return (
@@ -10,7 +11,7 @@ const Reglamento = () => {
       {/* Hero Banner */}
       <div className="relative h-64 w-full overflow-hidden">
         <img
-          src="/images/streets-colonial.jpg"
+          src=streets_colonial
           alt="Calles coloniales de Real del Monte"
           className="h-full w-full object-cover"
         />

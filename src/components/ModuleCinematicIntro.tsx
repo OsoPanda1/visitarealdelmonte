@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
-import cinematicBackdrop from "@/assets/rdm-header-bandcamp.jpg";
-import cinematicOverlay from "@/assets/rdm-hero-cinematic.png";
+import cinematicBackdrop from "@/assets/images/rdm-header-bandcamp.jpg";
+import cinematicOverlay from "@/assets/images/rdm-hero-cinematic.png";
 
 interface ModuleCinematicIntroProps {
   eyebrow: string;

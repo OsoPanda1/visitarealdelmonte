@@ -42,16 +42,16 @@ import { VideoGallery } from "@/components/VideoGallery";
 import { ImageGallery } from "@/components/ImageGallery";
 
 // Assets
-import minaImg from "@/assets/mina-acosta.webp";
-import panteonImg from "@/assets/panteon-ingles.webp";
-import callesImg from "@/assets/calles-colonial.webp";
-import heroImg from "@/assets/hero-real-del-monte.webp";
-import penasImg from "@/assets/penas-cargadas.webp";
-import rdm1 from "@/assets/rdm1.jpeg";
-import rdm2 from "@/assets/rdm2.jpeg";
-import rdm3 from "@/assets/rdm01.jpg";
-import rdm4 from "@/assets/rdm02.jpg";
-import rdm5 from "@/assets/rdm03.jpg";
+import minaImg from "@/assets/images/mina-acosta.webp";
+import panteonImg from "@/assets/images/panteon-ingles.webp";
+import callesImg from "@/assets/images/calles-colonial.webp";
+import heroImg from "@/assets/images/hero-real-del-monte.webp";
+import penasImg from "@/assets/images/penas-cargadas.webp";
+import rdm1 from "@/assets/images/rdm1.jpeg";
+import rdm2 from "@/assets/images/rdm2.jpeg";
+import rdm3 from "@/assets/images/rdm01.jpg";
+import rdm4 from "@/assets/images/rdm02.jpg";
+import rdm5 from "@/assets/images/rdm03.jpg";
 
 // Extended timeline with more historical depth
 const timeline = [

@@ -19,6 +19,9 @@ import {
   Zap,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import dia_muertos from "@/assets/images/dia-muertos.jpg";
+import penas_cargadas from "@/assets/images/penas-cargadas.jpg";
+import plaza_noche from "@/assets/images/plaza-noche.jpg";
 
 // Tipos de datos
 interface GroupItem {
@@ -302,7 +305,7 @@ const CategoryColumns: React.FC = () => {
       id: "1",
       title: "Sinfonía Cuántica",
       artist: "DJ Nebula",
-      thumbnail: "/images/dia-muertos.jpg",
+      thumbnail: dia_muertos,
       isLive: true,
       viewers: 15420,
     },
@@ -310,14 +313,14 @@ const CategoryColumns: React.FC = () => {
       id: "2",
       title: "Ecos del Metaverso",
       artist: "Isabella Orchestra",
-      thumbnail: "/images/penas-cargadas.jpg",
+      thumbnail: penas_cargadas,
       isLive: false,
     },
     {
       id: "3",
       title: "Noche de Creadores",
       artist: "Various Artists",
-      thumbnail: "/images/plaza-noche.jpg",
+      thumbnail: plaza_noche,
       isLive: false,
     },
   ];

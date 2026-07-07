@@ -10,16 +10,19 @@ import {
   StaggerItem,
 } from "@/components/VisualEffects";
 import GradientSeparator from "@/components/GradientSeparator";
-import pasteImg from "@/assets/paste.webp";
-import rdm1 from "@/assets/rdm1.jpeg";
-import rdm2 from "@/assets/rdm2.jpeg";
+import pasteImg from "@/assets/images/paste.webp";
+import rdm1 from "@/assets/images/rdm1.jpeg";
+import rdm2 from "@/assets/images/rdm2.jpeg";
+import gastronomia_pastes from "@/assets/images/gastronomia-pastes.jpg";
+import gastronomia_paste from "@/assets/images/gastronomia-paste.jpg";
+import gastronomia_festival from "@/assets/images/gastronomia-festival.jpg";
+import { logger } from "@/lib/logger";
 
 const GASTRO_IMAGES = [
-  "/images/gastronomia-pastes.jpg",
-  "/images/gastronomia-paste.jpg",
-  "/images/gastronomia-festival.jpg",
+  gastronomia_pastes,
+  gastronomia_paste,
+  gastronomia_festival,
 ];
-import { logger } from "@/lib/logger";
 
 interface Business {
   id: string;

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, useInView } from "framer-motion";
-import aerialImage from "@/assets/aerial-realmont.jpg";
+import aerialImage from "@/assets/images/aerial-realmont.jpg";
 
 interface POI {
   id: string;

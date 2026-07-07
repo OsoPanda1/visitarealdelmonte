@@ -17,6 +17,7 @@ import {
 import { WikiPage } from "@/components/WikiPage";
 import { Section, InfoBox } from "@/components/WikiElements";
 import { useSystemMode } from "@/hooks/useSystemMode";
+import iglesia from "@/assets/images/iglesia.jpg";
 
 /* ── Centinelas Data ── */
 const centinelas = [
@@ -232,7 +233,7 @@ const SeguridadTenochtitlan = () => {
       {/* Hero Banner */}
       <div className="relative h-48 w-full overflow-hidden">
         <img
-          src="/images/iglesia.jpg"
+          src=iglesia
           alt="Iglesia de Real del Monte"
           className="h-full w-full object-cover"
         />

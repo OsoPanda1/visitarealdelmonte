@@ -1,9 +1,9 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { Compass, TreePine, Wind, Eye } from "lucide-react";
-import sierraAdventure from "@/assets/sierra-adventure.jpg";
-import waterfallForest from "@/assets/waterfall-forest.jpg";
-import mistyMountains from "@/assets/misty-mountains.jpg";
+import sierraAdventure from "@/assets/images/sierra-adventure.jpg";
+import waterfallForest from "@/assets/images/waterfall-forest.jpg";
+import mistyMountains from "@/assets/images/misty-mountains.jpg";
 
 const TRAILS = [
   {

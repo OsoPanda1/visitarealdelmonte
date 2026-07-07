@@ -9,6 +9,7 @@ import { SEOMeta } from "@/components/SEOMeta";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
+import historia_mina from "@/assets/images/historia-mina.jpg";
 
 interface Balance {
   oro: number;
@@ -126,7 +127,7 @@ export default function Mina() {
       {/* Hero Banner */}
       <div className="relative h-48 w-full overflow-hidden">
         <img
-          src="/images/historia-mina.jpg"
+          src=historia_mina
           alt="Historia de la mina de Real del Monte"
           className="h-full w-full object-cover"
         />

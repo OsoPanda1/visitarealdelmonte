@@ -7,14 +7,14 @@ import { AuroraBackground, TextReveal } from "@/components/VisualEffects";
 import { motion } from "framer-motion";
 import { Search, Store, Sparkles } from "lucide-react";
 
-import pasteriasImg from "@/assets/pasterias.png";
-import plateriasImg from "@/assets/platerias.png";
-import artesaniasImg from "@/assets/artesanias.png";
-import sanitariosImg from "@/assets/sanitarios.png";
-import minaImg from "@/assets/mina-acosta.webp";
-import callesImg from "@/assets/calles-colonial.webp";
-import rdm1 from "@/assets/rdm1.jpeg";
-import rdm2 from "@/assets/rdm2.jpeg";
+import pasteriasImg from "@/assets/images/pasterias.png";
+import plateriasImg from "@/assets/images/platerias.png";
+import artesaniasImg from "@/assets/images/artesanias.png";
+import sanitariosImg from "@/assets/images/sanitarios.png";
+import minaImg from "@/assets/images/mina-acosta.webp";
+import callesImg from "@/assets/images/calles-colonial.webp";
+import rdm1 from "@/assets/images/rdm1.jpeg";
+import rdm2 from "@/assets/images/rdm2.jpeg";
 
 const businesses = [
   {

@@ -1,6 +1,7 @@
 import { WikiPage } from "@/components/WikiPage";
 import { Section, InfoCard } from "@/components/WikiElements";
 import {
+import ceo_tamv from "@/assets/images/ceo-tamv.jpg";
   Crown,
   MapPin,
   Code,
@@ -25,7 +26,7 @@ const BiografiaCEO = () => (
     {/* Hero Banner */}
     <div className="relative h-48 w-full overflow-hidden">
       <img
-        src="/images/ceo-tamv.jpg"
+        src=ceo_tamv
         alt="Edwin Oswaldo Castillo Trejo, fundador de TAMV"
         className="h-full w-full object-cover"
       />

@@ -3,9 +3,9 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 import { BookOpen, Ghost, Heart, Moon, Star, TreePine, Scroll, Play, X } from "lucide-react";
 import { SEOMeta } from "@/components/SEOMeta";
-import panteonImg from "@/assets/panteon-ingles.webp";
-import penasImg from "@/assets/penas-cargadas.webp";
-import minaImg from "@/assets/mina-acosta.webp";
+import panteonImg from "@/assets/images/panteon-ingles.webp";
+import penasImg from "@/assets/images/penas-cargadas.webp";
+import minaImg from "@/assets/images/mina-acosta.webp";
 const leyendaVideo = "";
 
 const legends = [

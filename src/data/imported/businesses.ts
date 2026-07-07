@@ -1,3 +1,13 @@
+import gastronomia_paste from "@/assets/images/gastronomia-paste.jpg";
+import hotel_colonial from "@/assets/images/hotel-colonial.jpg";
+import artesanias_plata from "@/assets/images/artesanias-plata.jpg";
+import mine_entrance from "@/assets/images/mine-entrance.jpg";
+import hospedaje_cabana from "@/assets/images/hospedaje-cabana.jpg";
+import plaza_noche from "@/assets/images/plaza-noche.jpg";
+import mine_tunnel from "@/assets/images/mine-tunnel.jpg";
+import panteon_ingles from "@/assets/images/panteon-ingles.jpg";
+import gastronomia_pastes from "@/assets/images/gastronomia-pastes.jpg";
+import calles_coloridas from "@/assets/images/calles-coloridas.jpg";
 export interface Business {
   id: string;
   name: string;
@@ -22,7 +32,7 @@ export const BUSINESSES: Business[] = [
     address: "Calle Principal 45",
     phone: "771-123-4567",
     price_range: "ECONOMICO",
-    images: ["/images/gastronomia-paste.jpg"],
+    images: [gastronomia_paste],
     rating: 4.8,
     federation: "Gastronómica",
   },
@@ -35,7 +45,7 @@ export const BUSINESSES: Business[] = [
     phone: "771-234-5678",
     website: "https://hotelrdm.mx",
     price_range: "MODERADO",
-    images: ["/images/hotel-colonial.jpg"],
+    images: [hotel_colonial],
     rating: 4.5,
     federation: "Hospedaje",
   },
@@ -47,7 +57,7 @@ export const BUSINESSES: Business[] = [
     address: "Calle de la Plata 12",
     phone: "771-345-6789",
     price_range: "CARO",
-    images: ["/images/artesanias-plata.jpg"],
+    images: [artesanias_plata],
     rating: 4.9,
     federation: "Platería y Artesanía",
   },
@@ -59,7 +69,7 @@ export const BUSINESSES: Business[] = [
     address: "Callejón Minero 8",
     phone: "771-456-7890",
     price_range: "MODERADO",
-    images: ["/images/mine-entrance.jpg"],
+    images: [mine_entrance],
     rating: 4.7,
     federation: "Gastronómica",
   },
@@ -71,7 +81,7 @@ export const BUSINESSES: Business[] = [
     address: "Calle Real 67",
     phone: "771-567-8901",
     price_range: "MODERADO",
-    images: ["/images/hospedaje-cabana.jpg"],
+    images: [hospedaje_cabana],
     rating: 4.3,
     federation: "Hospedaje",
   },
@@ -82,7 +92,7 @@ export const BUSINESSES: Business[] = [
     category: "BAR",
     address: "Plaza Principal 3",
     price_range: "MODERADO",
-    images: ["/images/plaza-noche.jpg"],
+    images: [plaza_noche],
     rating: 4.4,
     federation: "Comercio y Servicios",
   },
@@ -94,7 +104,7 @@ export const BUSINESSES: Business[] = [
     address: "Mina de Acosta s/n",
     phone: "771-678-9012",
     price_range: "ECONOMICO",
-    images: ["/images/mine-tunnel.jpg"],
+    images: [mine_tunnel],
     rating: 4.9,
     federation: "Guías y Experiencias",
   },
@@ -105,7 +115,7 @@ export const BUSINESSES: Business[] = [
     category: "ARTESANIA",
     address: "Junto al Panteón Inglés",
     price_range: "ECONOMICO",
-    images: ["/images/panteon-ingles.jpg"],
+    images: [panteon_ingles],
     rating: 4.2,
     federation: "Platería y Artesanía",
   },
@@ -117,7 +127,7 @@ export const BUSINESSES: Business[] = [
     address: "Calle Morelos 15",
     phone: "771-789-0123",
     price_range: "CARO",
-    images: ["/images/gastronomia-pastes.jpg"],
+    images: [gastronomia_pastes],
     rating: 4.6,
     federation: "Gastronómica",
   },
@@ -128,7 +138,7 @@ export const BUSINESSES: Business[] = [
     category: "COMERCIO",
     address: "Av. Principal 89",
     price_range: "ECONOMICO",
-    images: ["/images/calles-coloridas.jpg"],
+    images: [calles_coloridas],
     rating: 4.1,
     federation: "Comercio y Servicios",
   },

@@ -33,11 +33,11 @@ import {
   synthesizeTwinSignals,
 } from "@/features/twins/hybridTwin";
 
-import pasteImg from "@/assets/paste.webp";
-import minaImg from "@/assets/mina-acosta.webp";
-import panteonImg from "@/assets/panteon-ingles.webp";
-import penasImg from "@/assets/penas-cargadas.webp";
-import callesImg from "@/assets/calles-colonial.webp";
+import pasteImg from "@/assets/images/paste.webp";
+import minaImg from "@/assets/images/mina-acosta.webp";
+import panteonImg from "@/assets/images/panteon-ingles.webp";
+import penasImg from "@/assets/images/penas-cargadas.webp";
+import callesImg from "@/assets/images/calles-colonial.webp";
 
 const Map3DTwin = lazy(() =>
   import("@/components/map/Map3DTwin").then((module) => ({ default: module.Map3DTwin })),

@@ -2,6 +2,7 @@ import { WikiPage } from "@/components/WikiPage";
 import { Section } from "@/components/WikiElements";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Server, Cloud, Shield, CheckCircle, Globe, Wrench, Box, ListChecks } from "lucide-react";
+import sierra_adventure from "@/assets/images/sierra-adventure.jpg";
 
 const Despliegue = () => (
   <WikiPage
@@ -11,7 +12,7 @@ const Despliegue = () => (
     {/* Hero Banner */}
     <div className="relative h-48 w-full overflow-hidden">
       <img
-        src="/images/sierra-adventure.jpg"
+        src=sierra_adventure
         alt="Aventura en la sierra de Real del Monte"
         className="h-full w-full object-cover"
       />

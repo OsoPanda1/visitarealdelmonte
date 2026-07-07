@@ -3,6 +3,12 @@ import { RDMLayout } from "@/components/rdm/RDMLayout";
 import { SEOMeta, PAGE_SEO } from "@/components/SEOMeta";
 import { motion, AnimatePresence } from "framer-motion";
 import {
+import mine_entrance from "@/assets/images/mine-entrance.jpg";
+import dia_muertos from "@/assets/images/dia-muertos.jpg";
+import bosque_niebla from "@/assets/images/bosque-niebla.jpg";
+import gastronomia_paste from "@/assets/images/gastronomia-paste.jpg";
+import plaza_principal from "@/assets/images/plaza-principal.jpg";
+import ceo_tamv from "@/assets/images/ceo-tamv.jpg";
   Heart,
   MessageCircle,
   Share2,
@@ -31,7 +37,7 @@ const DEMO_POSTS: FeedPost[] = [
     id: "1",
     author: {
       name: "Mina de Acosta",
-      avatar: "/images/mine-entrance.jpg",
+      avatar: mine_entrance,
       badge: "Lugar verificado",
     },
     content:
@@ -44,7 +50,7 @@ const DEMO_POSTS: FeedPost[] = [
   },
   {
     id: "2",
-    author: { name: "Cultura RDM", avatar: "/images/dia-muertos.jpg", badge: "Cultural" },
+    author: { name: "Cultura RDM", avatar: dia_muertos, badge: "Cultural" },
     content:
       "Últimos días de la exposición 'Plata y Memoría' en el Museo del Paste. Entrada libre. No te pierdas las piezas de platería tradicional.",
     timestamp: new Date("2026-06-24T14:00:00"),
@@ -55,7 +61,7 @@ const DEMO_POSTS: FeedPost[] = [
   },
   {
     id: "3",
-    author: { name: "Comunidad RDM", avatar: "/images/bosque-niebla.jpg", badge: "Comunitario" },
+    author: { name: "Comunidad RDM", avatar: bosque_niebla, badge: "Comunitario" },
     content:
       "Gracias a todos los que participaron en la jornada de limpieza del bosque de niebla. ¡Recolectamos más de 200 kg de residuos! El siguiente sábado haremos otra jornada.",
     timestamp: new Date("2026-06-23T09:00:00"),
@@ -67,7 +73,7 @@ const DEMO_POSTS: FeedPost[] = [
     id: "4",
     author: {
       name: "Gastronomía RDM",
-      avatar: "/images/gastronomia-paste.jpg",
+      avatar: gastronomia_paste,
       badge: "Gastronómico",
     },
     content:
@@ -79,7 +85,7 @@ const DEMO_POSTS: FeedPost[] = [
   },
   {
     id: "5",
-    author: { name: "Junta Local", avatar: "/images/plaza-principal.jpg", badge: "Oficial" },
+    author: { name: "Junta Local", avatar: plaza_principal, badge: "Oficial" },
     content:
       "Convocatoria abierta para el Festival de la Luz y la Plata 2026. Inscripciones hasta el 15 de julio. Categorías: fotografía, video, arte digital y música.",
     timestamp: new Date("2026-06-21T08:00:00"),
@@ -89,7 +95,7 @@ const DEMO_POSTS: FeedPost[] = [
   },
   {
     id: "6",
-    author: { name: "Isabella AI", avatar: "/images/ceo-tamv.jpg", badge: "IA TAMV" },
+    author: { name: "Isabella AI", avatar: ceo_tamv, badge: "IA TAMV" },
     content:
       "He estado analizando los patrones de visita de este mes. La afluencia turística ha aumentado un 34% vs el mes anterior. Recomiendo activar el plan de capacidad extendida los fines de semana.",
     timestamp: new Date("2026-06-20T16:00:00"),

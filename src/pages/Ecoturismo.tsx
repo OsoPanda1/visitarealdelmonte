@@ -11,18 +11,18 @@ import {
 } from "lucide-react";
 import { RDMLayout } from "@/components/rdm/RDMLayout";
 import { SEOMeta, PAGE_SEO } from "@/components/SEOMeta";
-import penasImg from "@/assets/penas-cargadas.webp";
-import callesImg from "@/assets/calles-colonial.webp";
-import minaImg from "@/assets/mina-acosta.webp";
-import rdm1 from "@/assets/rdm1.jpeg";
-import rdm2 from "@/assets/rdm2.jpeg";
-import rdm3 from "@/assets/rdm01.jpg";
-import rdm4 from "@/assets/rdm02.jpg";
-import callesJpg from "@/assets/calles.jpg";
-import heroPrincipalPng from "@/assets/heroprincipal.png";
-import laDificultadImg from "@/assets/ladificultad.jpg";
-import miradorPurisimaImg from "@/assets/mirador_purisima.jpg";
-import rdmInfografia from "@/assets/rdm-infografia.png";
+import penasImg from "@/assets/images/penas-cargadas.webp";
+import callesImg from "@/assets/images/calles-colonial.webp";
+import minaImg from "@/assets/images/mina-acosta.webp";
+import rdm1 from "@/assets/images/rdm1.jpeg";
+import rdm2 from "@/assets/images/rdm2.jpeg";
+import rdm3 from "@/assets/images/rdm01.jpg";
+import rdm4 from "@/assets/images/rdm02.jpg";
+import callesJpg from "@/assets/images/calles.jpg";
+import heroPrincipalPng from "@/assets/images/heroprincipal.png";
+import laDificultadImg from "@/assets/images/ladificultad.jpg";
+import miradorPurisimaImg from "@/assets/images/mirador_purisima.jpg";
+import rdmInfografia from "@/assets/images/rdm-infografia.png";
 
 const activities = [
   {

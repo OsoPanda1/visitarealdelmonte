@@ -1,6 +1,7 @@
 import { WikiPage } from "@/components/WikiPage";
 import { Section } from "@/components/WikiElements";
 import { GraduationCap, Building2, Landmark, Globe, Shield, Coins } from "lucide-react";
+import paste_rdm from "@/assets/images/paste-rdm.jpg";
 
 const casos = [
   {
@@ -94,7 +95,7 @@ const CasosDeUso = () => (
     {/* Hero Banner */}
     <div className="relative h-48 w-full overflow-hidden">
       <img
-        src="/images/paste-rdm.jpg"
+        src=paste_rdm
         alt="Pastes coloniales de Real del Monte"
         className="h-full w-full object-cover"
       />

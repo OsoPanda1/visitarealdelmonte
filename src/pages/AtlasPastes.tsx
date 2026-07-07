@@ -2,7 +2,7 @@ import MainLayout from "@/components/layout/MainLayout";
 import SEOMeta from "@/components/SEOMeta";
 import { AtlasPageHeader } from "@/components/atlas/AtlasPageHeader";
 import { pastes } from "@/data/atlas-territory";
-import img from "@/assets/chapter-pastes.jpg";
+import img from "@/assets/images/chapter-pastes.jpg";
 
 const tags: Record<string, string> = {
   tradicional: "Tradicional",

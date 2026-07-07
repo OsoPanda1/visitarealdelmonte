@@ -30,6 +30,22 @@ import StoriesSection from "@/components/metaverse/StoriesSection";
 import SocialWall from "@/components/metaverse/SocialWall";
 import ModulesGrid from "@/components/metaverse/ModulesGrid";
 import { VideoGrid } from "@/components/metaverse/VideoCard";
+import dia_muertos from "@/assets/images/dia-muertos.jpg";
+import penas_cargadas from "@/assets/images/penas-cargadas.jpg";
+import plaza_noche from "@/assets/images/plaza-noche.jpg";
+import mine_entrance from "@/assets/images/mine-entrance.jpg";
+import calles_coloridas from "@/assets/images/calles-coloridas.jpg";
+import waterfall_forest from "@/assets/images/waterfall-forest.jpg";
+import panteon_ingles from "@/assets/images/panteon-ingles.jpg";
+import iglesia from "@/assets/images/iglesia.jpg";
+import artesanias from "@/assets/images/artesanias.jpg";
+import mirador_sunset from "@/assets/images/mirador-sunset.jpg";
+import landscape_fog from "@/assets/images/landscape-fog.jpg";
+import ceo_tamv from "@/assets/images/ceo-tamv.jpg";
+import pueblo from "@/assets/images/pueblo.jpg";
+import centro from "@/assets/images/centro.jpg";
+import niebla from "@/assets/images/niebla.jpg";
+import ecoturismo from "@/assets/images/ecoturismo.jpg";
 
 const MetaverseHome: React.FC = () => {
   const [activeNotification, setActiveNotification] = useState<string | undefined>();
@@ -71,24 +87,24 @@ const MetaverseHome: React.FC = () => {
 
   // Mock data
   const rdmThumbs = [
-    "/images/dia-muertos.jpg",
-    "/images/penas-cargadas.jpg",
-    "/images/plaza-noche.jpg",
-    "/images/mine-entrance.jpg",
-    "/images/calles-coloridas.jpg",
-    "/images/waterfall-forest.jpg",
-    "/images/panteon-ingles.jpg",
-    "/images/iglesia.jpg",
-    "/images/artesanias.jpg",
-    "/images/mirador-sunset.jpg",
-    "/images/landscape-fog.jpg",
+    dia_muertos,
+    penas_cargadas,
+    plaza_noche,
+    mine_entrance,
+    calles_coloridas,
+    waterfall_forest,
+    panteon_ingles,
+    iglesia,
+    artesanias,
+    mirador_sunset,
+    landscape_fog,
   ];
   const rdmAvatars = [
-    "/images/ceo-tamv.jpg",
-    "/images/pueblo.jpg",
-    "/images/centro.jpg",
-    "/images/niebla.jpg",
-    "/images/ecoturismo.jpg",
+    ceo_tamv,
+    pueblo,
+    centro,
+    niebla,
+    ecoturismo,
   ];
 
   const mockStories = Array.from({ length: 12 }, (_, i) => ({

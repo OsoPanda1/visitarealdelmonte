@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useMemo, useRef, useState } from "react";
-import pastesFood from "@/assets/pastes-food.jpg";
-import marketArtesanias from "@/assets/market-artesanias.jpg";
+import pastesFood from "@/assets/images/pastes-food.jpg";
+import marketArtesanias from "@/assets/images/market-artesanias.jpg";
 import { ElegantPagination } from "@/components/ElegantPagination";
 
 const DISHES = [

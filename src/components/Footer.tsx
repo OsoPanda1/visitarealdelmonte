@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { MapPin, Mail, Phone, Send, Loader2, CheckCircle, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
-import logoRdm from "@/assets/logo-rdm-digital.png";
-import logoTamv from "@/assets/logotamv.jpg";
+import logoRdm from "@/assets/images/logo-rdm-digital.png";
+import logoTamv from "@/assets/images/logotamv.jpg";
 import { newsletterApi } from "../lib/api";
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";

@@ -6,6 +6,7 @@ import NavBar from "@/components/Navbar";
 import { FooterSection } from "@/components/FooterSection";
 import SEOMeta from "@/components/SEOMeta";
 import {
+import plaza_principal from "@/assets/images/plaza-principal.jpg";
   SENTINELS_MIRROR,
   RADARS_MIRROR,
   NODES_MIRROR,
@@ -50,7 +51,7 @@ const Tenochtitlan = () => {
       {/* Hero Banner */}
       <div className="relative h-48 w-full overflow-hidden">
         <img
-          src="/images/plaza-principal.jpg"
+          src=plaza_principal
           alt="Plaza principal de Real del Monte"
           className="h-full w-full object-cover"
         />

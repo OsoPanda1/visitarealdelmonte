@@ -1,7 +1,7 @@
 import MainLayout from "@/components/layout/MainLayout";
 import SEOMeta from "@/components/SEOMeta";
 import { AtlasPageHeader } from "@/components/atlas/AtlasPageHeader";
-import img from "@/assets/chapter-cementerio.jpg";
+import img from "@/assets/images/chapter-cementerio.jpg";
 
 export default function AtlasCementerio() {
   return (

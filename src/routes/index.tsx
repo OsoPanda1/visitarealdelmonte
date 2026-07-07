@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import heroImg from "@/assets/hero-rdm.jpg";
+import heroImg from "@/assets/images/hero-rdm.jpg";
 import {
   ArrowRight,
   CalendarDays,

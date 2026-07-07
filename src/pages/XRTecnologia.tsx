@@ -1,6 +1,7 @@
 import { WikiPage } from "@/components/WikiPage";
 import { Section, InfoBox } from "@/components/WikiElements";
 import { Monitor, Cpu, Sparkles, Atom, Headphones, BookOpen } from "lucide-react";
+import waterfall_forest from "@/assets/images/waterfall-forest.jpg";
 
 const XRTecnologia = () => (
   <WikiPage
@@ -10,7 +11,7 @@ const XRTecnologia = () => (
     {/* Hero Banner */}
     <div className="relative h-48 w-full overflow-hidden">
       <img
-        src="/images/waterfall-forest.jpg"
+        src=waterfall_forest
         alt="Cascada en el bosque de Real del Monte"
         className="h-full w-full object-cover"
       />

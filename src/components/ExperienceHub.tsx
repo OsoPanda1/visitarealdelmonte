@@ -1,9 +1,10 @@
 import { Compass, MapPin, Star } from "lucide-react";
 import { motion } from "framer-motion";
-import pasteriasImg from "@/assets/pasterias.png";
-import plateriasImg from "@/assets/platerias.png";
-import artesaniasImg from "@/assets/artesanias.png";
-import sanitariosImg from "@/assets/sanitarios.png";
+import pasteriasImg from "@/assets/images/pasterias.png";
+import plateriasImg from "@/assets/images/platerias.png";
+import artesaniasImg from "@/assets/images/artesanias.png";
+import sanitariosImg from "@/assets/images/sanitarios.png";
+import mine_tunnel from "@/assets/images/mine-tunnel.jpg";
 
 const experiences = [
   {
@@ -110,7 +111,7 @@ export default function ExperienceHub() {
         <div className="pointer-events-none absolute right-0 top-0 h-full w-1/2 opacity-20">
           <div className="absolute inset-0 bg-gradient-to-l from-brand-amber/20 to-transparent" />
           <img
-            src="/images/mine-tunnel.jpg"
+            src=mine_tunnel
             loading="lazy"
             className="h-full w-full object-cover"
             referrerPolicy="no-referrer"

@@ -3,10 +3,10 @@
 // Pensado como grafo ligero: capítulos, minas, pastes, calles, leyendas, rutas, eventos.
 // Cada entidad conoce su capa, conexiones y posibles usos (atlas, juegos, IA, dashboards).
 
-import minasImg from "@/assets/chapter-minas.jpg";
-import pastesImg from "@/assets/chapter-pastes.jpg";
-import cementerioImg from "@/assets/chapter-cementerio.jpg";
-import callesImg from "@/assets/chapter-calles.jpg";
+import minasImg from "@/assets/images/chapter-minas.jpg";
+import pastesImg from "@/assets/images/chapter-pastes.jpg";
+import cementerioImg from "@/assets/images/chapter-cementerio.jpg";
+import callesImg from "@/assets/images/chapter-calles.jpg";
 
 //
 // Tipos base y enums
