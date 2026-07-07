@@ -67,7 +67,7 @@ export default function GastronomiaPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/businesses?category=GASTRONOMIA`);
+        const response = await fetch(`${API_BASE_URL}/businesses?category={GASTRONOMIA}`);
         if (!response.ok) {
           throw new Error("No se pudo cargar la categoría de gastronomía");
         }

@@ -99,7 +99,7 @@ export default function GameHubPage() {
 
       {/* Hero Banner */}
       <CinematicBanner
-        image=rdm_aerial_pueblo
+        image={rdm_aerial_pueblo}
         alt="Game Hub RDM"
         height="50vh"
         className="mt-0"

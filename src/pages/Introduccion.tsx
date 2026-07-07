@@ -8,7 +8,7 @@ const Introduccion = () => (
     {/* Hero Banner */}
     <div className="relative h-48 w-full overflow-hidden">
       <img
-        src=heroprincipal
+        src={heroprincipal}
         alt="Hero principal de TAMV"
         className="h-full w-full object-cover"
       />

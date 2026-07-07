@@ -35,7 +35,7 @@ const Documentacion = () => (
     {/* Hero Banner */}
     <div className="relative h-48 w-full overflow-hidden">
       <img
-        src=museo_mina
+        src={museo_mina}
         alt="Museo de la Mina de Real del Monte"
         className="h-full w-full object-cover"
       />

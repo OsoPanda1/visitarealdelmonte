@@ -10,7 +10,7 @@ const Filosofia = () => (
     {/* Hero Banner */}
     <div className="relative h-48 w-full overflow-hidden">
       <img
-        src=rooftops_sunrise
+        src={rooftops_sunrise}
         alt="Azoteas al amanecer en Real del Monte"
         className="h-full w-full object-cover"
       />

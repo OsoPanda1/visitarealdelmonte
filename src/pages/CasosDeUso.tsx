@@ -95,7 +95,7 @@ const CasosDeUso = () => (
     {/* Hero Banner */}
     <div className="relative h-48 w-full overflow-hidden">
       <img
-        src=paste_rdm
+        src={paste_rdm}
         alt="Pastes coloniales de Real del Monte"
         className="h-full w-full object-cover"
       />

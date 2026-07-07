@@ -180,7 +180,7 @@ export default function PremiumPlans() {
       {/* Hero Banner */}
       <div className="relative h-56 w-full overflow-hidden">
         <img
-          src=artesanias_plata
+          src={artesanias_plata}
           alt="Artesanías de plata de Real del Monte"
           className="h-full w-full object-cover"
         />

@@ -12,7 +12,7 @@ const Manuales = () => (
     {/* Hero Banner */}
     <div className="relative h-48 w-full overflow-hidden">
       <img
-        src=mine_tunnel
+        src={mine_tunnel}
         alt="Túnel de la mina histórica"
         className="h-full w-full object-cover"
       />

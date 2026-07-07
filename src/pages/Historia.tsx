@@ -627,28 +627,28 @@ const HistoriaPage = () => {
               <TabsList className="w-full max-w-3xl mx-auto grid grid-cols-2 md:grid-cols-4 mb-12">
                 <TabsTrigger
                   value="mining"
-                  className="data-[state=active]:bg-terracotta data-[state=active]:text-white"
+                  className="data-[state={active}]:bg-terracotta data-[state={active}]:text-white"
                 >
                   <Pickaxe className="w-4 h-4 mr-2" />
                   Minería
                 </TabsTrigger>
                 <TabsTrigger
                   value="cornish"
-                  className="data-[state=active]:bg-gold data-[state=active]:text-white"
+                  className="data-[state={active}]:bg-gold data-[state={active}]:text-white"
                 >
                   <Ship className="w-4 h-4 mr-2" />
                   Cornish
                 </TabsTrigger>
                 <TabsTrigger
                   value="architecture"
-                  className="data-[state=active]:bg-primary data-[state=active]:text-white"
+                  className="data-[state={active}]:bg-primary data-[state={active}]:text-white"
                 >
                   <Building2 className="w-4 h-4 mr-2" />
                   Arquitectura
                 </TabsTrigger>
                 <TabsTrigger
                   value="nature"
-                  className="data-[state=active]:bg-forest data-[state=active]:text-white"
+                  className="data-[state={active}]:bg-forest data-[state={active}]:text-white"
                 >
                   <Mountain className="w-4 h-4 mr-2" />
                   Naturaleza

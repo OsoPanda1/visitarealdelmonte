@@ -11,7 +11,7 @@ const BlockchainMSR = () => (
     {/* Hero Banner */}
     <div className="relative h-48 w-full overflow-hidden">
       <img
-        src=landscape_fog
+        src={landscape_fog}
         alt="Paisaje con neblina de Real del Monte"
         className="h-full w-full object-cover"
       />

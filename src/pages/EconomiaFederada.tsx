@@ -83,7 +83,7 @@ const EconomiaFederada = () => (
     {/* Hero Banner */}
     <div className="relative h-48 w-full overflow-hidden">
       <img
-        src=aerial_realmont
+        src={aerial_realmont}
         alt="Vista aérea de Real del Monte"
         className="h-full w-full object-cover"
       />

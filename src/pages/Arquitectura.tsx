@@ -91,7 +91,7 @@ const Arquitectura = () => (
     {/* Hero Banner */}
     <div className="relative h-48 w-full overflow-hidden">
       <img
-        src=church_asuncion
+        src={church_asuncion}
         alt="Iglesia de la Asunción en Real del Monte"
         className="h-full w-full object-cover"
       />

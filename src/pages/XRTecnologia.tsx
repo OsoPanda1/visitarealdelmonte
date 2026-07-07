@@ -11,7 +11,7 @@ const XRTecnologia = () => (
     {/* Hero Banner */}
     <div className="relative h-48 w-full overflow-hidden">
       <img
-        src=waterfall_forest
+        src={waterfall_forest}
         alt="Cascada en el bosque de Real del Monte"
         className="h-full w-full object-cover"
       />

@@ -43,7 +43,7 @@ export default function Donar() {
       {/* Hero Banner */}
       <div className="relative h-56 w-full overflow-hidden">
         <img
-          src=plaza_noche
+          src={plaza_noche}
           alt="Plaza de Real del Monte de noche"
           className="h-full w-full object-cover"
         />

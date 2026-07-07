@@ -12,7 +12,7 @@ const Despliegue = () => (
     {/* Hero Banner */}
     <div className="relative h-48 w-full overflow-hidden">
       <img
-        src=sierra_adventure
+        src={sierra_adventure}
         alt="Aventura en la sierra de Real del Monte"
         className="h-full w-full object-cover"
       />

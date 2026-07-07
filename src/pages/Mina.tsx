@@ -127,7 +127,7 @@ export default function Mina() {
       {/* Hero Banner */}
       <div className="relative h-48 w-full overflow-hidden">
         <img
-          src=historia_mina
+          src={historia_mina}
           alt="Historia de la mina de Real del Monte"
           className="h-full w-full object-cover"
         />

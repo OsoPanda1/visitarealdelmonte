@@ -111,7 +111,7 @@ export default function ExperienceHub() {
         <div className="pointer-events-none absolute right-0 top-0 h-full w-1/2 opacity-20">
           <div className="absolute inset-0 bg-gradient-to-l from-brand-amber/20 to-transparent" />
           <img
-            src=mine_tunnel
+            src={mine_tunnel}
             loading="lazy"
             className="h-full w-full object-cover"
             referrerPolicy="no-referrer"

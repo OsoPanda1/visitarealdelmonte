@@ -1,7 +1,7 @@
 import { WikiPage } from "@/components/WikiPage";
 import { Section, InfoCard } from "@/components/WikiElements";
-import {
 import streets_colonial from "@/assets/images/streets-colonial.jpg";
+import {
   Shield,
   Users,
   FileCheck,
@@ -25,7 +25,7 @@ const Gobernanza = () => (
     {/* Hero Banner */}
     <div className="relative h-48 w-full overflow-hidden">
       <img
-        src=streets_colonial
+        src={streets_colonial}
         alt="Calles coloniales de Real del Monte"
         className="h-full w-full object-cover"
       />

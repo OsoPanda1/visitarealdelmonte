@@ -91,7 +91,7 @@ export default function Membresias() {
       {/* Hero Banner */}
       <div className="relative h-48 w-full overflow-hidden">
         <img
-          src=mine_entrance
+          src={mine_entrance}
           alt="Entrada de la mina de Real del Monte"
           className="h-full w-full object-cover"
         />

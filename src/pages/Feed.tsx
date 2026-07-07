@@ -2,13 +2,13 @@ import { useState } from "react";
 import { RDMLayout } from "@/components/rdm/RDMLayout";
 import { SEOMeta, PAGE_SEO } from "@/components/SEOMeta";
 import { motion, AnimatePresence } from "framer-motion";
-import {
 import mine_entrance from "@/assets/images/mine-entrance.jpg";
 import dia_muertos from "@/assets/images/dia-muertos.jpg";
 import bosque_niebla from "@/assets/images/bosque-niebla.jpg";
 import gastronomia_paste from "@/assets/images/gastronomia-paste.jpg";
 import plaza_principal from "@/assets/images/plaza-principal.jpg";
 import ceo_tamv from "@/assets/images/ceo-tamv.jpg";
+import {
   Heart,
   MessageCircle,
   Share2,
