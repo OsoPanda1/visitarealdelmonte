@@ -2,7 +2,6 @@
 
 import {
   useState,
-  useCallback,
   useEffect,
   lazy,
   Suspense,
@@ -28,9 +27,6 @@ import { captureException } from "@/integrations/observability/sentry";
 import { LoadingFallback } from "@/components/LoadingFallback";
 
 // Componentes pesados: lazy loading para reducir bundle inicial (~126KB)
-const CinematicIntro = lazy(() =>
-  import("@/components/CinematicIntro").then((m) => ({ default: m.CinematicIntro })),
-);
 const MicroPageIntro = lazy(() => import("@/components/MicroPageIntro"));
 const RealitoChatLauncher = lazy(() => import("./components/RealitoChatLauncher"));
 const AmbientLayer = lazy(() => import("@/components/AmbientLayer"));
@@ -1262,59 +1258,7 @@ const AnimatedRoutes = () => {
   );
 };
 
-// Error boundary that catches CinematicIntro errors and unblocks main content
-class CinematicIntroSafe extends Component<{ onEnter: () => void }, { hasError: boolean }> {
-  state = { hasError: false };
-
-  static getDerivedStateFromError() {
-    return { hasError: true };
-  }
-
-  componentDidCatch(_error: Error, _info: ErrorInfo) {
-    // Unblock main content on error
-    setTimeout(() => this.props.onEnter(), 0);
-  }
-
-  render() {
-    if (this.state.hasError) return null;
-    return <CinematicIntro onEnter={this.props.onEnter} />;
-  }
-}
-
 const AppInner = () => {
-  const [introComplete, setIntroComplete] = useState(false);
-
-  const [showIntro] = useState(() => {
-    try {
-      const isBrowser = typeof window !== "undefined";
-      if (!isBrowser) {
-        return false;
-      }
-
-      // Solo mostrar CinematicIntro en la landing page /
-      if (window.location.pathname !== "/") return false;
-
-      if (sessionStorage.getItem("rdm_intro_shown")) return false;
-      sessionStorage.setItem("rdm_intro_shown", "true");
-      return true;
-    } catch {
-      return false;
-    }
-  });
-
-  const handleIntroComplete = useCallback(() => {
-    setIntroComplete(true);
-  }, []);
-
-  // Safety net: if CinematicIntro fails to load or never calls onEnter,
-  // force-complete after 5s so main content always renders
-  useEffect(() => {
-    if (showIntro && !introComplete) {
-      const timer = setTimeout(() => setIntroComplete(true), 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [showIntro, introComplete]);
-
   // Analytics post-pintado: se montan vía requestIdleCallback para no bloquear el main thread
   const [analyticsReady, setAnalyticsReady] = useState(false);
   useEffect(() => {
@@ -1350,36 +1294,24 @@ const AppInner = () => {
         <AuthStatusBanner />
         <Toaster />
         <Sonner />
-        <AnimatePresence>
-          {showIntro && !introComplete && (
-            <Suspense fallback={<LoadingFallback />}>
-              <CinematicIntroSafe onEnter={handleIntroComplete} />
-            </Suspense>
-          )}
-        </AnimatePresence>
-        {(!showIntro || introComplete) && (
-          <>
-            <AudioPlayerProvider>
-              <Suspense fallback={<LoadingFallback />}>
-                <MicroPageIntro />
-              </Suspense>
-              <AnimatedRoutes />
-              <Suspense fallback={<LoadingFallback />}>
-                <GlobalPlayerBar />
-              </Suspense>
-              <Suspense fallback={<LoadingFallback />}>
-                <LiveTelemetryBadge />
-              </Suspense>
-              <Suspense fallback={<LoadingFallback />}>
-                <SearchOverlay />
-              </Suspense>
-              {/* CompassNav disabled — RDMNavbar now covers all navigation */}
-              <Suspense fallback={<LoadingFallback />}>
-                <SmartSidebar />
-              </Suspense>
-            </AudioPlayerProvider>
-          </>
-        )}
+        <AudioPlayerProvider>
+          <Suspense fallback={<LoadingFallback />}>
+            <MicroPageIntro />
+          </Suspense>
+          <AnimatedRoutes />
+          <Suspense fallback={<LoadingFallback />}>
+            <GlobalPlayerBar />
+          </Suspense>
+          <Suspense fallback={<LoadingFallback />}>
+            <LiveTelemetryBadge />
+          </Suspense>
+          <Suspense fallback={<LoadingFallback />}>
+            <SearchOverlay />
+          </Suspense>
+          <Suspense fallback={<LoadingFallback />}>
+            <SmartSidebar />
+          </Suspense>
+        </AudioPlayerProvider>
         <Suspense fallback={<LoadingFallback />}>
           <RealitoChatLauncher />
         </Suspense>
