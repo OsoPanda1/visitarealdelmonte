@@ -124,7 +124,7 @@ function NotificationItem({
   notification: Notification;
   onRemove: () => void;
 }) {
-  const Icon = notification.icon || notificationIcons[notification.type];
+  const Icon: any = notification.icon || notificationIcons[notification.type];
   const gradientClass = notificationColors[notification.type];
 
   return (

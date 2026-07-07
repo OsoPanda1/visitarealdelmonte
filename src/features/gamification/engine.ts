@@ -15,6 +15,7 @@ import type {
   PostGameEventResponse,
   XpTrack,
   QuestCriteria,
+  QuestType,
 } from "./types";
 
 // ============================================================================
@@ -334,7 +335,7 @@ export function processGameEvent(
   for (const quest of activeQuests) {
     if (quest.status !== "active") continue;
     if (
-      quest.quest_type !== request.event_type &&
+      quest.quest_type !== (request.event_type as unknown as QuestType) &&
       quest.quest_type !== "narrative" &&
       quest.quest_type !== "territorial"
     )

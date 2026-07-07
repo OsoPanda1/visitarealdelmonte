@@ -9,7 +9,7 @@ import { isabellaTerritorialMind } from "@/isabella/territorial/IsabellaTerritor
 import { federationBus } from "@/federaciones/FederationBus";
 import { isabellaGuardian } from "@/core/ai/isabella-guardian";
 import { locateNode } from "@/isabella/ontology";
-import { initEventBusBridge, publishUnified } from "@/core/yun/event-bus-bridge";
+import { initEventBusBridge, publishUnified, type UnifiedYunEventType } from "@/core/yun/event-bus-bridge";
 import type { Coordenadas, FederationId } from "@/core/models";
 import type { SystemMetrics } from "@/core/system/modes";
 import type {
@@ -351,7 +351,7 @@ export class IsabellaConsciousnessPipeline {
 
         // Also publish to YUN unified event bus
         publishUnified(
-          `yun.isabella.${action.eventType.toLowerCase()}`,
+          `yun.isabella.${action.eventType.toLowerCase()}` as UnifiedYunEventType,
           `isabella-pipeline:${traceId}`,
           action.payload,
           { traceId: action.traceId },

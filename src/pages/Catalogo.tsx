@@ -292,6 +292,7 @@ const CatalogoPage = () => {
                 const discountedPrice = Math.round(tier.price * (1 - plan.discount / 100));
                 const totalOriginal = tier.price * plan.months;
                 const totalDiscounted = discountedPrice * plan.months;
+                const TierIcon: any = tier.icon;
 
                 return (
                   <motion.div
@@ -310,7 +311,7 @@ const CatalogoPage = () => {
                         <div
                           className={`w-10 h-10 rounded-xl bg-gradient-to-br ${tier.color} flex items-center justify-center`}
                         >
-                          <tier.icon className="w-5 h-5 text-white" />
+                          <TierIcon className="w-5 h-5 text-white" />
                         </div>
                         <h3 className="font-semibold text-foreground text-sm leading-tight">
                           {tier.category}

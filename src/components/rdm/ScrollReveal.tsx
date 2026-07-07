@@ -1,4 +1,4 @@
-import { useEffect, useRef, ReactNode } from "react";
+import { useEffect, useRef, ReactNode, JSX as ReactJSX } from "react";
 
 interface ScrollRevealProps {
   children: ReactNode;
@@ -6,7 +6,7 @@ interface ScrollRevealProps {
   direction?: "up" | "down" | "left" | "right" | "scale";
   delay?: number;
   stagger?: boolean;
-  as?: keyof JSX.IntrinsicElements;
+  as?: keyof ReactJSX.IntrinsicElements;
 }
 
 export function ScrollReveal({

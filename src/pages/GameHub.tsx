@@ -6,6 +6,7 @@ import {
   Target,
   Star,
   Users,
+  User,
   Flame,
   ChevronRight,
   Shield,

@@ -459,7 +459,7 @@ function EcosMusicaSection({
   const [selectedTrack, setSelectedTrack] = useState<MusicTrack>(recommended[0]);
   const [trackIndex, setTrackIndex] = useState(0);
   const [xpToast, setXpToast] = useState<string | null>(null);
-  const xpTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  const xpTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const prefersReducedMotion = useReducedMotion();
 
   const handleXpEarned = useCallback((xp: number) => {

@@ -135,7 +135,7 @@ export function DashboardView() {
           <p className={cardTitle}>Distribución por Categoría</p>
           <div className="space-y-2">
             {Object.entries(categoryCounts).map(([cat, count]) => {
-              const Icon = INTENT_ICONS[cat] || MapPin;
+              const Icon: any = INTENT_ICONS[cat] || MapPin;
               return (
                 <div key={cat} className="flex items-center gap-2">
                   <Icon className="w-3.5 h-3.5 text-secondary" />
@@ -205,7 +205,7 @@ export function DashboardView() {
             </thead>
             <tbody>
               {places.map((place) => {
-                const Icon = INTENT_ICONS[place.category] || MapPin;
+                const Icon: any = INTENT_ICONS[place.category] || MapPin;
                 return (
                   <tr
                     key={place.id}

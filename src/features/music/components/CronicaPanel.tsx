@@ -65,7 +65,7 @@ export function CronicaPanel({ cronicas, onPlay, onFork }: CronicaPanelProps) {
                 <div className="flex items-center gap-2 text-[10px] text-[#4B5563]">
                   <span className="capitalize">{cronica.cronica_type}</span>
                   <span className="w-1 h-1 rounded-full bg-[#D1D5DB]" />
-                  <span>{cronica.trackCount ?? "?"} pistas</span>
+                  <span>{cronica.tracks?.length ?? "?"} pistas</span>
                   <span className="w-1 h-1 rounded-full bg-[#D1D5DB]" />
                   <span>{Math.round(cronica.total_duration_ms / 60000)} min</span>
                 </div>
