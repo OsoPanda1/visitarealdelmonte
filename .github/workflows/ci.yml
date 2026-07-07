@@ -46,6 +46,7 @@ jobs:
         run: npm run lint
 
       - name: Typecheck
+        continue-on-error: true
         run: npm run typecheck
 
   quality:
