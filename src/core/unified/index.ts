@@ -1,4 +1,3 @@
-export { UnifiedEventBus, unifiedEventBus } from "./UnifiedEventBus";
 export { UnifiedSupervisor, unifiedSupervisor } from "./UnifiedSupervisor";
 export { UnifiedPersistence, unifiedPersistence } from "./UnifiedPersistence";
 export { UnifiedSDK, unifiedSDK } from "./UnifiedSDK";

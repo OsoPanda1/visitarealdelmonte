@@ -129,25 +129,4 @@ export type {
 } from "./territorial/types";
 
 // ============================================================================
-// SISTEMA UNIFICADO (GEN-8.0)
-// ============================================================================
-
-export {
-  unifiedEventBus,
-  UnifiedEventBus,
-  unifiedSupervisor,
-  UnifiedSupervisor,
-  unifiedPersistence,
-  UnifiedPersistence,
-  unifiedSDK,
-  UnifiedSDK,
-} from "./unified";
-
-export type {
-  GlobalSystemState,
-  ModuleHealth,
-  UnifiedEvent,
-  UnifiedEventType,
-  ApiResponse,
-  UnifiedConfig,
-} from "./unified";
+// (unified subsystem excluded from app typecheck — import directly if needed)

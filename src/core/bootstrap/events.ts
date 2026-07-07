@@ -3,7 +3,7 @@
  * Conecta el bus de eventos con el controlador de modos
  */
 
-import { subscribe, publish } from "../events/bus";
+import { bus } from "../infra/event-bus";
 import { updateSystemMode } from "../system/controller";
 import type { SystemMetrics } from "../system/modes";
 import { auditEvent } from "../audit/logger";
@@ -14,23 +14,22 @@ export function bootstrapCoreEvents() {
   if (initialized) return;
   initialized = true;
 
-  subscribe("rdm.system.overload.v1", (event) => {
-    const metrics = event.payload as { metrics: SystemMetrics };
-    const result = updateSystemMode(metrics.metrics);
+  const handleOverload = (payload: unknown) => {
+    const metrics = (payload as { metrics: SystemMetrics }).metrics;
+    const result = updateSystemMode(metrics);
 
     auditEvent(
       "SYSTEM_OVERLOAD_HANDLED",
-      { metrics: metrics.metrics, newMode: result.currentMode, aiDecision: result.aiDecision },
+      { metrics, newMode: result.currentMode, aiDecision: result.aiDecision },
       "system",
     );
 
-    publish({
-      name: "rdm.system.mode-changed.v1",
-      payload: {
-        mode: result.currentMode,
-        aiDecision: result.aiDecision,
-      },
+    bus.emit("rdm.system.mode-changed.v1", {
+      mode: result.currentMode,
+      aiDecision: result.aiDecision,
       timestamp: new Date().toISOString(),
     });
-  });
+  };
+
+  bus.on("rdm.system.overload.v1", handleOverload);
 }

@@ -17,7 +17,7 @@ import { FooterSection } from "@/components/FooterSection";
 import { SEOMeta } from "@/components/SEOMeta";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { TAMV_THESIS } from "@/data/tamv-thesis";
+import { TAMV_THESIS } from "@/data/atlas/tamv-thesis";
 
 const STATUS_STYLE: Record<string, string> = {
   operativa: "border-[hsl(var(--gold))]/40 bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold))]",

@@ -1,4 +1,7 @@
-import type { ScoreInput } from "@/core/engine/scoring.engine";
+export interface ScoreInput {
+  state: Record<string, unknown>;
+  context: import("@/core/models").ScoringContext;
+}
 
 export interface ScoreRule {
   name: string;

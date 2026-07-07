@@ -1,6 +1,6 @@
 import { Suspense } from "react";
-import platforms from "@/data/imported/ltos-platforms.json";
-import repos from "@/data/imported/osopanda-repos.json";
+import platforms from "@/data/ltos-platforms.json";
+import repos from "@/data/osopanda-repos.json";
 import { RDMPageShell } from "@/components/rdm/RDMPageShell";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

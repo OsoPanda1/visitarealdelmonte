@@ -1,5 +1,5 @@
-export {
-  SafeEventBus as EventBus,
-  safeBus as bus,
-  type Listener,
-} from "@/core/infra/event-bus.safe";
+import { SafeEventBus } from "./event-bus.safe";
+
+export type EventBus = SafeEventBus;
+export const bus = new SafeEventBus();
+export { SafeEventBus } from "./event-bus.safe";

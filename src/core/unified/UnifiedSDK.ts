@@ -9,7 +9,7 @@ import { isabellaAPI } from "@/isabella/api";
 import { knowledgeEngine } from "@/isabella/knowledge/KnowledgeAbsorptionEngine";
 import { awakeningProtocol } from "@/isabella/protocols/IsabellaAwakeningProtocol";
 import { motorConciencia } from "@/isabella/core/consciousness";
-import { unifiedEventBus } from "./UnifiedEventBus";
+import { bus } from "@/core/infra/event-bus";
 import { unifiedSupervisor } from "./UnifiedSupervisor";
 import { unifiedPersistence } from "./UnifiedPersistence";
 import type { Coordenadas, FederationId, PointOfInterest } from "@/core/models";
@@ -36,7 +36,7 @@ export class UnifiedSDK {
     this.initialized = true;
 
     if (this.config.enableRealTimeSync) {
-      unifiedEventBus.start();
+      bus.start();
     }
 
     logger.info("[UNIFIED-SDK] Sistemas unificados listos", {
@@ -60,7 +60,7 @@ export class UnifiedSDK {
     fusionEngine.stop();
     unifiedSupervisor.stop();
     unifiedPersistence.stop();
-    unifiedEventBus.stop();
+    bus.stop();
     this.initialized = false;
     logger.info("[UNIFIED-SDK] Todos los sistemas detenidos");
   }
@@ -89,7 +89,7 @@ export class UnifiedSDK {
       );
       territorialFederationBridge.routeContribution(contribution);
 
-      unifiedEventBus.emit({
+      bus.emit({
         type: "territorial:contribution",
         source: "sdk",
         payload: { contributionId: contribution.id, type, territorio },
@@ -222,11 +222,11 @@ export class UnifiedSDK {
   }
 
   getEventStats() {
-    return unifiedEventBus.getEventStats();
+    return bus.getEventStats();
   }
 
   subscribeToEvents(type: UnifiedEventType, handler: (event: unknown) => void) {
-    return unifiedEventBus.on(type, handler);
+    return bus.on(type, handler);
   }
 
   getPersistenceStats() {

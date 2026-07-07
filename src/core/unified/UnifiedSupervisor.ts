@@ -6,7 +6,7 @@ import { territorialGeofencer } from "@/core/territorial/TerritorialGeofencer";
 import { consciousnessPipeline } from "@/isabella/pipeline/IsabellaConsciousnessPipeline";
 import { knowledgeEngine } from "@/isabella/knowledge/KnowledgeAbsorptionEngine";
 import { awakeningProtocol } from "@/isabella/protocols/IsabellaAwakeningProtocol";
-import { unifiedEventBus } from "./UnifiedEventBus";
+import { bus } from "@/core/infra/event-bus";
 import type { GlobalSystemState, ModuleHealth } from "./types";
 
 interface AlertRule {
@@ -137,8 +137,8 @@ export class UnifiedSupervisor {
       });
       checks.push({
         name: "event_bus",
-        passed: unifiedEventBus.getEventCount() >= 0,
-        detail: `${unifiedEventBus.getEventCount()} eventos`,
+        passed: bus.getEventCount() >= 0,
+        detail: `${bus.getEventCount()} eventos`,
       });
     } catch (error) {
       checks.push({ name: "system_check", passed: false, detail: `Error: ${error}` });
@@ -198,7 +198,7 @@ export class UnifiedSupervisor {
       {
         name: "event_backlog",
         check: () => {
-          const count = unifiedEventBus.getEventCount();
+          const count = bus.getEventCount();
           if (count > 100) {
             return {
               triggered: true,
@@ -229,7 +229,7 @@ export class UnifiedSupervisor {
           });
 
           if (result.severity === "critical") {
-            unifiedEventBus.emit({
+            bus.emit({
               type: "system:alert",
               source: "supervisor",
               payload: { rule: rule.name, message: result.message },
