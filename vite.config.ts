@@ -48,9 +48,6 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes("node_modules")) {
-            if (id.includes("react") && (id.includes("react-dom") || id.includes("scheduler"))) {
-              return "vendor-react";
-            }
             if (id.includes("framer-motion")) {
               return "vendor-framer";
             }
@@ -66,32 +63,17 @@ export default defineConfig({
             if (id.includes("supabase")) {
               return "vendor-supabase";
             }
-            if (id.includes("@tanstack/react-query")) {
-              return "vendor-tanstack";
-            }
             if (id.includes("lucide-react")) {
               return "vendor-lucide";
-            }
-            if (id.includes("date-fns")) {
-              return "vendor-date";
             }
             if (id.includes("stripe")) {
               return "vendor-stripe";
             }
-            if (id.includes("posthog")) {
-              return "vendor-posthog";
-            }
-            if (id.includes("zod") || id.includes("react-hook-form")) {
+            if (id.includes("zod") || id.includes("react-hook-form") || id.includes("@hookform")) {
               return "vendor-forms";
             }
             if (id.includes("@radix-ui")) {
               return "vendor-radix";
-            }
-            if (id.includes("@hookform")) {
-              return "vendor-forms";
-            }
-            if (id.includes("react-router-dom")) {
-              return "vendor-router";
             }
             return "vendor-other";
           }
