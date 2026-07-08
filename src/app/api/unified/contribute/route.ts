@@ -19,12 +19,12 @@ export async function POST(req: Request) {
     const body = await req.json();
     const data = validate(contributionSchema, body);
 
-    const cacheKey = `contrib:${data.userId}:${Date.now()}`;
+    const userId = data.userId ?? "anonymous";
+    const cacheKey = `contrib:${userId}:${Date.now()}`;
     const cached = await cache.get(cacheKey);
     if (cached) return apiResponse(cached);
-
     const result = unifiedSDK.recordContribution(
-      data.userId,
+      userId,
       data.type,
       data.coords,
       data.territorio,

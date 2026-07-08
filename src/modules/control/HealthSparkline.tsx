@@ -15,7 +15,7 @@ export default function HealthSparkline({ color = "#D4AF37" }: Props) {
         .order("recorded_at", { ascending: false })
         .limit(30);
       if (cancel) return;
-      const vals = (data ?? []).map((r) => Number(r.integrity)).reverse();
+      const vals = (data ?? []).map((r: unknown) => Number((r as { integrity: number }).integrity)).reverse();
       setPoints(vals);
     };
     load();

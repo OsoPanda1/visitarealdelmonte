@@ -103,7 +103,7 @@ export function useGamification() {
       .limit(50);
     if (data) {
       setLeaderboard(
-        data.map((row, i) => ({
+        data.map((row: any, i: number) => ({
           user_id: row.user_id,
           display_name: null,
           avatar_url: null,

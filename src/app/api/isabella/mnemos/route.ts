@@ -13,9 +13,9 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const event = val(body, ["event"]) as Record<string, unknown>;
-    const category = val(body, ["category"]) as string;
+    const category = val(body, ["category"]) as "patrimonio" | "politica_publica" | "innovacion" | "memoria_comunitaria";
     const evidence = val(body, ["evidence"]) as Array<{ type: string; content: string }>;
-    const retentionPolicy = val(body, ["retention_policy", "retentionPolicy"]) as string;
+    const retentionPolicy = val(body, ["retention_policy", "retentionPolicy"]) as "permanente" | "largo_plazo" | "rotativa";
     if (!event || !category || !evidence) {
       return Response.json(
         { success: false, error: "Faltan campos requeridos: event, category, evidence" },

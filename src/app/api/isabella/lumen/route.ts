@@ -1,4 +1,4 @@
-import { lumen } from "@/isabella/skills/lumen";
+import { lumen, LumenEvaluateInput } from "@/isabella/skills/lumen";
 import { createTraceId } from "@/core/context/trace";
 
 function val(body: Record<string, unknown>, keys: string[]): unknown {
@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     const actionRequest = val(body, ["action_request", "actionRequest"]) as Record<string, unknown>;
     const policyContext = val(body, ["policy_context", "policyContext"]) as Record<string, unknown>;
-    const riskLevel = val(body, ["risk_level", "riskLevel"]) as string;
+    const riskLevel = val(body, ["risk_level", "riskLevel"]) as "bajo" | "medio" | "alto";
     if (!actionRequest) {
       return Response.json(
         { success: false, error: "Faltan campos requeridos: action_request/actionRequest" },
@@ -41,7 +41,7 @@ export async function POST(req: Request) {
             ((policyContext as Record<string, unknown>)?.applicablePolicies as string[]) ?? [],
           riskLevel:
             riskLevel ??
-            ((policyContext as Record<string, unknown>)?.riskLevel as string) ??
+            ((policyContext as Record<string, unknown>)?.riskLevel as "bajo" | "medio" | "alto") ??
             "bajo",
         },
       },

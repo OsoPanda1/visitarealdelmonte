@@ -24,7 +24,7 @@ export default function Wiki() {
       .select("*")
       .eq("published", true)
       .order("order_index")
-      .then(({ data }) => {
+      .then(({ data }: { data: Article[] | null }) => {
         const arr = (data as Article[]) ?? [];
         setArticles(arr);
         setSelected(arr[0] ?? null);

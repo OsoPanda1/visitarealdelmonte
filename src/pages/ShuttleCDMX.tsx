@@ -27,9 +27,9 @@ export default function ShuttleCDMX() {
         .order("departure_time");
       if (data)
         setRoutes(
-          data.map((r) => ({
+          data.map((r: Record<string, unknown>) => ({
             ...r,
-            company_name: r.shuttle_companies?.name ?? null,
+            company_name: (r.shuttle_companies as { name?: string } | null)?.name ?? null,
             days_of_week: Array.isArray(r.days_of_week) ? r.days_of_week : [],
           })),
         );

@@ -3,8 +3,8 @@
 // Auth + Rate limiting + CORS unified
 
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { requireAuth } from "./_shared/auth.js";
-import { checkRateLimit, RATE_LIMITS } from "./_shared/rate-limit.js";
+import { requireAuth } from "./_shared/auth";
+import { checkRateLimit, RATE_LIMITS } from "./_shared/rate-limit";
 import { sendWebResponse, vercelRequestToWebRequest } from "./_edge-adapter";
 
 type ModelProvider = "huggingface" | "openllm" | "fallback";

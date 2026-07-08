@@ -13,7 +13,7 @@ export function TerritorialMap() {
 
     const nearest = REAL_DEL_MONTE_SITES.map((site) => ({
       site,
-      distance: fastDistance(decision.coords, { lat: site.lat, lng: site.lng }),
+      distance: fastDistance(decision.coords, { lat: site.lat ?? 0, lng: site.lng ?? 0 }),
     })).sort((a, b) => a.distance - b.distance)[0];
 
     return nearest?.site.id ?? null;

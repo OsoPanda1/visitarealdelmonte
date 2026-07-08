@@ -90,6 +90,7 @@ class RedisCache implements CacheAdapter {
 
   async connect(url: string): Promise<void> {
     try {
+      // @ts-expect-error - redis is optional, falls back to InMemoryCache
       const { createClient } = await import("redis");
       this.client = createClient({ url }) as unknown as RedisCache["client"];
       (this.client as unknown as { connect: () => Promise<void> }).connect();

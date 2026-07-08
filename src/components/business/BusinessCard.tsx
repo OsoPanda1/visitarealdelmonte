@@ -14,7 +14,7 @@ interface Business {
   website?: string | null;
   price_range?: string | null;
   images?: string[];
-  rating?: number;
+  rating?: number | null;
 }
 
 const CATEGORY_ICONS: Record<string, string> = {
@@ -72,7 +72,7 @@ export function BusinessCard({ business }: { business: Business }) {
             <p className="text-sm text-muted-foreground line-clamp-2">{business.description}</p>
           )}
 
-          {business.rating !== undefined && <StarRating rating={business.rating} size="sm" />}
+          {business.rating != null && <StarRating rating={business.rating} size="sm" />}
 
           <div className="flex flex-wrap gap-3 text-xs text-muted-foreground pt-1">
             {business.address && (

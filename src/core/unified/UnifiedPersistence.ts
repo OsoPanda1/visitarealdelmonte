@@ -3,7 +3,7 @@ import { logger } from "@/lib/logger";
 import { territorialCollector } from "@/core/territorial/TerritorialDataCollector";
 import { isabellaTerritorialMind } from "@/isabella/territorial/IsabellaTerritorialMind";
 import { consciousnessPipeline } from "@/isabella/pipeline/IsabellaConsciousnessPipeline";
-import { bus } from "@/core/infra/event-bus";
+import { unifiedEventBus } from "./UnifiedEventBus";
 import { unifiedSupervisor } from "./UnifiedSupervisor";
 import type { UserContribution, TerritorialStats } from "@/core/territorial/types";
 import type { PipelineResult } from "@/isabella/pipeline/pipeline.types";
@@ -187,7 +187,7 @@ export class UnifiedPersistence {
             : [],
       };
 
-      bus.emit({
+      unifiedEventBus.emit({
         type: "territorial:heat_update",
         source: "persistence",
         payload: { snapshotId, stats: snapshot.stats },

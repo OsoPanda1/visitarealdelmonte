@@ -1,6 +1,6 @@
 import type { SkillContext, LumenDecision, LumenLogEntry, PolicyViolation } from "./types";
 
-interface LumenEvaluateInput {
+export interface LumenEvaluateInput {
   actionRequest: {
     actionId: string;
     actionType: string;

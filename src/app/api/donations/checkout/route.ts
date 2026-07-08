@@ -11,9 +11,8 @@ export async function POST(req: Request) {
     const BASE_URL = process.env.BASE_URL ?? "https://realdelmonte.digital";
 
     if (STRIPE_SECRET_KEY) {
-      // @ts-expect-error - stripe may not be installed
-      const stripe = await import("stripe");
-      const client = new stripe.default(STRIPE_SECRET_KEY);
+      const { default: Stripe } = await import("stripe");
+      const client = new Stripe(STRIPE_SECRET_KEY, { apiVersion: "2025-04-30" as any });
       const session = await client.checkout.sessions.create({
         payment_method_types: ["card"],
         line_items: [
@@ -36,7 +35,7 @@ export async function POST(req: Request) {
 
     return Response.json({ url: `${BASE_URL}/gracias-donativo` });
   } catch (error) {
-    logger.error("[DONATIONS] Error en checkout", error);
+    logger.error("[DONATIONS] Error en checkout", { error: String(error) });
     return Response.json({ url: "/gracias-donativo" });
   }
 }

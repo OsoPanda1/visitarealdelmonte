@@ -7,13 +7,16 @@ export async function POST(req: Request) {
     const body = await req.json();
     const data = validate(feedbackSchema, body);
 
-    if (data.rating !== null) {
-      const type = data.rating >= 4 ? "positive" : data.rating <= 2 ? "negative" : "neutral";
-      reviews.inc({ territory: data.territory, type });
-      reviewsScore.observe(data.rating);
+    const rating = data.rating;
+    const territory = data.territory ?? "unknown";
+    if (rating != null) {
+      const type = rating >= 4 ? "positive" : rating <= 2 ? "negative" : "neutral";
+      reviews.inc({ territory, type });
+      reviewsScore.observe(rating);
     }
-    if (data.consent !== null) {
-      consentEvents.inc({ territory: data.territory, status: data.consent ? "granted" : "denied" });
+    const consent = data.consent;
+    if (consent != null) {
+      consentEvents.inc({ territory, status: consent ? "granted" : "denied" });
     }
 
     return apiResponse({ ok: true, ...data });

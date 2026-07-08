@@ -106,7 +106,7 @@ export class EventBus {
       try {
         listener(event as BusEvent);
       } catch (error) {
-        logger.error("[EventBus] Error en listener:", error);
+        logger.error("[EventBus] Error en listener:", { error: String(error) });
       }
     }
 

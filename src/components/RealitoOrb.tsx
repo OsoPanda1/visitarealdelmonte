@@ -170,7 +170,7 @@ export function RealitoOrb() {
         correlationId: decision?.traceId,
       });
     } catch (e) {
-      logger.error("Realito error:", e);
+      logger.error("Realito error:", { error: String(e) });
       setMessages((prev) => [
         ...prev,
         {

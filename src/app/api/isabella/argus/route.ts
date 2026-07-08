@@ -1,4 +1,4 @@
-import { argus } from "@/isabella/skills/argus";
+import { argus, ArgusSimulationInput } from "@/isabella/skills/argus";
 import { createTraceId } from "@/core/context/trace";
 
 function val(body: Record<string, unknown>, keys: string[]): unknown {
@@ -16,7 +16,7 @@ export async function POST(req: Request) {
       string,
       unknown
     >;
-    const timeHorizon = val(body, ["time_horizon", "timeHorizon"]) as string;
+    const timeHorizon = val(body, ["time_horizon", "timeHorizon"]) as "corto" | "medio" | "largo";
     const dimensions = val(body, ["dimensions"]) as string[];
     const constraints = val(body, ["constraints"]) as Record<string, unknown>;
     if (!scenarioDefinition || !timeHorizon || !dimensions) {

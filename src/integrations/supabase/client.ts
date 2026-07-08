@@ -44,7 +44,7 @@ function makeStubAuth() {
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
-export const supabase = new Proxy({} as ReturnType<typeof createSupabaseClient>, {
+export const supabase = new Proxy({} as NonNullable<ReturnType<typeof createSupabaseClient>>, {
   get(_, prop, receiver) {
     const client = getSupabase();
     if (!client) {

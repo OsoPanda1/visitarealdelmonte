@@ -22,8 +22,8 @@ import {
   events,
   territoryStats,
 } from "@/data/atlas/territory-pois";
-import { RDM_CORPUS } from "@/data/atlas/corpus";
-import { comercios, comercioCategoriaLabel } from "@/data/atlas/comercios-catalog";
+import { RDM_CORPUS, type CorpusSection, type CorpusEntry } from "@/data/atlas/corpus";
+import { comercios, comercioCategoriaLabel, type Comercio, type ComercioCategoria } from "@/data/atlas/comercios-catalog";
 import { dichos } from "@/data/atlas/dichos";
 
 const TABS = [
@@ -150,7 +150,7 @@ export default function AtlasMaximus() {
       <div className="max-w-6xl mx-auto px-6 py-10">
         {tab === "corpus" ? (
           <div className="space-y-6">
-            {RDM_CORPUS.map((section: any) => (
+            {RDM_CORPUS.map((section: CorpusSection) => (
               <article key={section.id} className="rounded-2xl border border-border bg-card/60 p-6">
                 <p className="text-[10px] uppercase tracking-widest text-[hsl(var(--rdm-amber))] mb-1">
                   {section.id}
@@ -162,7 +162,7 @@ export default function AtlasMaximus() {
                   {section.title}
                 </h2>
                 <div className="space-y-3">
-                  {section.entries?.map((entry: any, i: number) => (
+                  {section.entries?.map((entry: CorpusEntry, i: number) => (
                     <div key={i} className="border-l-2 border-[hsl(var(--rdm-amber)/0.4)] pl-4">
                       <p className="text-sm font-medium">
                         {entry.title ?? entry.heading ?? "Entrada"}
@@ -212,7 +212,7 @@ export default function AtlasMaximus() {
             aparecerán en el mapa público.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
-            {comercios.slice(0, 12).map((c: any) => (
+            {comercios.slice(0, 12).map((c: Comercio) => (
               <div key={c.id} className="rounded-lg border border-border/50 p-3">
                 <div className="flex items-center justify-between mb-1">
                   <p className="text-sm font-semibold">{c.nombre}</p>
@@ -221,7 +221,7 @@ export default function AtlasMaximus() {
                   </span>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  {comercioCategoriaLabel[c.categoria] ?? c.categoria}
+                  {comercioCategoriaLabel[c.categoria as ComercioCategoria] ?? c.categoria}
                 </p>
               </div>
             ))}

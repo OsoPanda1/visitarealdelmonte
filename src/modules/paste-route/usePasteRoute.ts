@@ -48,8 +48,8 @@ export function usePasteRoute() {
         agg[r.poi_id].n += 1;
       });
 
-      const merged: PastePoi[] = (poiData ?? []).map((p) => ({
-        ...(p as Omit<PastePoi, "avg_rating" | "rating_count">),
+      const merged: PastePoi[] = (poiData ?? []).map((p: Omit<PastePoi, "avg_rating" | "rating_count">) => ({
+        ...p,
         avg_rating: agg[p.id] ? Number((agg[p.id].sum / agg[p.id].n).toFixed(1)) : 4.8,
         rating_count: agg[p.id]?.n ?? 0,
       }));

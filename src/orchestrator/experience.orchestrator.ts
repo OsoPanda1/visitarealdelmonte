@@ -2,11 +2,17 @@ import { MovementFilter } from "@/core/behavior/movement.filter";
 import { detectMovementPattern } from "@/core/behavior/pattern.detector";
 import { createTraceId } from "@/core/context/trace";
 import { type IClock, Clock } from "@/core/engine/deterministic-clock";
-import { ScoringEngine } from "@/core/engine/scoring.engine";
 import { withinBBox } from "@/core/geo";
 import { fastDistance } from "@/core/geo";
 import { GeoLRUCache } from "@/core/geo";
 import { bus, type EventBus } from "@/core/infra/event-bus";
+
+interface ScoringResult { total: number }
+
+function defaultScoringEngine(input: { distanceToExit: number; stayTimeHours: number; inactivityMinutes: number; speedMps: number }): ScoringResult {
+  const score = Math.max(0, 100 - input.distanceToExit / 10 - input.inactivityMinutes * 2);
+  return { total: score };
+}
 import type {
   Coordenadas,
   BoundingBox,
@@ -21,7 +27,6 @@ interface OrchestratorOptions {
   cacheTtlMs?: number;
   movementAlpha?: number;
   clock?: IClock;
-  engine?: ScoringEngine;
   eventBus?: EventBus;
   throttleMs?: number;
   proximityBBoxMeters?: number;
@@ -60,7 +65,6 @@ export class ExperienceOrchestrator {
   private cache: GeoLRUCache;
   private movement: MovementFilter;
   private clock: IClock;
-  private engine: ScoringEngine;
   private eventBus: EventBus;
   private throttleMs: number;
   private proximityBBoxMeters: number;
@@ -73,7 +77,6 @@ export class ExperienceOrchestrator {
     options: OrchestratorOptions = {},
   ) {
     this.clock = options.clock ?? new Clock();
-    this.engine = options.engine ?? new ScoringEngine();
     this.eventBus = options.eventBus ?? bus;
     this.cache = new GeoLRUCache({
       maxSize: options.cacheCapacity ?? 5000,
@@ -116,7 +119,7 @@ export class ExperienceOrchestrator {
 
     const inactivity = (started - t.activityTimestamps.lastInteractionAt.getTime()) / 60_000;
 
-    const score = this.engine.evaluar({
+    const score = defaultScoringEngine({
       distanceToExit: dist,
       stayTimeHours: t.stayTimeHours,
       inactivityMinutes: inactivity,

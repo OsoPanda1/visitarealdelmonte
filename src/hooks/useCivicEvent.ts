@@ -23,7 +23,7 @@ export function useCivicEvent() {
         traceId: crypto.randomUUID().slice(0, 16),
       } as Omit<FederationEvent, "id" | "timestamp">);
     } catch (error) {
-      logger.error("Event failed", error);
+      logger.error("Event failed", { error: String(error) });
     }
   };
 }

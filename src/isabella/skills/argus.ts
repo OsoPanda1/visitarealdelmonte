@@ -1,6 +1,6 @@
 import type { SkillContext, SimulationResult, RiskProfile } from "./types";
 
-interface ArgusSimulationInput {
+export interface ArgusSimulationInput {
   scenarioDefinition: {
     action: string;
     domain: string;

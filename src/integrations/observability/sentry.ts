@@ -51,7 +51,7 @@ export async function initSentry(): Promise<void> {
         SentryGlobal.Sentry.replayIntegration?.({ maskAllText: true, blockAllMedia: true }),
       ].filter(Boolean),
       sendDefaultPii: false,
-      beforeSend(event) {
+      beforeSend(event: ErrorEvent) {
         if (event.request?.url) {
           event.request.url = event.request.url.split("?")[0];
         }
