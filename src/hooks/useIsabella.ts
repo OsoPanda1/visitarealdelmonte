@@ -31,7 +31,8 @@ export interface IsabellaState {
   };
 }
 
-const ISABELLA_ENDPOINT = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/isabella-ai`;
+const ISABELLA_ENDPOINT =
+  import.meta.env.VITE_ISABELLA_ENDPOINT ?? `/api/isabella-chat`;
 
 export const useIsabella = () => {
   const [state, setState] = useState<IsabellaState>({
