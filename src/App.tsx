@@ -1270,18 +1270,35 @@ const AppInner = () => {
     }
   }, []);
 
-  // Arranque dinámico de Isabella AI — FusionEngine se importa bajo demanda
+  // Arranque completo del ecosistema YUN + Isabella + UnifiedSDK
   useEffect(() => {
     const isBrowser = typeof window !== "undefined";
     if (!isBrowser) return;
-    import("@/core/territorial/TerritorialFusionEngine")
-      .then(({ fusionEngine }) => {
-        fusionEngine.start();
-      })
-      .catch((err) => {
-        console.error("[FUSION ENGINE]", err);
-        captureException(err, { module: "TerritorialFusionEngine" });
-      });
+
+    async function bootSystem() {
+      try {
+        // 1. Initialiser el bridge YUN ↔ FederationBus
+        const { initEventBusBridge } = await import("@/core/yun/event-bus-bridge");
+        initEventBusBridge();
+
+        // 2. UnifiedSDK: init + fusion engine + supervisor + persistence
+        const { unifiedSDK } = await import("@/core/unified/UnifiedSDK");
+        unifiedSDK.init();
+        await unifiedSDK.startFusionEngine();
+
+        // 3. Heartbeats periódicos de las federaciones YUN
+        const { federationManager } = await import("@/core/yun/federation-coordinator");
+        federationManager.heartbeatAll();
+        setInterval(() => federationManager.heartbeatAll(), 30_000);
+
+        console.log("[BOOT] Ecosistema YUN + Isabella + UnifiedSDK activo");
+      } catch (err) {
+        console.error("[BOOT]", err);
+        captureException(err, { module: "SystemBoot" });
+      }
+    }
+
+    bootSystem();
   }, []);
 
   return (

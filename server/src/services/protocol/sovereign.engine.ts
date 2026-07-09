@@ -99,6 +99,40 @@ export class SovereignEngine {
   }
 
   private static async queryExternalSecureGateway(context: SovereignContext, prompt: string): Promise<string> {
+    const gatewayUrl = process.env.VERCEL_AI_GATEWAY_URL;
+    const gatewayToken = process.env.VERCEL_AI_GATEWAY_TOKEN;
+
+    if (gatewayUrl && gatewayToken) {
+      try {
+        const systemPrompt = buildSystemPrompt(context);
+        const res = await fetch(`${gatewayUrl}/openai/v1/chat/completions`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${gatewayToken}`,
+          },
+          body: JSON.stringify({
+            model: process.env.VERCEL_AI_GATEWAY_MODEL || "claude-sonnet-4-20250514",
+            messages: [
+              { role: "system", content: systemPrompt },
+              { role: "user", content: prompt },
+            ],
+            max_tokens: 512,
+            temperature: 0.7,
+          }),
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          const text = data?.choices?.[0]?.message?.content ?? "";
+          if (text) return text.trim();
+        }
+        console.warn("[SovereignEngine] Vercel AI Gateway failed, trying encrypted gateway");
+      } catch (e) {
+        console.warn("[SovereignEngine] Vercel AI Gateway error, trying encrypted gateway", e);
+      }
+    }
+
     const url = process.env.SOVEREIGN_GATEWAY_URL;
     if (!url) {
       return "[Soberano] Modelo local no disponible y gateway externo no configurado.";

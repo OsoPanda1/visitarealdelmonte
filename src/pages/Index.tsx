@@ -25,6 +25,7 @@ import { RUTAS_TEMATICAS, FICHA_TECNICA } from "@/data/rdm-territorial";
 import { EVENTOS_RDM, DATOS_CURIOSOS, SABIAS_QUE } from "@/data/rdm-events";
 import { RDM_IMAGES, GALLERY_SECTIONS } from "@/data/rdm-images";
 import { useState, useEffect } from "react";
+import IsabellaOrb from "@/components/home/IsabellaOrb";
 
 const QUICK_ACCESS = [
   {
@@ -759,6 +760,7 @@ const Index = () => {
           </div>
         </motion.div>
       </section>
+      <IsabellaOrb />
     </RDMLayout>
   );
 };

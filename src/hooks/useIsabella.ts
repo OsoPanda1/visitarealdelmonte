@@ -101,11 +101,21 @@ export const useIsabella = () => {
         }));
         apiMessages.push({ role: "user", content });
 
+        const token = session?.access_token;
+        if (!token) {
+          setState((prev) => ({
+            ...prev,
+            isLoading: false,
+            error: "Debes iniciar sesión para hablar con Isabella",
+          }));
+          return;
+        }
+
         const response = await fetch(ISABELLA_ENDPOINT, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             messages: apiMessages,

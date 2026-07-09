@@ -123,7 +123,7 @@ const IsabellaOrb: React.FC = () => {
             initial={{ opacity: 0, scale: 0 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0 }}
-            className="fixed bottom-6 right-6 z-50 cursor-pointer group"
+            className="fixed bottom-6 left-6 z-40 cursor-pointer group"
             onClick={() => setIsOpen(true)}
           >
             <canvas ref={canvasRef} className="w-[120px] h-[120px]" />
@@ -148,7 +148,7 @@ const IsabellaOrb: React.FC = () => {
             initial={{ opacity: 0, scale: 0.8, y: 50 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 50 }}
-            className="fixed bottom-6 right-6 z-50 w-96 max-h-[600px] bg-card/95 backdrop-blur-xl rounded-2xl border border-border/50 shadow-2xl shadow-cyan-500/20 overflow-hidden"
+            className="fixed bottom-6 left-6 z-40 w-96 max-h-[600px] bg-card/95 backdrop-blur-xl rounded-2xl border border-border/50 shadow-2xl shadow-cyan-500/20 overflow-hidden"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-border/50 bg-gradient-to-r from-cyan-500/10 to-purple-500/10">

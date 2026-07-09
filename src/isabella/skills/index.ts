@@ -21,6 +21,7 @@ export { sophia } from "./sophia";
 export { argus } from "./argus";
 export { mnemos } from "./mnemos";
 export { lumen } from "./lumen";
+export { vercel } from "./vercel";
 
 import type { SkillContext, SkillMetadata } from "./types";
 import { orion } from "./orion";
@@ -28,6 +29,7 @@ import { sophia } from "./sophia";
 import { argus } from "./argus";
 import { mnemos } from "./mnemos";
 import { lumen } from "./lumen";
+import { vercel } from "./vercel";
 
 interface SkillRegistration {
   skillId: string;
@@ -81,6 +83,16 @@ export const SKILL_REGISTRY: SkillRegistration[] = [
       "Motor de gobernanza constitucional y supervisión ética para todas las acciones del sistema",
     priority: "maximo",
     getStats: () => lumen.getStats(),
+  },
+  {
+    skillId: "skill.vercel",
+    name: "VERCEL",
+    version: "1.0.0",
+    description:
+      "Arquitectura de plataforma Vercel: optimización de Core Web Vitals y diseño del Agent Stack " +
+      "(AI SDK, AI Gateway, Sandbox, Workflows, Connect, eve, seguridad y observabilidad)",
+    priority: "alto",
+    getStats: () => vercel.getStats(),
   },
 ];
 

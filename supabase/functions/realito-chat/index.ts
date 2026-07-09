@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { callGatewayChat } from "../_shared/vercel-ai-gateway.ts";
 
 const ALLOWED_ORIGINS = [
   "https://www.visitarealdelmonte.online",
@@ -59,26 +60,34 @@ interface ModelRouterResponse {
 }
 
 async function callModelRouter(prompt: string, userId: string): Promise<ModelRouterResponse> {
+  const gatewayResp = await callGatewayChat(SYSTEM_PROMPT, prompt, { temperature: 0.8, maxTokens: 1024 });
+  if (gatewayResp) return gatewayResp;
+
   const routerUrl = Deno.env.get("MODEL_ROUTER_URL");
   const routerToken = Deno.env.get("MODEL_ROUTER_TOKEN");
   const modelName = Deno.env.get("REALITO_MODEL_NAME") ?? "Qwen/Qwen1.5-72B-Chat";
 
   if (routerUrl) {
-    const res = await fetch(routerUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(routerToken ? { Authorization: `Bearer ${routerToken}` } : {}),
-      },
-      body: JSON.stringify({
-        model: modelName,
-        prompt,
-        max_tokens: 1024,
-        temperature: 0.8,
-        context: { federation: "F6", useCase: "turismo", userId },
-      }),
-    });
-    if (res.ok) return await res.json();
+    try {
+      const res = await fetch(routerUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(routerToken ? { Authorization: `Bearer ${routerToken}` } : {}),
+        },
+        body: JSON.stringify({
+          model: modelName,
+          prompt,
+          max_tokens: 1024,
+          temperature: 0.8,
+          context: { federation: "F6", useCase: "turismo", userId },
+        }),
+      });
+      if (res.ok) return await res.json();
+      console.error("Model router failed, falling back to Gemini:", res.status);
+    } catch (e) {
+      console.error("Model router error:", e);
+    }
   }
 
   const geminiKey = Deno.env.get("GEMINI_API_KEY");

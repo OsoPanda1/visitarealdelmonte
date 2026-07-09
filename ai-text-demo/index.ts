@@ -1,8 +1,10 @@
 // tools/ai/text-demo.ts
-// Nodo de prueba de streaming de texto con GPT-5.4
+// Nodo de prueba de streaming de texto con GPT-5.4 / Claude via Vercel AI Gateway
 // Integra cardinalización mínima, observabilidad y EOCT básico.
 
 import { streamText } from "ai";
+import { createOpenAI } from "@ai-sdk/openai";
+import { createAnthropic } from "@ai-sdk/anthropic";
 import "dotenv/config";
 
 type FederationContext = {
@@ -44,29 +46,49 @@ function emitTelemetry(event: TelemetryEvent) {
 async function main() {
   const startedAt = new Date().toISOString();
 
-  if (!process.env.OPENAI_API_KEY) {
+  const gatewayUrl = process.env.VERCEL_AI_GATEWAY_URL;
+  const gatewayToken = process.env.VERCEL_AI_GATEWAY_TOKEN;
+
+  let model;
+  let modelName: string;
+
+  if (gatewayUrl && gatewayToken) {
+    const openai = createOpenAI({
+      baseURL: `${gatewayUrl}/openai/v1`,
+      apiKey: gatewayToken,
+    });
+    modelName = process.env.VERCEL_AI_GATEWAY_MODEL || "claude-sonnet-4-20250514";
+    model = openai(modelName);
+    emitTelemetry({
+      level: "info",
+      message: "Iniciando text-demo con Vercel AI Gateway",
+      timestamp: startedAt,
+      context: FEDERATION_CONTEXT,
+      data: { model: modelName, gateway: gatewayUrl },
+    });
+  } else if (process.env.OPENAI_API_KEY) {
+    const openai = createOpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    modelName = "gpt-4o";
+    model = openai(modelName);
+    emitTelemetry({
+      level: "info",
+      message: "Iniciando text-demo con OpenAI",
+      timestamp: startedAt,
+      context: FEDERATION_CONTEXT,
+      data: { model: modelName },
+    });
+  } else {
     emitTelemetry({
       level: "error",
-      message: "OPENAI_API_KEY no está definida en el entorno",
+      message: "Ni VERCEL_AI_GATEWAY_URL ni OPENAI_API_KEY están definidos",
       timestamp: startedAt,
       context: FEDERATION_CONTEXT,
     });
-    throw new Error("OPENAI_API_KEY no está definida en el entorno");
+    throw new Error("Configura VERCEL_AI_GATEWAY_URL o OPENAI_API_KEY en .env");
   }
 
-  emitTelemetry({
-    level: "info",
-    message: "Iniciando text-demo con GPT-5.4",
-    timestamp: startedAt,
-    context: FEDERATION_CONTEXT,
-    data: {
-      model: "openai/gpt-5.4",
-      promptSummary: "Invent a new holiday...",
-    },
-  });
-
   const result = streamText({
-    model: "openai/gpt-5.4",
+    model,
     prompt: "Invent a new holiday and describe its traditions.",
   });
 

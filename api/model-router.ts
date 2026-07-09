@@ -7,7 +7,7 @@ import { requireAuth } from "./_shared/auth.js";
 import { checkRateLimit, RATE_LIMITS } from "./_shared/rate-limit.js";
 import { sendWebResponse, vercelRequestToWebRequest } from "./_edge-adapter";
 
-type ModelProvider = "huggingface" | "openllm" | "fallback";
+type ModelProvider = "vercel-ai-gateway" | "huggingface" | "openllm" | "fallback";
 
 interface FederationContext {
   nodeId: string;
@@ -128,6 +128,55 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       max_tokens,
       temperature,
     });
+
+    // Vercel AI Gateway (primary — Claude via subscription)
+    const gatewayUrl = process.env.VERCEL_AI_GATEWAY_URL;
+    const gatewayToken = process.env.VERCEL_AI_GATEWAY_TOKEN;
+    const gatewayModel = process.env.VERCEL_AI_GATEWAY_MODEL || "claude-sonnet-4-20250514";
+
+    if (gatewayUrl && gatewayToken) {
+      try {
+        const gatewayRes = await fetch(`${gatewayUrl}/openai/v1/chat/completions`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${gatewayToken}`,
+          },
+          body: JSON.stringify({
+            model: gatewayModel,
+            messages: [{ role: "user", content: prompt }],
+            max_tokens,
+            temperature,
+          }),
+        });
+
+        if (gatewayRes.ok) {
+          const gatewayData = await gatewayRes.json();
+          output = gatewayData?.choices?.[0]?.message?.content ?? "";
+          provider = "vercel-ai-gateway";
+          tokens = typeof gatewayData?.usage?.total_tokens === "number" ? gatewayData.usage.total_tokens : undefined;
+        } else {
+          emitTelemetry("warn", "Vercel AI Gateway failed, falling back", federation, traceId, {
+            status: gatewayRes.status,
+          });
+        }
+      } catch (gatewayError) {
+        emitTelemetry("error", "Vercel AI Gateway error", federation, traceId, {
+          error: gatewayError instanceof Error ? gatewayError.message : "unknown",
+        });
+      }
+    }
+
+    if (output) {
+      const latencyMs = Date.now() - start;
+      const response: ModelRouterResponse = {
+        provider,
+        model: gatewayModel,
+        output,
+        meta: { tokens, latencyMs, traceId, federation },
+      };
+      return res.status(200).json(response);
+    }
 
     // Hugging Face provider
     if (
