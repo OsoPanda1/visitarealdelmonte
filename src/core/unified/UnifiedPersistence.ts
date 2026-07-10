@@ -212,7 +212,7 @@ export class UnifiedPersistence {
   } | null> {
     try {
       const { supabase } = await import("@/integrations/supabase/client");
-      return supabase;
+      return supabase as any;
     } catch {
       logger.warn("[Persistence] Supabase no disponible, usando solo memoria");
       return null;

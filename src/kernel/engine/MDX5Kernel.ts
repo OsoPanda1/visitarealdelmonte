@@ -203,7 +203,7 @@ export class MDX5Kernel {
         timestamp: new Date().toISOString(),
       });
     } catch (error) {
-      logger.warn("[MDX5] Error al emitir evento de soberanía", error);
+      logger.warn("[MDX5] Error al emitir evento de soberanía", { error });
     }
 
     return { ...base, approved: true, reason: "Plan generado" };
@@ -225,7 +225,7 @@ export class MDX5Kernel {
         timestamp: new Date().toISOString(),
       });
     } catch (error) {
-      logger.warn("[MDX5] Error al emitir señal de observabilidad", error);
+      logger.warn("[MDX5] Error al emitir señal de observabilidad", { error });
     }
 
     return { ...base, approved: true, reason: "Commit registrado en ledger" };

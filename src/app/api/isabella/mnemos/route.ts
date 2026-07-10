@@ -41,7 +41,7 @@ export async function POST(req: Request) {
       traceId: createTraceId(),
     };
     const result = await mnemos.record(
-      { event, category, evidence, retentionPolicy: retentionPolicy ?? "rotativa" },
+      { event, category: category as "patrimonio" | "politica_publica" | "innovacion" | "memoria_comunitaria", evidence, retentionPolicy: (retentionPolicy ?? "rotativa") as "permanente" | "largo_plazo" | "rotativa" },
       ctx,
     );
     const ce = result.canonicalEntry;

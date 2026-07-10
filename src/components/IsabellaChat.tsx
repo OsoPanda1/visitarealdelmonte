@@ -96,7 +96,7 @@ export function IsabellaChat() {
         }
       }
     } catch (e) {
-      logger.error(e);
+      logger.error("IsabellaChat error", { error: e });
       setMessages((prev) => [
         ...prev,
         {

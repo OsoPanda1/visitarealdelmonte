@@ -1,6 +1,21 @@
 import { lumen } from "@/isabella/skills/lumen";
 import { createTraceId } from "@/core/context/trace";
 
+interface LumenEvaluateInput {
+  actionRequest: {
+    actionId: string;
+    actionType: string;
+    target: string;
+    payload: Record<string, unknown>;
+    initiatedBy: string;
+    federationId?: string;
+  };
+  policyContext: {
+    applicablePolicies: string[];
+    riskLevel: "bajo" | "medio" | "alto";
+  };
+}
+
 function val(body: Record<string, unknown>, keys: string[]): unknown {
   for (const k of keys) {
     const v = body[k];
@@ -40,9 +55,9 @@ export async function POST(req: Request) {
           applicablePolicies:
             ((policyContext as Record<string, unknown>)?.applicablePolicies as string[]) ?? [],
           riskLevel:
-            riskLevel ??
+            (riskLevel ??
             ((policyContext as Record<string, unknown>)?.riskLevel as string) ??
-            "bajo",
+            "bajo") as "alto" | "medio" | "bajo",
         },
       },
       ctx,

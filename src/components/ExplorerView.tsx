@@ -43,8 +43,8 @@ export function ExplorerView() {
 
         {/* Place markers */}
         {places.map((place, i) => {
-          const offsetX = (place.lng + 98.675) * 8000 + 50;
-          const offsetY = (20.142 - place.lat) * 8000 + 50;
+          const offsetX = ((place.lng ?? 0) + 98.675) * 8000 + 50;
+          const offsetY = (20.142 - (place.lat ?? 0)) * 8000 + 50;
           return (
             <motion.div
               key={place.id}
@@ -101,7 +101,7 @@ export function ExplorerView() {
             <p className="text-xs text-muted-foreground mt-2 line-clamp-2">{place.description}</p>
             <div className="flex items-center gap-1 mt-2 text-[10px] text-secondary font-mono">
               <MapPin className="w-3 h-3" />
-              {place.lat.toFixed(3)}, {place.lng.toFixed(3)}
+              {(place.lat ?? 0).toFixed(3)}, {(place.lng ?? 0).toFixed(3)}
             </div>
           </motion.div>
         ))}

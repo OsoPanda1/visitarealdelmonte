@@ -1,6 +1,23 @@
 import { argus } from "@/isabella/skills/argus";
 import { createTraceId } from "@/core/context/trace";
 
+interface ArgusSimulationInput {
+  scenarioDefinition: {
+    action: string;
+    domain: string;
+    target: string;
+    parameters: Record<string, unknown>;
+  };
+  timeHorizon: "corto" | "medio" | "largo";
+  dimensions: string[];
+  constraints: {
+    budget?: number;
+    timeline?: number;
+    dependencies?: string[];
+    assumptions?: string[];
+  };
+}
+
 function val(body: Record<string, unknown>, keys: string[]): unknown {
   for (const k of keys) {
     const v = body[k];
@@ -40,7 +57,7 @@ export async function POST(req: Request) {
     const result = await argus.simulate(
       {
         scenarioDefinition: scenarioDefinition as ArgusSimulationInput["scenarioDefinition"],
-        timeHorizon,
+        timeHorizon: timeHorizon as "medio" | "corto" | "largo",
         dimensions,
         constraints: constraints ?? {},
       },

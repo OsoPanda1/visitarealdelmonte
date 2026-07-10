@@ -8,12 +8,12 @@ export async function POST(req: Request) {
     const data = validate(feedbackSchema, body);
 
     if (data.rating !== null) {
-      const type = data.rating >= 4 ? "positive" : data.rating <= 2 ? "negative" : "neutral";
-      reviews.inc({ territory: data.territory, type });
-      reviewsScore.observe(data.rating);
+      const type = data.rating! >= 4 ? "positive" : data.rating! <= 2 ? "negative" : "neutral";
+      reviews.inc({ territory: data.territory!, type });
+      reviewsScore.observe(data.rating!);
     }
     if (data.consent !== null) {
-      consentEvents.inc({ territory: data.territory, status: data.consent ? "granted" : "denied" });
+      consentEvents.inc({ territory: data.territory!, status: data.consent ? "granted" : "denied" });
     }
 
     return apiResponse({ ok: true, ...data });

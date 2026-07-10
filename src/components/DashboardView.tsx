@@ -220,7 +220,7 @@ export function DashboardView() {
                     </td>
                     <td className="py-2.5 text-accent">★ {place.rating}</td>
                     <td className="py-2.5 text-muted-foreground text-xs font-mono hidden md:table-cell">
-                      {place.lat.toFixed(3)}, {place.lng.toFixed(3)}
+                      {(place.lat ?? 0).toFixed(3)}, {(place.lng ?? 0).toFixed(3)}
                     </td>
                   </tr>
                 );

@@ -22,10 +22,10 @@ export async function POST(req: Request) {
     const response = await withSpan(
       "isabella.recommendations",
       () => {
-        const result = runRealitoKernel(data.query, decision ?? undefined);
+        const result = runRealitoKernel(data.query ?? "", decision ?? undefined);
         return { traceId, territory: data.territory, decision, ...result };
       },
-      { traceId, territory: data.territory },
+      { traceId, territory: data.territory ?? "RDM" },
     );
 
     return apiResponse(response);

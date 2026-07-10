@@ -74,7 +74,7 @@ export default function GastronomiaPage() {
         const data = await response.json();
         setBusinesses(data.data ?? []);
       } catch (error) {
-        logger.error("Error loading gastronomía:", error);
+        logger.error("Error loading gastronomía:", { error });
         setBusinesses([]);
       } finally {
         setLoading(false);

@@ -66,7 +66,7 @@ export default function FederationBadge({
           metachain_tx: isVerified ? `0x${hash.slice(0, 16)}...${hash.slice(-8)}` : undefined,
         });
       } catch (err) {
-        logger.error("Federation check error:", err);
+        logger.error("Federation check error:", { error: err });
         setData({ verified: false });
       } finally {
         setLoading(false);

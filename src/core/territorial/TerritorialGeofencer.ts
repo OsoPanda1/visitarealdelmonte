@@ -152,7 +152,7 @@ export class TerritorialGeofencer {
   private findZone(coords: Coordenadas): TerritorialZone | null {
     for (const zone of this.zones) {
       if (zone.type === "circle") {
-        const dist = fastDistance(coords, { lat: zone.centerLat, lng: zone.centerLng });
+        const dist = fastDistance(coords, { lat: zone.centerLat ?? 0, lng: zone.centerLng ?? 0 });
         if (dist <= zone.radiusMeters) return zone;
       } else if (zone.type === "bbox" && zone.boundingBox) {
         if (withinBBox(coords, zone.boundingBox)) return zone;

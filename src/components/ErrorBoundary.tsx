@@ -38,7 +38,7 @@ class ErrorBoundary extends Component<Props, State> {
         );
       } catch (e) {
         // Si por alguna razón falla el CustomEvent, no rompemos más la app
-        logger.error("ErrorBoundary event dispatch failed:", e);
+        logger.error("ErrorBoundary event dispatch failed:", { error: e });
       }
     }
   }

@@ -132,7 +132,7 @@ export default function Comercios() {
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {paged.map((b) => (
-                <BusinessCard key={b.id} business={b} />
+                <BusinessCard key={b.id ?? undefined} business={b} />
               ))}
             </div>
           )}

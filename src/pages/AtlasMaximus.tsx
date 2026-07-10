@@ -221,7 +221,7 @@ export default function AtlasMaximus() {
                   </span>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  {comercioCategoriaLabel[c.categoria] ?? c.categoria}
+                  {comercioCategoriaLabel[c.categoria as keyof typeof comercioCategoriaLabel] ?? c.categoria}
                 </p>
               </div>
             ))}

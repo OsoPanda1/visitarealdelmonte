@@ -94,8 +94,8 @@ export class TerritorialDataCollector {
     if (!contribution) return null;
 
     const verificationScore = verified
-      ? Math.min(1, contribution.verificationScore + 0.3)
-      : Math.max(0, contribution.verificationScore - 0.5);
+      ? Math.min(1, (contribution.verificationScore ?? 0) + 0.3)
+      : Math.max(0, (contribution.verificationScore ?? 0) - 0.5);
 
     const newStatus: ContributionStatus =
       verificationScore >= this.config.verificationThreshold
@@ -309,7 +309,7 @@ export class TerritorialDataCollector {
       try {
         listener(contribution);
       } catch (e) {
-        logger.error("[TerritorialCollector] Error en listener:", e);
+        logger.error("[TerritorialCollector] Error en listener:", { error: e });
       }
     }
   }

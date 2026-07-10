@@ -27,7 +27,7 @@ export async function POST(req: Request) {
       data.userId,
       data.type,
       data.coords,
-      data.territorio,
+      data.territorio ?? "",
       data.payload,
       data.poiId,
     );
