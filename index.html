@@ -1,66 +1,236 @@
 <!doctype html>
-<html lang="es">
+<html lang="es-MX">
   <head>
+    <!-- Núcleo de documento -->
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#1a1009" />
-    <title>RDM Digital Hub — Real del Monte, Pueblo Mágico | Plataforma Territorial</title>
-    <meta name="description" content="RDM Digital Hub: plataforma inteligente territorial de Real del Monte, Hidalgo. Mapa interactivo, historia minera, gastronomía, eventos culturales, directorio de negocios y más." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#120b06" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+
+    <title>RDM Digital Hub | Real del Monte, Pueblo Mágico minero y gastronómico</title>
+    <meta
+      name="description"
+      content="RDM Digital Hub: plataforma territorial inteligente de Real del Monte, Hidalgo. Explora su historia minera, pastes, arquitectura inglesa, rutas del corredor de la montaña, agenda cultural y negocios locales."
+    />
     <meta name="author" content="RDM Digital — TAMV Online" />
-    <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://visitarealdelmonte.online/" />
 
-    <!-- Rendimiento: preconexiones a orígenes externos -->
+    <!-- Favicons y PWA base -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Rendimiento: conexiones esenciales -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://tile.openstreetmap.org" />
     <link rel="dns-prefetch" href="https://tile.openstreetmap.org" />
-    <link rel="preconnect" href="https://*.supabase.co" />
-    <!-- Google Fonts: solo pesos usados (400,500,700 + 700,800 heading), font-display:swap -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@700;800&display=swap" as="style" fetchpriority="high" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@700;800&display=swap" media="print" onload="this.media='all';this.onload=null" crossorigin />
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@700;800&display=swap" crossorigin /></noscript>
-    <!-- Open Graph -->
+    <!-- Si usas Supabase / APIs externas, agrega aquí preconnects concretos, no comodines -->
+
+    <!-- Tipografía: editorial + territorial -->
+    <link
+      rel="preload"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@700;800&display=swap"
+      as="style"
+      fetchpriority="high"
+      crossorigin
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@700;800&display=swap"
+      media="print"
+      onload="this.media='all';this.onload=null"
+      crossorigin
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@700;800&display=swap"
+        crossorigin
+      />
+    </noscript>
+
+    <!-- Open Graph / Social -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://visitarealdelmonte.online/" />
-    <meta property="og:title" content="RDM Digital Hub — Real del Monte, Pueblo Mágico" />
-    <meta property="og:description" content="Plataforma territorial inteligente de Real del Monte. Mapa, historia, gastronomía, eventos y directorio de negocios." />
-    <meta property="og:image" content="/images/rdm-hero.png" />
     <meta property="og:locale" content="es_MX" />
     <meta property="og:site_name" content="RDM Digital Hub" />
+    <meta property="og:url" content="https://visitarealdelmonte.online/" />
+    <meta property="og:title" content="RDM Digital Hub — Real del Monte, Pueblo Mágico de Hidalgo" />
+    <meta
+      property="og:description"
+      content="Descubre Real del Monte: minas históricas, pastes tradicionales, arquitectura inglesa y experiencias culturales en un solo hub digital."
+    />
+    <meta property="og:image" content="https://visitarealdelmonte.online/images/rdm-hero.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Vista panorámica de Real del Monte, Pueblo Mágico de Hidalgo" />
 
-    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="RDM Digital Hub — Real del Monte, Pueblo Mágico minero y gastronómico" />
+    <meta
+      name="twitter:description"
+      content="Explora Real del Monte desde una plataforma territorial inteligente: mapa interactivo, rutas mineras, gastronomía, eventos y negocios locales."
+    />
+    <meta name="twitter:image" content="https://visitarealdelmonte.online/images/rdm-hero.png" />
     <meta name="twitter:site" content="@visitarealdelmonte" />
-    <meta name="twitter:title" content="RDM Digital Hub — Real del Monte, Pueblo Mágico" />
-    <meta name="twitter:description" content="Plataforma territorial inteligente de Real del Monte. Mapa, historia, gastronomía, eventos y directorio." />
-    <meta name="twitter:image" content="/images/rdm-hero.png" />
 
-    <!-- Schema.org TouristDestination -->
+    <!-- Metadatos de experiencia -->
+    <meta name="application-name" content="RDM Digital Hub" />
+    <meta name="apple-mobile-web-app-title" content="RDM Digital Hub" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <!-- Structured Data: destino + sitio + atracciones núcleo -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "TouristDestination",
-      "name": "Real del Monte",
-      "description": "Pueblo Mágico de Hidalgo, México. Famoso por su historia minera, pastes y arquitectura inglesa.",
-      "url": "https://visitarealdelmonte.online",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Real del Monte",
-        "addressRegion": "Hidalgo",
-        "addressCountry": "MX"
-      },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": 20.1295,
-        "longitude": -98.6734
-      },
-      "touristType": ["Historia", "Gastronomía", "Aventura", "Cultura", "Ecoturismo"]
-    }
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://visitarealdelmonte.online#website",
+            "url": "https://visitarealdelmonte.online/",
+            "name": "RDM Digital Hub",
+            "description": "Plataforma territorial inteligente del Pueblo Mágico Real del Monte, Hidalgo.",
+            "inLanguage": "es-MX",
+            "publisher": {
+              "@type": "Organization",
+              "name": "RDM Digital",
+              "url": "https://visitarealdelmonte.online/"
+            },
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": "https://visitarealdelmonte.online/buscar?q={search_term_string}",
+              "query-input": "required name=search_term_string"
+            }
+          },
+          {
+            "@type": "TouristDestination",
+            "@id": "https://visitarealdelmonte.online#destino",
+            "name": "Real del Monte",
+            "alternateName": "Mineral del Monte",
+            "description": "Pueblo Mágico de Hidalgo, México, reconocido por su historia minera, su arquitectura de influencia inglesa y sus pastes tradicionales.",
+            "url": "https://visitarealdelmonte.online/",
+            "image": "https://visitarealdelmonte.online/images/rdm-hero.png",
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": 20.1295,
+              "longitude": -98.6734
+            },
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Real del Monte",
+              "addressRegion": "Hidalgo",
+              "addressCountry": "MX"
+            },
+            "touristType": [
+              "Historia minera",
+              "Gastronomía",
+              "Arquitectura histórica",
+              "Ecoturismo",
+              "Cultura"
+            ],
+            "containedInPlace": {
+              "@type": "Place",
+              "name": "Corredor de la Montaña, Hidalgo",
+              "address": {
+                "@type": "PostalAddress",
+                "addressRegion": "Hidalgo",
+                "addressCountry": "MX"
+              }
+            }
+          },
+          {
+            "@type": "ItemList",
+            "@id": "https://visitarealdelmonte.online#atracciones",
+            "name": "Atracciones principales en Real del Monte",
+            "itemListElement": [
+              {
+                "@type": "TouristAttraction",
+                "position": 1,
+                "name": "Museo de Sitio Mina de Acosta",
+                "description": "Antigua mina ahora museo, donde se puede conocer la historia minera de Real del Monte.",
+                "touristType": "Historia minera"
+              },
+              {
+                "@type": "TouristAttraction",
+                "position": 2,
+                "name": "Panteón Inglés",
+                "description": "Cementerio histórico donde descansan mineros de origen inglés, con lápidas orientadas hacia Europa.",
+                "touristType": "Patrimonio histórico"
+              },
+              {
+                "@type": "TouristAttraction",
+                "position": 3,
+                "name": "Centro Histórico de Real del Monte",
+                "description": "Calles empedradas, casas coloridas y casonas con influencia inglesa, corazón del pueblo.",
+                "touristType": "Cultura y arquitectura"
+              }
+            ]
+          },
+          {
+            "@type": "BreadcrumbList",
+            "@id": "https://visitarealdelmonte.online#breadcrumbs",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Inicio",
+                "item": "https://visitarealdelmonte.online/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Explorar Real del Monte",
+                "item": "https://visitarealdelmonte.online/explorar"
+              }
+            ]
+          }
+        ]
+      }
     </script>
-</head>
+  </head>
 
   <body>
+    <!-- Contenedor raíz de la SPA / app React -->
     <div id="root"></div>
+
+    <!-- Fallback sin JS: mínima experiencia narrativa y SEO -->
+    <noscript>
+      <main style="padding: 2rem; max-width: 72rem; margin: 0 auto; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+        <header>
+          <h1>RDM Digital Hub · Real del Monte, Pueblo Mágico</h1>
+          <p>
+            Explora la historia minera, los pastes y la arquitectura de Real del Monte desde una plataforma territorial inteligente.
+          </p>
+        </header>
+
+        <section aria-labelledby="rdm-historia">
+          <h2 id="rdm-historia">Historia y legado minero</h2>
+          <p>
+            Real del Monte forma parte del Corredor de la Montaña de Hidalgo, un territorio marcado por sus minas,
+            sus leyendas y el encuentro entre culturas que dieron forma a este Pueblo Mágico.
+          </p>
+        </section>
+
+        <section aria-labelledby="rdm-gastro">
+          <h2 id="rdm-gastro">Gastronomía y pastes</h2>
+          <p>
+            La tradición de los pastes, el pan de pulque y las enchiladas mineras hacen de Real del Monte un destino imprescindible para quienes buscan sabores con identidad.
+          </p>
+        </section>
+
+        <section aria-labelledby="rdm-explorar">
+          <h2 id="rdm-explorar">Explora el territorio</h2>
+          <p>
+            Visita minas históricas, el Panteón Inglés, el centro histórico y las rutas naturales que conectan con otros Pueblos Mágicos del estado de Hidalgo.
+          </p>
+        </section>
+      </main>
+    </noscript>
+
+    <!-- Entrada de la app -->
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
