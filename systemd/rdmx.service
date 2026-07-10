@@ -1,14 +1,63 @@
 [Unit]
-Description=RDM Digital API Service
+Description=RDM Digital API Service (Real del Monte Hub)
 After=network.target
+Wants=network-online.target
+Documentation=https://visitarealdelmonte.online/docs/api
 
 [Service]
 Type=simple
+# Usuario dedicado para el servicio (crear previamente: useradd -r -s /usr/sbin/nologin rdmx)
+User=rdmx
+Group=rdmx
+
 WorkingDirectory=/opt/rdmx
-ExecStart=/usr/bin/node /opt/rdmx/server/dist/index.js
-Restart=always
-RestartSec=5
+
+# Entorno
 Environment=NODE_ENV=production
+EnvironmentFile=-/etc/rdmx/api.env
+
+# Arranque de la app
+ExecStart=/usr/bin/node /opt/rdmx/server/dist/index.js
+
+# Reinicios
+Restart=on-failure
+RestartSec=5
+TimeoutStartSec=60
+TimeoutStopSec=30
+
+# Límites de recursos
+LimitNOFILE=65535
+
+# Seguridad / Sandboxing (ajusta según tu app)
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/rdmx
+# Si tienes carpeta específica para logs fuera de journal:
+# ReadWritePaths=/opt/rdmx /var/log/rdmx
+
+# Network sandboxing (restringe si tu app solo hace outbound)
+IPAddressDeny=localhost
+IPAddressAllow=any
+
+# Endurecimiento adicional del entorno
+ProtectControlGroups=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectClock=true
+ProtectHostname=true
+LockPersonality=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+RestrictNamespaces=true
+SystemCallArchitectures=native
+UMask=0077
+
+# Capability bounding: elimina todas capacidades extra
+CapabilityBoundingSet=
+AmbientCapabilities=
 
 [Install]
 WantedBy=multi-user.target
