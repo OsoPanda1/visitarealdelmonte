@@ -41,55 +41,70 @@ const IsabellaOrb: React.FC = () => {
 
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2;
-      const baseRadius = 40;
+      const baseRadius = 42;
 
-      // Anillos pulsantes
+      // Anillos pulsantes suaves
       for (let i = 0; i < 3; i++) {
-        const pulseRadius = baseRadius + 10 + Math.sin(time * 0.02 + i * 0.5) * 8;
-        const alpha = 0.3 - i * 0.1;
+        const pulseRadius = baseRadius + 12 + Math.sin(time * 0.015 + i * 0.5) * 10;
+        const alpha = 0.2 - i * 0.06;
 
         ctx.beginPath();
-        ctx.arc(centerX, centerY, pulseRadius + i * 8, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(0, 240, 255, ${alpha})`;
-        ctx.lineWidth = 2;
+        ctx.arc(centerX, centerY, pulseRadius + i * 6, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(180, 160, 255, ${alpha})`;
+        ctx.lineWidth = 1.5;
         ctx.stroke();
       }
 
-      // Gradiente central
+      // Sombra exterior suave
+      const glowGrad = ctx.createRadialGradient(centerX, centerY, baseRadius - 5, centerX, centerY, baseRadius + 20);
+      glowGrad.addColorStop(0, "rgba(140, 120, 255, 0.15)");
+      glowGrad.addColorStop(1, "rgba(140, 120, 255, 0)");
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, baseRadius + 20, 0, Math.PI * 2);
+      ctx.fillStyle = glowGrad;
+      ctx.fill();
+
+      // Gradiente central elegante
       const gradient = ctx.createRadialGradient(
-        centerX - 10,
-        centerY - 10,
-        5,
+        centerX - 8,
+        centerY - 8,
+        3,
         centerX,
         centerY,
         baseRadius,
       );
-      gradient.addColorStop(0, "rgba(100, 200, 255, 0.9)");
-      gradient.addColorStop(0.5, "rgba(0, 150, 255, 0.7)");
-      gradient.addColorStop(1, "rgba(0, 80, 200, 0.5)");
+      gradient.addColorStop(0, "rgba(220, 200, 255, 0.95)");
+      gradient.addColorStop(0.3, "rgba(160, 130, 255, 0.8)");
+      gradient.addColorStop(0.7, "rgba(100, 80, 220, 0.6)");
+      gradient.addColorStop(1, "rgba(60, 40, 180, 0.4)");
 
       ctx.beginPath();
       ctx.arc(centerX, centerY, baseRadius, 0, Math.PI * 2);
       ctx.fillStyle = gradient;
       ctx.fill();
 
-      // Partículas orbitando
-      for (let i = 0; i < 6; i++) {
-        const angle = time * 0.03 + (i * Math.PI) / 3;
-        const orbitRadius = 35 + Math.sin(time * 0.02 + i) * 5;
+      // Partículas orbitando elegantes
+      for (let i = 0; i < 8; i++) {
+        const angle = time * 0.025 + (i * Math.PI * 2) / 8;
+        const orbitRadius = 38 + Math.sin(time * 0.015 + i * 1.2) * 4;
         const px = centerX + Math.cos(angle) * orbitRadius;
         const py = centerY + Math.sin(angle) * orbitRadius;
+        const particleSize = 2 + Math.sin(time * 0.03 + i) * 0.5;
 
         ctx.beginPath();
-        ctx.arc(px, py, 3, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(155, 135, 245, 0.8)";
+        ctx.arc(px, py, particleSize, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(200, 180, 255, ${0.5 + Math.sin(time * 0.02 + i) * 0.2})`;
         ctx.fill();
       }
 
-      // Core brillante
+      // Core brillante con destello
+      const coreGrad = ctx.createRadialGradient(centerX - 3, centerY - 3, 0, centerX, centerY, 18);
+      coreGrad.addColorStop(0, "rgba(255, 255, 255, 0.9)");
+      coreGrad.addColorStop(0.5, "rgba(220, 200, 255, 0.5)");
+      coreGrad.addColorStop(1, "rgba(180, 160, 255, 0)");
       ctx.beginPath();
-      ctx.arc(centerX, centerY, 15, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
+      ctx.arc(centerX, centerY, 18, 0, Math.PI * 2);
+      ctx.fillStyle = coreGrad;
       ctx.fill();
 
       time++;

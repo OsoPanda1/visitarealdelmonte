@@ -70,7 +70,7 @@ const AmbientAudio = () => {
         playing ? "Silenciar sonido ambiental" : "Activar sonido ambiental de Real del Monte"
       }
       title={playing ? "Silenciar ambiente" : "Sonido inmersivo"}
-      className="fixed bottom-6 left-6 z-50 flex h-12 w-12 items-center justify-center rounded-full glass border border-[hsl(var(--gold))]/25 text-[hsl(var(--gold))] shadow-lg transition-all hover:scale-105 hover:border-[hsl(var(--gold))]/60"
+      className="fixed bottom-24 left-6 z-50 flex h-12 w-12 items-center justify-center rounded-full glass border border-[hsl(var(--gold))]/25 text-[hsl(var(--gold))] shadow-lg transition-all hover:scale-105 hover:border-[hsl(var(--gold))]/60"
     >
       {playing ? (
         <span className="relative flex items-center justify-center">

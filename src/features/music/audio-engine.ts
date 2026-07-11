@@ -67,6 +67,9 @@ export function applySpatialProfile(profile: SpatialProfile, mode: SpatialMode):
 
   if (mode === "archivo") {
     // Pure playback — no spatial processing
+    if (sourceNode) {
+      sourceNode.connect(masterGain!);
+    }
     return;
   }
 

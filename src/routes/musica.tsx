@@ -204,8 +204,8 @@ function MusicaPage() {
       const barWidth = w / bars - 1;
       for (let i = 0; i < bars; i++) {
         const barHeight = isPlaying
-          ? (Math.sin(Date.now() / 200 + i * 0.5) * 0.3 + 0.5) * h * progress * 1.5
-          : Math.sin(i * 0.3) * h * 0.05 + h * 0.05;
+          ? (Math.sin(Date.now() / 4000 + i * 0.3) * 0.25 + 0.5) * h * Math.max(0.1, progress * 1.5)
+          : (Math.sin(i * 0.3) * 0.5 + 0.5) * h * 0.08;
 
         const gradient = ctx.createLinearGradient(0, h, 0, h - barHeight);
         gradient.addColorStop(0, "oklch(0.66 0.16 45 / 0.3)");
@@ -220,7 +220,7 @@ function MusicaPage() {
   }, [isPlaying, progress]);
 
   return (
-    <>
+    <div className="min-h-screen bg-gradient-to-b from-background via-background/95 to-[hsl(var(--rdm-amber)/0.03)]">
       <PageHero
         eyebrow="RDM Ecos Música · Archivo Sonoro Vivo"
         title="Sonidos del"
@@ -240,7 +240,7 @@ function MusicaPage() {
               Radio Nodo Cero — Selección continua
             </div>
           </div>
-          <button className="rounded-full bg-foreground text-background px-5 py-2.5 text-sm flex items-center gap-2">
+          <button className="rounded-full bg-accent text-white px-5 py-2.5 text-sm flex items-center gap-2 hover:bg-accent/90 transition-colors">
             <Play className="w-4 h-4" /> Escuchar
           </button>
         </div>
@@ -262,8 +262,8 @@ function MusicaPage() {
               onClick={() => setActiveTab(tab.key)}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1.5 ${
                 activeTab === tab.key
-                  ? "bg-foreground text-background"
-                  : "bg-secondary text-muted-foreground hover:text-foreground"
+                  ? "bg-accent text-white shadow-sm"
+                  : "bg-secondary/50 text-muted-foreground hover:text-foreground hover:bg-secondary"
               }`}
             >
               <tab.icon className="w-4 h-4" />
@@ -278,7 +278,7 @@ function MusicaPage() {
           {currentTrack && (
             <div className="p-5 flex items-center gap-4">
               <div className="w-14 h-14 rounded-xl bg-aurora flex items-center justify-center shrink-0">
-                <Music2 className="w-7 h-7 text-background" />
+                <Music2 className="w-7 h-7 text-accent-foreground" />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="font-display text-lg text-ink truncate">{currentTrack.title}</div>
@@ -340,7 +340,7 @@ function MusicaPage() {
             </button>
             <button
               onClick={togglePlay}
-              className="w-12 h-12 rounded-full bg-foreground text-background flex items-center justify-center hover:scale-105 transition-transform"
+              className="w-12 h-12 rounded-full bg-accent text-white flex items-center justify-center hover:scale-105 transition-transform shadow-md shadow-accent/20"
             >
               {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 ml-0.5" />}
             </button>
@@ -399,7 +399,7 @@ function MusicaPage() {
                     {i + 1}
                   </div>
                   <div className="w-10 h-10 rounded-lg bg-aurora flex items-center justify-center shrink-0">
-                    <Music2 className="w-5 h-5 text-background" />
+                    <Music2 className="w-5 h-5 text-accent-foreground" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="font-medium text-ink truncate">{track.title}</div>
@@ -642,7 +642,7 @@ function MusicaPage() {
       </section>
 
       {/* Full-width bottom spacing */}
-      <div className="h-32" />
-    </>
+      </div>
+    </div>
   );
 }
