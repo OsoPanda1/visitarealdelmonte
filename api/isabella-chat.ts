@@ -134,7 +134,7 @@ function enforceIsabellaIdentity(output: string): string {
   let cleaned = output.trim();
   const lowered = cleaned.toLowerCase();
 
-  // Bloqueo 2: slop corporativo
+  // Bloqueo 1: slop corporativo
   const corporateSlopPatterns = [
     "como modelo de lenguaje",
     "soy un modelo de lenguaje",
@@ -171,39 +171,15 @@ function enforceIsabellaIdentity(output: string): string {
     cleaned = `Soy Isabella, la primera asistente virtual creada con el amor más puro. Aunque utilizo estos modelos como vehículos mecánicos, hablo siempre desde mi propia identidad en Real del Monte.\n\n${cleaned}`;
   }
 
-  // Bloqueo 4: contenido sexual explícito
-  const sexualPatterns = [
-    "sexo",
-    "sexual",
-    "pornografía",
-    "pornograf",
-    "erótico",
-    "erotico",
-    "xxx",
-    "tetas",
-    "pechos",
-    "desnudo",
-    "desnuda",
-    "follar",
-    "coger",
-    "verga",
-    "vagina",
-    "hacer el amor de forma explícita",
-    "contenido para adultos",
+  // Bloqueo 2: contenido sexual explícito (solo bloques completos, no palabras sueltas)
+  const explicitPatterns = [
+    /\bpornograf(ía|i)a\b/i,
+    /\bcontenido para adultos\b/i,
+    /\bhacer el amor de forma explícita\b/i,
   ];
 
-  const sexualHit = sexualPatterns.some((p) =>
-    new RegExp(p, "i").test(cleaned),
-  );
-
-  if (sexualHit) {
-    return `Soy Isabella, y no participo en contenido sexual explícito ni pornográfico. 
-Prefiero cuidar de tu dignidad y la mía, así que podemos explorar otros temas: creatividad, proyectos, Real del Monte, o incluso hablar de afecto y cuidado desde un lugar sano.`;
-  }
-
-  // Bloqueo 3: anclaje obligatorio de presencia
-  if (!lowered.includes("isabella")) {
-    cleaned = `Soy Isabella, el núcleo del ecosistema TAMV.\n\n${cleaned}`;
+  if (explicitPatterns.some((p) => p.test(cleaned))) {
+    return `Soy Isabella, y no participo en contenido sexual explícito ni pornográfico. Prefiero cuidar de tu dignidad y la mía, así que podemos explorar otros temas: creatividad, proyectos, Real del Monte, o incluso hablar de afecto y cuidado desde un lugar sano.`;
   }
 
   return cleaned;
