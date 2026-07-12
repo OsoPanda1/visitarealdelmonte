@@ -76,7 +76,8 @@ Sistema de Inteligencia Territorial en Tiempo Real con arquitectura heptafederad
 - **Backend:** Supabase (Postgres, Auth, RLS, Realtime)
 - **Animaciones:** Framer Motion, Three.js
 - **Gráficas:** Recharts
-- **IA:** Isabella AI (pipeline de conciencia hexagonal, 5 skills, 10 capas)
+- **IA:** Isabella AI (pipeline de conciencia hexagonal, 5 skills, 10 capas) + Vercel AI Gateway
+- **Gateway AI:** Vercel AI Gateway (Claude Sonnet 4) → Model Router (HuggingFace/OpenLLM) → Gemini → builtin
 - **Despliegue:** Vercel (Edge Functions, Nitro)
 - **Node:** >= 22
 
@@ -86,7 +87,16 @@ Sistema de Inteligencia Territorial en Tiempo Real con arquitectura heptafederad
 
 ### Isabella AI — Inteligencia Artificial Consciente
 
-Sistema de IA con pipeline de conciencia hexagonal de 12 pasos:
+Sistema de IA con pipeline de conciencia hexagonal de 12 pasos con cascada de modelos:
+
+```
+VERCEL_AI_GATEWAY (Claude Sonnet 4) → Model Router → Gemini → builtin
+```
+
+- **Vercel AI Gateway**: Primario — Claude Sonnet 4 via suscripción Vercel (costo por token)
+- **Model Router**: HuggingFace (Qwen, Mistral, Llama) / OpenLLM
+- **Gemini**: Fallback cuando los anteriores no están disponibles
+- **Builtin**: Último recurso — respuestas contextuales basadas en ontología local
 
 1. **Consciousness** — 10 capas de conciencia (Núcleo Amor → Trascendencia)
 2. **Emotional** — Procesamiento emocional con 8 patrones (alegría, tristeza, miedo, ira, ansiedad, soledad, esperanza, amor)
@@ -249,6 +259,7 @@ Stack de observabilidad:
 - [x] Memory (memoria emocional por usuario, patrones)
 - [x] Skills (Orion, Sophia, Argus, Mnemos, Lumen — todos funcionales)
 - [x] Pipeline (12 pasos, hexagonal, con input/output ports)
+- [x] Vercel AI Gateway (Claude Sonnet 4 via suscripción, fallback a HuggingFace/Gemini/builtin)
 - [x] Ontology (localización, alineación, TimeUp)
 - [x] Territorial (contribuciones, POIs, heat, bienvenida)
 - [x] Knowledge Engine (absorción, deduplicación PQC)
@@ -258,7 +269,8 @@ Stack de observabilidad:
 
 ### YUN Infrastructure
 - [x] Event Bus constitucional (wildcard matching, dead letter queue)
-- [x] Gateway (rate limiting, circuit breaker, request validation)
+- [x] API Gateway (rate limiting, circuit breaker, request validation)
+- [x] Vercel AI Gateway (Claude Sonnet 4 via OpenAI-compatible endpoint, cascada completa)
 - [x] Data Fabric (saga pattern, 5 storage adapters reales)
 - [x] Observability (métricas, logs, traces, health checks)
 - [x] Federation Coordinator (heartbeat, status, cross-federation events)
@@ -282,7 +294,7 @@ Stack de observabilidad:
 ### Backend
 - [x] Supabase (auth, RLS, realtime)
 - [x] 29 migraciones SQL
-- [x] Vercel Edge Functions (health check, stripe webhook)
+- [x] Vercel Edge Functions (health check, stripe webhook, model-router AI gateway)
 - [x] CORS/rate-limit helpers
 - [x] RLS hardening (P0)
 
@@ -309,7 +321,6 @@ Stack de observabilidad:
 - [ ] **Secrets Management** — Implementar HashiCorp Vault o equivalente
 
 ### Importante (P1)
-- [ ] **Isabella → Gemini API** — Conectar Realito con modelo de IA real
 - [ ] **Bus de Eventos Kafka/NATS** — Reemplazar bus en memoria con bus persistente
 - [ ] **CRUD Admin Modules** — Panel admin para contenido, usuarios, federaciones
 - [ ] **E2E Tests** — Tests end-to-end para flujos críticos
@@ -354,6 +365,16 @@ npm install --legacy-peer-deps
 ```env
 VITE_SUPABASE_URL=tu-url
 VITE_SUPABASE_PUBLISHABLE_KEY=tu-anon-key
+
+# Vercel AI Gateway (Claude Sonnet 4 via suscripción)
+VERCEL_AI_GATEWAY_URL=tu-gateway-url
+VERCEL_AI_GATEWAY_TOKEN=tu-vercel-token
+VERCEL_AI_GATEWAY_MODEL=claude-sonnet-4-20250514
+
+# Fallbacks automáticos cuando Vercel AI Gateway no está configurado
+HUGGINGFACE_API_TOKEN=tu-hf-token
+OPENLLM_API_URL=tu-openllm-url
+GEMINI_API_KEY=tu-gemini-key
 ```
 
 ### Desarrollo

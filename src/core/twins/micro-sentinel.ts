@@ -86,7 +86,6 @@ export class MicroSentinel {
     if (verdict.passed) {
       const stateTopic = `ldtocs/mesh/${payload.nodeId}/state`;
       const twinState = transformToTwinState(payload);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (this.bus as any).emit(stateTopic, twinState);
       logger.info("[SENTINEL] Nodo validado", { nodeId: payload.nodeId });
     } else {
@@ -97,7 +96,6 @@ export class MicroSentinel {
         reasons: verdict.reasons,
         timestamp: payload.timestamp,
       };
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (this.bus as any).emit(eventTopic, alert);
       logger.warn("[SENTINEL] Nodo comprometido", {
         nodeId: payload.nodeId,

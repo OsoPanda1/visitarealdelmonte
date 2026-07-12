@@ -1,21 +1,85 @@
-const hits = new Map<string, { count: number; resetAt: number }>();
+const store = new Map<string, { count: number; resetAt: number }>();
 
-export function checkRateLimit(
-  key: string,
-  limit = 60,
-  windowMs = 60_000,
-): { allowed: boolean; remaining: number } {
+function getClientIp(request: Request): string {
+  return (
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    request.headers.get("x-real-ip") ||
+    request.headers.get("cf-connecting-ip") ||
+    "unknown"
+  );
+}
+
+interface RateLimitConfig {
+  windowMs: number;
+  maxRequests: number;
+  keyPrefix?: string;
+}
+
+interface RateLimitResult {
+  allowed: boolean;
+  remaining: number;
+  resetAt: number;
+  retryAfter?: number;
+  headers: Record<string, string>;
+}
+
+export function checkRateLimit(request: Request, config: RateLimitConfig): RateLimitResult {
+  const ip = getClientIp(request);
+  const key = `${config.keyPrefix || "api"}:${ip}`;
   const now = Date.now();
-  const entry = hits.get(key);
+  const resetAt = now + config.windowMs;
 
-  if (!entry || now > entry.resetAt) {
-    hits.set(key, { count: 1, resetAt: now + windowMs });
-    return { allowed: true, remaining: limit - 1 };
+  const entry = store.get(key);
+
+  if (!entry || entry.resetAt < now) {
+    store.set(key, { count: 1, resetAt });
+    return {
+      allowed: true,
+      remaining: config.maxRequests - 1,
+      resetAt,
+      headers: {
+        "X-RateLimit-Limit": String(config.maxRequests),
+        "X-RateLimit-Remaining": String(config.maxRequests - 1),
+        "X-RateLimit-Reset": String(Math.ceil(resetAt / 1000)),
+      },
+    };
   }
 
   entry.count++;
+
+  if (entry.count > config.maxRequests) {
+    const retryAfter = Math.ceil((entry.resetAt - now) / 1000);
+    return {
+      allowed: false,
+      remaining: 0,
+      resetAt: entry.resetAt,
+      retryAfter,
+      headers: {
+        "X-RateLimit-Limit": String(config.maxRequests),
+        "X-RateLimit-Remaining": "0",
+        "X-RateLimit-Reset": String(Math.ceil(entry.resetAt / 1000)),
+        "Retry-After": String(retryAfter),
+      },
+    };
+  }
+
   return {
-    allowed: entry.count <= limit,
-    remaining: Math.max(0, limit - entry.count),
+    allowed: true,
+    remaining: config.maxRequests - entry.count,
+    resetAt,
+    headers: {
+      "X-RateLimit-Limit": String(config.maxRequests),
+      "X-RateLimit-Remaining": String(config.maxRequests - entry.count),
+      "X-RateLimit-Reset": String(Math.ceil(resetAt / 1000)),
+    },
   };
 }
+
+export const RATE_LIMITS: Record<string, RateLimitConfig> = {
+  ai: { windowMs: 60_000, maxRequests: 20, keyPrefix: "ai" },
+  tts: { windowMs: 60_000, maxRequests: 30, keyPrefix: "tts" },
+  health: { windowMs: 60_000, maxRequests: 60, keyPrefix: "health" },
+  model: { windowMs: 60_000, maxRequests: 10, keyPrefix: "model" },
+  telemetry: { windowMs: 60_000, maxRequests: 30, keyPrefix: "telemetry" },
+  default: { windowMs: 60_000, maxRequests: 60, keyPrefix: "default" },
+};

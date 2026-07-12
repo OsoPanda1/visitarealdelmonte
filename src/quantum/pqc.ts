@@ -40,7 +40,6 @@ async function sha256(data: string | Uint8Array): Promise<ArrayBuffer> {
 // -----------------------------------------------------------------------
 // WASM loader for liboqs (browser-compatible)
 // -----------------------------------------------------------------------
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let oqsWasmModule: any = null;
 let wasmLoadAttempted = false;
 let wasmAvailable = false;

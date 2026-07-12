@@ -720,8 +720,6 @@ function MusicaPage() {
         </div>
       </section>
 
-      {/* Full-width bottom spacing */}
-      </div>
     </div>
   );
 }
