@@ -10,15 +10,15 @@ Sistema de Inteligencia Territorial en Tiempo Real con arquitectura heptafederad
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    GATEWAY YUN (Vercel)                      │
-│              TLS · JWT · Rate Limit · Circuit Breaker        │
-├─────────┬─────────┬─────────┬─────────┬─────────┬──────────┤
-│  Fed1   │  Fed2   │  Fed3   │  Fed4   │  Fed5   │  Fed6/7  │
-│ DEKATEOTL│ ANUBIS │ BOOKPI  │ PHOENIX │ MDD_TAMV│KAOS/CRON │
-│  DATA   │  INTEL  │  SEC    │  GOV    │  ECON   │VIS/TERR  │
-├─────────┴─────────┴─────────┴─────────┴─────────┴──────────┤
-│                  DATA FABRIC (Orchestrator)                  │
-│              Saga Pattern · Cross-Domain Access              │
+│                    GATEWAY YUN (Vercel)                     │
+│              TLS · JWT · Rate Limit · Circuit Breaker       │
+├─────────┬─────────┬─────────┬─────────┬─────────┬───────────┤
+│  Fed1   │  Fed2   │  Fed3   │  Fed4   │  Fed5   │  Fed6/7   │
+│ DEKATEOTL│ ANUBIS │ BOOKPI  │ PHOENIX │ MDD_TAMV│KAOS/CRON  │
+│  DATA   │  INTEL  │  SEC    │  GOV    │  ECON   │VIS/TERR   │
+├─────────┴─────────┴─────────┴─────────┴─────────┴───────────┤
+│                  DATA FABRIC (Orchestrator)                 │
+│              Saga Pattern · Cross-Domain Access             │
 ├──────────┬──────────┬──────────┬──────────┬─────────────────┤
 │ Identity │Commerce  │Knowledge │Telemetry │   Gameplay      │
 │ Supabase │ Supabase │ Supabase │ Supabase │  Supabase+Cache │
@@ -27,15 +27,15 @@ Sistema de Inteligencia Territorial en Tiempo Real con arquitectura heptafederad
 
 ### Federaciones (7)
 
-| # | ID | Nombre | Dominio | Especialidad |
-|---|-----|--------|---------|--------------|
-| F1 | `DEKATEOTL` | Datos | Identity/Commerce | Vault, PostGIS, TimeSeries |
-| F2 | `ANUBIS` | Inteligencia | Knowledge | Cognitive & Agentic AI |
-| F3 | `BOOKPI_DATAGIT` | Seguridad | Identity/Telemetry | PQC, Zero-Trust, Q-Cells |
-| F4 | `PHOENIX` | Gobernanza | Identity/Telemetry | Executable Governance |
-| F5 | `MDD_TAMV` | Economía | Commerce | Economía local, phygital |
-| F6 | `KAOS_HYPERRENDER` | Visual | Gameplay | GeoEngine 2D/3D |
-| F7 | `CHRONOS` | Territorio | Telemetry/Gameplay | Edge, IoT, Human mesh |
+| #  |        ID         |     Nombre   |      Dominio        |         Especialidad       |
+|----|-------------------|--------------|---------------------|----------------------------|
+| F1 | `DEKATEOTL`       | Datos        | Identity/Commerce   | Vault, PostGIS, TimeSeries |
+| F2 | `ANUBIS`          | Inteligencia | Knowledge           | Cognitive & Agentic AI     |
+| F3 | `BOOKPI_DATAGIT`  | Seguridad    | Identity/Telemetry  | PQC, Zero-Trust, Q-Cells   |
+| F4 | `PHOENIX`         | Gobernanza   | Identity/Telemetry  | Executable Governance      |
+| F5 | `MDD_TAMV`        | Economía     | Commerce            | Economía local, phygital   |
+| F6 | `KAOS_HYPERRENDER`| Visual       | Gameplay            | GeoEngine 2D/3D            |
+| F7 | `CHRONOS`         | Territorio   | Telemetry/Gameplay  | Edge, IoT, Human mesh      |
 
 ---
 
