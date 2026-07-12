@@ -32,7 +32,7 @@ export interface IsabellaState {
 }
 
 const ISABELLA_ENDPOINT =
-  import.meta.env.VITE_ISABELLA_ENDPOINT ?? `/api/isabella-chat`;
+  import.meta.env.VITE_ISABELLA_ENDPOINT ?? `/api/isa-ai`;
 
 export const useIsabella = () => {
   const [state, setState] = useState<IsabellaState>({
