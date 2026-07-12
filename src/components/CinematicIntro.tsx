@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import { motion, AnimatePresence, type Easing } from "framer-motion";
+import { motion, AnimatePresence, type Variants, type Easing } from "framer-motion";
 import tumirada from "@/assets/musica/tumirada.mp3";
 
 type CinematicIntroProps = {
@@ -112,7 +112,7 @@ export const CinematicIntro: React.FC<CinematicIntroProps> = ({
     });
   };
 
-  const pageVariants = {
+  const pageVariants: Variants = {
     initial: { opacity: 0, scale: 0.98 },
     animate: {
       opacity: 1,
@@ -122,7 +122,7 @@ export const CinematicIntro: React.FC<CinematicIntroProps> = ({
     exit: {
       opacity: 0,
       scale: 1.02,
-      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as Easing },
+      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
     },
   };
 

@@ -48,11 +48,14 @@ export function usePasteRoute() {
         agg[r.poi_id].n += 1;
       });
 
-      const merged: PastePoi[] = (poiData ?? []).map((p: Record<string, unknown>) => ({
-        ...(p as Omit<PastePoi, "avg_rating" | "rating_count">),
-        avg_rating: agg[p.id] ? Number((agg[p.id].sum / agg[p.id].n).toFixed(1)) : 4.8,
-        rating_count: agg[p.id]?.n ?? 0,
-      }));
+      const merged: PastePoi[] = (poiData ?? []).map((p: Record<string, unknown>) => {
+        const poi = p as unknown as PastePoi;
+        return {
+          ...p,
+          avg_rating: agg[poi.id] ? Number((agg[poi.id].sum / agg[poi.id].n).toFixed(1)) : 4.8,
+          rating_count: agg[poi.id]?.n ?? 0,
+        } as PastePoi;
+      });
       if (!merged.length) {
         setPois(DEMO_POIS as PastePoi[]);
         setDemo(true);

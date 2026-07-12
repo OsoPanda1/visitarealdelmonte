@@ -190,8 +190,8 @@ api/tts-isabella.ts
 
 ```env
 # === Supabase (requerido) ===
-VITE_SUPABASE_URL=https://lbbijzimnydvodtfbjoz.supabase.co
-VITE_SUPABASE_PUBLISHABLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+VITE_SUPABASE_URL=tu-supabase-url
+VITE_SUPABASE_PUBLISHABLE_KEY=tu-supabase-anon-key
 
 # === ISA-AI endpoints (usa estos por defecto) ===
 VITE_ISABELLA_ENDPOINT=/api/isa-ai
@@ -204,8 +204,8 @@ VITE_TTS_ENDPOINT=/api/tts-isabella
 # VERCEL_AI_GATEWAY_TOKEN=vercel_token_xxx
 
 # === Autonoma AI (agente autónomo) ===
-AUTONOMA_CLIENT_ID=cmrhhirnt030z01b4ki559abw
-AUTONOMA_SECRET_ID=27cf69ea4f4d414b86068732c51c5aaf0130bfb849993be05d79431778870c9c32a3fbaa826364ce3348f5a054b72ec3
+AUTONOMA_CLIENT_ID=tu-autonoma-client-id
+AUTONOMA_SECRET_ID=tu-autonoma-secret-id
 ```
 
 ---
