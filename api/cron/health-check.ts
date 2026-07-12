@@ -73,8 +73,7 @@ export default async function handler(req: Request): Promise<Response> {
   const headers = buildHeaders(origin);
 
   // Rate-limit para llamadas manuales desde front / exploración
-  const ip = req.headers.get("x-forwarded-for") ?? "unknown";
-  const { allowed } = checkRateLimit(`health:${ip}`, 30, 60_000);
+  const { allowed } = checkRateLimit(req, { windowMs: 60_000, maxRequests: 30, keyPrefix: "health" });
   if (!allowed) {
     return new Response(JSON.stringify({ error: "rate_limited" }), {
       status: 429,

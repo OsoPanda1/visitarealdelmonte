@@ -187,7 +187,7 @@ function enforceIsabellaIdentity(output: string): string {
     "follar",
     "coger",
     "verga",
-    "vagina"
+    "vagina",
     "hacer el amor de forma explícita",
     "contenido para adultos",
   ];
