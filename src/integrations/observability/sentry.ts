@@ -52,8 +52,9 @@ export async function initSentry(): Promise<void> {
       ].filter(Boolean),
       sendDefaultPii: false,
       beforeSend(event: Record<string, unknown>) {
-        if (event.request?.url) {
-          event.request.url = event.request.url.split("?")[0];
+        const req = event.request;
+        if (req && typeof req === "object" && "url" in req) {
+          (req as { url: string }).url = (req as { url: string }).url.split("?")[0];
         }
         return event;
       },

@@ -24,13 +24,13 @@ export default function ComerciosCheckout() {
       .select("*")
       .eq("provider_session_id", sessionId)
       .maybeSingle()
-      .then(({ data }) => setPayment(data));
+      .then(({ data }: { data: unknown }) => setPayment(data));
     supabase
       .from("merchant_registrations")
       .select("*")
       .eq("id", merchantId)
       .maybeSingle()
-      .then(({ data }) => setMerchant(data));
+      .then(({ data }: { data: unknown }) => setMerchant(data));
   }, [sessionId, merchantId]);
 
   const simulatePaid = async () => {
@@ -50,7 +50,7 @@ export default function ComerciosCheckout() {
       toast.success("Pago confirmado. Tu negocio ya está publicado.");
       setTimeout(() => (window.location.href = "/catalogo"), 1500);
     } catch (e: unknown) {
-      toast.error(e.message ?? "Error al confirmar");
+      toast.error(e instanceof Error ? e.message : "Error al confirmar");
     } finally {
       setLoading(false);
     }

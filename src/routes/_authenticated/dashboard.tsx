@@ -41,10 +41,10 @@ function Dashboard() {
       .select("display_name, federation")
       .eq("id", user.id)
       .maybeSingle()
-      .then(({ data }) => {
+      .then(({ data }: { data: unknown }) => {
         if (data) {
           setProfile(data);
-          if (data.federation) setFed(data.federation);
+          if ((data as { federation: unknown }).federation) setFed((data as { federation: string }).federation);
         }
       });
     loadAll(user.id);

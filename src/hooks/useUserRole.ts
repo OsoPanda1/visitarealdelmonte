@@ -23,7 +23,7 @@ export function useUserRole() {
       }
       const { data } = await supabase.from("user_roles").select("role").eq("user_id", user.id);
       if (cancel) return;
-      setRoles((data ?? []).map((r) => r.role) as AppRole[]);
+      setRoles((data ?? []).map((r: { role: AppRole }) => r.role) as AppRole[]);
       setLoading(false);
     };
     load();

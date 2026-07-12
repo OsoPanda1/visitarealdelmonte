@@ -98,7 +98,7 @@ export default function RegistrarComercio() {
       }
       toast.error("No se generó el enlace de pago");
     } catch (err: unknown) {
-      toast.error(err?.message || "Error al registrar el comercio");
+      toast.error(err instanceof Error ? err.message : "Error al registrar el comercio");
     } finally {
       setLoading(false);
     }

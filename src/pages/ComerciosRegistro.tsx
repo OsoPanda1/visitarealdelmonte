@@ -36,14 +36,14 @@ export default function ComerciosRegistro() {
   });
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => setSession(data.session));
+    supabase.auth.getSession().then(({ data }: { data: { session: unknown } | null }) => setSession(data?.session));
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setSession(s));
     supabase
       .from("merchant_categories")
       .select("id,name,fee_mxn")
       .eq("active", true)
       .order("name")
-      .then(({ data }) => setCategories(data ?? []));
+      .then(({ data }: { data: unknown }) => setCategories((data ?? []) as Category[]));
     return () => sub.subscription.unsubscribe();
   }, []);
 
@@ -92,7 +92,7 @@ export default function ComerciosRegistro() {
       toast.success("Registro creado. Redirigiendo al pago…");
       window.location.href = data.checkout_url;
     } catch (err: unknown) {
-      toast.error(err.message ?? "Error al crear el registro");
+      toast.error(err instanceof Error ? err.message : "Error al crear el registro");
     } finally {
       setLoading(false);
     }

@@ -132,7 +132,7 @@ export default function Comercios() {
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {paged.map((b) => (
-                <BusinessCard key={b.id ?? undefined} business={b} />
+                <BusinessCard key={b.id ?? undefined} business={b as unknown as { id: string; name: string; description?: string | null; category: string; address?: string | null; phone?: string | null; website?: string | null; price_range?: string | null; images?: string[]; rating?: number }} />
               ))}
             </div>
           )}
