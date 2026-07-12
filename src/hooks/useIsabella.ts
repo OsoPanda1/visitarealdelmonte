@@ -216,6 +216,7 @@ export const useIsabella = () => {
   // Activar protocolo de seguridad
   const activateProtocol = useCallback(
     (protocol: "fenix_rex" | "iniciacion" | "hoyo_negro") => {
+      if (!sendMessage) return;
       setState((prev) => ({ ...prev, activeProtocol: protocol }));
 
       // Enviar mensaje de activación

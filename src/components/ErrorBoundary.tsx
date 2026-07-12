@@ -1,8 +1,9 @@
 // src/components/ErrorBoundary.tsx
 
 import { Component, ErrorInfo, ReactNode } from "react";
-import { AlertCircle, RefreshCw } from "lucide-react";
+import { AlertTriangle, RefreshCw } from "lucide-react";
 import { logger } from "@/lib/logger";
+import { captureException } from "@/integrations/observability/sentry";
 
 interface Props {
   children: ReactNode;
@@ -23,7 +24,8 @@ class ErrorBoundary extends Component<Props, State> {
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     logger.error("ErrorBoundary caught:", { error, errorInfo });
 
-    // Emite evento global para cualquier listener de telemetría/UI
+    captureException(error, { boundary: "ErrorBoundary", errorInfo });
+
     if (typeof window !== "undefined") {
       try {
         window.dispatchEvent(
@@ -37,38 +39,52 @@ class ErrorBoundary extends Component<Props, State> {
           }),
         );
       } catch (e) {
-        // Si por alguna razón falla el CustomEvent, no rompemos más la app
         logger.error("ErrorBoundary event dispatch failed:", { error: e });
       }
     }
   }
+
+  handleRetry = () => {
+    this.setState({ hasError: false });
+  };
 
   render() {
     if (this.state.hasError) {
       if (this.props.fallback) return this.props.fallback;
 
       return (
-        <div className="min-h-[400px] flex items-center justify-center p-8">
-          <div className="text-center max-w-md">
+        <div className="flex min-h-[400px] items-center justify-center p-8">
+          <div className="max-w-md text-center">
             <div
-              className="w-16 h-16 rounded-2xl mx-auto mb-6 flex items-center justify-center"
+              className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl"
               style={{
-                background: "linear-gradient(135deg, hsla(0,70%,50%,0.15), hsla(0,70%,50%,0.05))",
+                background:
+                  "linear-gradient(135deg, hsla(40,80%,55%,0.2), hsla(40,80%,55%,0.05))",
               }}
             >
-              <AlertCircle className="w-8 h-8 text-destructive" />
+              <AlertTriangle className="h-8 w-8 text-amber-500" />
             </div>
-            <h2 className="font-serif text-2xl font-bold text-foreground mb-2">Algo salió mal</h2>
-            <p className="text-sm text-muted-foreground mb-6">
-              Ha ocurrido un error inesperado. Por favor, intenta recargar la página.
+            <h2 className="mb-2 font-serif text-2xl font-bold text-foreground">
+              Algo salió mal
+            </h2>
+            <p className="mb-6 text-sm text-muted-foreground">
+              Ha ocurrido un error inesperado. Puedes intentar de nuevo o recargar la página.
             </p>
-            <button
-              onClick={() => window.location.reload()}
-              className="btn-hero-primary inline-flex items-center gap-2"
-            >
-              <RefreshCw className="w-4 h-4" />
-              Recargar página
-            </button>
+            <div className="flex items-center justify-center gap-3">
+              <button
+                onClick={this.handleRetry}
+                className="btn-hero-primary inline-flex items-center gap-2"
+              >
+                <RefreshCw className="h-4 w-4" />
+                Reintentar
+              </button>
+              <button
+                onClick={() => window.location.reload()}
+                className="inline-flex items-center gap-2 rounded-lg border border-amber-700/30 bg-amber-950/40 px-4 py-2 text-sm text-amber-200 hover:bg-amber-900/50"
+              >
+                Recargar página
+              </button>
+            </div>
           </div>
         </div>
       );

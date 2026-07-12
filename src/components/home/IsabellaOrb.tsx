@@ -124,7 +124,7 @@ const IsabellaOrb: React.FC = () => {
   }, [messages]);
 
   const handleSend = () => {
-    if (!input.trim() || isLoading) return;
+    if (!input.trim() || isLoading || !sendMessage) return;
     sendMessage(input);
     setInput("");
   };

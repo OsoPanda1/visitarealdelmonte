@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
-import { ChevronDown, Mountain, MapPin, Sparkles } from "lucide-react";
+import { useRef, useState, useEffect, useMemo } from "react";
+import { Mountain, MapPin, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import hero_realdelmonte from "@/assets/images/hero-realdelmonte.jpg";
 import rdm_aerial_pueblo from "@/assets/images/rdm-aerial-pueblo.jpg";
@@ -18,11 +18,26 @@ const HERO_IMAGES = [
 
 export function RDMHero() {
   const ref = useRef<HTMLDivElement>(null);
+  const bgParallaxRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const animFrameRef = useRef<number>(0);
+
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
   const [currentImg, setCurrentImg] = useState(0);
+
+  useEffect(() => {
+    const handler = () => {
+      if (bgParallaxRef.current) {
+        const offset = window.scrollY * 0.15;
+        bgParallaxRef.current.style.transform = `translate3d(0, ${offset}px, 0)`;
+      }
+    };
+    window.addEventListener("scroll", handler, { passive: true });
+    return () => window.removeEventListener("scroll", handler);
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -31,57 +46,126 @@ export function RDMHero() {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    const particles = Array.from({ length: 50 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      size: 1 + Math.random() * 2,
+      baseOpacity: 0.1 + Math.random() * 0.3,
+      speed: 0.08 + Math.random() * 0.15,
+      drift: Math.random() * 0.3 - 0.15,
+      phase: Math.random() * Math.PI * 2,
+      twinkleSpeed: 0.003 + Math.random() * 0.008,
+    }));
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const now = Date.now();
+
+      for (const p of particles) {
+        p.y -= p.speed;
+        p.x += Math.sin(p.y * 0.005 + p.phase) * 0.3 + p.drift;
+
+        if (p.y < -5) {
+          p.y = canvas.height + 5;
+          p.x = Math.random() * canvas.width;
+        }
+
+        const twinkle = p.baseOpacity * (0.6 + 0.4 * Math.sin(now * p.twinkleSpeed + p.phase));
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${twinkle})`;
+        ctx.fill();
+      }
+
+      animFrameRef.current = requestAnimationFrame(animate);
+    };
+
+    animate();
+    return () => {
+      cancelAnimationFrame(animFrameRef.current);
+      window.removeEventListener("resize", resize);
+    };
+  }, []);
+
+  const statsFloatParams = useMemo(
+    () =>
+      [
+        { y: [0, -6, 0], duration: 2.5 + Math.random() * 1, delay: Math.random() * 1.5 },
+        { y: [0, -10, 0], duration: 2.0 + Math.random() * 1.5, delay: Math.random() * 1.5 },
+        { y: [0, -7, 0], duration: 3.0 + Math.random() * 1, delay: Math.random() * 1.5 },
+      ],
+    [],
+  );
+
+  const stats = [
+    { value: "500+", label: "Años de historia" },
+    { value: "2,700m", label: "Altitud" },
+    { value: "14°C", label: "Temperatura media" },
+  ];
+
   return (
     <section ref={ref} className="relative h-[100vh] overflow-hidden rdm-hero-cinematic">
-      {/* Background Images with Ken Burns */}
-      <motion.div style={{ y, scale }} className="absolute inset-0">
-        {HERO_IMAGES.map((img, i) => (
+      <div ref={bgParallaxRef} className="absolute inset-0 will-change-transform">
+        <motion.div style={{ y, scale }} className="absolute inset-0">
+          {HERO_IMAGES.map((img, i) => (
+            <div
+              key={img}
+              className="absolute inset-0 bg-cover bg-center transition-opacity duration-[2000ms]"
+              style={{
+                backgroundImage: `url(${img})`,
+                opacity: i === currentImg ? 0.5 : 0,
+                animation:
+                  i === currentImg ? "rdmKenBurns 25s ease-in-out infinite alternate" : "none",
+              }}
+            />
+          ))}
+
           <div
-            key={img}
-            className="absolute inset-0 bg-cover bg-center transition-opacity duration-[2000ms]"
+            className="absolute inset-0"
             style={{
-              backgroundImage: `url(${img})`,
-              opacity: i === currentImg ? 0.5 : 0,
-              animation:
-                i === currentImg ? "rdmKenBurns 25s ease-in-out infinite alternate" : "none",
+              background:
+                "linear-gradient(135deg, hsl(220 25% 12% / 0.8) 0%, hsl(215 30% 18% / 0.5) 30%, hsl(24 40% 25% / 0.4) 70%, hsl(218 24% 10% / 0.7) 100%)",
             }}
           />
-        ))}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(to bottom, hsl(220 30% 6% / 0.55) 0%, hsl(220 25% 8% / 0.2) 40%, hsl(48 38% 96% / 1) 100%)",
+            }}
+          />
 
-        {/* Gradient overlays */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(135deg, hsl(220 25% 12% / 0.8) 0%, hsl(215 30% 18% / 0.5) 30%, hsl(24 40% 25% / 0.4) 70%, hsl(218 24% 10% / 0.7) 100%)",
-          }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(to bottom, hsl(220 30% 6% / 0.55) 0%, hsl(220 25% 8% / 0.2) 40%, hsl(48 38% 96% / 1) 100%)",
-          }}
-        />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(ellipse 70% 60% at 50% 50%, transparent 40%, hsl(222 47% 5% / 0.6) 100%)",
+            }}
+          />
+        </motion.div>
+      </div>
 
-        {/* Vignette */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse 70% 60% at 50% 50%, transparent 40%, hsl(222 47% 5% / 0.6) 100%)",
-          }}
-        />
-      </motion.div>
+      <canvas ref={canvasRef} className="absolute inset-0 z-[2] pointer-events-none" />
 
-      {/* Floating Particles */}
       <div className="rdm-particles">
         {Array.from({ length: 8 }).map((_, i) => (
           <span key={i} />
         ))}
       </div>
 
-      {/* Image indicators */}
       <div className="absolute top-8 right-8 z-20 flex gap-2">
         {HERO_IMAGES.map((_, i) => (
           <button
@@ -95,7 +179,6 @@ export function RDMHero() {
         ))}
       </div>
 
-      {/* Content */}
       <motion.div
         style={{ opacity }}
         className="relative z-10 h-full flex flex-col justify-end pb-24 px-6 md:px-16 lg:px-24"
@@ -119,17 +202,39 @@ export function RDMHero() {
           </motion.div>
 
           <motion.h1
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 1 }}
             className="text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.9] mb-4 text-white"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            Descubre la
-            <br />
-            <span className="text-gradient-gold">magia</span> que
-            <br />
-            vive entre montañas y neblina
+            <span className="block overflow-hidden">
+              <motion.span
+                className="inline-block"
+                initial={{ clipPath: "inset(0 100% 0 0)" }}
+                animate={{ clipPath: "inset(0 0% 0 0)" }}
+                transition={{ delay: 0.5, duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+              >
+                Descubre la
+              </motion.span>
+            </span>
+            <span className="block overflow-hidden">
+              <motion.span
+                className="inline-block"
+                initial={{ clipPath: "inset(0 100% 0 0)" }}
+                animate={{ clipPath: "inset(0 0% 0 0)" }}
+                transition={{ delay: 0.65, duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+              >
+                <span className="text-gradient-gold">magia</span> que
+              </motion.span>
+            </span>
+            <span className="block overflow-hidden">
+              <motion.span
+                className="inline-block"
+                initial={{ clipPath: "inset(0 100% 0 0)" }}
+                animate={{ clipPath: "inset(0 0% 0 0)" }}
+                transition={{ delay: 0.8, duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+              >
+                vive entre montañas y neblina
+              </motion.span>
+            </span>
           </motion.h1>
 
           <motion.p
@@ -176,18 +281,13 @@ export function RDMHero() {
           </motion.div>
         </div>
 
-        {/* Stats */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.4, duration: 0.8 }}
           className="absolute bottom-8 right-6 md:right-16 lg:right-24 flex gap-8"
         >
-          {[
-            { value: "500+", label: "Años de historia" },
-            { value: "2,700m", label: "Altitud" },
-            { value: "14°C", label: "Temperatura media" },
-          ].map((stat, i) => (
+          {stats.map((stat, i) => (
             <motion.div
               key={stat.label}
               initial={{ opacity: 0, y: 20 }}
@@ -195,30 +295,52 @@ export function RDMHero() {
               transition={{ delay: 1.6 + i * 0.15 }}
               className="text-right"
             >
-              <p
-                className="text-2xl md:text-3xl font-bold text-[hsl(var(--rdm-amber))]"
-                style={{ fontFamily: "var(--font-display)" }}
+              <motion.div
+                animate={{ y: statsFloatParams[i].y }}
+                transition={{
+                  repeat: Infinity,
+                  duration: statsFloatParams[i].duration,
+                  delay: statsFloatParams[i].delay + 1.6 + i * 0.15,
+                  ease: "easeInOut",
+                }}
               >
-                {stat.value}
-              </p>
-              <p className="text-xs text-white/80" style={{ fontFamily: "var(--font-body)" }}>
-                {stat.label}
-              </p>
+                <p
+                  className="text-2xl md:text-3xl font-bold text-[hsl(var(--rdm-amber))]"
+                  style={{ fontFamily: "var(--font-display)" }}
+                >
+                  {stat.value}
+                </p>
+                <p className="text-xs text-white/80" style={{ fontFamily: "var(--font-body)" }}>
+                  {stat.label}
+                </p>
+              </motion.div>
             </motion.div>
           ))}
         </motion.div>
       </motion.div>
 
-      {/* Scroll indicator */}
       <motion.div
-        animate={{ y: [0, 8, 0] }}
-        transition={{ repeat: Infinity, duration: 2 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2, duration: 1 }}
+        className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-3"
       >
-        <ChevronDown className="w-6 h-6 text-[hsl(var(--rdm-amber)/0.5)]" />
+        <motion.span
+          className="text-[10px] tracking-[0.25em] uppercase text-white/30 font-medium"
+          animate={{ opacity: [0.3, 0.7, 0.3] }}
+          transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+        >
+          Explorar
+        </motion.span>
+        <div className="w-[18px] h-[28px] rounded-full border border-white/15 flex items-start justify-center pt-[5px]">
+          <motion.div
+            className="w-[3px] h-[8px] rounded-full bg-[hsl(var(--rdm-amber)/0.6)]"
+            animate={{ y: [0, 10, 0] }}
+            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+          />
+        </div>
       </motion.div>
 
-      {/* Bottom gradient fade */}
       <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent z-[3]" />
     </section>
   );

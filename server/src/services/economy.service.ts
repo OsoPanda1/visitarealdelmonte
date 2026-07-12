@@ -499,7 +499,7 @@ export function handleGetEconomySummary(req: RequestLike, res: ResponseLike) {
 
     const summary = getEconomySummary(userId);
     res.status(200).json(summary);
-  } catch (err: any) {
+  } catch (err: unknown) {
     res.status(401).json({ error: err?.message ?? "Unauthorized" });
   }
 }
@@ -535,7 +535,7 @@ export function handleCreditTokens(req: RequestLike, res: ResponseLike) {
     });
 
     res.status(200).json({ entry, balance });
-  } catch (err: any) {
+  } catch (err: unknown) {
     res.status(400).json({ error: err?.message ?? "Bad Request" });
   }
 }
@@ -587,7 +587,7 @@ export function handleDebitTokens(req: RequestLike, res: ResponseLike) {
     res
       .status(200)
       .json({ entry, balance, remainingSession: validation.remaining });
-  } catch (err: any) {
+  } catch (err: unknown) {
     res.status(400).json({ error: err?.message ?? "Bad Request" });
   }
 }
@@ -618,7 +618,7 @@ export function handleSetMembershipTier(req: RequestLike, res: ResponseLike) {
     });
 
     res.status(200).json({ membership });
-  } catch (err: any) {
+  } catch (err: unknown) {
     res.status(400).json({ error: err?.message ?? "Bad Request" });
   }
 }

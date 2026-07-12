@@ -49,7 +49,7 @@ export default function ComerciosCheckout() {
       if (!r.ok) throw new Error(await r.text());
       toast.success("Pago confirmado. Tu negocio ya está publicado.");
       setTimeout(() => (window.location.href = "/catalogo"), 1500);
-    } catch (e: any) {
+    } catch (e: unknown) {
       toast.error(e.message ?? "Error al confirmar");
     } finally {
       setLoading(false);

@@ -277,17 +277,24 @@ const AnimatedRoutes = () => {
   const location = useLocation();
 
   return (
-    <AnimatePresence mode="popLayout">
-      <Suspense fallback={<RouteFallback />}>
-        <Routes location={location}>
-          <Route
-            path="/"
-            element={
-              <RouteErrorBoundary route="/">
-                <Index />
-              </RouteErrorBoundary>
-            }
-          />
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={location.pathname}
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -8 }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
+      >
+        <Suspense fallback={<RouteFallback />}>
+          <Routes location={location}>
+            <Route
+              path="/"
+              element={
+                <RouteErrorBoundary route="/">
+                  <Index />
+                </RouteErrorBoundary>
+              }
+            />
           <Route
             path="/mapa"
             element={
@@ -1252,8 +1259,9 @@ const AnimatedRoutes = () => {
               </RouteErrorBoundary>
             }
           />
-        </Routes>
-      </Suspense>
+          </Routes>
+        </Suspense>
+      </motion.div>
     </AnimatePresence>
   );
 };
@@ -1329,7 +1337,18 @@ const AppInner = () => {
             <SmartSidebar />
           </Suspense>
         </AudioPlayerProvider>
-        <Suspense fallback={<LoadingFallback />}>
+        <Suspense
+          fallback={
+            <div className="fixed bottom-6 left-6 z-40">
+              <div className="flex h-[120px] w-[120px] items-center justify-center">
+                <span className="flex h-4 w-4">
+                  <span className="absolute inline-flex h-4 w-4 animate-ping rounded-full bg-cyan-400/75" />
+                  <span className="relative inline-flex h-4 w-4 rounded-full bg-cyan-400" />
+                </span>
+              </div>
+            </div>
+          }
+        >
           <RealitoChatLauncher />
         </Suspense>
         {/* SpeedInsights + Analytics: diferidos al primer idle del navegador */}

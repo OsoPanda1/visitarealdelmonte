@@ -3,7 +3,7 @@ import { createCipheriv, createDecipheriv, randomBytes, scryptSync } from "node:
 const ALGO = "aes-256-gcm";
 const KEY = scryptSync(process.env.SOVEREIGN_GATEWAY_KEY || "rdmx-dev-key", "rdmx-salt", 32);
 
-export function encryptPayload(payload: object): string {
+export function encryptPayload(payload: Record<string, unknown>): string {
   const iv = randomBytes(12);
   const cipher = createCipheriv(ALGO, KEY, iv);
   const plaintext = JSON.stringify(payload);

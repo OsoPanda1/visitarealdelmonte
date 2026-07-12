@@ -91,7 +91,7 @@ export default function ComerciosRegistro() {
       if (error) throw error;
       toast.success("Registro creado. Redirigiendo al pago…");
       window.location.href = data.checkout_url;
-    } catch (err: any) {
+    } catch (err: unknown) {
       toast.error(err.message ?? "Error al crear el registro");
     } finally {
       setLoading(false);

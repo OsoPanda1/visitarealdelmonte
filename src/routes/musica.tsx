@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { PageHero } from "@/components/site/PageHero";
+import { getFrequencyData } from "@/features/music/audio-engine";
 import {
   Play,
   Pause,
@@ -195,29 +196,107 @@ function MusicaPage() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    const updateCanvasSize = () => {
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      return { w: rect.width, h: rect.height };
+    };
+
+    let dims = updateCanvasSize();
+    let time = 0;
+
     const draw = () => {
-      const w = canvas.width;
-      const h = canvas.height;
+      const { w, h } = dims;
       ctx.clearRect(0, 0, w, h);
 
-      const bars = 64;
-      const barWidth = w / bars - 1;
-      for (let i = 0; i < bars; i++) {
-        const barHeight = isPlaying
-          ? (Math.sin(Date.now() / 4000 + i * 0.3) * 0.25 + 0.5) * h * Math.max(0.1, progress * 1.5)
-          : (Math.sin(i * 0.3) * 0.5 + 0.5) * h * 0.08;
+      const rawData = getFrequencyData();
+      let bars: number[];
 
-        const gradient = ctx.createLinearGradient(0, h, 0, h - barHeight);
-        gradient.addColorStop(0, "oklch(0.66 0.16 45 / 0.3)");
-        gradient.addColorStop(1, "oklch(0.66 0.16 45 / 0.8)");
-        ctx.fillStyle = gradient;
-        ctx.fillRect(i * (barWidth + 1), h - barHeight, barWidth, barHeight);
+      if (rawData.length > 0) {
+        const step = Math.floor(rawData.length / 64);
+        bars = [];
+        for (let i = 0; i < 64; i++) {
+          let sum = 0;
+          let count = 0;
+          for (let j = 0; j < step; j++) {
+            const idx = i * step + j;
+            if (idx < rawData.length) {
+              sum += rawData[idx];
+              count++;
+            }
+          }
+          bars.push(count > 0 ? sum / count / 255 : 0);
+        }
+      } else {
+        time += 0.02;
+        bars = Array.from({ length: 64 }, (_, i) =>
+          (Math.sin(time + i * 0.2) * 0.3 + 0.5) * 0.12 + 0.02
+        );
       }
+
+      const barCount = bars.length;
+      const barGap = 2;
+      const barWidth = (w - barGap * (barCount - 1)) / barCount;
+      const maxBarHeight = h * 0.85;
+
+      for (let i = 0; i < barCount; i++) {
+        const normalized = Math.min(1, bars[i]);
+        const barHeight = Math.max(2, normalized * maxBarHeight);
+        const x = i * (barWidth + barGap);
+        const y = h - barHeight;
+
+        ctx.shadowColor = "hsla(24, 72%, 50%, 0.35)";
+        ctx.shadowBlur = 8 * normalized + 2;
+
+        const gradient = ctx.createLinearGradient(0, h, 0, y);
+        gradient.addColorStop(0, `hsla(16, 65%, 46%, ${0.3 + normalized * 0.5})`);
+        gradient.addColorStop(0.5, `hsla(24, 72%, 50%, ${0.5 + normalized * 0.4})`);
+        gradient.addColorStop(1, `hsla(40, 80%, 60%, ${0.7 + normalized * 0.3})`);
+        ctx.fillStyle = gradient;
+
+        const radius = Math.min(3, barWidth / 2);
+        ctx.beginPath();
+        ctx.moveTo(x + radius, y);
+        ctx.lineTo(x + barWidth - radius, y);
+        ctx.quadraticCurveTo(x + barWidth, y, x + barWidth, y + radius);
+        ctx.lineTo(x + barWidth, h);
+        ctx.lineTo(x, h);
+        ctx.lineTo(x, y + radius);
+        ctx.quadraticCurveTo(x, y, x + radius, y);
+        ctx.closePath();
+        ctx.fill();
+
+        if (normalized > 0.6 && i % 3 === 0) {
+          ctx.shadowBlur = 14;
+          ctx.fillStyle = `hsla(40, 90%, 70%, ${normalized * 0.5})`;
+          ctx.beginPath();
+          ctx.arc(x + barWidth / 2, y - 2, 2 + normalized * 2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      ctx.shadowBlur = 0;
       animFrameRef.current = requestAnimationFrame(draw);
     };
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.target === canvas) {
+          dims = updateCanvasSize();
+        }
+      }
+    });
+    resizeObserver.observe(canvas);
+
     draw();
-    return () => cancelAnimationFrame(animFrameRef.current);
-  }, [isPlaying, progress]);
+    return () => {
+      cancelAnimationFrame(animFrameRef.current);
+      resizeObserver.disconnect();
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background/95 to-[hsl(var(--rdm-amber)/0.03)]">
