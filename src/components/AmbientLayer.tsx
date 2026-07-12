@@ -1,5 +1,15 @@
 import { useEffect, useRef } from "react";
 
+let userActiveAt = 0;
+
+function isUserActive() {
+  return Date.now() - userActiveAt < 2000;
+}
+
+function onUserInteraction() {
+  userActiveAt = Date.now();
+}
+
 function CanvasStarfield() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -37,6 +47,10 @@ function CanvasStarfield() {
     let running = true;
     const draw = () => {
       if (!running) return;
+      if (isUserActive()) {
+        requestAnimationFrame(draw);
+        return;
+      }
       ctx.clearRect(0, 0, W, H);
       const now = Date.now() / 1000;
       for (const star of stars) {
@@ -65,14 +79,18 @@ function CanvasStarfield() {
   );
 }
 
+
 export default function AmbientLayer() {
   const rafRef = useRef<number>(0);
   const mouseRef = useRef({ x: 0.5, y: 0.5 });
 
   useEffect(() => {
     const root = document.documentElement;
+    const opts = { passive: true };
 
+    const onInteraction = () => onUserInteraction();
     const onMove = (e: MouseEvent) => {
+      onUserInteraction();
       mouseRef.current = {
         x: e.clientX / window.innerWidth,
         y: e.clientY / window.innerHeight,
@@ -86,11 +104,17 @@ export default function AmbientLayer() {
       });
     };
 
-    window.addEventListener("pointermove", onMove, { passive: true });
+    window.addEventListener("pointermove", onMove, opts);
+    window.addEventListener("keydown", onInteraction, opts);
+    window.addEventListener("touchstart", onInteraction, opts);
+    window.addEventListener("scroll", onInteraction, opts);
     root.classList.add("cursor-ambient");
 
     return () => {
       window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("keydown", onInteraction);
+      window.removeEventListener("touchstart", onInteraction);
+      window.removeEventListener("scroll", onInteraction);
       root.classList.remove("cursor-ambient");
       cancelAnimationFrame(rafRef.current);
     };

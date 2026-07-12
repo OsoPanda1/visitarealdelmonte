@@ -1319,24 +1319,24 @@ const AppInner = () => {
         <AuthStatusBanner />
         <Toaster />
         <Sonner />
-        <AudioPlayerProvider>
-          <Suspense fallback={<LoadingFallback />}>
-            <MicroPageIntro />
-          </Suspense>
-          <AnimatedRoutes />
-          <Suspense fallback={<LoadingFallback />}>
-            <GlobalPlayerBar />
-          </Suspense>
+          <AudioPlayerProvider>
+            <Suspense fallback={<LoadingFallback />}>
+              <MicroPageIntro />
+            </Suspense>
+            <AnimatedRoutes />
+            <Suspense fallback={<LoadingFallback />}>
+              <GlobalPlayerBar />
+            </Suspense>
+            <Suspense fallback={<LoadingFallback />}>
+              <SearchOverlay />
+            </Suspense>
+            <Suspense fallback={<LoadingFallback />}>
+              <SmartSidebar />
+            </Suspense>
+          </AudioPlayerProvider>
           <Suspense fallback={<LoadingFallback />}>
             <LiveTelemetryBadge />
           </Suspense>
-          <Suspense fallback={<LoadingFallback />}>
-            <SearchOverlay />
-          </Suspense>
-          <Suspense fallback={<LoadingFallback />}>
-            <SmartSidebar />
-          </Suspense>
-        </AudioPlayerProvider>
         <Suspense
           fallback={
             <div className="fixed bottom-6 left-6 z-40">

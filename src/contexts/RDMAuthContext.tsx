@@ -1,7 +1,7 @@
 // src/contexts/RDMAuthContext.tsx
 // Contexto de autenticación endurecido para RDM Digital Hub (Vite + Supabase + Lovable, despliegue en Vercel).
 
-import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from "react";
+import { createContext, useContext, useEffect, useMemo, useState, ReactNode, useCallback } from "react";
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -305,21 +305,24 @@ export function RDMAuthProvider({ children }: { children: ReactNode }) {
 
   const hasRole = (role: AppRole) => roles.includes(role);
 
-  const value: RDMAuthContextValue = {
-    user,
-    session,
-    profile,
-    roles,
-    loading,
-    isSupabaseReady,
-    error,
-    signInEmail,
-    signUpEmail,
-    signInGoogle,
-    signOut,
-    refreshProfile,
-    hasRole,
-  };
+  const value = useMemo<RDMAuthContextValue>(
+    () => ({
+      user,
+      session,
+      profile,
+      roles,
+      loading,
+      isSupabaseReady,
+      error,
+      signInEmail,
+      signUpEmail,
+      signInGoogle,
+      signOut,
+      refreshProfile,
+      hasRole,
+    }),
+    [user, session, profile, roles, loading, isSupabaseReady, error, signInEmail, signUpEmail, signInGoogle, signOut, refreshProfile, hasRole],
+  );
 
   return <RDMAuthContext.Provider value={value}>{children}</RDMAuthContext.Provider>;
 }

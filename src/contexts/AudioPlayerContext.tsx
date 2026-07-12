@@ -1,6 +1,7 @@
 import {
   createContext,
   useContext,
+  useMemo,
   useRef,
   useState,
   useCallback,
@@ -179,26 +180,45 @@ export function AudioPlayerProvider({ children }: { children: ReactNode }) {
     if (audioRef.current) audioRef.current.volume = v;
   }, []);
 
+  const ctxValue = useMemo(
+    () => ({
+      currentTrack,
+      playlist,
+      isPlaying,
+      progress,
+      currentTime,
+      volume,
+      error,
+      play,
+      togglePlay,
+      pause,
+      next,
+      prev,
+      seek,
+      setVolume: setVolumeFn,
+      retry,
+    }),
+    [
+      currentTrack,
+      playlist,
+      isPlaying,
+      progress,
+      currentTime,
+      volume,
+      error,
+      play,
+      togglePlay,
+      pause,
+      next,
+      prev,
+      seek,
+      setVolumeFn,
+      retry,
+    ],
+  );
+
   return (
-    <AudioPlayerContext.Provider
-      value={{
-        currentTrack,
-        playlist,
-        isPlaying,
-        progress,
-        currentTime,
-        volume,
-        error,
-        play,
-        togglePlay,
-        pause,
-        next,
-        prev,
-        seek,
-        setVolume: setVolumeFn,
-        retry,
-      }}
-    >
+    <AudioPlayerContext.Provider value={ctxValue}>
       {children}
     </AudioPlayerContext.Provider>
   );

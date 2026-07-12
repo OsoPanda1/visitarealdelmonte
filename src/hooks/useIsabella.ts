@@ -3,7 +3,7 @@
  * Triple Federado: Conceptual | Legal | Técnico
  */
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { generateFederationHash } from "@/lib/federation";
 
@@ -19,8 +19,7 @@ export interface IsabellaMessage {
   };
 }
 
-export interface IsabellaState {
-  messages: IsabellaMessage[];
+export interface IsabellaMeta {
   isLoading: boolean;
   error: string | null;
   sessionId: string;
@@ -34,25 +33,33 @@ export interface IsabellaState {
 const ISABELLA_ENDPOINT =
   import.meta.env.VITE_ISABELLA_ENDPOINT ?? `/api/isa-ai`;
 
-export const useIsabella = () => {
-  const [state, setState] = useState<IsabellaState>({
-    messages: [],
-    isLoading: false,
-    error: null,
-    sessionId: generateFederationHash(),
-    activeProtocol: null,
-    emotionalState: { sentiment: "neutral", intensity: 0.5 },
-  });
+const INITIAL_META: IsabellaMeta = {
+  isLoading: false,
+  error: null,
+  sessionId: generateFederationHash(),
+  activeProtocol: null,
+  emotionalState: { sentiment: "neutral", intensity: 0.5 },
+};
 
-  const messagesRef = useRef(state.messages);
-  const sessionIdRef = useRef(state.sessionId);
+function useIsabellaMessages() {
+  return useState<IsabellaMessage[]>([]);
+}
+
+function useIsabellaMeta() {
+  return useState<IsabellaMeta>(INITIAL_META);
+}
+
+export const useIsabella = () => {
+  const [messages, setMessages] = useIsabellaMessages();
+  const [meta, setMeta] = useIsabellaMeta();
+
+  const messagesRef = useRef(messages);
+  const sessionIdRef = useRef(meta.sessionId);
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  // Mantener refs sincronizados
-  messagesRef.current = state.messages;
-  sessionIdRef.current = state.sessionId;
+  messagesRef.current = messages;
+  sessionIdRef.current = meta.sessionId;
 
-  // Enviar mensaje a Isabella con streaming
   const sendMessage = useCallback(
     async (
       content: string,
@@ -63,7 +70,6 @@ export const useIsabella = () => {
     ) => {
       if (!content.trim()) return;
 
-      // Crear mensaje del usuario
       const userMessage: IsabellaMessage = {
         id: generateFederationHash(),
         role: "user",
@@ -72,28 +78,24 @@ export const useIsabella = () => {
         federationHash: generateFederationHash(),
       };
 
-      // Agregar mensaje del usuario al estado
-      setState((prev) => ({
+      setMessages((prev) => [...prev, userMessage]);
+      setMeta((prev) => ({
         ...prev,
-        messages: [...prev.messages, userMessage],
         isLoading: true,
         error: null,
         activeProtocol: options?.protocol || null,
       }));
 
-      // Cancelar petición anterior si existe
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
       }
       abortControllerRef.current = new AbortController();
 
       try {
-        // Obtener sesión actual
         const {
           data: { session },
         } = await supabase.auth.getSession();
 
-        // Preparar mensajes para la API (usar ref para evitar stale closure)
         const currentMessages = messagesRef.current;
         const currentSessionId = sessionIdRef.current;
         const apiMessages = currentMessages.map((m) => ({
@@ -126,28 +128,23 @@ export const useIsabella = () => {
           throw new Error(errorData.error || "Error al comunicarse con Isabella");
         }
 
-        // Procesar stream
         const reader = response.body?.getReader();
         const decoder = new TextDecoder();
         let assistantContent = "";
         let textBuffer = "";
 
-        // Crear mensaje vacío de Isabella
         const assistantMessageId = generateFederationHash();
 
-        setState((prev) => ({
+        setMessages((prev) => [
           ...prev,
-          messages: [
-            ...prev.messages,
-            {
-              id: assistantMessageId,
-              role: "assistant",
-              content: "",
-              timestamp: new Date().toISOString(),
-              federationHash: generateFederationHash(),
-            },
-          ],
-        }));
+          {
+            id: assistantMessageId,
+            role: "assistant",
+            content: "",
+            timestamp: new Date().toISOString(),
+            federationHash: generateFederationHash(),
+          },
+        ]);
 
         while (reader) {
           const { done, value } = await reader.read();
@@ -155,7 +152,6 @@ export const useIsabella = () => {
 
           textBuffer += decoder.decode(value, { stream: true });
 
-          // Procesar líneas del stream SSE
           let newlineIndex: number;
           while ((newlineIndex = textBuffer.indexOf("\n")) !== -1) {
             let line = textBuffer.slice(0, newlineIndex);
@@ -174,28 +170,26 @@ export const useIsabella = () => {
 
               if (deltaContent) {
                 assistantContent += deltaContent;
-
-                // Actualizar el último mensaje
-                setState((prev) => ({
-                  ...prev,
-                  messages: prev.messages.map((m, i) =>
-                    i === prev.messages.length - 1 ? { ...m, content: assistantContent } : m,
-                  ),
-                }));
+                setMessages((prev) => {
+                  const next = [...prev];
+                  const last = next[next.length - 1];
+                  if (last) next[next.length - 1] = { ...last, content: assistantContent };
+                  return next;
+                });
               }
             } catch {
-              // JSON incompleto, esperar más datos
+              //
             }
           }
         }
 
-        setState((prev) => ({ ...prev, isLoading: false }));
+        setMeta((prev) => ({ ...prev, isLoading: false }));
       } catch (error) {
         if (error instanceof Error && error.name === "AbortError") {
-          return; // Ignorar errores de cancelación
+          return;
         }
 
-        setState((prev) => ({
+        setMeta((prev) => ({
           ...prev,
           isLoading: false,
           error: error instanceof Error ? error.message : "Error desconocido",
@@ -203,45 +197,56 @@ export const useIsabella = () => {
       }
     },
     [],
-  ); // Sin dependencias externas - usamos refs
+  );
 
-  // Activar protocolo de seguridad
   const activateProtocol = useCallback(
     (protocol: "fenix_rex" | "iniciacion" | "hoyo_negro") => {
-      if (!sendMessage) return;
-      setState((prev) => ({ ...prev, activeProtocol: protocol }));
-
-      // Enviar mensaje de activación
+      setMeta((prev) => ({ ...prev, activeProtocol: protocol }));
       sendMessage(`[ACTIVACIÓN DE PROTOCOLO: ${protocol.toUpperCase()}]`, { protocol });
     },
     [sendMessage],
   );
 
-  // Limpiar conversación
   const clearConversation = useCallback(() => {
-    setState({
-      messages: [],
-      isLoading: false,
-      error: null,
-      sessionId: generateFederationHash(),
-      activeProtocol: null,
-      emotionalState: { sentiment: "neutral", intensity: 0.5 },
-    });
+    setMessages([]);
+    setMeta(INITIAL_META);
   }, []);
 
-  // Cancelar petición actual
   const cancelRequest = useCallback(() => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
-      setState((prev) => ({ ...prev, isLoading: false }));
+      setMeta((prev) => ({ ...prev, isLoading: false }));
     }
   }, []);
 
-  return {
-    ...state,
-    sendMessage,
-    activateProtocol,
-    clearConversation,
-    cancelRequest,
-  };
+  const value = useMemo(
+    () => ({
+      messages,
+      isLoading: meta.isLoading,
+      error: meta.error,
+      sessionId: meta.sessionId,
+      activeProtocol: meta.activeProtocol,
+      emotionalState: meta.emotionalState,
+      sendMessage,
+      activateProtocol,
+      clearConversation,
+      cancelRequest,
+    }),
+    [
+      messages,
+      meta.isLoading,
+      meta.error,
+      meta.sessionId,
+      meta.activeProtocol,
+      meta.emotionalState,
+      sendMessage,
+      activateProtocol,
+      clearConversation,
+      cancelRequest,
+    ],
+  );
+
+  return value;
 };
+
+
