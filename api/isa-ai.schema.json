@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://isa-ai.local/schema/isa-ai.schema.json",
+  "title": "ISA-AI Structured Output",
+  "description": "Structured response format for ISA-AI / MEXA-AI heptafederated agent.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "version": { "type": "string" },
+    "provider": { "type": "string", "const": "isa-ai" },
+    "model": { "type": "string" },
+    "traceId": { "type": "string" },
+    "intent": { "type": "string" },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "heptaDomain": {
+      "type": "string",
+      "enum": ["tourism", "rdm", "infra", "security", "observability", "blockchain", "governance"]
+    },
+    "topic": { "type": "string" },
+    "sessionId": { "type": "string" },
+    "content": { "type": "string" },
+    "structured": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["text", "tool", "faq", "route", "event", "rdm-node", "diagnostic"]
+        },
+        "toolName": { "type": "string" },
+        "tools": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string" },
+              "kind": {
+                "type": "string",
+                "enum": ["filter", "security", "radar", "mdx", "blockchain", "governance", "library"]
+              },
+              "status": {
+                "type": "string",
+                "enum": ["applied", "skipped", "failed"]
+              },
+              "details": { "type": "object" }
+            },
+            "required": ["name", "kind", "status"]
+          }
+        },
+        "pipelines": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "inputHex": { "type": "array", "items": { "type": "string" } },
+            "outputHex": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "data": {
+          "description": "Payload, shape depends on 'type' and 'toolName'.",
+          "oneOf": [
+            { "type": "object", "additionalProperties": true },
+            { "type": "array" },
+            { "type": "null" }
+          ]
+        }
+      },
+      "required": ["type"]
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "alignment": { "type": "string" },
+        "dataScope": { "type": "string" },
+        "korimaCodex": { "type": "object" }
+      },
+      "required": ["alignment", "dataScope"]
+    },
+    "observability": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "radars": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string" },
+              "status": { "type": "string" },
+              "latencyMs": { "type": "number" }
+            },
+            "required": ["name", "status"]
+          }
+        },
+        "latencyMs": { "type": "number" }
+      }
+    },
+    "security": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "systems": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string" },
+              "status": { "type": "string" },
+              "decision": { "type": "string" }
+            },
+            "required": ["name", "status"]
+          }
+        }
+      }
+    },
+    "kb": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "entriesUsed": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string" },
+              "score": { "type": "number" }
+            },
+            "required": ["id"]
+          }
+        }
+      }
+    }
+  },
+  "required": ["version", "provider", "model", "traceId", "intent", "content"]
+}
