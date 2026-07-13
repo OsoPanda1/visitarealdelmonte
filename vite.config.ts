@@ -36,7 +36,6 @@ function imageOptimizer(): Plugin {
               }
             }
           } catch {
-            // skip optimization for this asset
           }
         }
       }

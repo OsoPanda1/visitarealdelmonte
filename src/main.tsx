@@ -1,5 +1,3 @@
-// src/main.tsx
-
 import React from "react";
 import { createRoot } from "react-dom/client";
 import "./styles.css";
@@ -7,8 +5,7 @@ import "./styles.css";
 const container = document.getElementById("root");
 
 if (!container) {
-  // Error crítico temprano: si el DOM no tiene #root, no hay app que montar.
-  throw new Error("No se encontró el elemento #root en el DOM.");
+  throw new Error("No se encontr\u00f3 el elemento #root en el DOM.");
 }
 
 const root = createRoot(container);
@@ -19,9 +16,9 @@ const BootstrapFallback = ({ error }: { error?: unknown }) => (
       <p className="text-xs font-semibold uppercase tracking-[0.3em] text-destructive">
         Error de arranque
       </p>
-      <h1 className="mt-3 font-serif text-2xl font-bold">No pudimos cargar la aplicación</h1>
+      <h1 className="mt-3 font-serif text-2xl font-bold">No pudimos cargar la aplicaci\u00f3n</h1>
       <p className="mt-3 text-sm text-muted-foreground">
-        El paquete principal no se inicializó correctamente. Recarga la página para intentar de
+        El paquete principal no se inicializ\u00f3 correctamente. Recarga la p\u00e1gina para intentar de
         nuevo.
       </p>
       {error instanceof Error && (
@@ -33,7 +30,7 @@ const BootstrapFallback = ({ error }: { error?: unknown }) => (
         onClick={() => window.location.reload()}
         className="btn-hero-primary mt-6 inline-flex items-center justify-center"
       >
-        Recargar aplicación
+        Recargar aplicaci\u00f3n
       </button>
     </div>
   </div>
@@ -46,7 +43,6 @@ async function bootstrap() {
       import("@/integrations/observability/sentry"),
     ]);
 
-    // Fire-and-forget; init is a no-op until VITE_SENTRY_DSN is set.
     void initSentry();
 
     root.render(
