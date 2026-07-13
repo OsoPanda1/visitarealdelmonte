@@ -23,7 +23,9 @@ import { motion } from "framer-motion";
 import { RDMLayout } from "@/components/rdm/RDMLayout";
 import { PAGE_SEO, SEOMeta } from "@/components/SEOMeta";
 import { Link } from "react-router-dom";
-import { Map2DPanel } from "@/components/map/Map2DPanel";
+const Map2DPanel = lazy(() =>
+  import("@/components/map/Map2DPanel").then((module) => ({ default: module.Map2DPanel })),
+);
 import { MapSyncProvider, useMapSync } from "@/hooks/useMapSync";
 import MapErrorBoundary from "@/components/MapErrorBoundary";
 import type { MapMarkerData, MarkerType } from "@/features/places/mapTypes";
