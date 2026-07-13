@@ -59,7 +59,7 @@ export default defineConfig({
           if (!id.includes("node_modules")) return;
           if (id.includes("framer-motion")) return "vendor-framer";
           if (id.includes("three") || id.includes("@react-three")) return "vendor-three";
-          if (id.includes("leaflet") || id.includes("react-leaflet")) return "vendor-leaflet";
+          if (id.includes("leaflet") || id.includes("react-leaflet") || id.includes("supercluster")) return "vendor-leaflet";
           if (id.includes("recharts")) return "vendor-recharts";
           if (id.includes("supabase")) return "vendor-supabase";
           if (id.includes("@tanstack/react-query")) return "vendor-tanstack";
@@ -76,6 +76,7 @@ export default defineConfig({
           if (id.includes("zustand")) return "vendor-state";
           if (id.includes("class-variance-authority") || id.includes("clsx") || id.includes("tailwind-merge")) return "vendor-utils";
           if (id.includes("react-day-picker") || id.includes("react-resizable-panels")) return "vendor-ui-libs";
+          if (id.includes("react") || id.includes("react-dom")) return "vendor-react";
           return "vendor-other";
         },
       },
