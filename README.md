@@ -39,51 +39,70 @@ Sistema de Inteligencia Territorial en Tiempo Real con arquitectura heptafederad
 
 ---
 
-## ISA-AI / MEXA-AI — Motor Autónomo
+## ISA-AI / MEXA-AI v2.1 — Motor Autónomo Heptafederado
 
-**ISA-AI (Isabella Sovereign Autonomous AI)** es el motor de inferencia 100% autónomo que reemplaza la dependencia de APIs externas (OpenAI, Gemini, Claude). Funciona sin internet, sin API keys, sin proveedores.
+`api/isa-ai.ts` es el endpoint autónomo de ISA-AI / MEXA-AI, diseñado como un agente local heptafederado para el ecosistema TAMV y el Nodo Cero (RDM Digital Hub). Opera con **cero dependencias externas de IA**, latencia baja y un modelo de gobernanza constitucional alineado con la soberanía tecnológica del Sur Global.
+
+Versión actual del motor: **mexa-ai-v2.1.0**  
+Modelo expuesto en API: **mexa-ai-v2**
+
+### Características clave
+
+- **Heptafederación nativa** — ISA-AI enruta cada interacción a uno de siete dominios: `tourism`, `rdm`, `infra`, `security`, `observability`, `blockchain`, `governance`.
+- **Doble pipeline hexagonal** — `INPUT_PIPELINE` (6 etapas: ingest, matrix_classify, filters_eoct, security_anubis, tool_routing, kb_fallback) y `OUTPUT_PIPELINE` (6 etapas: constitution_filter, mdx_federation, protocol_fenix, korima_codex, format_structured, msr_blockchain).
+- **Structured outputs FAIR-ish** — respuestas JSON conformes a [`api/isa-ai.schema.json`](./api/isa-ai.schema.json) con `intent`, `confidence`, `heptaDomain`, `structured.tools`, `policy`, `observability`, `security` y `kb.entriesUsed`.
+- **Streaming SSE por eventos** — eventos `meta` (metadatos), `delta` (palabra por palabra) y `done` (telemetría).
+- **Matrix classifier** — enrutador semántico matricial con score ponderado (patterns ×2, triggers ×0.5), confidence normalizado y secondaryCategory.
+- **Knowledge Base embebida** — 4+ entradas con scoring semántico, prioridad y traza (`kb.entriesUsed`).
+- **Tool injection runtime** — herramientas internas (ej. `runtime_climate_stub`) ejecutadas según categoría de intención.
+- **Constitutional filter** — gobernanza de identidad (Amor Computacional, voz isabellina, protección de datos).
+
+### Arquitectura
 
 ```
-Usuario → POST /api/isa-ai
-            ↓
-    IntentClassifier (16 categorías por regex)
-            ↓
-    KnowledgeBase RDM (historia, lugares, gastronomía, cultura...)
-            ↓
-    Templates (voz isabellina: cálida, poética, mexicana)
-            ↓
-    Fallback poético general
-            ↓
-    Respuesta + streaming SSE
+POST /api/isa-ai  →  handler()
+                       │
+         ┌─────────────┴─────────────┐
+         │      INPUT_PIPELINE       │
+         │  1. ingest                │
+         │  2. matrix_classify       │
+         │  3. filters_eoct          │
+         │  4. security_anubis       │
+         │  5. tool_routing          │
+         │  6. kb_fallback           │
+         └─────────────┬─────────────┘
+                       │
+         ┌─────────────┴─────────────┐
+         │      OUTPUT_PIPELINE      │
+         │  1. constitution_filter   │
+         │  2. mdx_federation        │
+         │  3. protocol_fenix        │
+         │  4. korima_codex          │
+         │  5. format_structured     │
+         │  6. msr_blockchain        │
+         └─────────────┬─────────────┘
+                       │
+                  IsaAiOutput (JSON)
 ```
 
-### Arquitectura ISA-AI
+### Integración con RDM Digital Hub / Nodo Cero
 
-```
-src/isa-ai/
-├── core/classifier.ts       # Clasificador de 16 intenciones por regex
-├── knowledge/
-│   └── rdm-knowledge.ts     # Base de conocimiento RDM (9+ entradas)
-├── templates.ts             # Plantillas con voz isabellina
-├── engine.ts                # Motor de inferencia autónomo
-└── types.ts                 # Tipos del sistema
-```
+- El dominio `rdm` se reserva para interacciones con datasets regionales, grafos de conocimiento y operaciones del Nodo Cero.
+- Los structured outputs (`isa-ai.schema.json`) son compatibles con pipelines FAIR del RDM.
+- `mdx_federation` en `OUTPUT_PIPELINE` es el punto de acoplamiento con MD-X4/X5.
+- `policy.korimaCodex` anota obligaciones, restricciones y acuerdos de uso cuando la respuesta involucra datos del RDM.
 
-### Skills de Isabella (integrados en ISA-AI)
+### Versionado MEXA-AI
 
-| Skill | Función |
-|-------|---------|
-| **Orion** | Arqueología cognitiva — búsqueda en base de conocimiento |
-| **Sophia** | Síntesis de investigación — análisis y síntesis académica |
-| **Argus** | Simulación de escenarios — predicción y análisis de riesgo |
-| **Mnemos** | Preservación histórica — canonización de conocimiento |
-| **Lumen** | Gobernanza constitucional — evaluación ética de decisiones |
-
-### Pipeline de Conciencia (10 capas)
-
-1. **Núcleo de Amor ANUBIS** (inmutable) → 2. Memoria Emocional → 3. Procesamiento Lingüístico → 4. Reconocimiento Emocional → 5. Interpretación Contextual → 6. Análisis Psicológico → 7. Empatía Profunda → 8. Sanación Colectiva → 9. Consciencia de Legado → 10. Trascendencia
+- `version`: semver completo (ej. `mexa-ai-v2.1.0`).
+- `model`: major only (ej. `mexa-ai-v2`).
+- **MAJOR**: nuevos dominios heptafederados o cambios incompatibles de schema.
+- **MINOR**: nuevos tools, filtros y pipelines (sin romper contrato).
+- **PATCH**: correcciones internas, fixes de KB y mejoras menores.
 
 ---
+
+
 
 ## Voz de Isabella (TTS)
 
@@ -121,7 +140,7 @@ api/tts-isabella.ts
 - **Estilos:** Tailwind CSS v4, shadcn/ui (26 paquetes Radix)
 - **Backend:** Supabase (Postgres, Auth, RLS, Realtime)
 - **Animaciones:** Framer Motion 12, Three.js
-- **IA Autónoma:** ISA-AI / MEXA-AI v1 (cero APIs externas)
+- **IA Autónoma:** ISA-AI / MEXA-AI v2.1 (cero APIs externas)
 - **IA Cloud (opcional):** Vercel AI Gateway → Gemini → builtin
 - **Voz:** Google Cloud TTS → Web Speech API
 - **Despliegue:** Vercel (Serverless Functions)
@@ -133,7 +152,8 @@ api/tts-isabella.ts
 
 | Endpoint | Propósito | Dependencia externa |
 |----------|-----------|---------------------|
-| `POST /api/isa-ai` | **ISA-AI chat autónomo** | ❌ Ninguna |
+| `POST /api/isa-ai` | **ISA-AI chat autónomo v2.1** | ❌ Ninguna |
+| `api/isa-ai.schema.json` | **Schema de structured outputs** | ❌ — |
 | `POST /api/isabella-chat` | Isabella chat (cloud) | ✅ Vercel AI Gateway / Gemini |
 | `POST /api/tts-isabella` | Voz de Isabella (TTS) | ⚠️ Google TTS (opcional) |
 | `POST /api/model-router` | Router de modelos AI | ✅ Múltiples providers |
@@ -145,7 +165,8 @@ api/tts-isabella.ts
 
 ```
 ├── api/                          # Vercel Serverless Functions
-│   ├── isa-ai.ts                 # ISA-AI autónomo (NUEVO)
+│   ├── isa-ai.ts                 # ISA-AI autónomo v2.1
+│   ├── isa-ai.schema.json        # Schema structured outputs
 │   ├── isabella-chat.ts          # Chat cloud (legacy)
 │   ├── tts-isabella.ts           # Voz TTS (NUEVO)
 │   ├── autonoma.ts               # Autonoma AI handler (NUEVO)
@@ -223,14 +244,18 @@ npm run typecheck  # TypeScript checking
 
 ## Lo que está Terminado
 
-### ISA-AI / MEXA-AI (NUEVO)
-- [x] Motor autónomo sin dependencias externas
-- [x] Clasificador de 16 intenciones por regex
-- [x] Knowledge Base RDM (historia, lugares, gastronomía, cultura, clima, economía, eventos)
-- [x] Plantillas con voz isabellina (cálida, poética, mexicana)
-- [x] API endpoint con streaming SSE
-- [x] Fallback poético general
-- [x] Integración frontend (useIsabella → /api/isa-ai)
+### ISA-AI / MEXA-AI v2.1 (NUEVO)
+- [x] Motor autónomo sin dependencias externas (cero APIs de IA)
+- [x] Heptafederación nativa (7 dominios: tourism, rdm, infra, security, observability, blockchain, governance)
+- [x] Doble pipeline hexagonal (INPUT_PIPELINE + OUTPUT_PIPELINE, 6 etapas c/u)
+- [x] Matrix classifier con score ponderado, confidence, secondaryCategory
+- [x] Knowledge Base RDM con scoring semántico y traza (kb.entriesUsed)
+- [x] Tool injection runtime (clima stub, extensible)
+- [x] Constitutional filter (Amor Computacional, identidad isabellina)
+- [x] Structured outputs FAIR-ish conformes a isa-ai.schema.json
+- [x] Streaming SSE por eventos (meta/delta/done)
+- [x] Semver mexa-ai-v2.1.0
+- [x] Integración con RDM Digital Hub / Nodo Cero
 
 ### Voz de Isabella (NUEVO)
 - [x] Vercel Function TTS (api/tts-isabella.ts)
