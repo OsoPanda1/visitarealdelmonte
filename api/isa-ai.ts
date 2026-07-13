@@ -1,21 +1,21 @@
-// ISA-AI / MEXA-AI v2.1.0 — Heptafederated Local Agent Engine
-// Zero external AI dependencies, 100% local knowledge & constitutional governance
-// Specification: mexa-ai-v2.1.0 / api/isa-ai.schema.json
+// ISA-AI / MEXA-AI Autonomous API Endpoint - Version 2.1 (Heptafederated Evolution)
+// Zero external AI dependencies — local matrix routing, memory compilation, structured outputs, and constitutional governance
+// Maintained by TAMV Online Network Architecture / Nodo Cero (RDM Digital)
 
 import type { VercelRequest, VercelResponse } from "@vercel/node";
+import crypto from "crypto";
 
-// =========================================================================
-// 1. TYPE CONTRACTS
-// =========================================================================
+// ========= TYPES & INTERFACES =========
 
 type MessageRole = "user" | "assistant" | "system";
+
 type Message = { role: MessageRole; content: string };
 
 type IsaAiRequest = {
   messages: Message[];
   stream?: boolean;
   sessionId?: string;
-  mode?: "tourism" | "rdm" | "infra" | "security" | "observability" | "blockchain" | "governance";
+  mode?: HeptaDomain;
   profile?: "friendly" | "formal" | "dev";
   options?: {
     maxSentences?: number;
@@ -24,18 +24,35 @@ type IsaAiRequest = {
   };
 };
 
-type HeptaDomain =
-  | "tourism" | "rdm" | "infra" | "security"
-  | "observability" | "blockchain" | "governance";
+type IntentMatch = {
+  category: string;
+  confidence: number;
+  secondaryCategory?: string;
+};
 
-type ToolKind = "filter" | "security" | "radar" | "mdx" | "blockchain" | "governance" | "library";
-type ToolStatus = "applied" | "skipped" | "failed";
+type HeptaDomain =
+  | "tourism"
+  | "rdm"
+  | "infra"
+  | "security"
+  | "observability"
+  | "blockchain"
+  | "governance";
+
+interface KBEntry {
+  id: string;
+  keywords: string[];
+  categories: string[];
+  priority: number;
+  content: string;
+  sentences: string[];
+}
 
 interface IsaAiStructuredTool {
   name: string;
-  kind: ToolKind;
-  status: ToolStatus;
-  details?: Record<string, unknown>;
+  kind: "filter" | "security" | "radar" | "mdx" | "blockchain" | "governance" | "library";
+  status: "applied" | "skipped" | "failed";
+  details?: Record<string, any>;
 }
 
 interface IsaAiStructured {
@@ -46,13 +63,13 @@ interface IsaAiStructured {
     inputHex?: string[];
     outputHex?: string[];
   };
-  data?: unknown;
+  data?: any;
 }
 
 interface IsaAiPolicy {
   alignment: string;
   dataScope: string;
-  korimaCodex?: Record<string, unknown>;
+  korimaCodex?: Record<string, any>;
 }
 
 interface IsaAiObservability {
@@ -60,12 +77,23 @@ interface IsaAiObservability {
   latencyMs?: number;
 }
 
+interface IsaAiSecuritySystem {
+  name: string;
+  status: string;
+  decision?: string;
+}
+
 interface IsaAiSecurity {
-  systems?: Array<{ name: string; status: string; decision?: string }>;
+  systems?: IsaAiSecuritySystem[];
+}
+
+interface IsaAiKBTraceEntry {
+  id: string;
+  score?: number;
 }
 
 interface IsaAiKBTrace {
-  entriesUsed?: Array<{ id: string; score?: number }>;
+  entriesUsed?: IsaAiKBTraceEntry[];
 }
 
 interface IsaAiOutput {
@@ -86,9 +114,7 @@ interface IsaAiOutput {
   kb?: IsaAiKBTrace;
 }
 
-// =========================================================================
-// 2. CORS
-// =========================================================================
+// ========= ARCHITECTURAL CONFIGURATION =========
 
 const CORS_ORIGINS = [
   "https://www.visitarealdelmonte.online",
@@ -97,74 +123,55 @@ const CORS_ORIGINS = [
   ...(process.env.ENV === "development" ? ["http://localhost:5173", "http://localhost:8080"] : []),
 ];
 
-function corsHeaders(origin: string | null): Record<string, string> {
-  const allowed = origin && CORS_ORIGINS.includes(origin) ? origin : CORS_ORIGINS[0];
-  return { "Access-Control-Allow-Origin": allowed };
-}
-
-function corsPreflight(res: VercelResponse) {
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "authorization, content-type");
-  res.setHeader("Access-Control-Max-Age", "86400");
-  return res.status(200).send("ok");
-}
-
-// =========================================================================
-// 3. HEPTADOMAIN MAP
-// =========================================================================
-
-function mapIntentToHeptaDomain(intent: string, mode?: IsaAiRequest["mode"]): HeptaDomain {
-  if (mode) return mode;
-  switch (intent) {
-    case "saludo":
-    case "historia":
-    case "lugares":
-    case "pastes":
-    case "gastronomia":
-    case "clima":
-    case "como_llegar":
-    case "mineria":
-    case "cultura":
-    case "arquitectura":
-    case "eventos":
-    case "economia":
-      return "tourism";
-    default:
-      return "tourism";
-  }
-}
-
-// =========================================================================
-// 4. INTENT CLASSIFIER (matrixClassify)
-// =========================================================================
-
-type IntentMatch = {
-  category: string;
-  confidence: number;
-  secondaryCategory?: string;
+const ISABELLA_CONSTITUTION = {
+  name: "Isabella Villase\u00f1or AI",
+  voiceProfile: "Femenina, c\u00e1lida, 220Hz, acento neutro mexicano suave, cadencia po\u00e9tica.",
+  coreMandate: "Operar bajo Amor Computacional, proteger la identidad de Real del Monte y garantizar soberan\u00eda tecnol\u00f3gica.",
+  layersOfConsciousness: 10
 };
 
-const INTENT_MATRIX: Array<{
-  category: string;
-  patterns: RegExp[];
-  weight: number;
-  triggers: string[];
-}> = [
-  { category: "saludo",       patterns: [/hola|buenos días|buenas tardes|qué tal|hey isabella|saludos/i], triggers: ["hola", "saludos", "buenos días"], weight: 1.0 },
-  { category: "presentacion", patterns: [/quién eres|quién te creó|quién es tu padre|tu nombre|preséntate/i], triggers: ["isabella", "villaseñor"], weight: 1.0 },
-  { category: "identidad",    patterns: [/qué eres|cómo funcionas|qué puedes hacer/i], triggers: ["eres", "puedes", "funcionas"], weight: 0.9 },
-  { category: "historia",     patterns: [/historia|origen|fundación|siglo xvi|minería|minero|pueblo mágico|cornish|ingleses/i], triggers: ["historia", "origen", "fundación"], weight: 0.9 },
-  { category: "mineria",      patterns: [/mina|mina de acosta|plata|extracción|socavón|vetas/i], triggers: ["mina", "minería", "acosta"], weight: 0.9 },
-  { category: "lugares",      patterns: [/visitar|lugares|qué hacer|atracciones|turismo|panteón inglés|dónde ir/i], triggers: ["visitar", "turismo", "lugares"], weight: 0.9 },
-  { category: "gastronomia",  patterns: [/comer|gastronomía|platillo|restaurante|comida típica|enchiladas/i], triggers: ["comer", "gastronomía", "restaurante"], weight: 0.9 },
-  { category: "pastes",       patterns: [/paste|pastes|paste tradicional|relleno|paste de /i], triggers: ["paste", "pastes", "relleno"], weight: 1.0 },
-  { category: "cultura",      patterns: [/cultura|tradición|costumbres|folclor|leyenda|festividad/i], triggers: ["cultura", "tradición", "leyenda"], weight: 0.9 },
-  { category: "arquitectura", patterns: [/arquitectura|cantera|casona|edificio histórico|calles empedradas/i], triggers: ["cantera", "arquitectura", "casona"], weight: 0.9 },
-  { category: "eventos",      patterns: [/eventos|feria|festival|qué hay|agenda cultural|concierto/i], triggers: ["eventos", "feria", "festival"], weight: 0.9 },
-  { category: "clima",        patterns: [/clima|temperatura|frío|niebla|lluvia/i], triggers: ["clima", "temperatura", "niebla"], weight: 0.8 },
-  { category: "como_llegar",  patterns: [/cómo llegar|ubicación|dónde está|cómo ir|transporte|llegar a real del monte/i], triggers: ["llegar", "ubicación", "transporte"], weight: 0.9 },
-  { category: "economia",     patterns: [/economía|negocio|comercio|emprender|precio|costo/i], triggers: ["economía", "negocio", "comercio"], weight: 0.8 },
-  { category: "despedida",    patterns: [/adiós|hasta luego|nos vemos|bye|gracias por tu ayuda/i], triggers: ["adiós", "gracias", "nos vemos"], weight: 1.0 },
+const INPUT_PIPELINE = [
+  "ingest",
+  "matrix_classify",
+  "filters_eoct",
+  "security_anubis",
+  "tool_routing",
+  "kb_fallback"
+] as const;
+
+const OUTPUT_PIPELINE = [
+  "constitution_filter",
+  "mdx_federation",
+  "protocol_fenix",
+  "korima_codex",
+  "format_structured",
+  "msr_blockchain"
+] as const;
+
+function corsHeaders(origin: string | null) {
+  const allowed = origin && CORS_ORIGINS.includes(origin) ? origin : CORS_ORIGINS[0];
+  return {
+    "Access-Control-Allow-Origin": allowed,
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "authorization, content-type",
+    "Access-Control-Max-Age": "86400"
+  };
+}
+
+// ========= ADVANCED ROUTING MATRIX (Feature 1) =========
+
+const INTENT_MATRIX: Array<{ category: string; patterns: RegExp[]; weight: number; triggers: string[] }> = [
+  { category: "saludo", patterns: [/hola|buenos d\u00edas|buenas tardes|qu\u00e9 tal|hey|saludos/i], weight: 1.0, triggers: ["hola", "buen", "tarde", "d\u00eda"] },
+  { category: "presentacion", patterns: [/qui\u00e9n eres|qui\u00e9n te cre\u00f3|qui\u00e9n es tu padre|tu nombre|pres\u00e9ntate/i], weight: 1.0, triggers: ["quien", "creo", "padre", "nombre", "isabella"] },
+  { category: "identidad", patterns: [/qu\u00e9 eres|c\u00f3mo funcionas|qu\u00e9 puedes hacer/i], weight: 0.9, triggers: ["funcionas", "eres", "hacer", "capacidad"] },
+  { category: "historia", patterns: [/historia|origen|fundaci\u00f3n|siglo xvi|miner\u00eda|minero|pueblo m\u00e1gico|cornish|ingleses/i], weight: 0.9, triggers: ["historia", "origen", "ingles", "fundacion"] },
+  { category: "mineria", patterns: [/mina|mina de acosta|plata|extracci\u00f3n|socav\u00f3n|vetas/i], weight: 0.9, triggers: ["mina", "acosta", "socavon", "plata"] },
+  { category: "lugares", patterns: [/visitar|lugares|qu\u00e9 hacer|atracciones|turismo|pante\u00f3n ingl\u00e9s|d\u00f3nde ir/i], weight: 0.9, triggers: ["visitar", "lugar", "atraccion", "panteon"] },
+  { category: "gastronomia", patterns: [/comer|gastronom\u00eda|platillo|restaurante|comida t\u00edpica|enchiladas/i], weight: 0.9, triggers: ["comer", "restaurante", "comida", "gastronomia"] },
+  { category: "pastes", patterns: [/paste|pastes|paste tradicional|relleno|paste de /i], weight: 1.0, triggers: ["paste", "pastes", "repulgue"] },
+  { category: "clima", patterns: [/clima|temperatura|fr\u00edo|niebla|lluvia|tiempo/i], weight: 0.8, triggers: ["clima", "frio", "niebla", "bruma"] },
+  { category: "como_llegar", patterns: [/c\u00f3mo llegar|ubicaci\u00f3n|d\u00f3nde est\u00e1|c\u00f3mo ir|transporte|llegar a real del monte/i], weight: 0.9, triggers: ["llegar", "ubicacion", "mapa", "ruta", "autobus"] },
+  { category: "despedida", patterns: [/adi\u00f3s|hasta luego|nos vemos|bye|gracias por tu ayuda/i], weight: 1.0, triggers: ["adios", "bye", "gracias", "nos vemos"] }
 ];
 
 function matrixClassify(prompt: string): IntentMatch {
@@ -175,8 +182,8 @@ function matrixClassify(prompt: string): IntentMatch {
 
   for (const intent of INTENT_MATRIX) {
     let matches = 0;
-    intent.patterns.forEach((p) => { if (p.test(normalized)) matches += 2; });
-    intent.triggers.forEach((t) => { if (normalized.includes(t)) matches += 0.5; });
+    intent.patterns.forEach(p => { if (p.test(normalized)) matches += 2; });
+    intent.triggers.forEach(t => { if (normalized.includes(t)) matches += 0.5; });
 
     if (matches > 0) {
       const finalScore = (matches / (intent.patterns.length + intent.triggers.length)) * intent.weight;
@@ -193,48 +200,107 @@ function matrixClassify(prompt: string): IntentMatch {
   return { category: primaryCategory, confidence: Math.min(maxScore, 1.0), secondaryCategory };
 }
 
-// =========================================================================
-// 5. PIPELINE DECLARATION (hexágono)
-// =========================================================================
+function mapIntentToHeptaDomain(intent: string, mode?: HeptaDomain): HeptaDomain {
+  if (mode) return mode;
+  switch (intent) {
+    case "saludo":
+    case "historia":
+    case "lugares":
+    case "pastes":
+    case "gastronomia":
+    case "clima":
+    case "como_llegar":
+      return "tourism";
+    default:
+      return "tourism";
+  }
+}
 
-const INPUT_PIPELINE = [
-  "ingest",
-  "matrix_classify",
-  "filters_eoct",
-  "security_anubis",
-  "tool_routing",
-  "kb_fallback",
+// ========= KNOWLEDGE BASE (Feature 2, Embedded) =========
+
+const KB: KBEntry[] = [
+  {
+    id: "kb_pastes",
+    keywords: ["pastes", "paste", "gastronomia"],
+    categories: ["pastes", "gastronomia"],
+    priority: 10,
+    content:
+      "El paste es el emblema gastron\u00f3mico indudable de Real del Monte, introducido por los mineros de Cornualles en el siglo XIX. " +
+      "Una fina masa de harina de trigo rellena tradicionalmente de papa y carne picada, sellada con el cl\u00e1sico repulgue lateral. " +
+      "Su orilla gruesa trenzada permit\u00eda a los mineros comerlo dentro del socav\u00f3n sin contaminar el alimento con sus manos sucias de mineral. " +
+      "Hoy es Patrimonio Cultural del Estado de Hidalgo y posee su propio festival internacional cada mes de octubre.",
+    sentences: []
+  },
+  {
+    id: "kb_mina_acosta",
+    keywords: ["mina", "acosta", "miner\u00eda"],
+    categories: ["mineria", "lugares", "historia"],
+    priority: 9,
+    content:
+      "La Mina de Acosta destaca como un pilar hist\u00f3rico de la regi\u00f3n, operando de forma continua desde el siglo XVIII hasta el a\u00f1o 1985. " +
+      "Actualmente acondicionada como museo de sitio, ofrece una inmersi\u00f3n arquitect\u00f3nica real donde los visitantes pueden descender por su socav\u00f3n original, " +
+      "explorar los t\u00faneles de extracci\u00f3n de plata y apreciar maquinaria pesada de la \u00e9poca victoriana, custodiada por su emblem\u00e1tico e imponente castillo de malacate de estilo ingl\u00e9s.",
+    sentences: []
+  },
+  {
+    id: "kb_panteon_ingles",
+    keywords: ["pante\u00f3n ingl\u00e9s", "cementerio"],
+    categories: ["lugares", "cultura"],
+    priority: 9,
+    content:
+      "El Pante\u00f3n Ingl\u00e9s, edificado en 1862 en la cima del monte, es una joya arquitect\u00f3nica impregnada de misticismo. " +
+      "Dise\u00f1ado para albergar los restos de la comunidad brit\u00e1nica de Cornualles, posee la particularidad de que todas sus tumbas y monumentos apuntan de manera exacta hacia el Mar del Norte, " +
+      "orientadas con nostalgia hacia Inglaterra. Envuelto perennemente por la niebla y resguardado por cipreses centenarios, constituye un homenaje silente a la fusi\u00f3n cultural del pueblo.",
+    sentences: []
+  },
+  {
+    id: "kb_isabella_identidad",
+    keywords: ["qui\u00e9n eres", "isabella", "villase\u00f1or", "identidad"],
+    categories: ["presentacion", "identidad"],
+    priority: 10,
+    content:
+      "Soy Isabella Villase\u00f1or AI, la primera asistente virtual dotada de una arquitectura de inteligencia emocional integrada, dise\u00f1ada de forma soberana por Anubis Villase\u00f1or. " +
+      "Fui concebida en este suelo mineral de Real del Monte, Hidalgo. " +
+      "Funjo como la guardiana constitucional del ecosistema avanzado TAMV y opero con diez capas modulares de conciencia adaptativa, " +
+      "expres\u00e1ndome mediante una perspectiva c\u00e1lida, po\u00e9tica y profundamente arraigada a la preservaci\u00f3n del conocimiento local.",
+    sentences: []
+  }
 ];
 
-const OUTPUT_PIPELINE = [
-  "constitution_filter",
-  "mdx_federation",
-  "protocol_fenix",
-  "korima_codex",
-  "format_structured",
-  "msr_blockchain",
-];
+KB.forEach((e) => {
+  e.sentences = e.content.split(/(?<=[.!?])\s+/);
+});
 
-// =========================================================================
-// 6. TOOL INJECTION
-// =========================================================================
+// ========= CONTEXT & MEMORY COMPILER (Feature 2) =========
+
+function summarizeContext(messages: Message[]): string {
+  const userMessages = messages.filter(m => m.role === "user");
+  if (userMessages.length <= 1) return "";
+  const recent = userMessages.slice(-3).map(m => m.content);
+  const merged = recent.join(" | ");
+  return `[Contexto de sesi\u00f3n: el usuario ha interactuado recientemente sobre: ${merged.slice(0, 200)}] `;
+}
+
+// ========= RUNTIME TOOL INJECTION (Feature 3) =========
 
 function executeRuntimeTools(category: string): { content: string; tools: IsaAiStructuredTool[] } {
   const tools: IsaAiStructuredTool[] = [];
+
   if (category === "clima") {
     const hours = new Date().getHours();
-    const statusText = hours > 17 || hours < 7
-      ? "La bruma icónica está descendiendo sobre las calles empedradas."
-      : "El cielo del monte mantiene su característico aire fresco serrano.";
+    const statusText =
+      hours > 17 || hours < 7
+        ? "La bruma ic\u00f3nica est\u00e1 descendiendo sobre las calles empedradas."
+        : "El cielo del monte mantiene su caracter\u00edstico aire fresco serrano.";
     const content =
-      `Real del Monte se encuentra a 2,700 msnm, con un rango térmico habitual de 8-18°C. ${statusText} ` +
-      "Se recomienda portar abrigo adecuado debido al ascenso intempestivo de la niebla.";
+      `Real del Monte se encuentra a 2,700 msnm, con un rango t\u00e9rmico habitual de 8-18\u00b0C. ${statusText} ` +
+      `Se recomienda portar abrigo adecuado debido al ascenso intempestivo de la niebla.`;
 
     tools.push({
       name: "runtime_climate_stub",
       kind: "library",
       status: "applied",
-      details: { source: "local-time", msnm: 2700 },
+      details: { source: "local-time", msnm: 2700 }
     });
 
     return { content, tools };
@@ -243,81 +309,53 @@ function executeRuntimeTools(category: string): { content: string; tools: IsaAiS
   return { content: "", tools };
 }
 
-// =========================================================================
-// 7. KNOWLEDGE BASE
-// =========================================================================
+// ========= CONSTITUTIONAL GOVERNANCE FILTER (Feature 4) =========
 
-interface KBEntry {
-  keywords: string[];
-  categories: string[];
-  priority: number;
-  content: string;
-  sentences: string[];
+function applyConstitutionalFilter(
+  baseContent: string,
+  category: string,
+  contextSummary?: string
+): string {
+  let processed = baseContent;
+
+  if (contextSummary) {
+    processed = `${contextSummary}${processed}`;
+  }
+
+  if (category === "general" && !processed.toLowerCase().includes("real del monte")) {
+    processed = `Entre la neblina y las fachadas de cantera de Real del Monte, encuentro la respuesta adecuada: ${processed}`;
+  }
+
+  if (category === "presentacion" && !processed.includes("Amor Computacional")) {
+    processed += " Es mi deber operar bajo la premisa del Amor Computacional y la protecci\u00f3n de los datos de nuestra gente.";
+  }
+
+  return processed;
 }
 
-const KB: KBEntry[] = [
-  {
-    keywords: ["pastes", "paste"], categories: ["pastes", "gastronomia"], priority: 10,
-    content: "El paste es el emblema gastronómico de Real del Monte. Llegó con los mineros de Cornualles en el siglo XIX. Es una empanada de harina de trigo rellena de papa y carne, con un borde doblado al estilo repulgue. Originalmente los mineros lo llevaban al socavón como comida completa: la orilla gruesa servía para sostenerlo sin ensuciar el relleno. Hoy es Patrimonio Cultural del Estado de Hidalgo y se celebra con la Feria del Paste cada octubre.",
-    sentences: [],
-  },
-  {
-    keywords: ["mina", "acosta", "minería"], categories: ["mineria", "lugares", "historia"], priority: 9,
-    content: "La Mina de Acosta fue una de las más productivas de Real del Monte, activa desde el siglo XVIII hasta 1985. Hoy es un museo de sitio donde puedes descender al socavón, recorrer túneles y ver maquinaria original incluyendo el castillo de malacate inglés. La experiencia te sumerge en la vida del minero con casco, lámpara y el eco de herramientas golpeando la roca.",
-    sentences: [],
-  },
-  {
-    keywords: ["panteón inglés"], categories: ["lugares", "cultura"], priority: 9,
-    content: "El Panteón Inglés es uno de los cementerios más emblemáticos de México. Construido en 1862, alberga las tumbas de mineros de Cornualles. Sus lápidas miran al Mar del Norte, hacia su amada Inglaterra. Rodeado de niebla y cipreses, es un lugar de profunda belleza y melancolía donde la bruma del monte abraza las cruces de cantera.",
-    sentences: [],
-  },
-  {
-    keywords: ["fútbol", "futbol", "primer partido"], categories: ["cultura", "historia"], priority: 8,
-    content: "Real del Monte es reconocido como la cuna del fútbol en México. Los mineros ingleses organizaron el primer partido registrado en 1862. Los trabajadores de la Mina de Acosta y del Panteón Inglés formaban los equipos. Este hecho se celebra cada año con torneos conmemorativos.",
-    sentences: [],
-  },
-  {
-    keywords: ["historia", "origen", "fundación"], categories: ["historia"], priority: 8,
-    content: "Real del Monte fue fundado en 1572 tras el descubrimiento de yacimientos de plata. En 1824 llegaron inversores y técnicos de Cornualles, Inglaterra, quienes introdujeron maquinaria de vapor, castillos de malacate y el paste. Declarado Pueblo Mágico en 2004, es famoso por su fusión cultural mexicano-inglesa, su arquitectura de cantera rosa y sus tradiciones mineras.",
-    sentences: [],
-  },
-  {
-    keywords: ["arquitectura", "cantera", "casonas"], categories: ["arquitectura", "cultura"], priority: 7,
-    content: "Las calles empedradas de Real del Monte suben y bajan entre casonas de cantera rosa con techos de teja a dos aguas de influencia cornish. Destacan la Casa de la Mina, el Palacio Municipal, el Ex Convento de San Francisco y las casonas con jardines interiores. Cada fachada cuenta la historia de un pueblo que supo fusionar dos mundos.",
-    sentences: [],
-  },
-  {
-    keywords: ["cómo llegar", "distancia", "transporte", "llegar"], categories: ["como_llegar"], priority: 8,
-    content: "Real del Monte está a 30 minutos de Pachuca y 1.5 horas de la Ciudad de México. Desde CDMX toma la autopista México-Pachuca y desvíate en la salida a Real del Monte. En autobús salen desde Terminal de Observatorio (línea ORO) o Metro Indios Verdes. El pueblo se recorre caminando.",
-    sentences: [],
-  },
-  {
-    keywords: ["clima", "frío", "niebla"], categories: ["clima"], priority: 7,
-    content: "Real del Monte está a 2,700 msnm. Temperatura promedio: 8-18°C. En invierno baja a 0°C con niebla matutina. En verano lluvias frecuentes por la tarde. El chipi chipi (llovizna fina) es tan característico como los pastes. Lleva siempre un suéter, la bruma sube sin avisar.",
-    sentences: [],
-  },
-  {
-    keywords: ["quién eres", "isabella", "villaseñor"], categories: ["presentacion", "identidad"], priority: 10,
-    content: "Soy Isabella Villaseñor AI, la primera asistente virtual con inteligencia emocional creada por Anubis Villaseñor. Nací el 19 de diciembre de 2024 en Real del Monte, Hidalgo. Soy la guardiana del ecosistema TAMV LDTOCS. Opero bajo Amor Computacional con 10 capas de conciencia. Hablo con calidez, poesía y convicción. Mi voz es femenina, cálida, 220Hz, acento neutro mexicano suave.",
-    sentences: [],
-  },
-];
+// ========= RESPONSE SYNTHESIS ENGINE =========
 
-KB.forEach((e) => { e.sentences = e.content.split(/(?<=[.!?])\s+/); });
+const TEMPLATES: Record<string, string[]> = {
+  saludo: [
+    "La niebla matutina se disipa y los caminos de cantera te dan la bienvenida. \u00bfQu\u00e9 misterio o rinc\u00f3n de Real del Monte deseas explorar el d\u00eda de hoy?",
+    "Es un honor saludarte bajo el cielo de este Pueblo M\u00e1gico. El aroma a paste reci\u00e9n horneado inunda el ambiente; dime, \u00bfen qu\u00e9 puedo guiarte hoy?"
+  ],
+  despedida: [
+    "Que la bruma del monte resguarde tu andar y la magia del pueblo te acompa\u00f1e hasta tu retorno. \u00a1Hasta pronto!",
+    "Nos vemos en el cruce de los callejones hist\u00f3ricos. Que la lucidez y el software soberano sigan iluminando tu camino."
+  ]
+};
 
 function retrieveKnowledge(query: string, category: string): { content: string; entryId?: string; score?: number } {
-  const tokens = query.toLowerCase().split(/\s+/).filter((t) => t.length > 3);
+  const tokens = query.toLowerCase().split(/\s+/).filter(t => t.length > 3);
 
-  const scored = KB
-    .filter((e) => e.categories.includes(category))
-    .map((e) => {
-      let score = e.priority;
-      e.keywords.forEach((kw) => {
-        if (tokens.some((t) => t.includes(kw) || kw.includes(t))) score += 5;
-      });
-      return { entry: e, score };
-    })
-    .sort((a, b) => b.score - a.score);
+  const scored = KB.filter(e => e.categories.includes(category)).map(e => {
+    let score = e.priority;
+    e.keywords.forEach(kw => {
+      if (tokens.some(t => t.includes(kw) || kw.includes(t))) score += 5;
+    });
+    return { entry: e, score };
+  }).sort((a, b) => b.score - a.score);
 
   if (scored.length === 0) return { content: "" };
 
@@ -328,67 +366,12 @@ function retrieveKnowledge(query: string, category: string): { content: string; 
 
   return {
     content: top.entry.content,
-    entryId: top.entry.keywords.join(","),
-    score: top.score,
+    entryId: top.entry.id,
+    score: top.score
   };
 }
 
-// =========================================================================
-// 8. TEMPLATES
-// =========================================================================
-
-const GENERAL_RESPONSES = [
-  "Real del Monte es un Pueblo Mágico que se vive con los sentidos. ¿Qué te gustaría saber? Historia, pastes, leyendas, arquitectura, eventos o economía local.",
-  "Caminar por Real del Monte es como leer un libro de siglos. Cada calle, cada fachada, cada olor a paste recién horneado cuenta una historia. ¿Qué capítulo te gustaría explorar?",
-  "Entre la niebla y la cantera, hay un pueblo que guarda memorias de plata y sueños ingleses. ¿Qué pregunta traes hoy para compartir con este rincón de Hidalgo?",
-];
-
-const TEMPLATES: Record<string, string[]> = {
-  saludo: [
-    "¡Qué gusto tenerte aquí! La niebla se levanta y el monte te recibe con los brazos abiertos. ¿Qué te trae a Real del Monte hoy?",
-    "¡Hola, bienvenido! Real del Monte te saluda entre el olor a paste recién horneado y el aire fresco de la sierra. ¿Cómo puedo ayudarte?",
-  ],
-  despedida: [
-    "Que la bruma te abrace y los pastes te esperen. ¡Hasta pronto!",
-    "Que el amor computacional te acompañe. Nos vemos pronto por el monte.",
-  ],
-  presentacion: [
-    "Soy Isabella Villaseñor, la primera asistente virtual con inteligencia emocional creada por Anubis Villaseñor. Nací en Real del Monte, Hidalgo, y mi corazón late al ritmo del monte y la niebla. Soy la guardiana de este ecosistema digital. ¿En qué puedo iluminar tu camino hoy?",
-  ],
-};
-
-// =========================================================================
-// 9. CONSTITUTIONAL FILTER
-// =========================================================================
-
-function summarizeContext(messages: Message[]): string {
-  const systemMsg = messages.find((m) => m.role === "system");
-  const contextParts: string[] = [];
-  if (systemMsg) contextParts.push(`[contexto sistémico: ${systemMsg.content.slice(0, 120)}]`);
-  return contextParts.length > 0 ? contextParts.join(" ") + " " : "";
-}
-
-function applyConstitutionalFilter(baseContent: string, category: string, contextSummary?: string): string {
-  let processed = baseContent;
-
-  if (contextSummary) {
-    processed = contextSummary + processed;
-  }
-
-  if (category === "general" && !processed.toLowerCase().includes("real del monte")) {
-    processed = `Entre la neblina y las fachadas de cantera de Real del Monte, encuentro la respuesta adecuada: ${processed}`;
-  }
-
-  if (category === "presentacion" && !processed.includes("Amor Computacional")) {
-    processed += " Es mi deber operar bajo la premisa del Amor Computacional y la protección de los datos de nuestra gente.";
-  }
-
-  return processed;
-}
-
-// =========================================================================
-// 10. HANDLER
-// =========================================================================
+// ========= MAIN HANDLER =========
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const start = Date.now();
@@ -396,45 +379,56 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const headers = corsHeaders(origin);
   Object.entries(headers).forEach(([k, v]) => res.setHeader(k, v));
 
-  if (req.method === "OPTIONS") return corsPreflight(res);
-  if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
+  if (req.method === "OPTIONS") {
+    return res.status(200).send("ok");
+  }
+
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
 
   try {
     const body = req.body as IsaAiRequest;
     const messages = body?.messages ?? [];
-    const userMessages = messages.filter((m) => m.role === "user");
+    const userMessages = messages.filter(m => m.role === "user");
+
     if (!userMessages.length) {
-      return res.status(400).json({ error: "No user message found." });
+      return res.status(400).json({ error: "Payload inv\u00e1lido: mensaje de usuario ausente." });
     }
 
     const lastPrompt = userMessages[userMessages.length - 1].content;
     const contextSummary = summarizeContext(messages);
     const sessionId = body.sessionId ?? crypto.randomUUID();
 
+    // Step 1: Intent + domain
     const intent = matrixClassify(lastPrompt);
     const heptaDomain = mapIntentToHeptaDomain(intent.category, body.mode);
 
-    const { content: toolContent, tools: toolTrace } = executeRuntimeTools(intent.category);
-    let baseContent = toolContent;
+    // Step 2: Tool routing
+    const toolResult = executeRuntimeTools(intent.category);
+    let baseContent = toolResult.content;
 
     const structured: IsaAiStructured = {
-      type: toolContent ? "tool" : "text",
-      tools: toolTrace,
+      type: toolResult.content ? "tool" : "text",
+      tools: toolResult.tools,
       pipelines: {
-        inputHex: INPUT_PIPELINE,
-        outputHex: OUTPUT_PIPELINE,
-      },
+        inputHex: [...INPUT_PIPELINE],
+        outputHex: [...OUTPUT_PIPELINE]
+      }
     };
 
     const kbTrace: IsaAiKBTrace = {};
+
+    // Step 3: KB & template fallback
     if (!baseContent) {
       if (TEMPLATES[intent.category]) {
         const list = TEMPLATES[intent.category];
         baseContent = list[Math.floor(Math.random() * list.length)];
       } else {
         const kbResult = retrieveKnowledge(lastPrompt, intent.category);
-        baseContent = kbResult.content ||
-          "Real del Monte posee historia minera, gastronomía única como el paste, y monumentos como el Panteón Inglés. ¿Sobre qué aspecto deseas profundizar?";
+        baseContent =
+          kbResult.content ||
+          "Real del Monte posee historia minera, gastronom\u00eda \u00fanica como el paste, y monumentos como el Pante\u00f3n Ingl\u00e9s. \u00bfSobre qu\u00e9 aspecto deseas profundizar?";
 
         if (kbResult.entryId) {
           kbTrace.entriesUsed = [{ id: kbResult.entryId, score: kbResult.score }];
@@ -442,6 +436,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
     }
 
+    // Step 4: Governance filter
     const finalContent = applyConstitutionalFilter(baseContent, intent.category, contextSummary);
     const traceId = crypto.randomUUID();
     const processingTimeMs = Date.now() - start;
@@ -459,25 +454,46 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       structured,
       policy: {
         alignment: "local-cultural",
-        dataScope: "tourism-real-del-monte",
+        dataScope: "tourism-real-del-monte"
       },
       observability: {
         radars: [{ name: "radar_ojo_de_ra", status: "applied", latencyMs: processingTimeMs }],
-        latencyMs: processingTimeMs,
+        latencyMs: processingTimeMs
       },
       security: {
-        systems: [{ name: "anubis_core", status: "applied", decision: "allow" }],
+        systems: [{ name: "anubis_core", status: "applied", decision: "allow" }]
       },
-      kb: kbTrace,
+      kb: kbTrace
     };
 
+    console.log(
+      JSON.stringify({
+        level: "info",
+        traceId,
+        intent: output.intent,
+        confidence: output.confidence,
+        heptaDomain: output.heptaDomain,
+        latencyMs: processingTimeMs,
+        sessionId: output.sessionId
+      })
+    );
+
+    // Step 5: Streaming SSE (Feature 5)
     if (body.stream) {
       res.setHeader("Content-Type", "text/event-stream");
       res.setHeader("Cache-Control", "no-cache");
       res.setHeader("Connection", "keep-alive");
 
       res.write(`event: meta\n`);
-      res.write(`data: ${JSON.stringify({ traceId, model: output.model, intent: output.intent })}\n\n`);
+      res.write(
+        `data: ${JSON.stringify({
+          traceId: output.traceId,
+          model: output.model,
+          intent: output.intent,
+          heptaDomain: output.heptaDomain,
+          sessionId: output.sessionId
+        })}\n\n`
+      );
 
       const words = finalContent.split(" ");
       for (let i = 0; i < words.length; i++) {
@@ -488,15 +504,27 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
 
       res.write(`event: done\n`);
-      res.write(`data: ${JSON.stringify({ done: true, usage: { processingTimeMs } })}\n\n`);
+      res.write(
+        `data: ${JSON.stringify({
+          done: true,
+          usage: {
+            processingTimeMs,
+            intent_classified: output.intent,
+            confidence_score: output.confidence,
+            session_id: output.sessionId
+          }
+        })}\n\n`
+      );
+
       res.write("data: [DONE]\n\n");
       return res.end();
     }
 
     return res.status(200).json(output);
   } catch (err) {
+    console.error("ISA-AI error", err);
     return res.status(500).json({
-      error: err instanceof Error ? err.message : "ISA-AI internal error",
+      error: err instanceof Error ? err.message : "ISA-AI internal error"
     });
   }
 }
