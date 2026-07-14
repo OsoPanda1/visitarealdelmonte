@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { getCorsHeaders } from '../_shared/cors';
 
 interface Render4DRequest {
   operation: 'create-hypercube' | 'rotate-4d' | 'project-to-3d' | 'color-map';
@@ -177,6 +178,11 @@ function colorMap(payload: Record<string, unknown>) {
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const startTime = Date.now();
+  const origin = (req.headers.origin as string | undefined) ?? null;
+  const cors = getCorsHeaders(origin);
+  Object.entries(cors).forEach(([k, v]) => res.setHeader(k, v));
+
+  if (req.method === "OPTIONS") return res.status(204).end();
 
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('X-Cell-Type', 'Render4D');

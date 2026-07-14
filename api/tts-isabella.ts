@@ -2,16 +2,7 @@
 // Fallback chain: Google Cloud TTS (Neural2) → Web Speech API (client-side)
 
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-
-const ALLOWED_ORIGINS = [
-  "https://www.visitarealdelmonte.online",
-  "https://visitarealdelmonte.online",
-  "https://real-del-monte-digital-hub.vercel.app",
-];
-
-if (process.env.ENV === "development") {
-  ALLOWED_ORIGINS.push("http://localhost:5173", "http://localhost:8080");
-}
+import { getCorsHeaders } from "./_shared/cors";
 
 // Perfiles de voz TAMV: Frecuencias, velocidades y balances sintonizados
 const TTS_PROFILES: Record<string, { speakingRate: number; pitch: number }> = {
@@ -30,23 +21,6 @@ interface TTSRequestBody {
   text?: string;
   profile?: keyof typeof TTS_PROFILES;
   language?: SupportedLanguage | string;
-}
-
-function buildCorsHeaders(origin: string | null) {
-  const allowed =
-    origin && ALLOWED_ORIGINS.includes(origin)
-      ? origin
-      : ALLOWED_ORIGINS[0];
-
-  return {
-    "Access-Control-Allow-Origin": allowed,
-    "Access-Control-Allow-Credentials": "true",
-    "Access-Control-Allow-Headers":
-      "Authorization, Content-Type, X-Isabella-Client, X-Isabella-Token",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Max-Age": "86400",
-    "X-Content-Type-Options": "nosniff",
-  };
 }
 
 function sanitizeText(input: unknown): string {
@@ -161,11 +135,9 @@ export default async function handler(
   res: VercelResponse,
 ) {
   const origin = (req.headers.origin as string | undefined) ?? null;
-  const corsHeaders = buildCorsHeaders(origin);
-
-  Object.entries(corsHeaders).forEach(([key, value]) =>
-    res.setHeader(key, value),
-  );
+  const cors = getCorsHeaders(origin);
+  Object.entries(cors).forEach(([k, v]) => res.setHeader(k, v));
+  res.setHeader("X-Content-Type-Options", "nosniff");
 
   if (req.method === "OPTIONS") {
     return res.status(200).end();

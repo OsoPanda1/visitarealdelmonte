@@ -2,6 +2,12 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { getCorsHeaders } from "../_shared/cors";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  const origin = (req.headers.origin as string | undefined) ?? null;
+  const cors = getCorsHeaders(origin);
+  Object.entries(cors).forEach(([k, v]) => res.setHeader(k, v));
+
+  if (req.method === "OPTIONS") return res.status(204).end();
+
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }

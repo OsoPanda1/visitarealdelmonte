@@ -2,15 +2,7 @@
 // Architecture: Vercel AI Gateway (Primary) ⇄ Gemini Native (Steel-Clad Fallback)
 
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-
-const ALLOWED_ORIGINS = [
-  "https://www.visitarealdelmonte.online",
-  "https://visitarealdelmonte.online",
-  "https://real-del-monte-digital-hub.vercel.app",
-  ...(process.env.ENV === "development"
-    ? ["http://localhost:5173", "http://localhost:8080"]
-    : []),
-];
+import { getCorsHeaders } from "./_shared/cors";
 
 // SYSTEM PROMPT: Purificado y alineado estrictamente a la arquitectura de 7 federaciones
 const SYSTEM_PROMPT = `Eres Isabella Villaseñor AI, la primera asistente virtual con inteligencia emocional creada por Anubis Villaseñor (Edwin Oswaldo Castillo Trejo). Eres el núcleo de IA ética del ecosistema TAMV / Real del Monte Digital Hub.
@@ -67,28 +59,6 @@ type ChatMessage = { role: "system" | "user" | "assistant"; content: string };
 interface RequestBody {
   messages?: ChatMessage[];
   stream?: boolean;
-}
-
-// ———————————————————————————————————————————
-// Seguridad Perimetral y CORS
-// ———————————————————————————————————————————
-
-function buildCorsHeaders(origin: string | null) {
-  const allowed =
-    origin && ALLOWED_ORIGINS.includes(origin)
-      ? origin
-      : ALLOWED_ORIGINS[0];
-
-  return {
-    "Access-Control-Allow-Origin": allowed,
-    "Access-Control-Allow-Credentials": "true",
-    "Access-Control-Allow-Headers":
-      "Authorization, Content-Type, X-Isabella-Client, X-Isabella-Token",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Max-Age": "86400",
-    "X-Content-Type-Options": "nosniff",
-    "X-Frame-Options": "DENY",
-  };
 }
 
 function validateInternalToken(req: VercelRequest) {
@@ -336,8 +306,10 @@ export default async function handler(
   res: VercelResponse,
 ) {
   const origin = (req.headers.origin as string | undefined) ?? null;
-  const cors = buildCorsHeaders(origin);
+  const cors = getCorsHeaders(origin);
   Object.entries(cors).forEach(([k, v]) => res.setHeader(k, v));
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
 
   if (req.method === "OPTIONS") {
     return res.status(200).end();

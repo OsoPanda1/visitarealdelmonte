@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { getCorsHeaders } from '../_shared/cors';
 
 interface KnowledgeCell {
   id: string;
@@ -37,6 +38,12 @@ const CELLS: Record<string, KnowledgeCell> = {
 };
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
+  const origin = (req.headers.origin as string | undefined) ?? null;
+  const cors = getCorsHeaders(origin);
+  Object.entries(cors).forEach(([k, v]) => res.setHeader(k, v));
+
+  if (req.method === "OPTIONS") return res.status(204).end();
+
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Cache-Control', 'public, max-age=300, stale-while-revalidate=86400');
   res.setHeader('X-Knowledge-Cells-Version', '1.0.0');

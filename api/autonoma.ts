@@ -2,6 +2,7 @@
 // Integra agentes autónomos de Autonoma para testing, generación de datos y escenarios
 
 import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { getCorsHeaders } from "./_shared/cors";
 
 const AUTONOMA_CLIENT_ID = process.env.AUTONOMA_CLIENT_ID ?? "";
 const AUTONOMA_SECRET_ID = process.env.AUTONOMA_SECRET_ID ?? "";
@@ -78,6 +79,12 @@ const FACTORIES = {
 };
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  const origin = (req.headers.origin as string | undefined) ?? null;
+  const cors = getCorsHeaders(origin);
+  Object.entries(cors).forEach(([k, v]) => res.setHeader(k, v));
+
+  if (req.method === "OPTIONS") return res.status(204).end();
+
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }

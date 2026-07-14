@@ -36,3 +36,10 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+
+# Test / tool artifacts
+TEST_WRITE_*.txt
+prettier-run.mjs
+commit-all.ps1
+push.ps1
+municipio.pdf

@@ -3,10 +3,8 @@
  * @description Central repository for knowledge cells with dependency resolution
  */
 
-import { KnowledgeRepo, KnowledgeCell, KnowledgeRelation } from '@types/knowledge-cell';
-import { Logger } from '@utils/logger';
-import { render3DHoloCube } from '@cells/render-3d-holocube/cell';
-import { render4DHypercube } from '@cells/render-4d-hypercube/cell';
+import { KnowledgeRepo, KnowledgeCell, KnowledgeRelation } from '../types/knowledge-cell';
+import { Logger } from '../utils/logger';
 
 const logger = Logger.getInstance();
 
@@ -37,13 +35,6 @@ export class KnowledgeRepository {
   }
 
   private populateCells(): void {
-    const cells = [render3DHoloCube, render4DHypercube];
-
-    for (const cell of cells) {
-      this.repo.cells[cell.id] = cell;
-      this.cellCache.set(cell.id, cell);
-    }
-
     logger.info('Knowledge repository initialized', {
       cellCount: Object.keys(this.repo.cells).length,
     });

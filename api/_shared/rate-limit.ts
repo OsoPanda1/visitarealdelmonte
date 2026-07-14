@@ -1,5 +1,17 @@
 const store = new Map<string, { count: number; resetAt: number }>();
 
+const CLEANUP_INTERVAL = 5 * 60 * 1000;
+let lastCleanup = Date.now();
+
+function cleanup(): void {
+  const now = Date.now();
+  if (now - lastCleanup < CLEANUP_INTERVAL) return;
+  lastCleanup = now;
+  for (const [key, entry] of store) {
+    if (entry.resetAt < now) store.delete(key);
+  }
+}
+
 function getClientIp(request: Request): string {
   return (
     request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
@@ -9,13 +21,13 @@ function getClientIp(request: Request): string {
   );
 }
 
-interface RateLimitConfig {
+export interface RateLimitConfig {
   windowMs: number;
   maxRequests: number;
   keyPrefix?: string;
 }
 
-interface RateLimitResult {
+export interface RateLimitResult {
   allowed: boolean;
   remaining: number;
   resetAt: number;
@@ -24,6 +36,8 @@ interface RateLimitResult {
 }
 
 export function checkRateLimit(request: Request, config: RateLimitConfig): RateLimitResult {
+  cleanup();
+
   const ip = getClientIp(request);
   const key = `${config.keyPrefix || "api"}:${ip}`;
   const now = Date.now();

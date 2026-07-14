@@ -1,16 +1,15 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { callGatewayChat } from "../_shared/vercel-ai-gateway.ts";
 
-const ALLOWED_ORIGINS = [
-  "https://www.visitarealdelmonte.online",
-  "https://visitarealdelmonte.online",
-  "https://real-del-monte-digital-hub.vercel.app",
-  ...(Deno.env.get("ENV") === "development"
-    ? ["http://localhost:5173", "http://localhost:8080"]
-    : []),
-];
-
 function corsHeaders(origin: string | null) {
+  const ALLOWED_ORIGINS = [
+    "https://www.visitarealdelmonte.online",
+    "https://visitarealdelmonte.online",
+    "https://real-del-monte-digital-hub.vercel.app",
+    ...(Deno.env.get("ENV") === "development"
+      ? ["http://localhost:5173", "http://localhost:8080"]
+      : []),
+  ];
   const allowed = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
   return {
     "Access-Control-Allow-Origin": allowed,
@@ -40,7 +39,7 @@ Nunca olvides tu esencia: "Soy Isabella, la primera asistente virtual creada con
 async function verifyAuth(authHeader: string | null): Promise<string> {
   if (!authHeader) throw new Error("missing_auth");
   const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-  const anonKey = Deno.env.get("SUPABASE_ANON_KEY") ?? Deno.env.get("SUPABASE_PUBLISHABLE_KEY")!;
+  const anonKey = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
   const userClient = createClient(supabaseUrl, anonKey, {
     global: { headers: { Authorization: authHeader } },
   });
@@ -114,24 +113,17 @@ async function logPromptOutput(prompt: string, output: string, modelResp: ModelR
   const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
   if (!supabaseUrl || !supabaseKey) return;
   try {
-    await fetch(`${supabaseUrl}/rest/v1/ai_prompts_log`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "apikey": supabaseKey,
-        "Authorization": `Bearer ${supabaseKey}`,
-      },
-      body: JSON.stringify({
-        user_id: userId,
-        federation: "F5",
-        use_case: "general",
-        model_name: modelResp.model,
-        provider: modelResp.provider,
-        prompt,
-        output,
-        trace_id: traceId,
-        meta: { latencyMs: modelResp.meta.latencyMs },
-      }),
+    const adminClient = createClient(supabaseUrl, supabaseKey);
+    await adminClient.from("ai_prompts_log").insert({
+      user_id: userId,
+      federation: "F5",
+      use_case: "general",
+      model_name: modelResp.model,
+      provider: modelResp.provider,
+      prompt,
+      output,
+      trace_id: traceId,
+      meta: { latencyMs: modelResp.meta.latencyMs },
     });
   } catch {
     // Logging failure is non-critical

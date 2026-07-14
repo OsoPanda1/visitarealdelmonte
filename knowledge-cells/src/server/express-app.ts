@@ -4,17 +4,25 @@
  */
 
 import express, { Express, Request, Response } from 'express';
-import { knowledgeRepository } from '@/repository/knowledge-repo';
-import { Logger } from '@utils/logger';
-import { handleRender3D } from '@cells/render-3d-holocube/cell';
-import { handleRender4D } from '@cells/render-4d-hypercube/cell';
-import { CellRequest } from '@types/knowledge-cell';
+import cors from 'cors';
+import { knowledgeRepository } from '../repository/knowledge-repo';
+import { Logger } from '../utils/logger';
+import { CellRequest } from '../types/knowledge-cell';
 
 const logger = Logger.getInstance();
 
 export function createApp(): Express {
   const app = express();
 
+  app.use(cors({
+    origin: [
+      'https://www.visitarealdelmonte.online',
+      'https://visitarealdelmonte.online',
+      'https://real-del-monte-digital-hub.vercel.app',
+      ...(process.env.ENV === 'development' ? ['http://localhost:5173', 'http://localhost:3000'] : []),
+    ],
+    credentials: true,
+  }));
   app.use(express.json());
   app.use(express.static('public'));
 

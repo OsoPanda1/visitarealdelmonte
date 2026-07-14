@@ -1,18 +1,14 @@
-// api/telemetry.js — Vercel Edge Function
+// api/telemetry.ts — Vercel Edge Function
 // Endpoint perimetral de telemetría del Nodo Cero
 // Auth + Rate limiting + CORS unificados
 
-import { getCorsHeaders, handleCors, corsJsonResponse } from "./_shared/cors.js";
-import { checkRateLimit, RATE_LIMITS } from "./_shared/rate-limit.js";
+import { getCorsHeaders, handleCors, corsJsonResponse } from "./_shared/cors";
+import { checkRateLimit, RATE_LIMITS } from "./_shared/rate-limit";
 
-/**
- * @param {Request} request
- */
-export default async function handler(request) {
+export default async function handler(request: Request): Promise<Response> {
   // CORS preflight
-  if (request.method === "OPTIONS") {
-    return corsPreflightResponse(request);
-  }
+  const corsResponse = handleCors(request);
+  if (corsResponse) return corsResponse;
 
   // Rate limit
   const rateLimit = checkRateLimit(request, RATE_LIMITS.telemetry);

@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { getCorsHeaders } from "./_shared/cors";
 
 interface HealthStatus {
   status: 'healthy' | 'degraded' | 'critical';
@@ -11,6 +12,11 @@ interface HealthStatus {
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const startTime = performance.now();
+  const origin = (req.headers.origin as string | undefined) ?? null;
+  const cors = getCorsHeaders(origin);
+  Object.entries(cors).forEach(([k, v]) => res.setHeader(k, v));
+
+  if (req.method === "OPTIONS") return res.status(204).end();
 
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Cache-Control', 'no-cache, max-age=60');

@@ -4,6 +4,8 @@
 
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import crypto from "crypto";
+import { getCorsHeaders } from "./_shared/cors";
+import isaAiSchema from "./isa-ai.schema.json" with { type: "json" };
 
 // ========= TYPES & INTERFACES =========
 
@@ -116,13 +118,6 @@ interface IsaAiOutput {
 
 // ========= ARCHITECTURAL CONFIGURATION =========
 
-const CORS_ORIGINS = [
-  "https://www.visitarealdelmonte.online",
-  "https://visitarealdelmonte.online",
-  "https://real-del-monte-digital-hub.vercel.app",
-  ...(process.env.ENV === "development" ? ["http://localhost:5173", "http://localhost:8080"] : []),
-];
-
 const ISABELLA_CONSTITUTION = {
   name: "Isabella Villase\u00f1or AI",
   voiceProfile: "Femenina, c\u00e1lida, 220Hz, acento neutro mexicano suave, cadencia po\u00e9tica.",
@@ -147,16 +142,6 @@ const OUTPUT_PIPELINE = [
   "format_structured",
   "msr_blockchain"
 ] as const;
-
-function corsHeaders(origin: string | null) {
-  const allowed = origin && CORS_ORIGINS.includes(origin) ? origin : CORS_ORIGINS[0];
-  return {
-    "Access-Control-Allow-Origin": allowed,
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "authorization, content-type",
-    "Access-Control-Max-Age": "86400"
-  };
-}
 
 // ========= ADVANCED ROUTING MATRIX (Feature 1) =========
 
@@ -376,8 +361,8 @@ function retrieveKnowledge(query: string, category: string): { content: string; 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const start = Date.now();
   const origin = req.headers.origin ?? null;
-  const headers = corsHeaders(origin);
-  Object.entries(headers).forEach(([k, v]) => res.setHeader(k, v));
+  const cors = getCorsHeaders(origin);
+  Object.entries(cors).forEach(([k, v]) => res.setHeader(k, v));
 
   if (req.method === "OPTIONS") {
     return res.status(200).send("ok");
@@ -442,7 +427,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const processingTimeMs = Date.now() - start;
 
     const output: IsaAiOutput = {
-      version: "mexa-ai-v2.1.0",
+      version: isaAiSchema?.$schema ?? "mexa-ai-v2.1.0",
       provider: "isa-ai",
       model: "mexa-ai-v2",
       traceId,

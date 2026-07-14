@@ -4,8 +4,8 @@
 
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { requireAuth } from "./_shared/auth.js";
-import { checkRateLimit, RATE_LIMITS } from "./_shared/rate-limit.js";
-import { sendWebResponse, vercelRequestToWebRequest } from "./_edge-adapter";
+import { checkRateLimit, RATE_LIMITS } from "./_shared/rate-limit";
+import { sendWebResponse, vercelRequestToWebRequest } from "./_shared/network-utils";
 
 type ModelProvider = "vercel-ai-gateway" | "huggingface" | "openllm" | "fallback";
 
