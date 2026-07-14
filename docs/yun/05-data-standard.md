@@ -1,8 +1,8 @@
 # YUN Data Standard – Dominios, catálogo y fragmentación
 
-**Versión:** v1.0  
-**Fecha:** 2026-07-04  
-**Ámbito:** Gobernanza de datos en YUN
+**Versión:** v1.1  
+**Fecha:** 2026-07-13  
+**Ámbito:** Gobernanza de datos en YUN, integración con ecosistema atómico
 
 ---
 
@@ -117,3 +117,16 @@ CREATE TABLE data_catalog (
 ### Reglas
 - Ningún cambio de modelo de datos sensible se hace sin aprobación del Data Owner y revisión del Data Architect.
 - Ninguna exposición de datos hacia terceros se hace sin revisión del Security & Privacy Officer.
+
+---
+
+## 8. Integración con ecosistema atómico
+
+| Componente YUN | Rol en datos |
+|----------------|--------------|
+| **SDMD-7** | Almacenamiento federado para los 7 dominios, cada federación con su shard |
+| **MSR BLOCKCHAIN** | Ledger inmutable para decisiones de gobernanza de datos |
+| **QUETZALCOATL** | Orquestador del data fabric entre dominios y federaciones |
+| **GEMET** | Bus de eventos para cambios en el data catalog |
+| **MNEMOS** | Memoria histórica de patrones de datos y accesos |
+| **LUMEN** | Evaluación de políticas de datos contra la Constitución |

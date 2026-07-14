@@ -1,8 +1,8 @@
 # YUN Blueprint – Arquitectura lógica, física, despliegue, seguridad y datos
 
-**Versión:** v1.0  
-**Fecha:** 2026-07-04  
-**Ámbito:** TAMV Online, Nodo Cero, RDM Digital, Isabella, 7 Federaciones
+**Versión:** v1.1  
+**Fecha:** 2026-07-13  
+**Ámbito:** TAMV Online, Nodo Cero, RDM Digital, Isabella, 7 Federaciones, ISA-API
 
 ---
 
@@ -180,3 +180,63 @@ Tabla `data_catalog` en Telemetry con campos:
 - El Security & Data Standard detalla los controles de seguridad y datos.
 - El Event Standard define el modelo de eventos que este Blueprint utiliza.
 - El Operations Manual describe cómo operar y recuperar este diseño en producción.
+- La Isabella Layer define la capa cognitiva y los motores.
+- Los ISA-API Contracts definen la interfaz cognitiva.
+
+---
+
+## 7. Ejes L0–L10 y P0–P10
+
+### 7.1 Eje L0–L10 (Technical Maturity Layers)
+
+Cada federación implementa hasta 11 capas técnicas:
+
+| Nivel | Nombre | Descripción |
+|-------|--------|-------------|
+| L0 | Conectividad | Mesh CITEMESH, nodo físico |
+| L1 | Transporte | Enrutamiento federado, relay |
+| L2 | Identidad | JWT, OAuth2, DID |
+| L3 | Mensajería | GEMET event bus, topics |
+| L4 | Agentes | Mesh de agentes (ANUBIS, HORUS, OJO DE RA) |
+| L5 | Ontología | SOPHIA, grafo de conocimiento |
+| L6 | Almacenamiento | SDMD-7 (federado) |
+| L7 | Ledger | MSR BLOCKCHAIN (gobernanza) |
+| L8 | Orquestación | QUETZALCOATL, data fabric |
+| L9 | Cognición | Isabella, ORION, LUMEN |
+| L10 | Soberanía | Políticas, ADR, triple bloqueo |
+
+### 7.2 Eje P0–P10 (Process Maturity Levels)
+
+Cada federación evalúa su madurez de procesos:
+
+| Nivel | Nombre | Descripción |
+|-------|--------|-------------|
+| P0 | Inicial | Sin procesos formales |
+| P1 | Gestionado | Operación documentada |
+| P2 | Definido | Estándares por federación |
+| P3 | Integrado | Eventos cross-federación |
+| P4 | Medido | KPIs, telemetría, auditoría |
+| P5 | Optimizado | Mejora continua |
+| P6 | Predictivo | Anomalías anticipadas |
+| P7 | Autónomo | Auto-recuperación parcial |
+| P8 | Resiliente | Degradación controlada |
+| P9 | Soberano | Independencia operativa total |
+| P10 | Constitucional | Ciclo completo de gobernanza |
+
+---
+
+## 8. Patrón hexagonal de doble pipeline
+
+### 8.1 Pipeline de ingesta
+- Eventos entran por GEMET.
+- SOPHIA ontologiza y clasifica.
+- LUMEN evalúa contra políticas.
+- SDMD-7 persiste.
+
+### 8.2 Pipeline de proyección
+- ANUBIS orquesta agentes.
+- HORUS monitorea telemetría.
+- OJO DE RA aplica seguridad.
+- QUETZALCOATL fabrica datos entre dominios.
+
+Ambos pipelines operan en paralelo y se realimentan. Este patrón es la arquitectura por defecto para todo nuevo dominio o federación.

@@ -1,8 +1,8 @@
 # YUN Security & Data Standards
 
-**Versión:** v1.0  
-**Fecha:** 2026-07-04  
-**Ámbito:** Seguridad de aplicación, infraestructura y datos en YUN
+**Versión:** v1.1  
+**Fecha:** 2026-07-13  
+**Ámbito:** Seguridad de aplicación, infraestructura y datos en YUN, incluyendo Triple Bloqueo Semántico
 
 ---
 
@@ -142,7 +142,35 @@ Cada entidad en el `data_catalog` debe tener nivel de sensibilidad asignado.
 
 ---
 
-## 5. Evolución
+## 5. Triple Bloqueo Semántico
+
+El Triple Bloqueo Semántico es un mecanismo de seguridad obligatorio para operaciones críticas (grabación de políticas, decisiones de gobernanza, acceso a datos P0). Consta de tres capas secuenciales:
+
+### 5.1 Capa 1 – Firma criptográfica de identidad
+- El emisor DEBE firmar la operación con una clave privada asociada a su identidad YUN.
+- La firma DEBE ser verificable contra el ledger de identidad (MSR BLOCKCHAIN o dominio Identity).
+- Operaciones sin firma válida DEBEN ser rechazadas automáticamente.
+
+### 5.2 Capa 2 – Validación de sintaxis constitucional
+- La operación DEBE validarse contra los schemas del dominio (JSON Schema, OpenAPI).
+- DEBE verificarse que cumple los principios constitucionales aplicables.
+- Operaciones que violen la Constitución YUN DEBEN ser rechazadas.
+
+### 5.3 Capa 3 – Comprobación semántica por IA
+- Isabella (ORION o LUMEN) DEBE evaluar la intención, el contexto y la congruencia de la operación.
+- Si la IA detecta anomalía semántica, la operación DEBE pasar a revisión humana.
+- El resultado de la comprobación semántica DEBE registrarse como evento en GEMET.
+
+### 5.4 Endpoints que requieren Triple Bloqueo
+| Endpoint | Motor | Justificación |
+|----------|-------|---------------|
+| POST /v1/argus/diagnose | ARGUS | Diagnóstico crítico |
+| POST /v1/lumen/policy | LUMEN | Decisiones de gobernanza |
+| POST /v1/orion/chat (solo comandos admin) | ORION | Operaciones privilegiadas |
+
+---
+
+## 6. Evolución
 
 Este documento se versiona junto con YUN:
 - Cambios se proponen como PR.

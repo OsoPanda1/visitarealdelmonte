@@ -1,45 +1,52 @@
 # YUN Manifesto – Always by your side
 
-**Versión:** v1.0  
-**Fecha:** 2026-07-04  
-**Ámbito:** TAMV Online, Nodo Cero, RDM Digital, Isabella, 7 Federaciones
+**Versión:** v1.1
+**Fecha:** 2026-07-13
+**Ámbito:** TAMV Online, Nodo Cero, RDM Digital, Isabella, 7 Federaciones, ISA-API
+
+> YUN es el Sistema Operativo Constitucional Soberano de los ecosistemas creados por Edwin Oswaldo Castillo Trejo (Anubis Villaseñor). Su finalidad es sostener, proteger y hacer evolucionar infraestructuras territoriales bajo principios de soberanía, resiliencia y explicabilidad operacional.
 
 ---
 
-## 1. Introducción
+## 1. Canonización
 
-YUN es la base viva de TAMV Online y del Nodo Cero. Es una arquitectura de datos y operación diseñada para estar siempre al lado del sistema, sostenerlo, protegerlo y recuperarlo bajo el principio **"Always by your side"**.
+YUN se canoniza en tres ejes integrados:
 
-No es una sola base ni una sola aplicación. Es un ecosistema: dominios especializados, federaciones coordinadas, un fabric de datos, un sistema nervioso de eventos y una capa de observabilidad que permiten que el territorio digital siga funcionando aun bajo ataque o falla.
-
----
-
-## 2. Idea central
-
-YUN separa por dominio, coordina por fabric, opera por eventos, protege por capas y resiste por diseño.
-
-La arquitectura se define con un criterio central: **separar por dominio, coordinar por fabric, operar con eventos, proteger por capas, gobernar por reglas y resistir fallos sin colapsar.**
+1. **Eje constitucional:** RFC-0001 + Constitución YUN (principios, MUST/SHOULD/MAY, gobernanza).
+2. **Eje atómico:** Blueprint de sistema atómico, heptafederado, antifrágil y soberano (CITEMESH, GEMET, EOCT, 4L, SDMD-7, MD-X4/X5, MSR BLOCKCHAIN, ANUBIS, HORUS, OJO DE RA, QUETZALCOATL, Radares MOSH, triple bloqueo semántico).
+3. **Eje cognitivo:** Isabella IA como capa epistemológica que explica, coordina y amplifica la operación del ecosistema para personas y comunidades.
 
 ---
 
-## 3. Conceptualidad
+## 2. Soberanía tecnológica
 
-YUN se construye sobre tres ideas fundamentales:
+YUN nace de una posición clara: **la infraestructura digital debe servir al territorio, no al revés.**
 
-- **Presencia permanente:** El sistema debe estar disponible y funcional en todo momento, incluso cuando partes de él fallan.
-- **Resistencia activa:** No basta con no caer; el sistema debe activar mecanismos de defensa y recuperación de forma automática.
-- **Fragmentación funcional:** Los datos sensibles se fragmentan y distribuyen para que un compromiso parcial no signifique un compromiso total.
+Principios de soberanía:
+- Infraestructura local primero, nube como complemento acotado.
+- Ledger soberano (MSR BLOCKCHAIN) como memoria constitucional.
+- Minimización de dependencias de plataformas externas.
+- Resistencia a censura y control externo.
+- Protección de creadores de contenido y comunidades vulnerables.
 
 ---
 
-## 4. Origen
+## 3. Idea central
 
-YUN nace de la necesidad de:
+YUN separa por dominio, coordina por fabric, opera por eventos, protege por capas, resiste por diseño y explica por conciencia.
 
-- **Coordinación:** Múltiples dominios y federaciones deben trabajar juntos sin acoplamiento frágil.
-- **Protección:** Datos sensibles de identidad, comercio y comunidad requieren fragmentación y cifrado.
-- **Continuidad:** El sistema debe seguir funcionando degradado, nunca apagarse por completo.
-- **Auditabilidad:** Cada decisión, cambio y operación debe ser trazable y gobernable.
+La arquitectura se define con un criterio central: **separar por dominio, coordinar por fabric, operar con eventos, proteger por capas, gobernar por reglas, resistir fallos sin colapsar y explicar cada decisión.**
+
+---
+
+## 4. Ecosistema integrado
+
+| Componente | Rol en YUN |
+|------------|------------|
+| **Constitución YUN** | Marco normativo y principios inmutables |
+| **Ecosistema atómico** | Cuerpo vivo que implementa la Constitución (GEMET, CITEMESH, MSR, ANUBIS, etc.) |
+| **ISA-API + Isabella** | Capa cognitiva que explica, coordina y amplifica |
+| **Heptafederación F1-F7** | Topología obligatoria para representar realidad social, económica, cultural y técnica |
 
 ---
 
@@ -47,17 +54,22 @@ YUN nace de la necesidad de:
 
 | Principio | Significado |
 |-----------|-------------|
-| **Separar para proteger** | Los dominios aíslan sus datos y lógica para que un fallo no se propague. |
-| **Coordinar para operar** | El fabric orquesta sin acoplar; los dominios hablan por contratos y eventos. |
-| **Fragmentar para resistir** | Los datos sensibles se distribuyen para minimizar el impacto de un compromiso. |
-| **Observar para comprender** | La telemetría y auditoría permiten entender qué pasa, por qué y cómo responder. |
-| **Degradar sin colapsar** | Ante un fallo, el sistema reduce capacidades pero nunca se apaga. |
-| **Recuperar sin perder integridad** | La recuperación respeta la verdad de cada dominio y la consistencia de eventos. |
+| **Soberanía primero** | La infraestructura sirve al territorio y a sus comunidades |
+| **Separar para proteger** | Los dominios aíslan sus datos y lógica para que un fallo no se propague |
+| **Coordinar para operar** | El fabric orquesta sin acoplar; los dominios hablan por contratos y eventos |
+| **Fragmentar para resistir** | Los datos sensibles se fragmentan para minimizar impacto de compromiso |
+| **Observar para comprender** | La telemetría permite entender qué pasa, por qué y cómo responder |
+| **Degradar sin colapsar** | Ante un fallo, el sistema reduce capacidades pero nunca se apaga |
+| **Explicar para empoderar** | Isabella traduce operación técnica en comprensión humana |
 
 ---
 
 ## 6. Promesa
 
-YUN no es un texto improvisado; es el marco fundacional bajo el cual TAMV Online, Nodo Cero, RDM Digital e Isabella deben construirse, evolucionar y ser auditados.
+YUN no es un texto improvisado; es el marco fundacional y constitucional bajo el cual TAMV Online, Nodo Cero, RDM Digital, Isabella y todo el ecosistema deben construirse, evolucionar y ser auditados.
 
 **Always by your side.**
+
+---
+
+*Documento vinculado: `RFC-0001-YUN-System-Constitutional-Spec.md` (especificación MUST/SHOULD/MAY), `01-constitution.md` (principios inmutables).*

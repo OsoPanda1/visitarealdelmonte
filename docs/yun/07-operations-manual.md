@@ -151,4 +151,12 @@ Ningún servicio se considera "deployable" en producción sin estar instrumentad
 | Blueprint | Define la arquitectura a operar |
 | Security & Data Standard | Define qué controles respetar durante incidentes |
 | Event Standard | Define cómo se comunican los cambios de estado |
+| Isabella Layer | Consultar estado de motores y explicaciones de decisiones |
+| ISA-API Contracts | Operaciones sobre ISA-API monitoreadas por eventos |
 | ADR Index | Recoge decisiones que afecten la operación futura |
+
+---
+
+## 8. Actualización del manual
+
+- Cualquier nueva experiencia operativa relevante (incidente grande, mejora sustancial) puede generar una nueva sección, ser acompañada por ADR y requerir aprobación del Architecture Board antes de convertirse en estándar.

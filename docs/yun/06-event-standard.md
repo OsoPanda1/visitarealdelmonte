@@ -1,8 +1,8 @@
 # YUN Event Standard – Modelo de eventos y sistema nervioso
 
-**Versión:** v1.0  
-**Fecha:** 2026-07-04  
-**Ámbito:** Eventos de negocio, salud, seguridad y federación en YUN
+**Versión:** v1.1  
+**Fecha:** 2026-07-13  
+**Ámbito:** Eventos de negocio, salud, seguridad, federación y panteón en YUN, incluyendo GEMET
 
 ---
 
@@ -102,9 +102,56 @@ Todo evento debe incluir:
 
 ---
 
-## 6. Vínculo con otros documentos YUN
+## 6. GEMET – Global Event Mutator & Executor Tracker
+
+GEMET es el bus de eventos canónico de YUN. Es el sistema nervioso que transporta, muta y trackea eventos entre federaciones, dominios y agentes.
+
+### 6.1 Responsabilidades
+- Transporte de eventos entre federaciones F1–F7.
+- Mutación de eventos según políticas de transformación (EOCT).
+- Trazabilidad de cada evento desde origen hasta consumidor final.
+- Replay de eventos para recuperación y rehidratación.
+
+### 6.2 Eventos de panteón
+
+Además de los eventos de negocio por dominio, el panteón de agentes publica eventos específicos:
+
+| Event Type | Publicado por | Propósito |
+|------------|--------------|-----------|
+| `pantheon.anubis.deployment.started` | ANUBIS | Inicio de despliegue de agente/nodo |
+| `pantheon.anubis.deployment.completed` | ANUBIS | Despliegue exitoso |
+| `pantheon.horus.health.changed` | HORUS | Cambio en estado de salud de un nodo |
+| `pantheon.horus.anomaly.detected` | HORUS | Anomalía detectada en telemetría |
+| `pantheon.oao_de_ra.security.incident` | OJO DE RA | Incidente de seguridad neutralizado |
+| `pantheon.oao_de_ra.threat.blocked` | OJO DE RA | Amenaza bloqueada en perímetro |
+| `pantheon.quetzalcoatl.data.sync` | QUETZALCOATL | Sincronización de datos entre dominios |
+| `pantheon.quetzalcoatl.fabric.state` | QUETZALCOATL | Estado del data fabric |
+| `pantheon.mosh.scan.completed` | MOSH | Escaneo de radar completado |
+| `pantheon.mosh.threat.found` | MOSH | Amenaza encontrada en escaneo |
+
+### 6.3 x-yun-event-topic
+
+Cada evento DEBE especificar su topic YUN via el campo `event_type` con el formato `x.yun.<topic>`. Los topics canónicos son:
+
+| Topic YUN | Propósito |
+|-----------|-----------|
+| `x.yun.identity` | Eventos de identidad |
+| `x.yun.commerce` | Eventos de comercio |
+| `x.yun.knowledge` | Eventos de conocimiento |
+| `x.yun.telemetry` | Eventos de telemetría |
+| `x.yun.governance` | Eventos de gobernanza |
+| `x.yun.security` | Eventos de seguridad |
+| `x.yun.federation` | Eventos de federación |
+| `x.yun.pantheon` | Eventos del panteón de agentes |
+| `x.yun.isabella` | Eventos de la capa cognitiva |
+
+---
+
+## 7. Vínculo con otros documentos YUN
 
 - La Constitución YUN exige que todo cambio significativo genere un evento (principio 2.2).
 - El Blueprint define el bus de eventos como componente central.
 - El Operations Manual usa eventos para detectar y recuperar fallos.
+- La Isabella Layer consume y publica eventos de los motores.
+- Los ISA-API Contracts mapean eventos a endpoints con x-yun-event-topic.
 - El Data Catalog registra qué entidades generan eventos y con qué propósito.

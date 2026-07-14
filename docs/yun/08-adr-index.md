@@ -49,6 +49,10 @@ Cada ADR sigue este formato:
 | ADR-002 | Arquitectura event-driven | 2026-07-04 | Accepted | [ADR-002-event-driven.md](adr/ADR-002-event-driven.md) |
 | ADR-003 | YUN como base fundacional | 2026-07-04 | Accepted | [ADR-003-yun-architecture.md](adr/ADR-003-yun-architecture.md) |
 | ADR-004 | Modelo heptafederado | 2026-07-04 | Accepted | [ADR-004-heptafederation.md](adr/ADR-004-heptafederation.md) |
+| ADR-005 | Voice engine Isabella | 2026-07-13 | Accepted | [ADR-005-voice-engine.md](adr/ADR-005-voice-engine.md) |
+| ADR-006 | Isabella como capa epistemológica | 2026-07-13 | Accepted | [ADR-006-isabella-layer.md](adr/ADR-006-isabella-layer.md) |
+| ADR-007 | ISA-API contratos de integración | 2026-07-13 | Accepted | [ADR-007-isa-api-contracts.md](adr/ADR-007-isa-api-contracts.md) |
+| ADR-008 | Canonización constitucional YUN v1.0 | 2026-07-13 | Accepted | [ADR-008-yun-canonical-spec.md](adr/ADR-008-yun-canonical-spec.md) |
 
 ---
 
