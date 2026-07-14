@@ -3,24 +3,27 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
+type SharpFactory = (input: Buffer | Uint8Array | string) => import("sharp").Sharp;
+
 function imageOptimizer(): Plugin {
   return {
     name: "image-optimizer",
     enforce: "post",
     async generateBundle(_, bundle) {
-      let sharpModule: typeof import("sharp") | null = null;
+      let sharpFactory: SharpFactory | null = null;
       try {
-        sharpModule = (await import("sharp")).default;
+        const mod = await import("sharp");
+        sharpFactory = (mod.default ?? mod) as SharpFactory;
       } catch {
         return;
       }
-      if (!sharpModule) return;
-      for (const [key, asset] of Object.entries(bundle)) {
+      if (!sharpFactory) return;
+      for (const [, asset] of Object.entries(bundle)) {
         if (asset.type === "asset" && /\.(png|jpe?g)$/i.test(asset.fileName)) {
           try {
             const oldName = asset.fileName;
             asset.fileName = asset.fileName.replace(/\.(png|jpe?g)$/i, ".webp");
-            const img = sharpModule(asset.source);
+            const img = sharpFactory(asset.source);
             const meta = await img.metadata();
             asset.source = await (meta.format === "png"
               ? img.webp({ quality: 80, lossless: false })
