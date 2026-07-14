@@ -3,9 +3,12 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type ImageOptMod = { imageOptimizer: () => any };
+
 async function loadOptimizer(): Promise<PluginOption | null> {
   try {
-    const mod = await import("./scripts/image-optimizer.js");
+    const mod: ImageOptMod = await import("./scripts/image-optimizer.js");
     return mod.imageOptimizer();
   } catch {
     return null;
@@ -26,7 +29,7 @@ export default defineConfig(async () => {
       chunkSizeWarningLimit: 500,
       rollupOptions: {
         output: {
-          manualChunks(id) {
+          manualChunks(id: string) {
             if (!id.includes("node_modules")) return;
             if (id.includes("framer-motion")) return "vendor-framer";
             if (id.includes("three") || id.includes("@react-three")) return "vendor-three";
