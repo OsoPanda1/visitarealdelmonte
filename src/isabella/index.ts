@@ -59,5 +59,4 @@ export {
   kernelTransduccionEstetica,
   kernelOmnipresenciaMesh,
 } from "./kernel";
-export { MenteCuantica, menteCuantica } from "./quantum";
-export type { QuantumCapability, QuantumState } from "./quantum";
+

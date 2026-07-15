@@ -1,6 +1,7 @@
 import { logger } from "@/lib/logger";
 import { buildTerritorySecurityTopic } from "./topics";
 import type { TwinState } from "./types";
+import type { FederationId } from "@/core/models";
 import type { FederationBus } from "@/federaciones/FederationBus";
 
 export interface TelemetryPayload {
@@ -87,8 +88,9 @@ export class MicroSentinel {
       const twinState = transformToTwinState(payload);
       this.bus.emit({
         type: "TWIN_STATE",
-        source: "SENTINEL",
+        source: "SENTINEL" as FederationId,
         payload: { topic: `ldtocs/mesh/${payload.nodeId}/state`, state: twinState },
+        traceId: crypto.randomUUID(),
         metadata: { traceId: crypto.randomUUID(), nodeId: payload.nodeId, territory: "rdm", priority: "normal" },
       });
       logger.info("[SENTINEL] Nodo validado", { nodeId: payload.nodeId });
@@ -99,7 +101,7 @@ export class MicroSentinel {
         reasons: verdict.reasons,
         timestamp: payload.timestamp,
       };
-      this.bus.emit({ type: "SECURITY_ALERT", source: "SENTINEL", payload: alert, metadata: { traceId: crypto.randomUUID(), nodeId: payload.nodeId, territory: "rdm", priority: "high" } });
+      this.bus.emit({ type: "SECURITY_ALERT", source: "SENTINEL" as FederationId, payload: alert, traceId: crypto.randomUUID(), metadata: { traceId: crypto.randomUUID(), nodeId: payload.nodeId, territory: "rdm", priority: "high" } });
       logger.warn("[SENTINEL] Nodo comprometido", {
         nodeId: payload.nodeId,
         reasons: verdict.reasons,

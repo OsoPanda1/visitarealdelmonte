@@ -164,7 +164,7 @@ const AppInner = () => {
 
         logger.info("[BOOT] Ecosistema YUN + Isabella + UnifiedSDK activo");
       } catch (err) {
-        logger.error("[BOOT]", err);
+        logger.error("[BOOT]", { error: err });
         captureException(err, { module: "SystemBoot" });
       }
     }

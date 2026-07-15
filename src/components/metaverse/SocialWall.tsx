@@ -118,50 +118,54 @@ const PostCard: React.FC<{
       </div>
 
       {/* Media */}
-      {post.media && post.media.length > 0 && (
-        <div
-          className={cn(
-            "grid gap-1",
-            post.media.length === 1 && "grid-cols-1",
-            post.media.length === 2 && "grid-cols-2",
-            post.media.length >= 3 && "grid-cols-2",
-          )}
-        >
-          {post.media.slice(0, 4).map((media, index) => (
-            <motion.div
-              key={index}
-              whileHover={{ scale: 1.02 }}
-              className={cn(
-                "relative aspect-video bg-muted overflow-hidden cursor-pointer",
-                post.media.length === 3 && index === 0 && "row-span-2",
-              )}
-            >
-              <div
-                className="absolute inset-0 bg-cover bg-center"
-                style={{ backgroundImage: `url(${media.thumbnail || media.url})` }}
-              />
-              {media.type === "video" && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                  <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                    <svg
-                      className="w-6 h-6 text-white ml-1"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
+      {(() => {
+        const m = post.media;
+        if (!m || m.length === 0) return null;
+        return (
+          <div
+            className={cn(
+              "grid gap-1",
+              m.length === 1 && "grid-cols-1",
+              m.length === 2 && "grid-cols-2",
+              m.length >= 3 && "grid-cols-2",
+            )}
+          >
+            {m.slice(0, 4).map((media, index) => (
+              <motion.div
+                key={index}
+                whileHover={{ scale: 1.02 }}
+                className={cn(
+                  "relative aspect-video bg-muted overflow-hidden cursor-pointer",
+                  m.length === 3 && index === 0 && "row-span-2",
+                )}
+              >
+                <div
+                  className="absolute inset-0 bg-cover bg-center"
+                  style={{ backgroundImage: `url(${media.thumbnail || media.url})` }}
+                />
+                {media.type === "video" && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                    <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                      <svg
+                        className="w-6 h-6 text-white ml-1"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
                   </div>
-                </div>
-              )}
-              {post.media.length > 4 && index === 3 && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/60">
-                  <span className="text-2xl font-bold text-white">+{post.media.length - 4}</span>
-                </div>
-              )}
-            </motion.div>
-          ))}
-        </div>
-      )}
+                )}
+                {m.length > 4 && index === 3 && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/60">
+                    <span className="text-2xl font-bold text-white">+{m.length - 4}</span>
+                  </div>
+                )}
+              </motion.div>
+            ))}
+          </div>
+        );
+      })()}
 
       {/* Federation Badge */}
       {post.federationHash && (

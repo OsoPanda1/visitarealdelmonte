@@ -145,7 +145,7 @@ function applyMetaversoEffect(effect: string): void {
       lfo.start();
       if (pannerNode) {
         pannerNode.connect(delay);
-        delay.connect(masterGain);
+        delay.connect(masterGain!);
       }
       break;
     }
@@ -158,7 +158,7 @@ function applyMetaversoEffect(effect: string): void {
       feedback.connect(delay);
       if (pannerNode) {
         pannerNode.connect(delay);
-        delay.connect(masterGain);
+        delay.connect(masterGain!);
       }
       break;
     }

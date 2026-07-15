@@ -16,6 +16,7 @@ export interface FederationEvent {
   payload: unknown;
   timestamp: Date;
   traceId: string;
+  metadata?: Record<string, unknown>;
 }
 
 export type EventHandler = (event: FederationEvent) => void;

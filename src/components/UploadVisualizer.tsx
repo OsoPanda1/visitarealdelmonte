@@ -37,7 +37,7 @@ const UploadVisualizer = ({
       }
 
       // Create paths between nodes
-      const newPaths = [];
+      const newPaths: { id: number; d: string }[] = [];
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
           if (Math.random() > 0.7) {

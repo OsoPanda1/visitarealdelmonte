@@ -2,7 +2,6 @@ import { defineConfig, type PluginOption } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import tsconfigPaths from "vite-tsconfig-paths";
-import compression from "vite-plugin-compression";
 
 type ImageOptMod = { imageOptimizer: () => PluginOption };
 
@@ -15,15 +14,30 @@ async function loadOptimizer(): Promise<PluginOption | null> {
   }
 }
 
-export default defineConfig(async () => {
+async function loadCompressionPlugins(): Promise<PluginOption[]> {
+  let compressionModule: { default: (opts: Record<string, unknown>) => PluginOption };
+  try {
+    // @ts-expect-error - optional compression plugin
+    compressionModule = await import("vite-plugin-compression");
+    const compression = compressionModule.default;
+    return [
+      compression({ algorithm: "gzip" }),
+      compression({ algorithm: "brotliCompress" }),
+    ];
+  } catch {
+    return [];
+  }
+}
+
+const configFn: () => Promise<import("vite").UserConfig> = async () => {
   const optimizer = await loadOptimizer();
+  const compressionPlugins = await loadCompressionPlugins();
   return {
     plugins: [
       react(),
       tailwindcss(),
       tsconfigPaths(),
-      compression({ algorithm: "gzip" }),
-      compression({ algorithm: "brotliCompress" }),
+      ...compressionPlugins,
       optimizer,
     ].filter(Boolean),
     resolve: {
@@ -86,4 +100,6 @@ export default defineConfig(async () => {
       },
     },
   };
-});
+};
+
+export default defineConfig(configFn);
