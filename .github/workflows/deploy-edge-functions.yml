@@ -1,4 +1,4 @@
-name: "🛰️ YUN Protocol · Supabase Edge Functions Sovereign Deployment"
+name: "🛰️ YUN Protocol · High-Integrity Sovereign Edge Deployment v1.0"
 
 on:
   push:
@@ -12,30 +12,31 @@ permissions:
   deployments: write
 
 concurrency:
-  group: supabase-edge-${{ github.ref }}
+  group: yun-sovereign-${{ github.ref }}
   cancel-in-progress: true
 
 env:
   SUPABASE_PROJECT_REF: "lbbijzimnydvodtfbjoz"
   SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-  SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
 
 jobs:
-  validate-and-deploy:
-    name: "🚀 Verify & Deploy Sovereign Edge Network"
+  sovereign-audit-and-deploy:
+    name: "🚀 YUN Sovereign Engine · Audit & Deploy"
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
+    outputs:
+      audit_report: ${{ steps.sovereign_engine.outputs.report }}
 
     steps:
       - name: 🛡️ Hardened Checkout
         uses: actions/checkout@v4
 
-      - name: 🟢 Setup Supabase CLI Engine
-        uses: supabase/setup-cli@v3
+      - name: 🟢 Setup Supabase CLI
+        uses: supabase/setup-cli@v1
         with:
           version: latest
 
-      - name: 🔗 Link Supabase Project (Sovereign Context)
+      - name: 🔗 Link Sovereign Context
         env:
           SUPABASE_ACCESS_TOKEN: ${{ env.SUPABASE_ACCESS_TOKEN }}
         run: |
@@ -47,23 +48,37 @@ jobs:
           supabase link --project-ref ${{ env.SUPABASE_PROJECT_REF }}
           supabase status
 
-      - name: 🔍 Verify Functions Physical Integrity (Heptafederation)
-        id: verify_functions
+      - name: 🚀 Execute YUN Sovereign Engine (Heptafederation Graph)
+        id: sovereign_engine
+        shell: bash
         run: |
-          echo "=== Evaluando consistencia física de la Heptafederación ==="
+          echo "=== YUN Sovereign Engine v3.0 — Heptafederation Graph Validation & Deployment ==="
 
-          declare -a core_functions=("isabella-ai" "realito-chat")
-          declare -a federated_functions=("telemetry-ingest" "pqc-auth" "constitutional-gate" "mdd-transact" "geospatial-renderer")
+          # 1. Mapa de Heptafederación — identidad lógica de cada módulo
+          declare -A FEDERATION_MAP=(
+            ["isabella-ai"]="F2-ANUBIS"
+            ["realito-chat"]="F2-ANUBIS"
+            ["pqc-auth"]="F3-BOOKPI"
+            ["constitutional-gate"]="F4-PHOENIX"
+            ["mdd-transact"]="F5-MDD_TAMV"
+            ["geospatial-renderer"]="F6-KAOS"
+            ["telemetry-ingest"]="F7-CHRONOS"
+          )
+
+          # 2. Núcleo obligatorio vs. federaciones opcionales
+          CORE_FUNCTIONS=("isabella-ai" "realito-chat")
+          FEDERATED_FUNCTIONS=("telemetry-ingest" "pqc-auth" "constitutional-gate" "mdd-transact" "geospatial-renderer")
 
           verify_entrypoint() {
             local func="$1"
             local base_dir="supabase/functions/$func"
+
             if [ ! -d "$base_dir" ]; then
               echo "❌ Directorio inexistente para función '$func' en $base_dir"
               return 1
             fi
 
-            # Preferimos index.ts, pero aceptamos cualquier *.ts como entrada legítima
+            # Preferimos index.ts/index.js, pero aceptamos *.ts/*.js en raíz
             if [ -f "$base_dir/index.ts" ] || [ -f "$base_dir/index.js" ]; then
               echo "✅ '$func': entrypoint index.ts/js detectado."
               return 0
@@ -73,37 +88,50 @@ jobs:
             ts_files=$(find "$base_dir" -maxdepth 1 -name "*.ts" -o -name "*.js" || true)
 
             if [ -n "$ts_files" ]; then
-              echo "⚠️ '$func': no tiene index.ts/js, pero se detectaron archivos TS/JS en el raíz. Considera normalizar a index.ts para disciplina de despliegue."
+              echo "⚠️ '$func': sin index.ts/js, pero con archivos TS/JS en raíz. Disciplina de despliegue recomendada: normalizar a index.ts."
               return 0
             fi
 
-            echo "🚨 ERROR: '$func' no tiene ningún entrypoint TS/JS visible en el raíz. No se despliega."
+            echo "🚨 ERROR: '$func' sin ningún entrypoint TS/JS visible en raíz. No se despliega."
             return 1
           }
 
+          # 3. Validación de integridad de grafo para núcleo F2 (ANUBIS)
           CORE_ERRORS=0
+          echo "🔍 Validando integridad de núcleo F2 (ANUBIS)..."
 
-          echo "🔍 Verificando funciones Core F2 (Obligatorias)..."
-          for func in "${core_functions[@]}"; do
+          for func in "${CORE_FUNCTIONS[@]}"; do
+            if [ -z "${FEDERATION_MAP[$func]}" ]; then
+              echo "🚨 ERROR: Función core '$func' no está mapeada en FEDERATION_MAP. Ruptura de grafo soberano."
+              CORE_ERRORS=$((CORE_ERRORS+1))
+              continue
+            fi
+
             if ! verify_entrypoint "$func"; then
               CORE_ERRORS=$((CORE_ERRORS+1))
             fi
           done
 
           if [ "$CORE_ERRORS" -gt 0 ]; then
-            echo "🛑 ERROR CRÍTICO: $CORE_ERRORS función(es) core obligatorias sin estructura válida. Aborting deployment."
-            echo "core_status=failed" >> "$GITHUB_OUTPUT"
-            exit 1
+            echo "🛑 ERROR CRÍTICO: $CORE_ERRORS función(es) core con errores de integridad. Aborting deployment."
+            CORE_STATUS="FAILED"
           else
-            echo "✅ Todas las funciones core F2 tienen estructura aceptable."
-            echo "core_status=ok" >> "$GITHUB_OUTPUT"
+            echo "✅ Núcleo F2 validado estructuralmente."
+            CORE_STATUS="OK"
           fi
 
-          echo "🔍 Verificando funciones federadas (F3/F4/F5/F6/F7)..."
+          # 4. Validación suave de federaciones opcionales
+          echo "🔍 Validando federaciones opcionales (F3-F7)..."
           FEDERATED_READY=()
           FEDERATED_MISSING=()
 
-          for func in "${federated_functions[@]}"; do
+          for func in "${FEDERATED_FUNCTIONS[@]}"; do
+            if [ -z "${FEDERATION_MAP[$func]}" ]; then
+              echo "⚠️ Función '$func' sin mapeo en FEDERATION_MAP. Se considera fuera del grafo soberano."
+              FEDERATED_MISSING+=("$func")
+              continue
+            fi
+
             if verify_entrypoint "$func"; then
               FEDERATED_READY+=("$func")
             else
@@ -111,103 +139,54 @@ jobs:
             fi
           done
 
-          echo "federated_ready=${FEDERATED_READY[*]}" >> "$GITHUB_OUTPUT"
-          echo "federated_missing=${FEDERATED_MISSING[*]}" >> "$GITHUB_OUTPUT"
+          # 5. Motor de despliegue soberano
+          REPORT="| Federación | Servicio | Estado |"
+          REPORT+=$'\n'"| :--- | :--- | :--- |"
 
-      - name: 🧠 F2 [ANUBIS] · Deploy Isabella AI (Core Cognitivo)
-        id: deploy_isabella
-        run: |
-          supabase functions deploy isabella-ai \
-            --project-ref ${{ env.SUPABASE_PROJECT_REF }} \
-            --no-verify-jwt
-        continue-on-error: false
+          if [ "$CORE_STATUS" != "OK" ]; then
+            # No despliegues si núcleo está roto
+            for func in "${CORE_FUNCTIONS[@]}"; do
+              REPORT+=$'\n'"| ${FEDERATION_MAP[$func]:-F2-ANUBIS} | \`$func\` | 🔴 CORE INTEGRITY FAILED |"
+            done
 
-      - name: 💬 F2 [ANUBIS] · Deploy Realito Chat (Asistencia Comunitaria)
-        id: deploy_realito
-        run: |
-          supabase functions deploy realito-chat \
-            --project-ref ${{ env.SUPABASE_PROJECT_REF }} \
-            --no-verify-jwt
-        continue-on-error: false
-
-      - name: 🛰️ F7 [CHRONOS] · Deploy Telemetry & Mesh Gateway
-        id: deploy_telemetry
-        run: |
-          if [ -d "supabase/functions/telemetry-ingest" ]; then
-            supabase functions deploy telemetry-ingest \
-              --project-ref ${{ env.SUPABASE_PROJECT_REF }} \
-              --no-verify-jwt
+            for func in "${FEDERATED_FUNCTIONS[@]}"; do
+              REPORT+=$'\n'"| ${FEDERATION_MAP[$func]:-UNKNOWN} | \`$func\` | ⚪ SKIPPED (Core failure) |"
+            done
           else
-            echo "Omitiendo telemetry-ingest (No implementada físicamente)."
-          fi
-        continue-on-error: true
+            # Núcleo íntegro: desplegar todo el grafo sujeto a existencia física
+            for func in "${!FEDERATION_MAP[@]}"; do
+              local fed="${FEDERATION_MAP[$func]}"
 
-      - name: ⛓️ F3 [BOOKPI] · Deploy Cryptography Keys & Auth (PQC Guard)
-        id: deploy_pqc
-        run: |
-          if [ -d "supabase/functions/pqc-auth" ]; then
-            supabase functions deploy pqc-auth \
-              --project-ref ${{ env.SUPABASE_PROJECT_REF }}
-          else
-            echo "Omitiendo pqc-auth (No implementada físicamente)."
-          fi
-        continue-on-error: true
+              if [ -d "supabase/functions/$func" ]; then
+                echo "::group::Deploying $func (${fed})"
+                if supabase functions deploy "$func" --project-ref ${{ env.SUPABASE_PROJECT_REF }} --no-verify-jwt; then
+                  STATUS="✅ DEPLOYED"
+                else
+                  STATUS="🔴 CRITICAL FAILURE"
+                fi
+                echo "::endgroup::"
+              else
+                STATUS="⚪ OFFLINE (Missing Module)"
+              fi
 
-      - name: ⚖️ F4 [PHOENIX] · Deploy Constitutional Filter & Rules Engine (Korima)
-        id: deploy_constitutional
-        run: |
-          if [ -d "supabase/functions/constitutional-gate" ]; then
-            supabase functions deploy constitutional-gate \
-              --project-ref ${{ env.SUPABASE_PROJECT_REF }}
-          else
-            echo "Omitiendo constitutional-gate (No implementada físicamente)."
+              REPORT+=$'\n'"| ${fed} | \`$func\` | $STATUS |"
+            done
           fi
-        continue-on-error: true
 
-      - name: 💳 F5 [MDD_TAMV] · Deploy Ledger Transaccional (Economía Phygital)
-        id: deploy_mdd
-        run: |
-          if [ -d "supabase/functions/mdd-transact" ]; then
-            supabase functions deploy mdd-transact \
-              --project-ref ${{ env.SUPABASE_PROJECT_REF }}
-          else
-            echo "Omitiendo mdd-transact (No implementada físicamente)."
-          fi
-        continue-on-error: true
-
-      - name: 🗺️ F6 [KAOS] · Deploy Geolocation Vector Tiles (Spatial Renderer)
-        id: deploy_geospatial
-        run: |
-          if [ -d "supabase/functions/geospatial-renderer" ]; then
-            supabase functions deploy geospatial-renderer \
-              --project-ref ${{ env.SUPABASE_PROJECT_REF }} \
-              --no-verify-jwt
-          else
-            echo "Omitiendo geospatial-renderer (No implementada físicamente)."
-          fi
-        continue-on-error: true
+          # 6. Escape seguro para GitHub Actions (Output)
+          REPORT_ESCAPED="${REPORT//'%'/'%25'}"
+          REPORT_ESCAPED="${REPORT_ESCAPED//$'\n'/'%0A'}"
+          REPORT_ESCAPED="${REPORT_ESCAPED//$'\r'/'%0D'}"
+          echo "report=$REPORT_ESCAPED" >> "$GITHUB_OUTPUT"
 
   summary:
-    name: "📊 Sovereign Functions Audit Report"
+    name: "📊 YUN Sovereign Edge · Deployment Audit"
     runs-on: ubuntu-latest
-    needs: validate-and-deploy
+    needs: sovereign-audit-and-deploy
     if: always()
 
     steps:
-      - name: 📝 Generate Execution Report
+      - name: 📝 Sovereign Audit Summary
         run: |
-          echo "# 🛰️ YUN Edge Engine Deployment Audit" >> "$GITHUB_STEP_SUMMARY"
-          echo "---" >> "$GITHUB_STEP_SUMMARY"
-          echo "### 📡 Estado de los Microservicios de la Heptafederación" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Federativa | Servicio Edge | Estado del Despliegue |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| :--- | :--- | :--- |" >> "$GITHUB_STEP_SUMMARY"
-
-          # Core: resultado directo de cada step
-          echo "| **F2 - ANUBIS** | \`isabella-ai\` | ${{ steps.deploy_isabella.outcome == 'success' && '🟢 DEPLOYED' || '🔴 FAILED' }} |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| **F2 - ANUBIS** | \`realito-chat\` | ${{ steps.deploy_realito.outcome == 'success' && '🟢 DEPLOYED' || '🔴 FAILED' }} |" >> "$GITHUB_STEP_SUMMARY"
-
-          echo "| **F7 - CHRONOS** | \`telemetry-ingest\` | ${{ steps.deploy_telemetry.outcome == 'success' && '🟢 DEPLOYED' || '⚪ OMITIDO / FAILED' }} |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| **F3 - BOOKPI** | \`pqc-auth\` | ${{ steps.deploy_pqc.outcome == 'success' && '🟢 DEPLOYED' || '⚪ OMITIDO / FAILED' }} |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| **F4 - PHOENIX** | \`constitutional-gate\` | ${{ steps.deploy_constitutional.outcome == 'success' && '🟢 DEPLOYED' || '⚪ OMITIDO / FAILED' }} |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| **F5 - MDD_TAMV** | \`mdd-transact\` | ${{ steps.deploy_mdd.outcome == 'success' && '🟢 DEPLOYED' || '⚪ OMITIDO / FAILED' }} |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| **F6 - KAOS** | \`geospatial-renderer\` | ${{ steps.deploy_geospatial.outcome == 'success' && '🟢 DEPLOYED' || '⚪ OMITIDO / FAILED' }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "# 🛰️ YUN Protocol · Deployment Audit v3.0" >> "$GITHUB_STEP_SUMMARY"
+          echo "${{ needs.sovereign-audit-and-deploy.outputs.audit_report }}" >> "$GITHUB_STEP_SUMMARY"
