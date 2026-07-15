@@ -2,9 +2,9 @@ import { defineConfig, type PluginOption } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import tsconfigPaths from "vite-tsconfig-paths";
+import compression from "vite-plugin-compression";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type ImageOptMod = { imageOptimizer: () => any };
+type ImageOptMod = { imageOptimizer: () => PluginOption };
 
 async function loadOptimizer(): Promise<PluginOption | null> {
   try {
@@ -18,15 +18,45 @@ async function loadOptimizer(): Promise<PluginOption | null> {
 export default defineConfig(async () => {
   const optimizer = await loadOptimizer();
   return {
-    plugins: [react(), tailwindcss(), tsconfigPaths(), optimizer].filter(Boolean),
+    plugins: [
+      react(),
+      tailwindcss(),
+      tsconfigPaths(),
+      compression({ algorithm: "gzip" }),
+      compression({ algorithm: "brotliCompress" }),
+      optimizer,
+    ].filter(Boolean),
     resolve: {
       dedupe: ["react", "react-dom"],
+      alias: {
+        "@": "/src",
+        "@components": "/src/components",
+        "@hooks": "/src/hooks",
+        "@services": "/src/services",
+        "@utils": "/src/utils",
+        "@types": "/src/types",
+      },
+    },
+    envPrefix: ["VITE_"],
+    cacheDir: ".vite",
+    css: {
+      devSourcemap: false,
+    },
+    optimizeDeps: {
+      include: [
+        "@supabase/supabase-js",
+        "react",
+        "react-dom",
+        "react-router-dom",
+      ],
     },
     build: {
-      target: "es2020",
+      target: "es2022",
       cssCodeSplit: true,
       assetsInlineLimit: 4096,
       chunkSizeWarningLimit: 500,
+      sourcemap: false,
+      minify: "esbuild",
       rollupOptions: {
         output: {
           manualChunks(id: string) {

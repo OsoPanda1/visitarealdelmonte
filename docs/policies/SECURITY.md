@@ -28,20 +28,7 @@ No aplica: el stack usa **JWT bearer** (no cookies), por lo que el ataque CSRF c
 - `system_alerts` registra umbrales excedidos.
 - Linter Supabase ejecutado tras cada migración.
 
-## Post-Quantum Cryptography (PQC)
-- **Implementado**: `PostQuantumCryptoV2` en `src/quantum/pqc.ts`
-- **Kyber KEM** para intercambio de claves resistente a ataques cuánticos
-- **Dilithium** para firmas digitales post-cuánticas
-- **Dual provider**: liboqs WASM (cuando disponible) → fallback Web Crypto API
-- **Inicialización lazy**: `initPQC()` retorna estado del proveedor activo
-
-## Cloudflare / WAF Strategy
-- **Próximo**: WAF gestionado vía Cloudflare o Vercel Firewall
-- **Rate-limit global**: migrar de memoria local a Vercel KV o Cloudflare Rate Limiting
-- **DDoS protection**: habilitar en capa CDN (Vercel Edge Network o Cloudflare)
-- **Bot management**: Vercel Bot-Fighting o Cloudflare Bot Management
-- **Web Application Firewall**: reglas OWASP CRS en Cloudflare
-
-## Limitaciones conocidas (pre-producción real)
-- Rate-limit es por instancia de edge function (memoria local), no global.
-- PQC WASM: depende de disponibilidad de CDN para binario `.wasm`
+## Recomendaciones
+- Migrar rate-limit a Supabase Edge Function nativo o infraestructura dedicada.
+- Endpoints de donaciones, feedback y store ratings deben requerir JWT.
+- Auditoría periódica de RLS en tablas del esquema `public` y `personal`.

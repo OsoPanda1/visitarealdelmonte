@@ -1,6 +1,7 @@
-// server/src/index.ts
 import "dotenv/config";
 import cors from "cors";
+import helmet from "helmet";
+import compression from "compression";
 import express, { NextFunction, Request, Response } from "express";
 import { randomUUID } from "node:crypto";
 import apiRouter from "./routes/index.js";
@@ -8,8 +9,8 @@ import { config } from "./config.js";
 import { errorHandler, notFoundHandler } from "./middleware/http.js";
 import { constitutionalGuard } from "./middleware/constitutionalGuard.js";
 import { createHardenedRateLimiter } from "./middleware/rateLimit.js";
+import { logger } from "./lib/logger.js";
 
-// Tipado ligero para requestId en Express
 declare module "express-serve-static-core" {
   interface Request {
     id?: string;
@@ -19,210 +20,102 @@ declare module "express-serve-static-core" {
 
 export const app = express();
 
-// ============================
-// HARDENING BÁSICO DEL SERVER
-// ============================
-
 app.disable("x-powered-by");
 app.set("trust proxy", 1);
 
-// ============================
-// TELEMETRÍA DE REQUEST
-// ============================
+// Compresión
+app.use(compression());
 
+// Helmet (CSP desactivado para API; se gestiona en proxy)
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false,
+  }),
+);
+
+// Timeout global
+app.use((_req, _res, next) => {
+  _req.setTimeout(30000);
+  _res.setTimeout(30000);
+  next();
+});
+
+// Telemetría + logging centralizado
 app.use((req: Request, res: Response, next: NextFunction) => {
   const requestId = randomUUID();
   req.id = requestId;
   req.startedAt = Date.now();
-
   res.setHeader("X-Request-ID", requestId);
 
-  // Hook de logging mínimo; cámbialo por Pino/Winston si quieres algo más potente
   res.on("finish", () => {
     const durationMs =
       typeof req.startedAt === "number" ? Date.now() - req.startedAt : undefined;
-
-    const entry = {
-      ts: new Date().toISOString(),
-      level: "info",
-      message: "http_request",
-      requestId,
-      method: req.method,
-      path: req.originalUrl,
-      statusCode: res.statusCode,
-      durationMs,
-      ip: req.ip,
-      userAgent: req.get("user-agent") ?? undefined,
-    };
-
-     
-    console.log(JSON.stringify(entry));
+    logger.info({ requestId, method: req.method, path: req.originalUrl, statusCode: res.statusCode, durationMs, ip: req.ip, userAgent: req.get("user-agent") ?? undefined }, "http_request");
   });
 
   next();
 });
 
-// ============================
-// CABECERAS DE SEGURIDAD
-// ============================
-
-app.use((req, res, next) => {
-  res.setHeader("X-Content-Type-Options", "nosniff");
-  res.setHeader("X-Frame-Options", "DENY");
-  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
-  res.setHeader(
-    "Permissions-Policy",
-    "geolocation=(self), camera=(), microphone=(), payment=(self)",
-  );
-  res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
-  res.setHeader("Cross-Origin-Resource-Policy", "same-site");
-
-  // CSP muy restrictivo para la API; la parte de frontend/HTML se sirve desde otro host
-  // El TLS (pre/híbrido/post‑Q) debe configurarse en el proxy (nginx, Vercel, etc.). [web:433][web:436]
-  res.setHeader(
-    "Content-Security-Policy",
-    [
-      "default-src 'none'",
-      "frame-ancestors 'none'",
-      "base-uri 'none'",
-      "form-action 'none'",
-      "script-src 'none'",
-      "style-src 'none'",
-      "img-src 'none'",
-    ].join("; "),
-  );
-
-  next();
-});
-
-// ============================
-// CORS ENDURECIDO
-// ============================
-
+// CORS
 app.use(
   cors({
     origin(origin, callback) {
-      if (!origin) {
-        // Permitir herramientas tipo curl / localhost sin origin
-        return callback(null, true);
-      }
-      if (config.corsAllowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
+      if (!origin) return callback(null, true);
+      if (config.corsAllowedOrigins.includes(origin)) return callback(null, true);
       return callback(new Error("CORS origin not allowed"));
     },
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: [
-      "Authorization",
-      "Content-Type",
-      "X-Request-ID",
-      "X-Real-IP",
-      "X-Forwarded-For",
-    ],
+    allowedHeaders: ["Authorization", "Content-Type", "X-Request-ID", "X-Real-IP", "X-Forwarded-For"],
     exposedHeaders: ["X-Request-ID"],
   }),
 );
 
-// ============================
-// BODY PARSERS · LIMITES
-// ============================
-
+// Body parsers con límites estrictos
 app.use(
   express.json({
-    limit: "1mb",
+    limit: "256kb",
     strict: true,
-    // Evitar JSON malformado explotando el parser
-    verify: (req, _res, buf) => {
-      // Guardar el raw body si luego lo quieres validar (ej. Stripe webhooks)
-      (req as any).rawBody = buf.toString("utf8");
-    },
+    verify: (req, _res, buf) => { (req as any).rawBody = buf.toString("utf8"); },
   }),
 );
 app.use(express.urlencoded({ extended: false, limit: "256kb" }));
 
-// ============================
-// HEALTHCHECK
-// ============================
+// Healthchecks
+app.get("/healthz", (_req, res) => { res.json({ ok: true, service: "rdmx-api", uptime: process.uptime(), version: process.env.npm_package_version, node: process.version, timestamp: new Date().toISOString() }); });
+app.get("/readyz", (_req, res) => { res.sendStatus(200); });
+app.get("/livez", (_req, res) => { res.sendStatus(200); });
 
-app.get("/healthz", (req, res) => {
-  res.json({
-    ok: true,
-    service: "rdmx-api",
-    requestId: res.getHeader("X-Request-ID"),
-    // Podrías añadir más señales aquí: salud de DB, latencias, etc.
-  });
-});
-
-// ============================
-// RATE LIMIT + GUARDAS
-// ============================
-
+// Rate limit + guardas
 app.use(
   "/api",
-  createHardenedRateLimiter({
-    maxRequests: config.rateLimitMaxRequests,
-    windowMs: config.rateLimitWindowMs,
-    keyPrefix: "global-api",
-  }),
+  createHardenedRateLimiter({ maxRequests: config.rateLimitMaxRequests, windowMs: config.rateLimitWindowMs, keyPrefix: "global-api" }),
   constitutionalGuard,
   apiRouter,
 );
 
-// 404 + ERROR HANDLERS
+// 404 + error handlers
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-// ============================
-// ARRANQUE Y SHUTDOWN ORDENADO
-// ============================
-
+// Arranque y shutdown ordenado
 export function startServer(port = config.port) {
   const server = app.listen(port, () => {
-     
-    console.log(
-      JSON.stringify({
-        ts: new Date().toISOString(),
-        level: "info",
-        message: "rdm_backend_started",
-        port,
-      }),
-    );
+    logger.info({ port }, "rdm_backend_started");
   });
 
-  const shutdown = (signal: NodeJS.Signals) => {
-     
-    console.log(
-      JSON.stringify({
-        ts: new Date().toISOString(),
-        level: "warn",
-        message: "shutdown_signal_received",
-        signal,
-      }),
-    );
+  server.keepAliveTimeout = 65000;
+  server.headersTimeout = 66000;
 
+  const shutdown = (signal: NodeJS.Signals) => {
+    logger.warn({ signal }, "shutdown_signal_received");
     server.close((error) => {
       if (error) {
-         
-        console.error(
-          JSON.stringify({
-            ts: new Date().toISOString(),
-            level: "error",
-            message: "graceful_shutdown_error",
-            error: String(error),
-          }),
-        );
+        logger.error({ error: String(error) }, "graceful_shutdown_error");
         process.exit(1);
       }
-
-       
-      console.log(
-        JSON.stringify({
-          ts: new Date().toISOString(),
-          level: "info",
-          message: "rdm_backend_stopped",
-        }),
-      );
+      logger.info("rdm_backend_stopped");
       process.exit(0);
     });
   };
