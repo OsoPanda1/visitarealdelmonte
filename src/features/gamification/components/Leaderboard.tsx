@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Trophy, Medal, Crown, Star, TrendingUp, Users, Flame, Shield } from "lucide-react";
 import { getLeaderboard } from "../api";
 import type { LeaderboardEntry, XpTrack, GamificationSeason } from "../types";
@@ -159,98 +159,89 @@ export function Leaderboard({ compact = false, showSeason = true }: LeaderboardP
       <div
         className={`p-2 space-y-1 ${compact ? "max-h-[350px]" : "max-h-[500px]"} overflow-y-auto`}
       >
-        <AnimatePresence>
-          {loading ? (
-            <div className="space-y-2 p-2">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="h-14 bg-white/5 rounded-xl animate-pulse" />
-              ))}
-            </div>
-          ) : (
-            entries.map((entry, i) => {
-              const isTop3 = i < 3;
-              const rankStyle = isTop3 ? RANK_STYLES[i] : null;
-              const xp = getXp(entry, activeTrack);
+        {loading ? (
+          <div className="space-y-2 p-2">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="h-14 bg-white/5 rounded-xl animate-pulse" />
+            ))}
+          </div>
+        ) : (
+          entries.map((entry, i) => {
+            const isTop3 = i < 3;
+            const rankStyle = isTop3 ? RANK_STYLES[i] : null;
+            const xp = getXp(entry, activeTrack);
 
-              return (
-                <motion.div
-                  key={entry.player_id}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.03 }}
-                  className={`relative flex items-center gap-3 p-3 rounded-xl transition-all ${
-                    entry.player_id === "player-001"
-                      ? "bg-[hsl(var(--rdm-amber)/0.08)] border border-[hsl(var(--rdm-amber)/0.15)]"
-                      : isTop3
-                        ? `bg-gradient-to-r ${rankStyle?.bg ?? ""} border ${rankStyle?.border ?? ""}`
-                        : "hover:bg-white/[0.03]"
+            return (
+              <div
+                key={entry.player_id}
+                className={`relative flex items-center gap-3 p-3 rounded-xl transition-all duration-200 hover:scale-[1.01] ${
+                  entry.player_id === "player-001"
+                    ? "bg-[hsl(var(--rdm-amber)/0.08)] border border-[hsl(var(--rdm-amber)/0.15)]"
+                    : isTop3
+                      ? `bg-gradient-to-r ${rankStyle?.bg ?? ""} border ${rankStyle?.border ?? ""}`
+                      : "hover:bg-white/[0.03]"
+                }`}
+              >
+                <div
+                  className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
+                    isTop3 ? `${rankStyle?.bg ?? ""}` : "bg-white/5"
                   }`}
                 >
-                  {/* Rank */}
-                  <div
-                    className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
-                      isTop3 ? `${rankStyle?.bg ?? ""}` : "bg-white/5"
-                    }`}
-                  >
-                    {isTop3 ? (
-                      (() => {
-                        const RankIcon = rankStyle!.icon;
-                        return <RankIcon className={`w-4 h-4 ${rankStyle?.text ?? ""}`} />;
-                      })()
-                    ) : (
-                      <span className="text-xs font-medium text-[hsl(var(--muted-foreground))]">
-                        {entry.rank}
-                      </span>
+                  {isTop3 ? (
+                    (() => {
+                      const RankIcon = rankStyle!.icon;
+                      return <RankIcon className={`w-4 h-4 ${rankStyle?.text ?? ""}`} />;
+                    })()
+                  ) : (
+                    <span className="text-xs font-medium text-[hsl(var(--muted-foreground))]">
+                      {entry.rank}
+                    </span>
+                  )}
+                </div>
+
+                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[hsl(var(--rdm-amber)/0.3)] to-[hsl(var(--rdm-terracotta)/0.3)] flex items-center justify-center shrink-0">
+                  <span className="text-xs font-bold text-white">
+                    {entry.display_name.slice(0, 2).toUpperCase()}
+                  </span>
+                </div>
+
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="text-sm font-medium truncate"
+                      style={{ fontFamily: "var(--font-display)" }}
+                    >
+                      {entry.display_name}
+                    </span>
+                    {entry.roles.includes("guardian_patrimonio") && (
+                      <Shield className="w-3 h-3 text-[hsl(var(--teal))] shrink-0" />
                     )}
                   </div>
-
-                  {/* Avatar */}
-                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[hsl(var(--rdm-amber)/0.3)] to-[hsl(var(--rdm-terracotta)/0.3)] flex items-center justify-center shrink-0">
-                    <span className="text-xs font-bold text-white">
-                      {entry.display_name.slice(0, 2).toUpperCase()}
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <span className="text-[10px] text-[hsl(var(--muted-foreground))]">
+                      Nv. {entry.level}
                     </span>
-                  </div>
-
-                  {/* Info */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span
-                        className="text-sm font-medium truncate"
-                        style={{ fontFamily: "var(--font-display)" }}
-                      >
-                        {entry.display_name}
+                    <span className="text-[10px] text-[hsl(var(--muted-foreground))]">·</span>
+                    <div className="flex gap-1.5">
+                      <span className="text-[9px] text-amber-400/70">C:{entry.xp_cultura}</span>
+                      <span className="text-[9px] text-emerald-400/70">
+                        M:{entry.xp_comunidad}
                       </span>
-                      {entry.roles.includes("guardian_patrimonio") && (
-                        <Shield className="w-3 h-3 text-[hsl(var(--teal))] shrink-0" />
-                      )}
-                    </div>
-                    <div className="flex items-center gap-2 mt-0.5">
-                      <span className="text-[10px] text-[hsl(var(--muted-foreground))]">
-                        Nv. {entry.level}
-                      </span>
-                      <span className="text-[10px] text-[hsl(var(--muted-foreground))]">·</span>
-                      <div className="flex gap-1.5">
-                        <span className="text-[9px] text-amber-400/70">C:{entry.xp_cultura}</span>
-                        <span className="text-[9px] text-emerald-400/70">
-                          M:{entry.xp_comunidad}
-                        </span>
-                        <span className="text-[9px] text-blue-400/70">J:{entry.xp_juego}</span>
-                      </div>
+                      <span className="text-[9px] text-blue-400/70">J:{entry.xp_juego}</span>
                     </div>
                   </div>
+                </div>
 
-                  {/* XP */}
-                  <div className="text-right shrink-0">
-                    <span className="text-sm font-bold text-[hsl(var(--rdm-amber))]">
-                      {xp.toLocaleString()}
-                    </span>
-                    <span className="text-[9px] text-[hsl(var(--muted-foreground))] block">XP</span>
-                  </div>
-                </motion.div>
-              );
-            })
-          )}
-        </AnimatePresence>
+                <div className="text-right shrink-0">
+                  <span className="text-sm font-bold text-[hsl(var(--rdm-amber))]">
+                    {xp.toLocaleString()}
+                  </span>
+                  <span className="text-[9px] text-[hsl(var(--muted-foreground))] block">XP</span>
+                </div>
+              </div>
+            );
+          })
+        )}
       </div>
     </div>
   );
