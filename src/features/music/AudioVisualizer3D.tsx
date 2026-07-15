@@ -24,15 +24,37 @@ export function AudioVisualizer3D({
   const animFrameRef = useRef<number>(0);
   const timeRef = useRef(0);
   const intensityRef = useRef(0);
+  const sizeRef = useRef({ width, height });
+  sizeRef.current = { width, height };
+
+  const resizeCanvas = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const { width: w, height: h } = sizeRef.current;
+    const pw = w * window.devicePixelRatio;
+    const ph = h * window.devicePixelRatio;
+    if (canvas.width !== pw || canvas.height !== ph) {
+      canvas.width = pw;
+      canvas.height = ph;
+    }
+  }, []);
 
   const initGL = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return false;
 
+    // Dispose old context before creating new one
+    if (glRef.current) {
+      const oldGl = glRef.current;
+      const ext = oldGl.getExtension("WEBGL_lose_context");
+      ext?.loseContext();
+    }
+
     const gl = canvas.getContext("webgl", { alpha: true, antialias: true });
     if (!gl) return false;
 
     glRef.current = gl;
+    resizeCanvas();
 
     // Vertex shader
     const vsSource = `
@@ -85,6 +107,11 @@ export function AudioVisualizer3D({
       }
     `;
 
+    // Dispose previous program
+    if (programRef.current) {
+      gl.deleteProgram(programRef.current);
+    }
+
     // Compile shaders
     const vs = gl.createShader(gl.VERTEX_SHADER)!;
     gl.shaderSource(vs, vsSource);
@@ -100,12 +127,16 @@ export function AudioVisualizer3D({
     gl.linkProgram(program);
     gl.useProgram(program);
 
+    // Cleanup shaders after linking
+    gl.deleteShader(vs);
+    gl.deleteShader(fs);
+
     programRef.current = program;
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
     return true;
-  }, []);
+  }, [resizeCanvas]);
 
   const render = useCallback(() => {
     const gl = glRef.current;
@@ -118,8 +149,7 @@ export function AudioVisualizer3D({
     const avgFreq = getAverageFrequency();
     intensityRef.current += (avgFreq - intensityRef.current) * 0.1;
 
-    canvas.width = width * window.devicePixelRatio;
-    canvas.height = height * window.devicePixelRatio;
+    resizeCanvas();
     gl.viewport(0, 0, canvas.width, canvas.height);
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -184,7 +214,7 @@ export function AudioVisualizer3D({
     gl.deleteBuffer(freqBuffer);
 
     animFrameRef.current = requestAnimationFrame(render);
-  }, [width, height, mode]);
+  }, [mode, resizeCanvas]);
 
   useEffect(() => {
     initGL();

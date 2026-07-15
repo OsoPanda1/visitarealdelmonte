@@ -1,3 +1,4 @@
+import path from "path";
 import { defineConfig, type PluginOption } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
@@ -42,10 +43,10 @@ const configFn: () => Promise<import("vite").UserConfig> = async () => {
     resolve: {
       dedupe: ["react", "react-dom"],
       alias: {
-        "@": "/src",
-        "@components": "/src/components",
-        "@hooks": "/src/hooks",
-        "@types": "/src/types",
+        "@": path.resolve(__dirname, "src"),
+        "@components": path.resolve(__dirname, "src/components"),
+        "@hooks": path.resolve(__dirname, "src/hooks"),
+        "@types": path.resolve(__dirname, "src/types"),
       },
     },
     envPrefix: ["VITE_"],

@@ -396,29 +396,29 @@ function MapaPageContent() {
 
             <MapErrorBoundary>
               <div className="overflow-hidden rounded-2xl border border-white/10">
-                {mode === "2d" ? (
-                  <Map2DPanel
-                    markers={filtered}
-                    selected={selected}
-                    viewport={viewport}
-                    onSelect={setSelected}
-                    onViewportChange={syncFrom2D}
-                  />
-                ) : (
-                  <Suspense
-                    fallback={
-                      <div className="flex h-[420px] items-center justify-center bg-[hsl(var(--muted)/0.5)] text-sm text-[hsl(var(--muted-foreground))] md:h-[640px]">
-                        Cargando Gemelo Digital 3D...
-                      </div>
-                    }
-                  >
+                <Suspense
+                  fallback={
+                    <div className="flex h-[420px] items-center justify-center bg-[hsl(var(--muted)/0.5)] text-sm text-[hsl(var(--muted-foreground))] md:h-[640px]">
+                      Cargando {mode === "2d" ? "Mapa 2D" : "Gemelo Digital 3D"}...
+                    </div>
+                  }
+                >
+                  {mode === "2d" ? (
+                    <Map2DPanel
+                      markers={filtered}
+                      selected={selected}
+                      viewport={viewport}
+                      onSelect={setSelected}
+                      onViewportChange={syncFrom2D}
+                    />
+                  ) : (
                     <Map3DTwin
                       viewport={viewport}
                       markers={filtered}
                       onViewportChange={syncFrom3D}
                     />
-                  </Suspense>
-                )}
+                  )}
+                </Suspense>
               </div>
             </MapErrorBoundary>
           </div>

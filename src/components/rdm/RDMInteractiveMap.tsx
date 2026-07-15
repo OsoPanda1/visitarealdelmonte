@@ -83,10 +83,17 @@ export function RDMInteractiveMap() {
       markersLayerRef.current = L.layerGroup().addTo(map);
       leafletMapRef.current = map;
       setMapReady(true);
-      setTimeout(() => map.invalidateSize(), 250);
+      // Use ResizeObserver instead of setTimeout for reliable map sizing
+      const ro = new ResizeObserver(() => { map.invalidateSize(); });
+      ro.observe(mapRef.current!);
+      map.invalidateSize();
+      (mapRef.current as HTMLElement).dataset.ro = ro as unknown as string;
     });
     return () => {
       cancelled = true;
+      if (mapRef.current && (mapRef.current as HTMLElement).dataset.ro) {
+        ((mapRef.current as HTMLElement).dataset.ro as unknown as ResizeObserver).disconnect();
+      }
       leafletMapRef.current?.remove();
       leafletMapRef.current = null;
     };

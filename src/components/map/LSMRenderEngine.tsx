@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { useWebSocketSubscription } from "../../hooks/useWebSocket";
 
 export interface LSMRenderProps {
@@ -72,8 +72,32 @@ const projectPoint = (lat: number, lng: number) => {
   };
 };
 
+const MOCK_NODOS: Record<LSMRenderProps["capaActiva"], LSMNodeEvent["data"][]> = {
+  turismo: [
+    { id: "mock-t1", lat: 20.138, lng: -98.671, intensidadSaturacion: 0.3, ofertaActiva: true },
+    { id: "mock-t2", lat: 20.139, lng: -98.673, intensidadSaturacion: 0.5, ofertaActiva: true },
+    { id: "mock-t3", lat: 20.137, lng: -98.67, intensidadSaturacion: 0.2, ofertaActiva: false },
+  ],
+  economia: [
+    { id: "mock-e1", lat: 20.138, lng: -98.671, intensidadSaturacion: 0.4, ofertaActiva: true },
+    { id: "mock-e2", lat: 20.1395, lng: -98.672, intensidadSaturacion: 0.6, ofertaActiva: true },
+  ],
+  plateria: [
+    { id: "mock-p1", lat: 20.1375, lng: -98.6725, intensidadSaturacion: 0.3, ofertaActiva: true },
+    { id: "mock-p2", lat: 20.1385, lng: -98.6705, intensidadSaturacion: 0.1, ofertaActiva: false },
+    { id: "mock-p3", lat: 20.139, lng: -98.674, intensidadSaturacion: 0.5, ofertaActiva: true },
+  ],
+  movilidad: [
+    { id: "mock-m1", lat: 20.138, lng: -98.671, intensidadSaturacion: 0.7 },
+    { id: "mock-m2", lat: 20.139, lng: -98.673, intensidadSaturacion: 0.4 },
+    { id: "mock-m3", lat: 20.137, lng: -98.67, intensidadSaturacion: 0.2 },
+    { id: "mock-m4", lat: 20.14, lng: -98.672, intensidadSaturacion: 0.8 },
+  ],
+};
+
 export const LSMRenderEngine = ({ capaActiva, initialViewState }: LSMRenderProps) => {
   const [nodosLSM, setNodosLSM] = useState<LSMNodeEvent["data"][]>([]);
+  const [wsConnected, setWsConnected] = useState(false);
   const lastEvent = useWebSocketSubscription<LSMNodeEvent>("LSM_REALTIME_STREAM");
 
   // Aislamiento de Capas: evita persistencia de nodos fantasma al conmutar vector operativo
@@ -81,9 +105,20 @@ export const LSMRenderEngine = ({ capaActiva, initialViewState }: LSMRenderProps
     setNodosLSM([]);
   }, [capaActiva]);
 
+  // Fallback a datos simulados si WebSocket no conecta en 4s
+  useEffect(() => {
+    if (wsConnected) return;
+    const timer = setTimeout(() => {
+      setNodosLSM(MOCK_NODOS[capaActiva]);
+    }, 4000);
+    return () => clearTimeout(timer);
+  }, [capaActiva, wsConnected]);
+
   // Consumo e inserción limpia de flujos en tiempo real
   useEffect(() => {
-    if (!lastEvent || lastEvent.capa !== capaActiva) return;
+    if (!lastEvent) return;
+    setWsConnected(true);
+    if (lastEvent.capa !== capaActiva) return;
 
     setNodosLSM((prev) => {
       const filtrados = prev.filter((n) => n.id !== lastEvent.data.id);
@@ -159,6 +194,11 @@ export const LSMRenderEngine = ({ capaActiva, initialViewState }: LSMRenderProps
             {capaActiva}
           </span>
         </div>
+        {!wsConnected && nodosLSM.length > 0 && (
+          <span className="mt-1 block font-mono text-[9px] uppercase tracking-[1px] text-amber-400/80">
+            Datos simulados
+          </span>
+        )}
       </div>
     </div>
   );

@@ -1,0 +1,9 @@
+fix: resolve visualization bugs across all map and render components
+
+- TerritorialMap: wrong coordinate access (site.lat -> site.coords)
+- LSMRenderEngine: mock data fallback when WebSocket unavailable + connection state indicator
+- pages/VisualEffects: render actual AuroraBackground + FloatingParticles instead of placeholder
+- AudioVisualizer3D: stop resizing canvas every frame, dispose GL resources on reinit
+- Mapa: wrap lazy Map2DPanel in Suspense to prevent crash on load
+- RDMInteractiveMap: ResizeObserver instead of setTimeout for reliable map sizing
+- vite.config.ts: use path.resolve for @ alias instead of fragile /src
