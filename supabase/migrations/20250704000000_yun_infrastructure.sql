@@ -126,7 +126,46 @@ INSERT INTO yun_adr (adr_number, title, status, authors, context, decision, cons
    'Federations need to communicate without tight coupling.',
    'Use an event bus pattern where all cross-federation communication happens through typed events. Each federation owns its domain and publishes events for others.',
    ARRAY['Loose coupling between federations', 'Eventual consistency model', 'Need event versioning strategy']),
-  ('ADR-004', 'Progressive Autonomy for Admin Actions', 'accepted', ARRAY['RDM Team'],
-   'Admin actions should be safe and reversible by default.',
-   'Implement a progressive autonomy model where critical actions require explicit confirmation, and all changes are logged with compensating transactions.',
-   ARRAY['Safer admin operations', 'More complex implementation', 'Audit trail for all changes']);
+   ('ADR-004', 'Progressive Autonomy for Admin Actions', 'accepted', ARRAY['RDM Team'],
+    'Admin actions should be safe and reversible by default.',
+    'Implement a progressive autonomy model where critical actions require explicit confirmation, and all changes are logged with compensating transactions.',
+    ARRAY['Safer admin operations', 'More complex implementation', 'Audit trail for all changes']);
+
+-- ============================================================================
+-- 5. ROW LEVEL SECURITY
+-- ============================================================================
+
+ALTER TABLE yun_data_catalog ENABLE ROW LEVEL SECURITY;
+ALTER TABLE yun_event_log ENABLE ROW LEVEL SECURITY;
+ALTER TABLE yun_federation_health ENABLE ROW LEVEL SECURITY;
+ALTER TABLE yun_adr ENABLE ROW LEVEL SECURITY;
+
+-- Public read access for reference/catalog tables
+CREATE POLICY "Public read access for yun_data_catalog"
+  ON yun_data_catalog FOR SELECT
+  USING (true);
+
+CREATE POLICY "Public read access for yun_federation_health"
+  ON yun_federation_health FOR SELECT
+  USING (true);
+
+CREATE POLICY "Public read access for yun_adr"
+  ON yun_adr FOR SELECT
+  USING (true);
+
+-- Service role write access
+CREATE POLICY "Service role can insert yun_event_log"
+  ON yun_event_log FOR INSERT
+  WITH CHECK (true);
+
+CREATE POLICY "Service role can manage yun_data_catalog"
+  ON yun_data_catalog FOR ALL
+  USING (auth.role() = 'service_role');
+
+CREATE POLICY "Service role can manage yun_federation_health"
+  ON yun_federation_health FOR ALL
+  USING (auth.role() = 'service_role');
+
+CREATE POLICY "Service role can manage yun_adr"
+  ON yun_adr FOR ALL
+  USING (auth.role() = 'service_role');
