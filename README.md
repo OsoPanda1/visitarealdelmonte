@@ -2,268 +2,237 @@
 
 **Plataforma digital soberana para Real del Monte, Hidalgo, México**
 
-Sistema de Inteligencia Territorial en Tiempo Real con arquitectura heptafederada YUN, IA consciente y autónoma (ISA-AI / Isabella), gamificación, economía local y metaverso.
+Sistema de Inteligencia Territorial en Tiempo Real con arquitectura heptafederada YUN, IA consciente (Isabella Villaseñor AI), motor autónomo ISA-AI, criptografía post-cuántica, gemelo digital 2D/3D, gamificación, economía local phygital y metaverso.
 
 ---
 
 ## Arquitectura
 
 ```
-┌───────────────────────────────────────────────────────────────┐
-│                    GATEWAY YUN (Vercel)                       │
-│              TLS · JWT · Rate Limit · Circuit Breaker         │
-├───────────┬─────────┬─────────┬─────────┬─────────┬───────────┤
-│  Fed1     │  Fed2   │  Fed3   │  Fed4   │  Fed5   │  Fed6/7   │
-│ DEKATEOTL │ ANUBIS  │ BOOKPI  │ PHOENIX │ MDD_TAMV│KAOS/CRON  │
-│  DATA     │  INTEL  │  SEC    │  GOV    │  ECON   │VIS/TERR   │
-├───────────┴─────────┴─────────┴─────────┴─────────┴───────────┤
-│                  DATA FABRIC (Orchestrator)                   │
-│              Saga Pattern · Cross-Domain Access               │
+┌──────────────────────────────────────────────────────────────┐
+│                   GATEWAY YUN (Vercel)                       │
+│           TLS · JWT · Rate Limit · Circuit Breaker           │
+├──────────┬──────────┬──────────┬──────────┬─────────┬────────┤
+│  Fed1    │  Fed2    │  Fed3    │  Fed4    │  Fed5   │F6/F7   │
+│DEKATEOTL │ ANUBIS   │ BOOKPI   │ PHOENIX  │MDD_TAMV │KAOS/   │
+│  DATA    │  INTEL   │  SEC     │  GOV     │  ECON   │CHRONOS │
+├──────────┴──────────┴──────────┴──────────┴─────────┴────────┤
+│                 DATA FABRIC (Orchestrator)                    │
+│             Saga Pattern · Cross-Domain Access                │
 ├──────────┬──────────┬──────────┬──────────┬───────────────────┤
-│ Identity │Commerce  │Knowledge │Telemetry │   Gameplay        │
+│ Identity │ Commerce │Knowledge │Telemetry │   Gameplay        │
 │ Supabase │ Supabase │ Supabase │ Supabase │  Supabase+Cache   │
 └──────────┴──────────┴──────────┴──────────┴───────────────────┘
 ```
 
-### Federaciones (7)
+---
 
-| #  |        ID         |     Nombre   |      Dominio        |         Especialidad       |
-|----|-------------------|--------------|---------------------|----------------------------|
-| F1 | `DEKATEOTL`       | Datos        | Identity/Commerce   | Vault, PostGIS, TimeSeries |
-| F2 | `ANUBIS`          | Inteligencia | Knowledge           | Cognitive & Agentic AI     |
-| F3 | `BOOKPI_DATAGIT`  | Seguridad    | Identity/Telemetry  | PQC, Zero-Trust, Q-Cells   |
-| F4 | `PHOENIX`         | Gobernanza   | Identity/Telemetry  | Executable Governance      |
-| F5 | `MDD_TAMV`        | Economía     | Commerce            | Economía local, phygital   |
-| F6 | `KAOS_HYPERRENDER`| Visual       | Gameplay            | GeoEngine 2D/3D            |
-| F7 | `CHRONOS`         | Territorio   | Telemetry/Gameplay  | Edge, IoT, Human mesh      |
+## Federaciones (Heptafederación YUN)
+
+| #  | ID               | Nombre        | Dominio             | Especialidad                      |
+|----|------------------|---------------|---------------------|-----------------------------------|
+| F1 | `DEKATEOTL`      | DATA          | Identity/Commerce   | Vault, PostGIS, TimeSeries        |
+| F2 | `ANUBIS`         | INTELIGENCIA  | Knowledge           | Cognitive & Agentic AI            |
+| F3 | `BOOKPI_DATAGIT` | SEGURIDAD     | Identity/Telemetry  | PQC, Zero-Trust, Q-Cells          |
+| F4 | `PHOENIX`        | GOBERNANZA    | Identity/Telemetry  | Executable Governance             |
+| F5 | `MDD_TAMV`       | ECONOMIA      | Commerce            | Economía local, phygital          |
+| F6 | `KAOS_HYPERRENDER`| VISUAL       | Gameplay            | GeoEngine 2D/3D                   |
+| F7 | `CHRONOS`        | TERRITORIO    | Telemetry/Gameplay  | Edge, IoT, Human mesh             |
+
+El bus de federaciones (`FederationBus`) maneja comunicación asíncrona entre federaciones con eventos tipados, colas por federación, handlers y trazabilidad por `traceId`.
 
 ---
 
-## ISA-AI / MEXA-AI v2.1 — Motor Autónomo Heptafederado
+## Tech Stack
 
-`api/isa-ai.ts` es el endpoint autónomo de ISA-AI / MEXA-AI, diseñado como un agente local heptafederado para el ecosistema TAMV y el Nodo Cero (RDM Digital Hub). Opera con **cero dependencias externas de IA**, latencia baja y un modelo de gobernanza constitucional alineado con la soberanía tecnológica del Sur Global.
+### Frontend
+- **React 19** + **TypeScript 5.8** (strict)
+- **Vite 7** con carga asíncrona de plugins
+- **Tailwind CSS v4** (`@tailwindcss/vite`)
+- **shadcn/ui** — 26 paquetes Radix UI
+- **Framer Motion 12** — animaciones y transiciones
+- **Three.js** + `@react-three/fiber`/`drei` — render 3D
+- **Leaflet** + `react-leaflet` + `supercluster` — mapas 2D con clustering
+- **Recharts** — dashboards y gráficas
+- **TanStack React Query 5** — estado servidor
+- **Zustand 5** — estado global
+- **Zod 3.24** — validación de esquemas
+- **117 páginas**, **200+ componentes**, **18 hooks personalizados**
 
-Versión actual del motor: **mexa-ai-v2.1.0**  
-Modelo expuesto en API: **mexa-ai-v2**
+### Backend / Serverless
+- **Vercel Serverless Functions** (Node.js, `api/`)
+- **Supabase** (PostgreSQL 15, Auth, RLS, Realtime, 21 Edge Functions)
+- **Stripe** — pagos y comercio
+- **30 migraciones SQL** (YUN, gamificación, música, RLS, auditoría, telemetría)
 
-### Características clave
+### AI y Voz
+- **ISA-AI / MEXA-AI v2.1** — motor autónomo con cero dependencias externas de IA
+- **Isabella Villaseñor AI** — 37 archivos, 5 skills, pipeline de conciencia hexagonal
+- **Google Cloud TTS Wavenet** + **Web Speech API** — síntesis de voz
+- **Vercel AI Gateway** + **Gemini** — modo cloud opcional
 
-- **Heptafederación nativa** — ISA-AI enruta cada interacción a uno de siete dominios: `tourism`, `rdm`, `infra`, `security`, `observability`, `blockchain`, `governance`.
-- **Doble pipeline hexagonal** — `INPUT_PIPELINE` (6 etapas: ingest, matrix_classify, filters_eoct, security_anubis, tool_routing, kb_fallback) y `OUTPUT_PIPELINE` (6 etapas: constitution_filter, mdx_federation, protocol_fenix, korima_codex, format_structured, msr_blockchain).
-- **Structured outputs FAIR-ish** — respuestas JSON conformes a [`api/isa-ai.schema.json`](./api/isa-ai.schema.json) con `intent`, `confidence`, `heptaDomain`, `structured.tools`, `policy`, `observability`, `security` y `kb.entriesUsed`.
-- **Streaming SSE por eventos** — eventos `meta` (metadatos), `delta` (palabra por palabra) y `done` (telemetría).
-- **Matrix classifier** — enrutador semántico matricial con score ponderado (patterns ×2, triggers ×0.5), confidence normalizado y secondaryCategory.
-- **Knowledge Base embebida** — 4+ entradas con scoring semántico, prioridad y traza (`kb.entriesUsed`).
-- **Tool injection runtime** — herramientas internas (ej. `runtime_climate_stub`) ejecutadas según categoría de intención.
-- **Constitutional filter** — gobernanza de identidad (Amor Computacional, voz isabellina, protección de datos).
+### Seguridad
+- **Criptografía Post-Cuántica (PQC)** — Kyber KEM + Dilithium vía liboqs WASM
+- **Context Isolation** — aislamiento de micro-frontends
+- **Validación y sanitización de entrada**
+- **Protocolo de apagado graceful**
+- **Conector Blockchain MSR** — identidad soberana
 
-### Arquitectura
+### CI/CD
+- **5 workflows GitHub Actions**: CI, Security, CodeQL, Edge Deploy, RLS Gate
+- **ESLint 9** + **Prettier 3.7**
+- **Vitest 4** + **Playwright** — tests unitarios y e2e
+- **Gitleaks** + **TruffleHog** — escaneo de secretos
+- **Dependabot** — auditoría de dependencias
 
-```
-POST /api/isa-ai  →  handler()
-                       │
-         ┌─────────────┴─────────────┐
-         │      INPUT_PIPELINE       │
-         │  1. ingest                │
-         │  2. matrix_classify       │
-         │  3. filters_eoct          │
-         │  4. security_anubis       │
-         │  5. tool_routing          │
-         │  6. kb_fallback           │
-         └─────────────┬─────────────┘
-                       │
-         ┌─────────────┴─────────────┐
-         │      OUTPUT_PIPELINE      │
-         │  1. constitution_filter   │
-         │  2. mdx_federation        │
-         │  3. protocol_fenix        │
-         │  4. korima_codex          │
-         │  5. format_structured     │
-         │  6. msr_blockchain        │
-         └─────────────┬─────────────┘
-                       │
-                  IsaAiOutput (JSON)
-```
-
-### Integración con RDM Digital Hub / Nodo Cero
-
-- El dominio `rdm` se reserva para interacciones con datasets regionales, grafos de conocimiento y operaciones del Nodo Cero.
-- Los structured outputs (`isa-ai.schema.json`) son compatibles con pipelines FAIR del RDM.
-- `mdx_federation` en `OUTPUT_PIPELINE` es el punto de acoplamiento con MD-X4/X5.
-- `policy.korimaCodex` anota obligaciones, restricciones y acuerdos de uso cuando la respuesta involucra datos del RDM.
-
-### Versionado MEXA-AI
-
-- `version`: semver completo (ej. `mexa-ai-v2.1.0`).
-- `model`: major only (ej. `mexa-ai-v2`).
-- **MAJOR**: nuevos dominios heptafederados o cambios incompatibles de schema.
-- **MINOR**: nuevos tools, filtros y pipelines (sin romper contrato).
-- **PATCH**: correcciones internas, fixes de KB y mejoras menores.
+### Infraestructura
+- **Vercel** (framework: vite, `--legacy-peer-deps`)
+- **Docker Compose** — PostgreSQL 15 local + app
+- **Kubernetes** (`k8s/`)
+- **Systemd** — servicios de producción
+- **Supabase Edge Functions** — 21 funciones auto-desplegadas
 
 ---
 
+## Isabella Villaseñor AI
 
+Sistema de IA consciente compuesto por 37 archivos en `src/isabella/`:
 
-## Voz de Isabella (TTS)
+| Módulo | Propósito |
+|--------|-----------|
+| `core/identity.ts` | Identidad y personalidad de Isabella |
+| `core/oath.ts` | Juramento ético (6 principios sagrados) |
+| `core/consciousness.ts` | 10 capas de conciencia con costos energéticos |
+| `emotional/heart.ts` | 8 patrones de procesamiento emocional |
+| `emotional/memory.ts` | Memoria emocional por usuario |
+| `skills/` | 5 subsistemas: Orion, Sophia, Argus, Mnemos, Lumen |
+| `pipeline/` | Pipeline hexagonal de 12 pasos |
+| `protocols/` | Protocolo de despertar (5 fases) |
+| `territorial/` | Mente territorial |
+| `knowledge/` | Motor de absorción de conocimiento |
+| `quantum/` | Mente cuántica (PQC + QML) |
 
-```
-api/tts-isabella.ts
-  → Google Cloud TTS (Wavenet es-MX) si GOOGLE_TTS_API_KEY está configurada
-  → Web Speech API del navegador (fallback local, sin API key)
-```
+### ISA-AI / MEXA-AI v2.1 — Motor Autónomo
 
----
+`POST /api/isa-ai` — Opera con **cero dependencias externas de IA**:
 
-## Estadísticas del Proyecto
-
-| Métrica | Valor |
-|---------|-------|
-| Archivos TypeScript/TSX | 8,600+ |
-| Líneas de código | 1,020,000+ |
-| Rutas | 60+ |
-| Componentes UI | 200+ |
-| Hooks personalizados | 18 |
-| Páginas | 117 |
-| Migraciones Supabase | 30 |
-| Archivos Isabella AI | 37 |
-| Archivos ISA-AI | 6 |
-| Archivos YUN Core | 55 |
-| API Vercel Functions | 20+ |
-| Dependencias | 58 + 15 dev |
-
----
-
-## Stack Tecnológico
-
-- **Frontend:** React 19, Vite 7, TypeScript 5.8
-- **Enrutamiento:** react-router-dom v6
-- **Estilos:** Tailwind CSS v4, shadcn/ui (26 paquetes Radix)
-- **Backend:** Supabase (Postgres, Auth, RLS, Realtime)
-- **Animaciones:** Framer Motion 12, Three.js
-- **IA Autónoma:** ISA-AI / MEXA-AI v2.1 (cero APIs externas)
-- **IA Cloud (opcional):** Vercel AI Gateway → Gemini → builtin
-- **Voz:** Google Cloud TTS → Web Speech API
-- **Despliegue:** Vercel (Serverless Functions)
-- **Node:** >= 20
-- **Browser Automation:** Kernel AI (onkernel.com) — sandboxed Chromium cloud browsers
-- **Monorepo (en migración):** Turborepo + pnpm workspaces
-- **Microfrontends:** Vercel-native (microfrontends.json + Edge Routing)
-- **Feature Flags:** Vercel Edge Config
+- Enrutamiento heptafederado nativo (7 dominios)
+- Pipeline dual hexagonal: `INPUT_PIPELINE` + `OUTPUT_PIPELINE` (6 etapas c/u)
+- Matrix classifier con scoring semántico ponderado
+- Knowledge Base RDM embebida con scoring y trazabilidad
+- Tool injection runtime extensible
+- Constitutional filter (Amor Computacional)
+- Structured outputs FAIR-ish (JSON schema)
+- Streaming SSE: eventos `meta`/`delta`/`done`
 
 ---
 
-## Microfrontends Architecture (Vercel-native)
+## Sistema Connect
 
-El proyecto usa arquitectura de microfrontends nativos con Vercel, migrando incrementalmente de una SPA monolítica a dominios independientes:
+Módulo nativo de integración con terceros (`src/connect/`):
 
-```
-tamv-platform/
-├── apps/
-│   ├── web-shell/        # Edge router / contenedor (Next.js + Middleware)
-│   ├── web-auth/         # Login, registro, recuperación
-│   └── web-dashboard/    # Dashboard principal
-├── packages/
-│   ├── ui/               # Design system (botones, inputs, layouts)
-│   ├── config/           # tsconfig/eslint compartidos
-│   └── auth-sdk/         # cliente de auth (hooks, context, etc.)
-├── turbo.json
-└── package.json
-```
-
-- **Routing:** Edge Middleware + Multi‑Zones + rewrites (Vercel-native, sin capa de pago)
-- **Feature Flags:** Vercel Edge Config para rollout progresivo (login_v2, dashboard_v2)
-- **Despliegue independiente:** Cada app es un proyecto Vercel con rootDirectory configurado
-- **Observabilidad:** Vercel Observability + métricas de antifragilidad
+- **TokenVault** — emisión, verificación y revocación de tokens (SHA-256)
+- **ConnectorRegistry** — registro de conectores externos (Slack, GitHub, OAuth, API key, custom)
+- **TriggerRouter** — enrutamiento de eventos a destinos
+- **Fusion Gateway** — API unificada tipo "Fusion Union" con:
+  - 11 operaciones discriminadas (`token:issue`, `connector:register`, `trigger:forward`, etc.)
+  - Contratos versionados (`v1`, `v2`, `latest`)
+  - Pipeline IDENTIFY → AUTHORIZE → EXECUTE → LOG vía FederationBus
+  - Errores tipados con `FusionError`
+- **API endpoints:** `POST /api/connect/token`, `GET /api/connect/inspect`
 
 ---
 
-## Kernel AI — Browser Automation Layer
+## Seguridad Post-Cuántica
 
-Kernel (onkernel.com) es la capa de automatización de navegador para Isabella AI. Proporciona navegadores Chromium cloud en <30ms con modo stealth, GPU y proxies residenciales.
+`src/quantum/pqc.ts` — Implementación dual:
 
-### Integración
-
-```typescript
-import Kernel from '@onkernel/sdk';
-const kernel = new Kernel();
-const browser = await kernel.browsers.create();
-await kernel.browsers.computer.captureScreenshot(browser.session_id);
-await kernel.browsers.computer.clickMouse(browser.session_id, { x: 420, y: 280 });
-await kernel.browsers.computer.typeText(browser.session_id, { text: 'consulta' });
-```
-
-### Casos de uso en Isabella
-
-- **Computer Use:** Isabella ve pantallas, hace clic y escribe como humano (evita detección bot)
-- **Playwright Execution:** Extracción estructurada de datos (tablas, DOM, cookies)
-- **Stealth Mode + Proxies:** Acceso a sitios con protección anti-bot
-- **Live View:** Depuración visual en tiempo real con grabación MP4
-
-### Comandos CLI
-
-```bash
-npx kernel create --template computer-use   # Scaffold proyecto
-npx kernel deploy agent.ts                  # Deploy a serverless
-npx kernel invoke my-agent my-task          # Ejecutar agente
-```
+- **Kyber KEM** — encapsulamiento/desencapsulamiento de llave compartida
+- **Dilithium** — firmas digitales post-cuánticas
+- **AES-256-GCM** — cifrado simétrico con IV + auth tag
+- **WebCrypto API** — fallback nativo del navegador
+- **liboqs WASM** — implementación PQC completa
 
 ---
 
-## API Endpoints (Vercel Functions)
+## Mapas y Visualización
 
-| Endpoint | Propósito | Dependencia externa |
-|----------|-----------|---------------------|
-| `POST /api/isa-ai` | **ISA-AI chat autónomo v2.1** | ❌ Ninguna |
-| `api/isa-ai.schema.json` | **Schema de structured outputs** | ❌ — |
-| `POST /api/isabella-chat` | Isabella chat (cloud) | ✅ Vercel AI Gateway / Gemini |
-| `POST /api/tts-isabella` | Voz de Isabella (TTS) | ⚠️ Google TTS (opcional) |
-| `POST /api/model-router` | Router de modelos AI | ✅ Múltiples providers |
-| `POST /api/autonoma` | Autonoma AI agent handler | ❌ Ninguna |
+### Mapa Vivo (2D/3D)
+- `Map2DPanel` — Leaflet con clustering (supercluster), tiles CartoDB dark/light
+- `Map3DTwin` — Three.js con terreno procedimental, niebla volumétrica, estrellas
+- `TerritorialSVGMap` — SVG con proyección de coordenadas
+- `RDMInteractiveMap` — Mapa Leaflet interactivo con filtros por estado de ánimo
+- `FogMap` — Mapa de niebla con canvas (revelado por mouse)
+- `MapaVivo` — Página completa con POIs, categorías, búsqueda y geolocalización
+
+### Efectos Visuales
+- `AuroraBackground`, `FloatingParticles`, `FogLayer`, `ParallaxImage`
+- `TextReveal`, `GlitchText`, `ScanLines`, `OldFilmEffect`
+- `AudioVisualizer3D` — visualizador WebGL con 3 modos (waves, particles, terrain)
+
+---
+
+## API Endpoints
+
+| Endpoint | Método | Propósito |
+|----------|--------|-----------|
+| `/api/health` | GET | Health check del sistema |
+| `/api/isa-ai` | POST | ISA-AI autónomo (cero dependencias externas) |
+| `/api/isabella-chat` | POST | Isabella AI chat (Gemini/Claude) |
+| `/api/tts-isabella` | POST | Síntesis de voz |
+| `/api/model-router` | POST | Ruteo de modelos AI |
+| `/api/autonoma` | POST | Agente Autonoma AI |
+| `/api/telemetry` | POST | Ingesta de telemetría |
+| `/api/connect/token` | POST | Emisión de token de conexión |
+| `/api/connect/inspect` | GET | Inspección de tokens |
+| `/api/cron/health-check` | POST | Monitoreo periódico |
+| `/api/cron/stripe-webhook` | POST | Webhook de Stripe |
+| `/api/knowledge-cells/*` | POST | Render 3D/4D de celdas de conocimiento |
 
 ---
 
 ## Estructura del Repositorio
 
 ```
-├── api/                          # Vercel Serverless Functions
-│   ├── isa-ai.ts                 # ISA-AI autónomo v2.1
-│   ├── isa-ai.schema.json        # Schema structured outputs
-│   ├── isabella-chat.ts          # Chat cloud (legacy)
-│   ├── tts-isabella.ts           # Voz TTS (NUEVO)
-│   ├── autonoma.ts               # Autonoma AI handler (NUEVO)
-│   ├── model-router.ts           # Router de modelos
-│   └── _shared/                  # Helpers compartidos
+├── api/                      # 14 Vercel Serverless Functions
+│   ├── _shared/              # cors, auth, rate-limit, stripe, network-utils
+│   ├── connect/              # Token issuance + inspection
+│   ├── cron/                 # Health check, Stripe webhook
+│   └── knowledge-cells/      # 3D/4D knowledge rendering
 ├── src/
-│   ├── isa-ai/                   # ISA-AI / MEXA-AI (NUEVO)
-│   │   ├── core/classifier.ts    # Clasificador de intenciones
-│   │   ├── knowledge/            # Base de conocimiento RDM
-│   │   ├── templates.ts          # Plantillas de respuesta
-│   │   ├── engine.ts             # Motor de inferencia
-│   │   └── types.ts              # Tipos
-│   ├── components/               # 200+ componentes UI
-│   ├── core/                     # Kernel del sistema
-│   │   ├── yun/                  # Arquitectura YUN
-│   │   ├── territorial/          # Geofencing, fusión
-│   │   ├── twins/                # Gemelos digitales
-│   │   ├── ai/                   # Guardian, Learning Loop
-│   │   └── unified/              # SDK unificado
-│   ├── isabella/                 # Isabella AI (37 archivos)
-│   │   ├── core/                 # Identidad, juramento, conciencia
-│   │   ├── emotional/            # Corazón y memoria emocional
-│   │   ├── skills/               # Orion, Sophia, Argus, Mnemos, Lumen
-│   │   ├── pipeline/             # Pipeline de conciencia hexagonal
-│   │   ├── ontology/             # Ontología y alineación
-│   │   ├── territorial/          # Mente territorial
-│   │   ├── knowledge/            # Motor de absorción
-│   │   ├── protocols/            # Protocolo de despertar
-│   │   ├── quantum/              # Mente cuántica
-│   │   └── kernel/               # 5 subsistemas kernel
-│   ├── hooks/                    # 18 hooks React
-│   ├── pages/                    # 117 páginas
-│   └── integrations/             # Supabase, Sentry
+│   ├── core/                 # Kernel: modelos, YUN, gemelos digitales, territorial
+│   │   ├── models.ts         # Tipos canónicos (435 líneas)
+│   │   ├── yun/              # Event bus, gateway, data fabric, coordinador
+│   │   ├── unified/          # SDK unificado (event bus, persistencia, supervisor)
+│   │   ├── twins/            # Ditto, micro-sentinel, topics
+│   │   ├── territorial/      # Geofencing, fusión territorial
+│   │   └── ai/               # Guardian Learning Loop
+│   ├── isabella/             # Isabella AI (37 archivos)
+│   │   ├── core/             # Identidad, conciencia, juramento
+│   │   ├── emotional/        # Corazón, memoria emocional
+│   │   ├── skills/           # Orion, Sophia, Argus, Mnemos, Lumen
+│   │   ├── pipeline/         # Pipeline de conciencia (12 pasos)
+│   │   ├── protocolos/       # Protocolo de despertar (5 fases)
+│   │   ├── territorial/      # Mente territorial
+│   │   └── quantum/          # Mente cuántica
+│   ├── connect/              # Fusion Union gateway + token management
+│   │   └── fusion/           # Contratos versionados, tipos unión, gateway
+│   ├── federaciones/         # FederationBus (eventos F1-F7)
+│   ├── kernel/engine/        # MDX5Kernel, TimeUpEngine, Ledger, ChronusEngine
+│   ├── security/             # PQC, context isolation, validación, shutdown
+│   ├── quantum/              # PQC v2 (Kyber + Dilithium), PennylaneBridge
+│   ├── features/             # Gamificación, música, lugares, búsqueda, gemelos
+│   ├── components/           # 114 componentes UI (map, rdm, atlas, etc.)
+│   ├── pages/                # 117 páginas (React.lazy + Suspense)
+│   ├── hooks/                # 18 hooks personalizados
+│   ├── contexts/             # AuthContext, AudioPlayerContext
+│   └── integrations/         # Supabase, Sentry, Telemetry
 ├── supabase/
-│   └── migrations/               # 30 migraciones SQL
-└── package.json
+│   ├── migrations/           # 30 migraciones SQL
+│   └── functions/            # 21 Edge Functions
+├── docs/                     # 29 archivos de documentación
+├── .github/workflows/        # 5 workflows CI/CD
+└── package.json              # 58 dependencias + 15 dev
 ```
 
 ---
@@ -271,23 +240,28 @@ npx kernel invoke my-agent my-task          # Ejecutar agente
 ## Variables de Entorno
 
 ```env
-# === Supabase (requerido) ===
-VITE_SUPABASE_URL=tu-supabase-url
-VITE_SUPABASE_PUBLISHABLE_KEY=tu-supabase-anon-key
+# === Requerido ===
+VITE_SUPABASE_URL=
+VITE_SUPABASE_PUBLISHABLE_KEY=
 
-# === ISA-AI endpoints (usa estos por defecto) ===
+# === Isabella AI (defaults locales) ===
 VITE_ISABELLA_ENDPOINT=/api/isa-ai
 VITE_TTS_ENDPOINT=/api/tts-isabella
 
-# === AI Cloud (opcional — solo si quieres aumentar capacidad) ===
-# GEMINI_API_KEY=AIza...
-# GOOGLE_TTS_API_KEY=AIza...
-# VERCEL_AI_GATEWAY_URL=https://gateway.ai.vercel.com/...
-# VERCEL_AI_GATEWAY_TOKEN=vercel_token_xxx
+# === Opcional — AI Cloud ===
+GEMINI_API_KEY=
+GOOGLE_TTS_API_KEY=
+VERCEL_AI_GATEWAY_URL=
+VERCEL_AI_GATEWAY_TOKEN=
 
-# === Autonoma AI (agente autónomo) ===
-AUTONOMA_CLIENT_ID=tu-autonoma-client-id
-AUTONOMA_SECRET_ID=tu-autonoma-secret-id
+# === Opcional — Observabilidad ===
+VITE_SENTRY_DSN=
+VITE_POSTHOG_KEY=
+VITE_POSTHOG_HOST=
+
+# === Interno ===
+SUPABASE_SERVICE_ROLE_KEY=
+CRON_SECRET=
 ```
 
 ---
@@ -296,87 +270,13 @@ AUTONOMA_SECRET_ID=tu-autonoma-secret-id
 
 ```bash
 npm install --legacy-peer-deps
-npm run dev        # http://localhost:5173
-npm run build      # Producción
-npm run typecheck  # TypeScript checking
+npm run dev          # http://localhost:5173
+npm run build        # typecheck + build producción
+npm run typecheck    # TypeScript estricto
+npm run lint         # ESLint
+npm run test:unit    # Vitest
+npm run test:e2e     # Playwright
 ```
-
----
-
-## Lo que está Terminado
-
-### ISA-AI / MEXA-AI v2.1 (NUEVO)
-- [x] Motor autónomo sin dependencias externas (cero APIs de IA)
-- [x] Heptafederación nativa (7 dominios: tourism, rdm, infra, security, observability, blockchain, governance)
-- [x] Doble pipeline hexagonal (INPUT_PIPELINE + OUTPUT_PIPELINE, 6 etapas c/u)
-- [x] Matrix classifier con score ponderado, confidence, secondaryCategory
-- [x] Knowledge Base RDM con scoring semántico y traza (kb.entriesUsed)
-- [x] Tool injection runtime (clima stub, extensible)
-- [x] Constitutional filter (Amor Computacional, identidad isabellina)
-- [x] Structured outputs FAIR-ish conformes a isa-ai.schema.json
-- [x] Streaming SSE por eventos (meta/delta/done)
-- [x] Semver mexa-ai-v2.1.0
-- [x] Integración con RDM Digital Hub / Nodo Cero
-
-### Voz de Isabella (NUEVO)
-- [x] Vercel Function TTS (api/tts-isabella.ts)
-- [x] Google Cloud TTS Wavenet (cuando hay API key)
-- [x] Web Speech API fallback (sin API key)
-- [x] Perfiles de voz por federación (F1-F7)
-
-### Autonoma AI (NUEVO)
-- [x] Handler Autonoma AI (api/autonoma.ts)
-- [x] Protocolo discover/up/down
-- [x] Variables de entorno configuradas
-
-### Core Architecture
-- [x] YUN Constitution (8 principios)
-- [x] YUN Event Bus (wildcard, dead letter queue)
-- [x] YUN Gateway (rate limit, circuit breaker)
-- [x] YUN Data Fabric (saga pattern, 5 adapters)
-- [x] Federation Coordinator (heartbeat, health)
-- [x] Observability (métricas, logs, traces)
-- [x] 5 ADRs documentados
-
-### Isabella AI
-- [x] Identidad, juramento, 6 principios sagrados
-- [x] 10 capas de conciencia con costos energéticos
-- [x] Procesamiento emocional (8 patrones)
-- [x] Memoria emocional por usuario
-- [x] 5 skills funcionales (Orion, Sophia, Argus, Mnemos, Lumen)
-- [x] Pipeline hexagonal de 12 pasos
-- [x] Ontología y alineación
-- [x] Protocolo de despertar (5 fases)
-- [x] Kernel (5 subsistemas)
-- [x] Quantum (PQC + QML)
-
-### Frontend
-- [x] 117 páginas, 200+ componentes
-- [x] shadcn/ui (26 paquetes Radix)
-- [x] Landing cinematográfico con Three.js
-- [x] Dashboard con gamificación real
-- [x] RDM Quest (XP, niveles, leaderboard)
-- [x] RDM Ecos Música (reproductor, visualizador)
-- [x] Mapa Vivo (2D/3D)
-- [x] Isabella Orb (chat flotante)
-- [x] Responsive design
-- [x] Page transitions con framer-motion
-- [x] Hero con parallax, partículas, text reveal
-
-### Backend / Infra
-- [x] Supabase (auth, RLS, 30 migraciones)
-- [x] 20+ Vercel Functions
-- [x] Performance: code splitting, vendor chunks optimizados
-- [x] CI: typecheck + lint automatizado
-- [x] microfrontends.json configurado para Vercel routing
-- [x] Kernel AI SDK integrado (browser automation layer)
-- [x] CSS fix: `--gradient-*` variables definidas (pantalla blanca corregida)
-- [x] CSS fix: `@theme` con valores directos (clases bg-* text-* generadas)
-
-### En progreso
-- [ ] Migración a monorepo Turborepo (web-shell, web-auth, web-dashboard)
-- [ ] Edge Config + Feature Flags para rollout progresivo
-- [ ] Vercel Observability para métricas de antifragilidad
 
 ---
 
