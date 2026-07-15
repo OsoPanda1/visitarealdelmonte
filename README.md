@@ -145,6 +145,67 @@ api/tts-isabella.ts
 - **Voz:** Google Cloud TTS → Web Speech API
 - **Despliegue:** Vercel (Serverless Functions)
 - **Node:** >= 20
+- **Browser Automation:** Kernel AI (onkernel.com) — sandboxed Chromium cloud browsers
+- **Monorepo (en migración):** Turborepo + pnpm workspaces
+- **Microfrontends:** Vercel-native (microfrontends.json + Edge Routing)
+- **Feature Flags:** Vercel Edge Config
+
+---
+
+## Microfrontends Architecture (Vercel-native)
+
+El proyecto usa arquitectura de microfrontends nativos con Vercel, migrando incrementalmente de una SPA monolítica a dominios independientes:
+
+```
+tamv-platform/
+├── apps/
+│   ├── web-shell/        # Edge router / contenedor (Next.js + Middleware)
+│   ├── web-auth/         # Login, registro, recuperación
+│   └── web-dashboard/    # Dashboard principal
+├── packages/
+│   ├── ui/               # Design system (botones, inputs, layouts)
+│   ├── config/           # tsconfig/eslint compartidos
+│   └── auth-sdk/         # cliente de auth (hooks, context, etc.)
+├── turbo.json
+└── package.json
+```
+
+- **Routing:** Edge Middleware + Multi‑Zones + rewrites (Vercel-native, sin capa de pago)
+- **Feature Flags:** Vercel Edge Config para rollout progresivo (login_v2, dashboard_v2)
+- **Despliegue independiente:** Cada app es un proyecto Vercel con rootDirectory configurado
+- **Observabilidad:** Vercel Observability + métricas de antifragilidad
+
+---
+
+## Kernel AI — Browser Automation Layer
+
+Kernel (onkernel.com) es la capa de automatización de navegador para Isabella AI. Proporciona navegadores Chromium cloud en <30ms con modo stealth, GPU y proxies residenciales.
+
+### Integración
+
+```typescript
+import Kernel from '@onkernel/sdk';
+const kernel = new Kernel();
+const browser = await kernel.browsers.create();
+await kernel.browsers.computer.captureScreenshot(browser.session_id);
+await kernel.browsers.computer.clickMouse(browser.session_id, { x: 420, y: 280 });
+await kernel.browsers.computer.typeText(browser.session_id, { text: 'consulta' });
+```
+
+### Casos de uso en Isabella
+
+- **Computer Use:** Isabella ve pantallas, hace clic y escribe como humano (evita detección bot)
+- **Playwright Execution:** Extracción estructurada de datos (tablas, DOM, cookies)
+- **Stealth Mode + Proxies:** Acceso a sitios con protección anti-bot
+- **Live View:** Depuración visual en tiempo real con grabación MP4
+
+### Comandos CLI
+
+```bash
+npx kernel create --template computer-use   # Scaffold proyecto
+npx kernel deploy agent.ts                  # Deploy a serverless
+npx kernel invoke my-agent my-task          # Ejecutar agente
+```
 
 ---
 
@@ -306,8 +367,16 @@ npm run typecheck  # TypeScript checking
 - [x] Supabase (auth, RLS, 30 migraciones)
 - [x] 20+ Vercel Functions
 - [x] Performance: code splitting, vendor chunks optimizados
-- [x] Typecheck CI: 0 errores
-- [x] White screen fix: analytics en dependencies
+- [x] CI: typecheck + lint automatizado
+- [x] microfrontends.json configurado para Vercel routing
+- [x] Kernel AI SDK integrado (browser automation layer)
+- [x] CSS fix: `--gradient-*` variables definidas (pantalla blanca corregida)
+- [x] CSS fix: `@theme` con valores directos (clases bg-* text-* generadas)
+
+### En progreso
+- [ ] Migración a monorepo Turborepo (web-shell, web-auth, web-dashboard)
+- [ ] Edge Config + Feature Flags para rollout progresivo
+- [ ] Vercel Observability para métricas de antifragilidad
 
 ---
 
