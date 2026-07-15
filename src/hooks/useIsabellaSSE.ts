@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { IsabellaDecision } from "@/core/models";
+import { logger } from "@/lib/logger";
 
 type ConnectionState = "connecting" | "connected" | "reconnecting" | "closed";
 
@@ -22,7 +23,7 @@ export function useIsabellaSSE(options: Options = {}) {
 
   useEffect(() => {
     if (!url) {
-      console.error("[Isabella SSE] Missing VITE_API_GATEWAY or stream URL; SSE disabled.");
+      logger.error("[Isabella SSE] Missing VITE_API_GATEWAY or stream URL; SSE disabled.");
       setState("closed");
       return;
     }
@@ -41,7 +42,7 @@ export function useIsabellaSSE(options: Options = {}) {
         try {
           setDecision(JSON.parse(event.data));
         } catch (err) {
-          console.error("[Isabella SSE] Malformed event payload", err);
+          logger.error("[Isabella SSE] Malformed event payload", { error: err });
           // keep stream healthy despite malformed packets
         }
       };

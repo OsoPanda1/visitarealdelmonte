@@ -61,6 +61,7 @@ export function getAudioContext(): AudioContext {
  */
 export function applySpatialProfile(profile: SpatialProfile, mode: SpatialMode): void {
   const ctx = getAudioContext();
+  if (!masterGain || !ctx) return;
 
   // Disconnect previous nodes
   disconnectSpatial();
@@ -68,7 +69,7 @@ export function applySpatialProfile(profile: SpatialProfile, mode: SpatialMode):
   if (mode === "archivo") {
     // Pure playback — no spatial processing
     if (sourceNode) {
-      sourceNode.connect(masterGain!);
+      sourceNode.connect(masterGain);
     }
     return;
   }
@@ -114,9 +115,9 @@ export function applySpatialProfile(profile: SpatialProfile, mode: SpatialMode):
 
   if (pannerNode) {
     convolverNode.connect(pannerNode);
-    pannerNode.connect(masterGain!);
+    pannerNode.connect(masterGain);
   } else {
-    convolverNode.connect(masterGain!);
+    convolverNode.connect(masterGain);
   }
 
   // Metaverso effects
@@ -144,7 +145,7 @@ function applyMetaversoEffect(effect: string): void {
       lfo.start();
       if (pannerNode) {
         pannerNode.connect(delay);
-        delay.connect(masterGain!);
+        delay.connect(masterGain);
       }
       break;
     }
@@ -157,7 +158,7 @@ function applyMetaversoEffect(effect: string): void {
       feedback.connect(delay);
       if (pannerNode) {
         pannerNode.connect(delay);
-        delay.connect(masterGain!);
+        delay.connect(masterGain);
       }
       break;
     }

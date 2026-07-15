@@ -84,19 +84,22 @@ export class MicroSentinel {
     };
 
     if (verdict.passed) {
-      const stateTopic = `ldtocs/mesh/${payload.nodeId}/state`;
       const twinState = transformToTwinState(payload);
-      (this.bus as any).emit(stateTopic, twinState);
+      this.bus.emit({
+        type: "TWIN_STATE",
+        source: "SENTINEL",
+        payload: { topic: `ldtocs/mesh/${payload.nodeId}/state`, state: twinState },
+        metadata: { traceId: crypto.randomUUID(), nodeId: payload.nodeId, territory: "rdm", priority: "normal" },
+      });
       logger.info("[SENTINEL] Nodo validado", { nodeId: payload.nodeId });
     } else {
-      const eventTopic = buildTerritorySecurityTopic();
       const alert = {
         type: "SECURITY_ALERT" as const,
         nodeId: payload.nodeId,
         reasons: verdict.reasons,
         timestamp: payload.timestamp,
       };
-      (this.bus as any).emit(eventTopic, alert);
+      this.bus.emit({ type: "SECURITY_ALERT", source: "SENTINEL", payload: alert, metadata: { traceId: crypto.randomUUID(), nodeId: payload.nodeId, territory: "rdm", priority: "high" } });
       logger.warn("[SENTINEL] Nodo comprometido", {
         nodeId: payload.nodeId,
         reasons: verdict.reasons,

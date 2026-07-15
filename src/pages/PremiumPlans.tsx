@@ -140,7 +140,7 @@ export default function PremiumPlans() {
 
       // Punto de auditoría mínimo: log informativo (idealmente enviar a telemetría backend)
 
-      console.info("Iniciando checkout premium", {
+      logger.info("Iniciando checkout premium", {
         userId: user.id,
         planId,
         fn,

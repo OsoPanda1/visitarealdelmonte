@@ -25,7 +25,7 @@ import {
   Video,
 } from "lucide-react";
 import Matrix3DEffect from "@/components/metaverse/Matrix3DEffect";
-import RetractableToolbar from "@/components/metaverse/RetractableToolbar";
+import RetractableToolbar, { type NotificationType } from "@/components/metaverse/RetractableToolbar";
 import StoriesSection from "@/components/metaverse/StoriesSection";
 import SocialWall from "@/components/metaverse/SocialWall";
 import ModulesGrid from "@/components/metaverse/ModulesGrid";
@@ -156,7 +156,7 @@ const MetaverseHome: React.FC = () => {
       <RetractableToolbar
         position="top"
         items={topBarItems}
-        notificationType={activeNotification as any}
+        notificationType={activeNotification as NotificationType | undefined}
       />
       <RetractableToolbar position="left" items={leftBarItems} />
       <RetractableToolbar position="right" items={rightBarItems} />

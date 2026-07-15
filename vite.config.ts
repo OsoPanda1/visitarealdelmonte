@@ -32,8 +32,6 @@ export default defineConfig(async () => {
         "@": "/src",
         "@components": "/src/components",
         "@hooks": "/src/hooks",
-        "@services": "/src/services",
-        "@utils": "/src/utils",
         "@types": "/src/types",
       },
     },
@@ -51,6 +49,7 @@ export default defineConfig(async () => {
       ],
     },
     build: {
+      modulePreload: false,
       target: "es2022",
       cssCodeSplit: true,
       assetsInlineLimit: 4096,

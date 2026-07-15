@@ -82,7 +82,7 @@ export default function RegistrarComercio() {
           owner_id: user.id,
           is_active: true,
           is_subscribed: false,
-        } as any)
+        } as Record<string, unknown>)
         .select("id")
         .single();
       if (error || !created) throw error || new Error("No se creó el comercio");

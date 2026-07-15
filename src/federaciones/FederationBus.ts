@@ -161,7 +161,7 @@ class FederationBus {
     if (!this.handlers.has(eventType)) {
       this.handlers.set(eventType, new Set());
     }
-    this.handlers.get(eventType)!.add(handler);
+    this.handlers.get(eventType)?.add(handler);
 
     return () => {
       this.handlers.get(eventType)?.delete(handler);

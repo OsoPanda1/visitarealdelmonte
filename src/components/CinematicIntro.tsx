@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence, type Variants, type Easing } from "framer-motion";
+import { logger } from "@/lib/logger";
 import tumirada from "@/assets/musica/tumirada.mp3";
 
 type CinematicIntroProps = {
@@ -38,7 +39,7 @@ export const CinematicIntro: React.FC<CinematicIntroProps> = ({
         requestAnimationFrame(fadeIn);
       })
       .catch((err: DOMException) => {
-        console.warn("[CinematicIntro] Autoplay bloqueado:", err.message);
+        logger.warn("[CinematicIntro] Autoplay bloqueado", { error: err.message });
         setAudioBlocked(true);
       });
   }, [isAudioEnabled]);

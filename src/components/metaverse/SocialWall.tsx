@@ -133,7 +133,7 @@ const PostCard: React.FC<{
               whileHover={{ scale: 1.02 }}
               className={cn(
                 "relative aspect-video bg-muted overflow-hidden cursor-pointer",
-                post.media!.length === 3 && index === 0 && "row-span-2",
+                post.media.length === 3 && index === 0 && "row-span-2",
               )}
             >
               <div
@@ -153,9 +153,9 @@ const PostCard: React.FC<{
                   </div>
                 </div>
               )}
-              {post.media!.length > 4 && index === 3 && (
+              {post.media.length > 4 && index === 3 && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/60">
-                  <span className="text-2xl font-bold text-white">+{post.media!.length - 4}</span>
+                  <span className="text-2xl font-bold text-white">+{post.media.length - 4}</span>
                 </div>
               )}
             </motion.div>

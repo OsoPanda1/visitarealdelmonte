@@ -1,5 +1,6 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
+import { logger } from "@/lib/logger";
 import "./styles.css";
 
 const container = document.getElementById("root");
@@ -48,7 +49,7 @@ async function bootstrap() {
       </React.StrictMode>,
     );
   } catch (error) {
-    console.error("[bootstrap] Failed to initialize application:", error);
+    logger.error("[bootstrap] Failed to initialize application", { error });
     root.render(
       <React.StrictMode>
         <BootstrapFallback error={error} />

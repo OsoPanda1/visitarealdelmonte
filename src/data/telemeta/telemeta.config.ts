@@ -74,7 +74,7 @@ export const telemetryExamples = {
   fps: () =>
     build("fps", "performance", {
       fps:
-        typeof window !== "undefined" ? Math.round((window.performance as any)?.now?.() ?? 60) : 60,
+        typeof window !== "undefined" ? Math.round(window.performance.now?.() ?? 60) : 60,
     }),
 
   // Ejemplo de error (falso, para pruebas)
@@ -89,10 +89,10 @@ export const telemetryExamples = {
   memory: () =>
     build("client_memory_mb", "performance", {
       used:
-        (typeof window !== "undefined" && (window.performance as any)?.memory?.usedJSHeapSize) ??
+        (typeof window !== "undefined" && (window.performance as unknown as { memory?: { usedJSHeapSize: number } }).memory?.usedJSHeapSize) ??
         0 / 1048576,
       total:
-        (typeof window !== "undefined" && (window.performance as any)?.memory?.jsHeapSizeLimit) ??
+        (typeof window !== "undefined" && (window.performance as unknown as { memory?: { jsHeapSizeLimit: number } }).memory?.jsHeapSizeLimit) ??
         0 / 1048576,
     }),
 };

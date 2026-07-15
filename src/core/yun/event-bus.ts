@@ -6,6 +6,7 @@
  * Every event MUST have a trace. No silent mutations.
  */
 
+import { logger } from "@/lib/logger";
 import type {
   YunEventEnvelope,
   YunEventType,
@@ -113,7 +114,7 @@ export async function publish<T>(event: YunEventEnvelope<T>): Promise<void> {
       } catch (error) {
         // Per YUN Principle #8: Progressive Autonomy
         // Log error but don't crash the bus
-        console.error(`[YUN EventBus] Handler error for ${event.type}:`, error);
+        logger.error(`[YUN EventBus] Handler error for ${event.type}`, { error });
         throw error;
       }
     }),
@@ -122,7 +123,7 @@ export async function publish<T>(event: YunEventEnvelope<T>): Promise<void> {
   // Check for failures
   const failures = results.filter((r) => r.status === "rejected");
   if (failures.length > 0) {
-    console.warn(
+    logger.warn(
       `[YUN EventBus] ${failures.length}/${results.length} handlers failed for ${event.type}`,
     );
   }

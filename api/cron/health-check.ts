@@ -6,7 +6,7 @@
 export const config = { runtime: "edge" };
 
 import { getCorsHeaders, handleCors } from "../_shared/cors";
-import { checkRateLimit } from "../_shared/rate-limit.js";
+import { checkRateLimit } from "../_shared/rate-limit";
 
 const FEDERATIONS = [
   { id: "F1", name: "Gobernanza" },

@@ -24,8 +24,7 @@ export function publish<T>(event: RDMEvent<T>) {
 }
 
 export function subscribe(name: EventName, fn: (e: RDMEvent) => void): () => void {
-  if (!listeners[name]) listeners[name] = [];
-  listeners[name]!.push(fn);
+  (listeners[name] ??= []).push(fn);
   return () => {
     const arr = listeners[name];
     if (arr) {

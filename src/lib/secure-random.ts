@@ -31,9 +31,10 @@ export function secureRandomId(byteLength = 16): string {
   const crypto = getCrypto();
   const bytes = new Uint8Array(byteLength);
   crypto.getRandomValues(bytes);
+  const nodeBuffer = (globalThis as unknown as { Buffer?: { from: (bytes: Uint8Array) => { toString: (enc: string) => string } } }).Buffer;
   let b64: string;
-  if (typeof (globalThis as any).Buffer !== "undefined") {
-    b64 = (globalThis as any).Buffer.from(bytes).toString("base64");
+  if (typeof nodeBuffer !== "undefined") {
+    b64 = nodeBuffer.from(bytes).toString("base64");
   } else {
     b64 = btoa(String.fromCharCode(...bytes));
   }

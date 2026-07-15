@@ -8,6 +8,7 @@
  * All state changes flow through this unified bus.
  */
 
+import { logger } from "@/lib/logger";
 import {
   publish as yunPublish,
   subscribe as yunSubscribe,
@@ -225,5 +226,5 @@ export function initEventBusBridge(): void {
   bridgeFederationToYun();
   bridgeYunToFederation();
   initialized = true;
-  console.log("[YUN EventBusBridge] Unified event bus initialized — TAMV ↔ YUN ↔ Core bridged");
+  logger.info("[YUN EventBusBridge] Unified event bus initialized — TAMV ↔ YUN ↔ Core bridged");
 }

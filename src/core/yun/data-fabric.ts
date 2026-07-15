@@ -7,6 +7,7 @@
  * Storage adapters route to real backends: Supabase (Identity), Supabase (Knowledge/Telemetry/Gameplay via tables).
  */
 
+import { logger } from "@/lib/logger";
 import type { YunDomain, StorageEngine } from "./types";
 import { publish, createEvent } from "./event-bus";
 import { supabase } from "@/integrations/supabase/client";
@@ -102,9 +103,9 @@ export async function executeSaga<TFinal>(
           await step.compensate(i > 0 ? stepOutputs[i - 1] : initialInput, stepOutputs[i], err);
           compensatedSteps.push(step.name);
         } catch (compError) {
-          console.error(
-            `[YUN DataFabric] Compensation failed for step ${completedSteps[i]}:`,
-            compError,
+          logger.error(
+            `[YUN DataFabric] Compensation failed for step ${completedSteps[i]}`,
+            { error: compError },
           );
         }
       }

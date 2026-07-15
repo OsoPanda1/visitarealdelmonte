@@ -158,7 +158,7 @@ export default function Perfil() {
         location: parsed.data.location || null,
         avatar_url: parsed.data.avatar_url || null,
       })
-      .eq("id", user!.id);
+      .eq("id", user?.id);
     setSaving(false);
     if (error) {
       toast({ title: "Error", description: error.message, variant: "destructive" });
@@ -207,7 +207,7 @@ export default function Perfil() {
             </div>
             <div className="flex-1 text-center md:text-left">
               <h1 className="text-3xl font-bold">{profile.display_name}</h1>
-              <p className="text-sm text-muted-foreground">{user!.email}</p>
+              <p className="text-sm text-muted-foreground">{user?.email ?? ""}</p>
               <div className="flex flex-wrap gap-2 mt-2 justify-center md:justify-start">
                 {roles.map((r) => (
                   <Badge key={r} variant="secondary" className="capitalize">
