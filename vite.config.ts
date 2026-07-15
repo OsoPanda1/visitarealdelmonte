@@ -17,7 +17,6 @@ async function loadOptimizer(): Promise<PluginOption | null> {
 async function loadCompressionPlugins(): Promise<PluginOption[]> {
   let compressionModule: { default: (opts: Record<string, unknown>) => PluginOption };
   try {
-    // @ts-expect-error - optional compression plugin
     compressionModule = await import("vite-plugin-compression");
     const compression = compressionModule.default;
     return [
