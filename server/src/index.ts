@@ -11,10 +11,15 @@ import { constitutionalGuard } from "./middleware/constitutionalGuard.js";
 import { createHardenedRateLimiter } from "./middleware/rateLimit.js";
 import { logger } from "./lib/logger.js";
 
+// Errores no capturados globales
+process.on("unhandledRejection", (err) => { logger.error(err, "unhandled_rejection"); });
+process.on("uncaughtException", (err) => { logger.fatal(err, "uncaught_exception"); process.exit(1); });
+
 declare module "express-serve-static-core" {
   interface Request {
     id?: string;
     startedAt?: number;
+    rawBody?: string;
   }
 }
 
@@ -77,7 +82,7 @@ app.use(
   express.json({
     limit: "256kb",
     strict: true,
-    verify: (req, _res, buf) => { (req as any).rawBody = buf.toString("utf8"); },
+    verify: (req, _res, buf) => { req.rawBody = buf.toString("utf8"); },
   }),
 );
 app.use(express.urlencoded({ extended: false, limit: "256kb" }));
