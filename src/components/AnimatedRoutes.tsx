@@ -217,7 +217,7 @@ const AnimatedRoutes = () => {
             <Route path="/atlas/pastes" element={<RouteErrorBoundary route="/atlas/pastes"><AtlasPastes /></RouteErrorBoundary>} />
             <Route path="/atlas/cementerio" element={<RouteErrorBoundary route="/atlas/cementerio"><AtlasCementerio /></RouteErrorBoundary>} />
             <Route path="/atlas/calles" element={<RouteErrorBoundary route="/atlas/calles"><AtlasCalles /></RouteErrorBoundary>} />
-            <Route path="/atlas/keyendas" element={<RouteErrorBoundary route="/atlas/keyendas"><AtlasLeyendas /></RouteErrorBoundary>} />
+            <Route path="/atlas/leyendas" element={<RouteErrorBoundary route="/atlas/leyendas"><AtlasLeyendas /></RouteErrorBoundary>} />
             <Route path="/atlas" element={<RouteErrorBoundary route="/atlas"><AtlasMaximus /></RouteErrorBoundary>} />
             <Route path="/ecosistema-ltos" element={<RouteErrorBoundary route="/ecosistema-ltos"><EcosistemaLTOS /></RouteErrorBoundary>} />
             <Route path="/perfil" element={<RouteErrorBoundary route="/perfil"><Perfil /></RouteErrorBoundary>} />
