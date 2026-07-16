@@ -1,6 +1,6 @@
 import { corsJsonResponse, handleCors } from "../_shared/cors";
-import { isPrivateIP } from "../_shared/network-utils";
 import { fusionGateway } from "../../src/connect/fusion/FusionGateway";
+import jwt from "jsonwebtoken";
 
 export const config = { runtime: "edge" };
 
@@ -11,6 +11,23 @@ const REQUIRED_AUDIENCES = [
   "tamv-cell-node-1", "tamv-cell-node-2", "tamv-cell-node-3",
   "tamv-cell-node-4", "tamv-cell-node-5", "tamv-cell-node-6", "tamv-cell-node-7",
 ];
+const JWT_SECRET = process.env.JWT_SECRET;
+
+interface TokenPayload {
+  agentId: string;
+  federationId: number;
+  role: "agent" | "admin" | "viewer";
+}
+
+export function generateAgentToken(payload: TokenPayload): string {
+  if (!JWT_SECRET) throw new Error("JWT_SECRET not configured");
+  return jwt.sign(payload, JWT_SECRET, {
+    algorithm: "HS256",
+    expiresIn: "2h",
+    audience: "tamv-core",
+    issuer: "tamv-auth-gateway",
+  });
+}
 
 function sanitizeLog(msg: string): string {
   return msg.replace(/(bearer\s+|secret=|key=)[a-zA-Z0-9\-_.]+/gi, "$1[MASKED]");
@@ -30,7 +47,23 @@ export default async function handler(request: Request): Promise<Response> {
 
   try {
     const body = await request.json();
-    const { nonce, timestamp, clientId, clientSecret, targetAudience, ...operation } = body;
+    const { nonce, timestamp, clientId, clientSecret, targetAudience, action, agentId, federationId, ...operation } = body;
+
+    if (action === "exchange") {
+      if (!agentId || typeof agentId !== "string") {
+        return corsJsonResponse(request, { error: { code: "MISSING_AGENT_ID" } }, 400);
+      }
+      const fedId = parseInt(federationId, 10);
+      if (isNaN(fedId) || fedId < 1 || fedId > 7) {
+        return corsJsonResponse(request, { error: { code: "INVALID_FEDERATION_ID" } }, 400);
+      }
+      const expectedSecret = process.env.TAMV_FEDERATION_SECRET;
+      if (!expectedSecret || clientSecret !== expectedSecret) {
+        return corsJsonResponse(request, { error: { code: "UNAUTHORIZED" } }, 401);
+      }
+      const token = generateAgentToken({ agentId, federationId: fedId, role: "agent" });
+      return corsJsonResponse(request, { access_token: token, token_type: "Bearer", expires_in: 7200 });
+    }
 
     if (!nonce || typeof nonce !== "string") {
       return corsJsonResponse(request, { error: { code: "MISSING_NONCE" } }, 400);
@@ -49,7 +82,6 @@ export default async function handler(request: Request): Promise<Response> {
       return corsJsonResponse(request, { error: { code: "EXPIRED_REQUEST" } }, 400);
     }
 
-    // Client authentication + audience validation
     if (clientId && clientSecret && targetAudience) {
       const fedSecret = process.env.TAMV_FEDERATION_SECRET;
       if (!fedSecret) {
@@ -59,21 +91,14 @@ export default async function handler(request: Request): Promise<Response> {
       if (!REQUIRED_AUDIENCES.includes(targetAudience)) {
         return corsJsonResponse(request, { error: { code: "INVALID_AUDIENCE" } }, 403);
       }
-      const isAuthorized = clientId === "tamv-gateway" && clientSecret === fedSecret;
-      if (!isAuthorized) {
-        console.warn(`[WARN] Auth failed for client: ${clientId}`);
+      if (clientId !== "tamv-gateway" || clientSecret !== fedSecret) {
         return corsJsonResponse(request, { error: { code: "UNAUTHORIZED" } }, 401);
       }
     }
 
     const result = await fusionGateway.execute(operation);
-
     if (!result.ok) {
-      return corsJsonResponse(
-        request,
-        { error: { code: result.error.code, message: result.error.message } },
-        result.error.statusCode,
-      );
+      return corsJsonResponse(request, { error: { code: result.error.code, message: result.error.message } }, result.error.statusCode);
     }
 
     return corsJsonResponse(request, { success: true, data: result.data });
