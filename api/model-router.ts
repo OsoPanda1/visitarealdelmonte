@@ -83,6 +83,14 @@ function buildFederationContext(
   };
 }
 
+function sanitizeHuggingFaceModelId(input: string): string | null {
+  const value = input.trim();
+  if (!value || value.length > 128) return null;
+  if (!/^[A-Za-z0-9._/-]+$/.test(value)) return null;
+  if (value.includes("..") || value.startsWith("/") || value.endsWith("/") || value.includes("//")) return null;
+  return value;
+}
+
 async function fetchWithTimeout(url: string, options: RequestInit & { timeout?: number }): Promise<Response> {
   const timeout = options.timeout || 15000;
   const controller = new AbortController();
@@ -215,8 +223,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         });
       }
 
+      const safeModel = sanitizeHuggingFaceModelId(model);
+      if (!safeModel) {
+        return res.status(400).json({ error: "Invalid model identifier" });
+      }
+
       const hfRes = await fetchWithRetry(
-        `https://api-inference.huggingface.co/models/${model}`,
+        `https://api-inference.huggingface.co/models/${encodeURIComponent(safeModel)}`,
         {
           method: "POST",
           headers: {
