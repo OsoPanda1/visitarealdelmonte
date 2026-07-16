@@ -2,9 +2,10 @@
 // Marca merchant_payments.status='succeeded' -> el trigger publica el comercio.
 // Auth: header X-Webhook-Secret debe coincidir con MERCHANT_WEBHOOK_SECRET.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { corsHeaders as sharedCors } from "../_shared/cors.ts";
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
+  ...sharedCors,
   "Access-Control-Allow-Headers": "authorization, content-type, x-webhook-secret",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };

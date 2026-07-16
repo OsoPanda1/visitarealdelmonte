@@ -3,11 +3,7 @@
  * y genera entradas en system_alerts cuando se exceden umbrales.
  */
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+import { corsHeaders } from "../_shared/cors.ts";
 
 const THRESHOLDS = {
   latency_ms: 500,

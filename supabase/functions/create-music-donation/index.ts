@@ -2,14 +2,11 @@
 // RDM Digital OS — Edge Function: Music Streaming & Sovereign Donation Engine v4.0
 // Identidad: Silver & Mist Sovereign — Plata pulida, Platino y Crystal Glow
 // ============================================================================
+import { corsHeaders as sharedCors } from "../_shared/cors.ts";
 import { createStripe, safeError } from "../_shared/stripe.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-};
+const corsHeaders = { ...sharedCors, "Access-Control-Allow-Methods": "GET, POST, OPTIONS" };
 
 // ============================================================================
 // CATÁLOGO DE ACTIVOS MUSICALES SOBERANOS (src/assets)

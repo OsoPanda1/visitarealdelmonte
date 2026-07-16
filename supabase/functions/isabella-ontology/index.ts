@@ -1,5 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
+import { corsHeaders } from "../_shared/cors.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SUPABASE_SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -14,11 +15,7 @@ const CORS_ORIGINS = [
 function getCorsHeaders(req: Request): Record<string, string> {
   const origin = req.headers.get("origin");
   const allowed = origin && CORS_ORIGINS.includes(origin) ? origin : CORS_ORIGINS[0];
-  return {
-    "Access-Control-Allow-Origin": allowed,
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
-  };
+  return { ...corsHeaders, "Access-Control-Allow-Origin": allowed };
 }
 
 interface OntologyRequest {
