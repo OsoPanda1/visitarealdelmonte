@@ -1,40 +1,17 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { getCorsHeaders } from '../_shared/cors';
+import {
+  analyzeFrequencies,
+  calculateImmersion,
+  frequencyToColor,
+  handleRenderCors,
+  renderError,
+  renderSuccess,
+} from '../_shared/render-core';
 
-interface RenderRequest {
-  operation: 'render' | 'sync-audio' | 'update-color';
-  payload: Record<string, unknown>;
-  context?: { userId?: string; sessionId?: string };
-}
-
-function analyzeFrequencies(signal: number[]): Record<string, number> {
-  if (!signal || signal.length < 20) {
-    return { bass: 0, mid: 0, treble: 0 };
-  }
-  return {
-    bass: signal.slice(0, 5).reduce((a, b) => a + b, 0) / 5,
-    mid: signal.slice(5, 15).reduce((a, b) => a + b, 0) / 10,
-    treble: signal.slice(15, 20).reduce((a, b) => a + b, 0) / 5,
-  };
-}
-
-function calculateImmersion(frequencies: Record<string, number>): number {
-  const total = Object.values(frequencies).reduce((a, b) => a + b, 0);
-  return Math.min(total / 300, 1);
-}
-
-function frequencyToColor(frequency: number): string {
-  const hue = (frequency % 360).toString();
-  return `hsl(${hue}, 100%, 50%)`;
-}
-
-async function performRender(payload: Record<string, unknown>) {
+export async function performRender(payload: Record<string, unknown>) {
   const startTime = Date.now();
-
-  // Simular renderizado
   const renderTime = Math.random() * 50 + 10;
   await new Promise((resolve) => setTimeout(resolve, renderTime));
-
   return {
     status: 'rendered',
     gltfHash: `gltf_${Date.now()}_${Math.random().toString(36).slice(7)}`,
@@ -52,11 +29,10 @@ async function performRender(payload: Record<string, unknown>) {
   };
 }
 
-async function syncAudio(payload: Record<string, unknown>) {
+export async function syncAudio(payload: Record<string, unknown>) {
   const audioSignal = (payload.audioSignal as number[]) || [];
   const frequencyBands = analyzeFrequencies(audioSignal);
   const immersion = calculateImmersion(frequencyBands);
-
   return {
     status: 'synced',
     frequencyBands,
@@ -70,10 +46,9 @@ async function syncAudio(payload: Record<string, unknown>) {
   };
 }
 
-async function updateColor(payload: Record<string, unknown>) {
+export async function updateColor(payload: Record<string, unknown>) {
   const frequency = (payload.frequency as number) || 440;
   const targetColor = frequencyToColor(frequency);
-
   return {
     status: 'updated',
     color: targetColor,
@@ -83,75 +58,51 @@ async function updateColor(payload: Record<string, unknown>) {
   };
 }
 
+export function extractOperation(req: VercelRequest): { operation: string; payload: Record<string, unknown>; context?: { userId?: string; sessionId?: string } } {
+  const { operation, payload, context } = req.body as { operation: string; payload: Record<string, unknown>; context?: { userId?: string; sessionId?: string } };
+  return { operation, payload: payload || {}, context };
+}
+
+export const validOperations = ['render', 'sync-audio', 'update-color'] as const;
+
+export async function executeRender3D(operation: string, payload: Record<string, unknown>): Promise<Record<string, unknown>> {
+  switch (operation) {
+    case 'render':
+      return await performRender(payload);
+    case 'sync-audio':
+      return await syncAudio(payload);
+    case 'update-color':
+      return await updateColor(payload);
+    default:
+      throw new Error(`Unknown operation: ${operation}`);
+  }
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const startTime = Date.now();
-  const origin = (req.headers.origin as string | undefined) ?? null;
-  const cors = getCorsHeaders(origin);
-  Object.entries(cors).forEach(([k, v]) => res.setHeader(k, v));
-
-  if (req.method === "OPTIONS") return res.status(204).end();
+  if (handleRenderCors(req, res)) return;
 
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('X-Cell-Type', 'Render3D');
   res.setHeader('X-Cell-Version', '1.0.0');
 
   if (req.method !== 'POST') {
-    return res.status(405).json({
-      success: false,
-      error: { code: 'METHOD_NOT_ALLOWED', message: 'Use POST for render-3d operations' },
-    });
+    return renderError(res, 'METHOD_NOT_ALLOWED', 'Use POST for render-3d operations', 0, 405);
   }
 
   try {
-    const { operation, payload, context } = req.body as RenderRequest;
+    const { operation, payload, context } = extractOperation(req);
 
-    if (!operation || !['render', 'sync-audio', 'update-color'].includes(operation)) {
-      return res.status(400).json({
-        success: false,
-        error: {
-          code: 'INVALID_OPERATION',
-          message: `Operation '${operation}' not supported. Use: render, sync-audio, update-color`,
-        },
-      });
+    if (!operation || !validOperations.includes(operation as typeof validOperations[number])) {
+      return renderError(res, 'INVALID_OPERATION', `Operation '${operation}' not supported. Use: ${validOperations.join(', ')}`, Date.now() - startTime, 400);
     }
 
-    let result: Record<string, unknown>;
-
-    switch (operation) {
-      case 'render':
-        result = await performRender(payload || {});
-        break;
-      case 'sync-audio':
-        result = await syncAudio(payload || {});
-        break;
-      case 'update-color':
-        result = await updateColor(payload || {});
-        break;
-      default:
-        throw new Error(`Unknown operation: ${operation}`);
-    }
-
-    const executionTime = Date.now() - startTime;
-
-    return res.status(200).json({
-      success: true,
-      data: result,
-      performance: { executionTime, startTime },
-      timestamp: new Date().toISOString(),
-      context: { userId: context?.userId, sessionId: context?.sessionId },
-    });
+    const result = await executeRender3D(operation, payload);
+    renderSuccess(res, result, startTime, context);
   } catch (err) {
     const executionTime = Date.now() - startTime;
-    const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-
-    return res.status(500).json({
-      success: false,
-      error: {
-        code: 'RENDER_3D_ERROR',
-        message: errorMessage,
-      },
-      performance: { executionTime },
-      timestamp: new Date().toISOString(),
-    });
+    renderError(res, 'RENDER_3D_ERROR', err instanceof Error ? err.message : 'Unknown error', executionTime);
   }
 }
+
+export const render3dHandler = handler;

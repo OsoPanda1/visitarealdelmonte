@@ -3,6 +3,14 @@ import { fusionGateway } from "../../src/connect/fusion/FusionGateway";
 
 export const config = { runtime: "edge" };
 
+const NONCE_STORE = new Set<string>();
+const NONCE_TTL = 5 * 60 * 1000;
+
+function isExpired(timestamp: number): boolean {
+  const clockSkew = 30_000;
+  return Date.now() - timestamp > clockSkew;
+}
+
 export default async function handler(request: Request): Promise<Response> {
   const cors = handleCors(request);
   if (cors) return cors;
@@ -13,7 +21,27 @@ export default async function handler(request: Request): Promise<Response> {
 
   try {
     const body = await request.json();
-    const result = await fusionGateway.execute(body);
+    const { nonce, timestamp, ...operation } = body;
+
+    if (!nonce || typeof nonce !== "string") {
+      return corsJsonResponse(request, { error: { code: "MISSING_NONCE", message: "Nonce is required" } }, 400);
+    }
+    if (!timestamp || typeof timestamp !== "number") {
+      return corsJsonResponse(request, { error: { code: "MISSING_TIMESTAMP", message: "Timestamp is required" } }, 400);
+    }
+
+    if (NONCE_STORE.has(nonce)) {
+      return corsJsonResponse(request, { error: { code: "REPLAY_DETECTED", message: "Nonce already used" } }, 409);
+    }
+
+    NONCE_STORE.add(nonce);
+    setTimeout(() => NONCE_STORE.delete(nonce), NONCE_TTL);
+
+    if (isExpired(timestamp)) {
+      return corsJsonResponse(request, { error: { code: "EXPIRED_REQUEST", message: "Timestamp is too old" } }, 400);
+    }
+
+    const result = await fusionGateway.execute(operation);
 
     if (!result.ok) {
       return corsJsonResponse(

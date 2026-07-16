@@ -1,81 +1,14 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { getCorsHeaders } from '../_shared/cors';
+import {
+  hammingDistance,
+  generateRotationMatrix,
+  frequencyToRGB,
+  handleRenderCors,
+  renderError,
+  renderSuccess,
+} from '../_shared/render-core';
 
-interface Render4DRequest {
-  operation: 'create-hypercube' | 'rotate-4d' | 'project-to-3d' | 'color-map';
-  payload: Record<string, unknown>;
-  context?: { userId?: string; sessionId?: string };
-}
-
-function hammingDistance(a: number, b: number): number {
-  let distance = 0;
-  let xor = a ^ b;
-  while (xor) {
-    distance += xor & 1;
-    xor >>= 1;
-  }
-  return distance;
-}
-
-function generateRotationMatrix(angle: number, plane: string = 'xy'): number[][] {
-  const cos = Math.cos(angle);
-  const sin = Math.sin(angle);
-
-  const matrix: number[][] = [
-    [1, 0, 0, 0],
-    [0, 1, 0, 0],
-    [0, 0, 1, 0],
-    [0, 0, 0, 1],
-  ];
-
-  if (plane === 'xy' || plane === 'yx') {
-    matrix[0][0] = cos;
-    matrix[0][1] = -sin;
-    matrix[1][0] = sin;
-    matrix[1][1] = cos;
-  } else if (plane === 'zw' || plane === 'wz') {
-    matrix[2][2] = cos;
-    matrix[2][3] = -sin;
-    matrix[3][2] = sin;
-    matrix[3][3] = cos;
-  }
-
-  return matrix;
-}
-
-function frequencyToRGB(frequency: number): { r: number; g: number; b: number } {
-  const wavelength = 380 + (frequency % 321);
-  let r = 0;
-  let g = 0;
-  let b = 0;
-
-  if (wavelength >= 380 && wavelength < 440) {
-    r = Math.abs(wavelength - 440) / (440 - 380);
-    b = 1;
-  } else if (wavelength >= 440 && wavelength < 490) {
-    g = (wavelength - 440) / (490 - 440);
-    b = 1;
-  } else if (wavelength >= 490 && wavelength < 510) {
-    g = 1;
-    b = Math.abs(wavelength - 510) / (510 - 490);
-  } else if (wavelength >= 510 && wavelength < 580) {
-    r = (wavelength - 510) / (580 - 510);
-    g = 1;
-  } else if (wavelength >= 580 && wavelength < 645) {
-    r = 1;
-    g = Math.abs(wavelength - 645) / (645 - 580);
-  } else if (wavelength >= 645 && wavelength <= 700) {
-    r = 1;
-  }
-
-  return {
-    r: Math.floor(r * 255),
-    g: Math.floor(g * 255),
-    b: Math.floor(b * 255),
-  };
-}
-
-function createHypercube() {
+export function createHypercube() {
   const vertices: Array<{ id: number; x: number; y: number; z: number; w: number }> = [];
   for (let i = 0; i < 16; i++) {
     vertices.push({
@@ -103,21 +36,19 @@ function createHypercube() {
     vertices,
     edges,
     topology: {
-      cells_0d: 16, // vertices
-      cells_1d: 32, // edges
-      cells_2d: 24, // square faces
-      cells_3d: 8, // cubic cells
-      cells_4d: 1, // the hypercube itself
+      cells_0d: 16,
+      cells_1d: 32,
+      cells_2d: 24,
+      cells_3d: 8,
+      cells_4d: 1,
     },
   };
 }
 
-function rotate4D(payload: Record<string, unknown>) {
+export function rotate4D(payload: Record<string, unknown>) {
   const angle = (payload.angle as number) || 0.1;
   const plane = (payload.plane as string) || 'xy';
-
   const rotationMatrix = generateRotationMatrix(angle, plane);
-
   return {
     status: 'rotated',
     angle,
@@ -127,10 +58,9 @@ function rotate4D(payload: Record<string, unknown>) {
   };
 }
 
-function projectTo3D(payload: Record<string, unknown>) {
+export function projectTo3D(payload: Record<string, unknown>) {
   const method = (payload.method as string) || 'schlegel';
   const distance = (payload.distance as number) || 2;
-
   const projection = [
     { x: 1, y: 1, z: 1 },
     { x: -1, y: 1, z: 1 },
@@ -141,7 +71,6 @@ function projectTo3D(payload: Record<string, unknown>) {
     { x: 0.5, y: -0.5, z: 0.5 },
     { x: -0.5, y: -0.5, z: 0.5 },
   ];
-
   return {
     status: 'projected',
     method,
@@ -157,12 +86,10 @@ function projectTo3D(payload: Record<string, unknown>) {
   };
 }
 
-function colorMap(payload: Record<string, unknown>) {
+export function colorMap(payload: Record<string, unknown>) {
   const frequency = (payload.frequency as number) || 440;
   const colorScheme = (payload.colorScheme as string) || 'spectrum';
-
   const baseColor = frequencyToRGB(frequency);
-
   return {
     status: 'colored',
     colorScheme,
@@ -176,79 +103,48 @@ function colorMap(payload: Record<string, unknown>) {
   };
 }
 
+export const validOperations = ['create-hypercube', 'rotate-4d', 'project-to-3d', 'color-map'] as const;
+
+export function executeRender4D(operation: string, payload: Record<string, unknown>): Record<string, unknown> {
+  switch (operation) {
+    case 'create-hypercube':
+      return createHypercube();
+    case 'rotate-4d':
+      return rotate4D(payload);
+    case 'project-to-3d':
+      return projectTo3D(payload);
+    case 'color-map':
+      return colorMap(payload);
+    default:
+      throw new Error(`Unknown operation: ${operation}`);
+  }
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const startTime = Date.now();
-  const origin = (req.headers.origin as string | undefined) ?? null;
-  const cors = getCorsHeaders(origin);
-  Object.entries(cors).forEach(([k, v]) => res.setHeader(k, v));
-
-  if (req.method === "OPTIONS") return res.status(204).end();
+  if (handleRenderCors(req, res)) return;
 
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('X-Cell-Type', 'Render4D');
   res.setHeader('X-Cell-Version', '1.0.0');
 
   if (req.method !== 'POST') {
-    return res.status(405).json({
-      success: false,
-      error: { code: 'METHOD_NOT_ALLOWED', message: 'Use POST for render-4d operations' },
-    });
+    return renderError(res, 'METHOD_NOT_ALLOWED', 'Use POST for render-4d operations', 0, 405);
   }
 
   try {
-    const { operation, payload, context } = req.body as Render4DRequest;
+    const { operation, payload, context } = req.body as { operation: string; payload: Record<string, unknown>; context?: { userId?: string; sessionId?: string } };
 
-    const validOps = ['create-hypercube', 'rotate-4d', 'project-to-3d', 'color-map'] as const;
-    if (!operation || !validOps.includes(operation)) {
-      return res.status(400).json({
-        success: false,
-        error: {
-          code: 'INVALID_OPERATION',
-          message: `Operation '${operation}' not supported. Use: ${validOps.join(', ')}`,
-        },
-      });
+    if (!operation || !validOperations.includes(operation as typeof validOperations[number])) {
+      return renderError(res, 'INVALID_OPERATION', `Operation '${operation}' not supported. Use: ${validOperations.join(', ')}`, Date.now() - startTime, 400);
     }
 
-    let result: Record<string, unknown>;
-
-    switch (operation) {
-      case 'create-hypercube':
-        result = createHypercube();
-        break;
-      case 'rotate-4d':
-        result = rotate4D(payload || {});
-        break;
-      case 'project-to-3d':
-        result = projectTo3D(payload || {});
-        break;
-      case 'color-map':
-        result = colorMap(payload || {});
-        break;
-      default:
-        throw new Error(`Unknown operation: ${operation}`);
-    }
-
-    const executionTime = Date.now() - startTime;
-
-    return res.status(200).json({
-      success: true,
-      data: result,
-      performance: { executionTime, startTime },
-      timestamp: new Date().toISOString(),
-      context: { userId: context?.userId, sessionId: context?.sessionId },
-    });
+    const result = executeRender4D(operation, payload || {});
+    renderSuccess(res, result, startTime, context);
   } catch (err) {
     const executionTime = Date.now() - startTime;
-    const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-
-    return res.status(500).json({
-      success: false,
-      error: {
-        code: 'RENDER_4D_ERROR',
-        message: errorMessage,
-      },
-      performance: { executionTime },
-      timestamp: new Date().toISOString(),
-    });
+    renderError(res, 'RENDER_4D_ERROR', err instanceof Error ? err.message : 'Unknown error', executionTime);
   }
 }
+
+export const render4dHandler = handler;

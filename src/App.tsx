@@ -127,39 +127,31 @@ class AppCrashBoundary extends Component<{ children: ReactNode }, { hasError: bo
 
 
 const AppInner = () => {
-  // Analytics post-pintado: se montan vía requestIdleCallback para no bloquear el main thread
   const [analyticsReady, setAnalyticsReady] = useState(false);
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    if ("requestIdleCallback" in window) {
-      requestIdleCallback(() => setAnalyticsReady(true), { timeout: 4000 });
-    } else {
-      setTimeout(() => setAnalyticsReady(true), 3000);
-    }
-  }, []);
+    const schedule = (fn: () => void) => {
+      if ("requestIdleCallback" in window) {
+        requestIdleCallback(fn, { timeout: 5000 });
+      } else {
+        setTimeout(fn, 3000);
+      }
+    };
 
-  // Arranque completo del ecosistema YUN + Isabella + UnifiedSDK
-  useEffect(() => {
-    const isBrowser = typeof window !== "undefined";
-    if (!isBrowser) return;
+    schedule(() => setAnalyticsReady(true));
 
-    async function bootSystem() {
+    schedule(async () => {
       try {
-        // 1. Initialiser el bridge YUN ↔ FederationBus
         const { initEventBusBridge } = await import("@/core/yun/event-bus-bridge");
         initEventBusBridge();
 
-        // 2. UnifiedSDK: init + fusion engine + supervisor + persistence
         const { unifiedSDK } = await import("@/core/unified/UnifiedSDK");
         unifiedSDK.init();
         await unifiedSDK.startFusionEngine();
 
-        // 3. Heartbeats periódicos de las federaciones YUN
         const { federationManager } = await import("@/core/yun/federation-coordinator");
         federationManager.heartbeatAll();
         setInterval(() => federationManager.heartbeatAll(), 30_000);
 
-        // 4. Despertar de Isabella: WHISPER → ANNOUNCE → TRANSCEND
         await unifiedSDK.triggerAwakening();
 
         logger.info("[BOOT] Ecosistema YUN + Isabella + UnifiedSDK activo");
@@ -167,9 +159,7 @@ const AppInner = () => {
         logger.error("[BOOT]", { error: err });
         captureException(err, { module: "SystemBoot" });
       }
-    }
-
-    bootSystem();
+    });
   }, []);
 
   return (

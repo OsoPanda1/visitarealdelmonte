@@ -1,6 +1,3 @@
-// Activa la membresía minera RDM (129 MXN/mes).
-// Modo manual/dev: activa de inmediato por 30 días. Cuando se conecte un
-// proveedor de pagos real (MERCHANT_PAYMENT_PROVIDER), aquí se redirige al checkout.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 
@@ -21,6 +18,7 @@ Deno.serve(async (req) => {
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
     const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const ANON = Deno.env.get("SUPABASE_ANON_KEY")!;
+    const STRIPE_SECRET = Deno.env.get("STRIPE_SECRET_KEY");
 
     const auth = req.headers.get("Authorization");
     if (!auth) return json({ error: "Auth required" }, 401);
@@ -29,6 +27,14 @@ Deno.serve(async (req) => {
     const { data: userData, error: userErr } = await userClient.auth.getUser();
     if (userErr || !userData.user) return json({ error: "Invalid session" }, 401);
     const userId = userData.user.id;
+
+    const paymentVerified = STRIPE_SECRET
+      ? await verifyPayment(SUPABASE_URL, SERVICE_KEY, userId)
+      : true;
+
+    if (!paymentVerified) {
+      return json({ error: "Pago no verificado. Completa el checkout primero." }, 402);
+    }
 
     const admin = createClient(SUPABASE_URL, SERVICE_KEY);
 
@@ -50,7 +56,6 @@ Deno.serve(async (req) => {
       .single();
     if (error) return json({ error: error.message }, 500);
 
-    // Bono de bienvenida: energía llena
     await admin
       .from("mineral_balances")
       .upsert({ user_id: userId, energy: 100, energy_updated_at: new Date().toISOString() }, { onConflict: "user_id" });
@@ -60,3 +65,26 @@ Deno.serve(async (req) => {
     return json({ error: e instanceof Error ? e.message : "Unknown error" }, 500);
   }
 });
+
+async function verifyPayment(supabaseUrl: string, serviceKey: string, userId: string): Promise<boolean> {
+  try {
+    const admin = createClient(supabaseUrl, serviceKey);
+    const { data: subs } = await admin
+      .from("subscriptions_premium")
+      .select("id, status, current_period_end")
+      .eq("user_id", userId)
+      .eq("status", "activa")
+      .maybeSingle();
+    if (subs) return true;
+
+    const { data: checkout } = await admin
+      .from("stripe_events")
+      .select("id")
+      .eq("metadata->>user_id", userId)
+      .eq("type", "checkout.session.completed")
+      .maybeSingle();
+    return !!checkout;
+  } catch {
+    return false;
+  }
+}

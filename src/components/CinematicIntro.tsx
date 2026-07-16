@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence, type Variants, type Easing } from "framer-motion";
 import { logger } from "@/lib/logger";
-import tumirada from "@/assets/musica/tumirada.mp3";
 
 type CinematicIntroProps = {
   onEnter?: () => void;
@@ -45,7 +44,7 @@ export const CinematicIntro: React.FC<CinematicIntroProps> = ({
   }, [isAudioEnabled]);
 
   useEffect(() => {
-    const audio = new Audio(tumirada);
+    const audio = new Audio(new URL("../assets/musica/tumirada.mp3", import.meta.url).href);
     audioRef.current = audio;
     audio.loop = false;
     audio.volume = 0.01;

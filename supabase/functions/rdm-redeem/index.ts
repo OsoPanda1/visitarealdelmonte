@@ -1,5 +1,3 @@
-// Canje de puntos por recompensas reales. Verifica puntos, descuenta de forma
-// atómica y registra la solicitud de canje para que el negocio la cumpla.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 import { z } from "https://esm.sh/zod@3.23.8";
@@ -43,23 +41,13 @@ Deno.serve(async (req) => {
     if (rErr || !reward || !reward.active) return json({ error: "Recompensa no disponible" }, 400);
     if (reward.stock === 0) return json({ error: "Recompensa agotada" }, 400);
 
-    const { data: balance } = await admin
-      .from("mineral_balances")
-      .select("puntos")
-      .eq("user_id", userId)
-      .maybeSingle();
-
-    if (!balance || balance.puntos < reward.cost_points) {
-      return json({ error: "insufficient_points", message: "No tienes puntos suficientes para este canje." }, 400);
+    const { data: updated, error: upErr } = await admin.rpc("redeem_points", {
+      p_user_id: userId,
+      p_cost: reward.cost_points,
+    });
+    if (upErr || !updated) {
+      return json({ error: upErr?.message || "No tienes puntos suficientes" }, 400);
     }
-
-    const { data: updated, error: upErr } = await admin
-      .from("mineral_balances")
-      .update({ puntos: balance.puntos - reward.cost_points })
-      .eq("user_id", userId)
-      .select()
-      .single();
-    if (upErr) return json({ error: upErr.message }, 500);
 
     const { data: redemption } = await admin
       .from("reward_redemptions")
