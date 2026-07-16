@@ -119,9 +119,10 @@ class FusionGateway {
           result = { ok: true, operation: op.type, data: stats as Record<string, unknown> };
           break;
         }
-        default:
+        default: {
           const unknownOp = op as FusionOperation;
           result = { ok: false, operation: unknownOp.type, error: FusionErrors.Internal(`Unknown operation: ${unknownOp.type}`) };
+        }
       }
 
       emitFederationEvent(op, "OPERATION_COMPLETED", { success: true }, traceId);

@@ -2,7 +2,7 @@ import type { Database } from "./types";
 
 let _supabase: import("@supabase/supabase-js").SupabaseClient<Database> | null | undefined;
 let _initPromise: Promise<void> | null = null;
-let _authQueue: Array<{ event: string; callback: Function }> = [];
+let _authQueue: Array<{ event: string; callback: (...args: unknown[]) => void }> = [];
 
 async function createSupabaseClient() {
   const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
@@ -51,7 +51,7 @@ let _authStub: any;
 function getAuthStub() {
   if (!_authStub) {
     _authStub = {
-      onAuthStateChange: (callback: Function) => {
+      onAuthStateChange: (callback: (...args: unknown[]) => void) => {
         _authQueue.push({ event: "authStateChange", callback });
         return { data: { subscription: { unsubscribe: () => {} } } };
       },
