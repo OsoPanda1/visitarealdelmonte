@@ -764,7 +764,7 @@ export default function GamePortal() {
           </div>
         ) : (
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {(rewardsLoading ? Array.from({ length: 6 }) : rewards).map((r, i) => {
+            {(rewardsLoading ? (Array(6).fill(null) as (Reward | null)[]) : rewards).map((r, i) => {
               if (!r) return <SkeletonCard key={i} className="min-h-[280px]" />;
 
               const canRedeem = isPremium && user && totalMinerals >= r.points_cost && r.stock > 0;

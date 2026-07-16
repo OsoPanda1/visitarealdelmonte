@@ -16,10 +16,9 @@ async function loadOptimizer(): Promise<PluginOption | null> {
 }
 
 async function loadCompressionPlugins(): Promise<PluginOption[]> {
-  let compressionModule: { default: (opts: Record<string, unknown>) => PluginOption };
   try {
-    compressionModule = await import("vite-plugin-compression");
-    const compression = compressionModule.default;
+    // @ts-ignore - optional compression plugin
+    const { default: compression } = await import("vite-plugin-compression");
     return [
       compression({ algorithm: "gzip" }),
       compression({ algorithm: "brotliCompress" }),
