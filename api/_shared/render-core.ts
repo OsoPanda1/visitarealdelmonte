@@ -1,11 +1,19 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { getCorsHeaders } from "./cors";
+import { promises as fs } from "fs";
+import path from "path";
+
+const ALLOWED_ASSETS_DIR = path.resolve(process.cwd(), "src/assets/images");
+
+// ── Existing types (preserved) ──
 
 export interface RenderOperation {
   operation: string;
   payload: Record<string, unknown>;
   context?: { userId?: string; sessionId?: string };
 }
+
+// ── Existing render exports (preserved for backward compat) ──
 
 export function analyzeFrequencies(signal: number[]): Record<string, number> {
   if (!signal || signal.length < 20) {
@@ -113,4 +121,66 @@ export function renderSuccess(res: VercelResponse, data: Record<string, unknown>
     timestamp: new Date().toISOString(),
     context,
   });
+}
+
+// ── Secure Mesh Processing & Asset Loading ──
+
+export interface Vector3D {
+  x: number;
+  y: number;
+  z: number;
+}
+
+export interface MeshData {
+  vertices: Vector3D[];
+  faces: number[][];
+  texturePath?: string;
+}
+
+export function sanitizeAssetPath(userPath: string): string {
+  const safePath = path.normalize(userPath).replace(/^(\.\.(\/|\\))+/, "");
+  const resolvedPath = path.resolve(ALLOWED_ASSETS_DIR, safePath);
+  if (!resolvedPath.startsWith(ALLOWED_ASSETS_DIR)) {
+    throw new Error("Path traversal detected: access denied");
+  }
+  return resolvedPath;
+}
+
+export async function processMeshAsync(rawData: string): Promise<MeshData> {
+  const parsed = await new Promise<any>((resolve, reject) => {
+    setImmediate(() => {
+      try {
+        resolve(JSON.parse(rawData));
+      } catch {
+        reject(new Error("Invalid mesh JSON format"));
+      }
+    });
+  });
+
+  const vertices: Vector3D[] = [];
+  const faces: number[][] = parsed.faces || [];
+  const rawVertices = parsed.vertices || [];
+  const BATCH_SIZE = 500;
+
+  for (let i = 0; i < rawVertices.length; i += 3) {
+    if (i > 0 && (i / 3) % BATCH_SIZE === 0) {
+      await new Promise((resolve) => setImmediate(resolve));
+    }
+    vertices.push({
+      x: typeof rawVertices[i] === "number" ? rawVertices[i] : 0,
+      y: typeof rawVertices[i + 1] === "number" ? rawVertices[i + 1] : 0,
+      z: typeof rawVertices[i + 2] === "number" ? rawVertices[i + 2] : 0,
+    });
+  }
+
+  return {
+    vertices,
+    faces,
+    texturePath: parsed.texturePath ? sanitizeAssetPath(parsed.texturePath) : undefined,
+  };
+}
+
+export async function loadSecureAssetTexture(assetRelativePath: string): Promise<Buffer> {
+  const securePath = sanitizeAssetPath(assetRelativePath);
+  return fs.readFile(securePath);
 }

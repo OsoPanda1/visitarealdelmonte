@@ -1,14 +1,17 @@
-const store = new Map<string, { count: number; resetAt: number }>();
+const store = new Map<string, { timestamps: number[] }>();
 
-const CLEANUP_INTERVAL = 5 * 60 * 1000;
-let lastCleanup = Date.now();
+const CLEANUP_INTERVAL_MS = 5 * 60 * 1000;
+let lastCleanupTime = Date.now();
 
-function cleanup(): void {
+function cleanup(windowMs: number): void {
   const now = Date.now();
-  if (now - lastCleanup < CLEANUP_INTERVAL) return;
-  lastCleanup = now;
-  for (const [key, entry] of store) {
-    if (entry.resetAt < now) store.delete(key);
+  if (now - lastCleanupTime < CLEANUP_INTERVAL_MS) return;
+  lastCleanupTime = now;
+  const cutoff = now - windowMs * 2;
+  for (const [key, record] of store) {
+    const active = record.timestamps.filter((t) => t > cutoff);
+    if (active.length === 0) store.delete(key);
+    else store.set(key, { timestamps: active });
   }
 }
 
@@ -36,56 +39,48 @@ export interface RateLimitResult {
 }
 
 export function checkRateLimit(request: Request, config: RateLimitConfig): RateLimitResult {
-  cleanup();
+  const now = Date.now();
+  const { windowMs, maxRequests } = config;
+
+  cleanup(windowMs);
 
   const ip = getClientIp(request);
   const key = `${config.keyPrefix || "api"}:${ip}`;
-  const now = Date.now();
-  const resetAt = now + config.windowMs;
 
-  const entry = store.get(key);
-
-  if (!entry || entry.resetAt < now) {
-    store.set(key, { count: 1, resetAt });
-    return {
-      allowed: true,
-      remaining: config.maxRequests - 1,
-      resetAt,
-      headers: {
-        "X-RateLimit-Limit": String(config.maxRequests),
-        "X-RateLimit-Remaining": String(config.maxRequests - 1),
-        "X-RateLimit-Reset": String(Math.ceil(resetAt / 1000)),
-      },
-    };
+  let record = store.get(key);
+  if (!record) {
+    record = { timestamps: [] };
+    store.set(key, record);
   }
 
-  entry.count++;
+  const windowStart = now - windowMs;
+  const validTimestamps = record.timestamps.filter((t) => t > windowStart);
+  const currentCount = validTimestamps.length;
+  const isBlocked = currentCount >= maxRequests;
 
-  if (entry.count > config.maxRequests) {
-    const retryAfter = Math.ceil((entry.resetAt - now) / 1000);
-    return {
-      allowed: false,
-      remaining: 0,
-      resetAt: entry.resetAt,
-      retryAfter,
-      headers: {
-        "X-RateLimit-Limit": String(config.maxRequests),
-        "X-RateLimit-Remaining": "0",
-        "X-RateLimit-Reset": String(Math.ceil(entry.resetAt / 1000)),
-        "Retry-After": String(retryAfter),
-      },
-    };
+  if (!isBlocked) {
+    validTimestamps.push(now);
+    store.set(key, { timestamps: validTimestamps });
   }
+
+  const remaining = Math.max(0, maxRequests - currentCount - (isBlocked ? 0 : 0));
+  const oldestValid = validTimestamps.length > 0 ? validTimestamps[0] : now;
+  const resetAt = oldestValid + windowMs;
+  const retryAfter = isBlocked ? Math.ceil((resetAt - now) / 1000) : undefined;
+
+  const headers: Record<string, string> = {
+    "X-RateLimit-Limit": String(maxRequests),
+    "X-RateLimit-Remaining": String(isBlocked ? 0 : remaining),
+    "X-RateLimit-Reset": String(Math.ceil(resetAt / 1000)),
+  };
+  if (retryAfter) headers["Retry-After"] = String(retryAfter);
 
   return {
-    allowed: true,
-    remaining: config.maxRequests - entry.count,
+    allowed: !isBlocked,
+    remaining: isBlocked ? 0 : remaining,
     resetAt,
-    headers: {
-      "X-RateLimit-Limit": String(config.maxRequests),
-      "X-RateLimit-Remaining": String(config.maxRequests - entry.count),
-      "X-RateLimit-Reset": String(Math.ceil(resetAt / 1000)),
-    },
+    retryAfter,
+    headers,
   };
 }
 
