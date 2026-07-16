@@ -3,7 +3,7 @@
 
 import { createContext, useContext, useEffect, useMemo, useState, ReactNode, useCallback } from "react";
 import type { Session, User } from "@supabase/supabase-js";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, initSupabase } from "@/integrations/supabase/client";
 
 export interface Profile {
   id: string;
@@ -99,29 +99,33 @@ export function RDMAuthProvider({ children }: { children: ReactNode }) {
 
     setIsSupabaseReady(true);
 
-    // 1. Listener de cambios de auth (sign‑in, sign‑out, refresh).
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_evt, s) => {
-      if (!isMounted) return;
-
-      setSession(s);
-      setUser(s?.user ?? null);
-
-      const uid = s?.user?.id;
-      if (uid) {
-        setTimeout(() => {
-          void loadProfileAndRoles(uid);
-        }, 0);
-      } else {
-        setProfile(null);
-        setRoles([]);
-      }
-    });
-
-    // 2. Sesión ya existente
     const init = async () => {
       try {
+        await initSupabase();
+
+        if (!isMounted) return;
+
+        // 1. Listener de cambios de auth (sign‑in, sign‑out, refresh).
+        const {
+          data: { subscription },
+        } = supabase.auth.onAuthStateChange((_evt, s) => {
+          if (!isMounted) return;
+
+          setSession(s);
+          setUser(s?.user ?? null);
+
+          const uid = s?.user?.id;
+          if (uid) {
+            setTimeout(() => {
+              void loadProfileAndRoles(uid);
+            }, 0);
+          } else {
+            setProfile(null);
+            setRoles([]);
+          }
+        });
+
+        // 2. Sesión ya existente
         const {
           data: { session: currentSession },
           error: sessionError,
@@ -142,6 +146,10 @@ export function RDMAuthProvider({ children }: { children: ReactNode }) {
         if (currentSession?.user) {
           await loadProfileAndRoles(currentSession.user.id);
         }
+
+        return () => {
+          subscription.unsubscribe();
+        };
       } catch (e) {
         if (!isMounted) return;
         const message = e instanceof Error ? e.message : "Error desconocido al inicializar sesión";
@@ -161,7 +169,6 @@ export function RDMAuthProvider({ children }: { children: ReactNode }) {
 
     return () => {
       isMounted = false;
-      subscription.unsubscribe();
     };
   }, [loadProfileAndRoles]);
 

@@ -16,13 +16,12 @@ async function loadOptimizer(): Promise<PluginOption | null> {
 }
 
 async function loadCompressionPlugins(): Promise<PluginOption[]> {
-  let compressionModule: { default: (opts: Record<string, unknown>) => PluginOption };
   try {
-    compressionModule = await import("vite-plugin-compression");
-    const compression = compressionModule.default;
+    // @ts-ignore - optional compression plugin
+    const { default: compression } = await import("vite-plugin-compression");
     return [
-      compression({ algorithm: "gzip" }),
-      compression({ algorithm: "brotliCompress" }),
+      compression({ algorithm: "gzip", filter: (f) => !/\.(mp3|mp4|webm|ogg|wav)$/i.test(f) }),
+      compression({ algorithm: "brotliCompress", filter: (f) => !/\.(mp3|mp4|webm|ogg|wav)$/i.test(f) }),
     ];
   } catch {
     return [];
@@ -63,7 +62,8 @@ const configFn: () => Promise<import("vite").UserConfig> = async () => {
       ],
     },
     build: {
-      modulePreload: false,
+      manifest: true,
+      modulePreload: true,
       target: "es2022",
       cssCodeSplit: true,
       assetsInlineLimit: 4096,
@@ -74,6 +74,7 @@ const configFn: () => Promise<import("vite").UserConfig> = async () => {
         output: {
           manualChunks(id: string) {
             if (!id.includes("node_modules")) return;
+            if (id.includes("react") || id.includes("react-dom") || id.includes("scheduler")) return "vendor-react";
             if (id.includes("framer-motion")) return "vendor-framer";
             if (id.includes("three") || id.includes("@react-three")) return "vendor-three";
             if (id.includes("leaflet") || id.includes("react-leaflet") || id.includes("supercluster")) return "vendor-leaflet";
@@ -93,7 +94,9 @@ const configFn: () => Promise<import("vite").UserConfig> = async () => {
             if (id.includes("zustand")) return "vendor-state";
             if (id.includes("class-variance-authority") || id.includes("clsx") || id.includes("tailwind-merge")) return "vendor-utils";
             if (id.includes("react-day-picker") || id.includes("react-resizable-panels")) return "vendor-ui-libs";
-            if (id.includes("react") || id.includes("react-dom")) return "vendor-react";
+            if (id.includes("@vercel")) return "vendor-vercel";
+            if (id.includes("uuid")) return "vendor-uuid";
+            if (id.includes("@lovable.dev")) return "vendor-lovable";
             return "vendor-other";
           },
         },

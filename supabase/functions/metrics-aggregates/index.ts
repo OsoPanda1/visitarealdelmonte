@@ -1,15 +1,33 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+import { corsHeaders } from "../_shared/cors.ts";
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader) {
+    return new Response(JSON.stringify({ error: "Authorization required" }), {
+      status: 401,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
   try {
     const supabase = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_ANON_KEY")!,
+      { global: { headers: { Authorization: authHeader } } },
+    );
+
+    const { data: { user }, error: authErr } = await supabase.auth.getUser();
+    if (authErr || !user) {
+      return new Response(JSON.stringify({ error: "Invalid session" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const admin = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
@@ -18,15 +36,15 @@ Deno.serve(async (req) => {
 
     const [places, businesses, events, premium, commerceSubs, tracking, bookings, redemptions, foot] =
       await Promise.all([
-        supabase.from("places").select("id", { count: "exact", head: true }).eq("is_active", true),
-        supabase.from("businesses").select("id", { count: "exact", head: true }).eq("is_active", true).eq("is_subscribed", true),
-        supabase.from("events").select("id", { count: "exact", head: true }).eq("is_active", true).gte("starts_at", new Date().toISOString()),
-        supabase.from("subscriptions_premium").select("id", { count: "exact", head: true }).eq("status", "activa"),
-        supabase.from("commerce_subscriptions").select("id", { count: "exact", head: true }).eq("status", "activa"),
-        supabase.from("tracking_events").select("event_type, route, created_at").gte("created_at", sinceISO).limit(1000),
-        supabase.from("tour_bookings").select("id, total_paid").gte("created_at", sinceISO),
-        supabase.from("reward_redemptions").select("id", { count: "exact", head: true }).gte("redeemed_at", sinceISO),
-        supabase.from("foot_traffic").select("place_id, count, recorded_at").gte("recorded_at", sinceISO).limit(500),
+        admin.from("places").select("id", { count: "exact", head: true }).eq("is_active", true),
+        admin.from("businesses").select("id", { count: "exact", head: true }).eq("is_active", true).eq("is_subscribed", true),
+        admin.from("events").select("id", { count: "exact", head: true }).eq("is_active", true).gte("starts_at", new Date().toISOString()),
+        admin.from("subscriptions_premium").select("id", { count: "exact", head: true }).eq("status", "activa"),
+        admin.from("commerce_subscriptions").select("id", { count: "exact", head: true }).eq("status", "activa"),
+        admin.from("tracking_events").select("event_type, route, created_at").gte("created_at", sinceISO).limit(1000),
+        admin.from("tour_bookings").select("id, total_paid").gte("created_at", sinceISO),
+        admin.from("reward_redemptions").select("id", { count: "exact", head: true }).gte("redeemed_at", sinceISO),
+        admin.from("foot_traffic").select("place_id, count, recorded_at").gte("recorded_at", sinceISO).limit(500),
       ]);
 
     const trackingRows = tracking.data ?? [];

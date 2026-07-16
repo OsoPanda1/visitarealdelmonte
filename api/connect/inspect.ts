@@ -14,6 +14,11 @@ export default async function handler(request: Request): Promise<Response> {
     return corsJsonResponse(request, { error: "Method not allowed" }, 405);
   }
 
+  const authHeader = request.headers.get("authorization");
+  if (!authHeader?.startsWith("Bearer ")) {
+    return corsJsonResponse(request, { error: "Unauthorized" }, 401);
+  }
+
   const result = await fusionGateway.execute({ type: "inspect:stats" });
 
   const data = result.ok && result.operation === "inspect:stats"

@@ -1,10 +1,6 @@
+import { corsHeaders } from "../_shared/cors.ts";
 import { createStripe, createAdmin, verifyStripeEvent, alreadyProcessed, markProcessed, safeError } from "../_shared/stripe.ts";
 import type Stripe from "https://esm.sh/stripe@17.7.0?target=deno";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, stripe-signature",
-};
 
 function mapStatus(s: string): "activa" | "pendiente" | "cancelada" | "vencida" {
   if (s === "active" || s === "trialing") return "activa";

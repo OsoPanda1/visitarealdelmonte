@@ -18,9 +18,13 @@
 - **Knowledge Cells**: Microservice architecture for 3D/4D rendering
 
 ## Important Conventions
-- CORS: Use shared getCorsHeaders() from api/_shared/cors.ts
-- Rate Limiting: Use checkRateLimit() from api/_shared/rate-limit.ts
-- Auth: Use verifyAuth/requireAuth from api/_shared/auth.ts (or auth.js for JS)
-- All API endpoints MUST add CORS headers and handle OPTIONS
-- Server-only code MUST be in *.server.ts files
-- Never import service-role clients from frontend code
+- CORS: Use shared getCorsHeaders() from api/_shared/cors.ts (API) or supabase/functions/_shared/cors.ts (Edge). Keep allowlist, never use wildcard.
+- Rate Limiting: Use checkRateLimit() from api/_shared/rate-limit.ts (Vercel) or supabase/functions/_shared/rate-limit.ts (Edge). Types in api/_shared/rate-limit-types.ts.
+- Auth: Use verifyAuth/requireAuth from api/_shared/auth.ts (Vercel) or supabase/functions/_shared/auth.ts (Edge). Server Express JWT in server/src/lib/auth-core.ts.
+- Telemetry: Use emitTelemetry() from api/_shared/telemetry.ts instead of console.log/warn/error.
+- All API endpoints MUST add CORS headers and handle OPTIONS.
+- Server-only code MUST be in *.server.ts files.
+- Never import service-role clients from frontend code.
+- Render Knowledge Cells: Use helpers from api/_shared/render-core.ts for 3D/4D operations.
+- NEVER use Vercel Connect SDK — native RDM token layer via FederationBus.
+- Gamification redemptions MUST be atomic via RPC (not read-then-write).

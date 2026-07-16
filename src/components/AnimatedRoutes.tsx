@@ -97,7 +97,6 @@ const Mitos = lazy(() => import("@/pages/Mitos"));
 const MusicDetail = lazy(() => import("@/pages/MusicDetail"));
 const Recorridos = lazy(() => import("@/pages/Recorridos"));
 const RutaDelPaste = lazy(() => import("@/pages/RutaDelPaste"));
-const AdminPanel = lazy(() => import("@/pages/Admin"));
 const DemoChecklist = lazy(() => import("@/pages/DemoChecklist"));
 const RealitoAIPage = lazy(() => import("@/pages/RealitoAI"));
 const ArchivoSonoro = lazy(() => import("@/pages/ArchivoSonoro"));
@@ -217,7 +216,7 @@ const AnimatedRoutes = () => {
             <Route path="/atlas/pastes" element={<RouteErrorBoundary route="/atlas/pastes"><AtlasPastes /></RouteErrorBoundary>} />
             <Route path="/atlas/cementerio" element={<RouteErrorBoundary route="/atlas/cementerio"><AtlasCementerio /></RouteErrorBoundary>} />
             <Route path="/atlas/calles" element={<RouteErrorBoundary route="/atlas/calles"><AtlasCalles /></RouteErrorBoundary>} />
-            <Route path="/atlas/keyendas" element={<RouteErrorBoundary route="/atlas/keyendas"><AtlasLeyendas /></RouteErrorBoundary>} />
+            <Route path="/atlas/leyendas" element={<RouteErrorBoundary route="/atlas/leyendas"><AtlasLeyendas /></RouteErrorBoundary>} />
             <Route path="/atlas" element={<RouteErrorBoundary route="/atlas"><AtlasMaximus /></RouteErrorBoundary>} />
             <Route path="/ecosistema-ltos" element={<RouteErrorBoundary route="/ecosistema-ltos"><EcosistemaLTOS /></RouteErrorBoundary>} />
             <Route path="/perfil" element={<RouteErrorBoundary route="/perfil"><Perfil /></RouteErrorBoundary>} />
@@ -233,7 +232,7 @@ const AnimatedRoutes = () => {
             <Route path="/mitos" element={<RouteErrorBoundary route="/mitos"><Mitos /></RouteErrorBoundary>} />
             <Route path="/recorridos" element={<RouteErrorBoundary route="/recorridos"><Recorridos /></RouteErrorBoundary>} />
             <Route path="/ruta-del-paste" element={<RouteErrorBoundary route="/ruta-del-paste"><RutaDelPaste /></RouteErrorBoundary>} />
-            <Route path="/admin-panel" element={<RouteErrorBoundary route="/admin-panel"><AdminPanel /></RouteErrorBoundary>} />
+            <Route path="/admin-panel" element={<RouteErrorBoundary route="/admin-panel"><Admin /></RouteErrorBoundary>} />
             <Route path="/demo-checklist" element={<RouteErrorBoundary route="/demo-checklist"><DemoChecklist /></RouteErrorBoundary>} />
             <Route path="/realito-ai" element={<RouteErrorBoundary route="/realito-ai"><RealitoAIPage /></RouteErrorBoundary>} />
             <Route path="/archivo-sonoro" element={<RouteErrorBoundary route="/archivo-sonoro"><ArchivoSonoro /></RouteErrorBoundary>} />

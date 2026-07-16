@@ -1,7 +1,3 @@
-// api/model-router.ts — Vercel Serverless Function
-// Unified entry point for open-source models (Hugging Face, OpenLLM, etc.)
-// Auth + Rate limiting + CORS unified
-
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { requireAuth } from "./_shared/auth.js";
 import { checkRateLimit, RATE_LIMITS } from "./_shared/rate-limit";
@@ -41,12 +37,43 @@ interface ModelRouterResponse {
   };
 }
 
+interface CircuitState {
+  failures: number;
+  lastFailure: number;
+  isOpen: boolean;
+}
+
+const circuitStore = new Map<string, CircuitState>();
+const CIRCUIT_THRESHOLD = parseInt(process.env.AI_CIRCUIT_BREAKER_THRESHOLD || "5", 10);
+const CIRCUIT_COOLDOWN = parseInt(process.env.AI_CIRCUIT_BREAKER_COOLDOWN_MS || "30000", 10);
+
+function isCircuitOpen(provider: string): boolean {
+  const state = circuitStore.get(provider);
+  if (!state || !state.isOpen) return false;
+  if (Date.now() - state.lastFailure > CIRCUIT_COOLDOWN) {
+    circuitStore.set(provider, { failures: 0, lastFailure: 0, isOpen: false });
+    return false;
+  }
+  return true;
+}
+
+function recordFailure(provider: string): void {
+  const state = circuitStore.get(provider) || { failures: 0, lastFailure: 0, isOpen: false };
+  state.failures++;
+  state.lastFailure = Date.now();
+  if (state.failures >= CIRCUIT_THRESHOLD) state.isOpen = true;
+  circuitStore.set(provider, state);
+}
+
+function recordSuccess(provider: string): void {
+  circuitStore.set(provider, { failures: 0, lastFailure: 0, isOpen: false });
+}
+
 function buildFederationContext(
   ctx?: ModelRouterRequest["context"],
   userId?: string,
 ): FederationContext {
   const env = (process.env.NODE_ENV as "dev" | "staging" | "prod") || "dev";
-
   return {
     nodeId: process.env.NODE_ID || "nodo-cero-model-router",
     federation: ctx?.federation || "F5",
@@ -56,27 +83,32 @@ function buildFederationContext(
   };
 }
 
-function emitTelemetry(
-  level: "info" | "warn" | "error",
-  message: string,
-  federation: FederationContext,
-  traceId: string,
-  data?: Record<string, unknown>,
-) {
-  const payload = {
-    level,
-    message,
-    traceId,
-    timestamp: new Date().toISOString(),
-    federation,
-    data,
-  };
-  // eslint-disable-next-line no-console
-  console.log("[model-router]", JSON.stringify(payload));
+async function fetchWithTimeout(url: string, options: RequestInit & { timeout?: number }): Promise<Response> {
+  const timeout = options.timeout || 15000;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeout);
+  try {
+    const res = await fetch(url, { ...options, signal: controller.signal });
+    return res;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function fetchWithRetry(url: string, options: RequestInit & { timeout?: number }, retries = 2): Promise<Response> {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const res = await fetchWithTimeout(url, options);
+      return res;
+    } catch (err) {
+      if (attempt === retries) throw err;
+      await new Promise((r) => setTimeout(r, Math.pow(2, attempt) * 200));
+    }
+  }
+  throw new Error("fetchWithRetry exhausted");
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // CORS preflight
   if (req.method === "OPTIONS") {
     return res.status(204).end();
   }
@@ -87,13 +119,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const webRequest = vercelRequestToWebRequest(req);
 
-  // Auth check
   const auth = await requireAuth(webRequest);
   if (auth.errorResponse) {
     return sendWebResponse(res, auth.errorResponse);
   }
 
-  // Rate limit
   const rateLimit = checkRateLimit(webRequest, RATE_LIMITS.model);
   if (!rateLimit.allowed) {
     return res.status(429).json({
@@ -112,10 +142,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const { model, prompt, max_tokens = 512, temperature = 0.7 } = body;
 
     if (!model || !prompt) {
-      emitTelemetry("warn", "Missing model or prompt", federation, traceId, {
-        model,
-        promptLength: prompt?.length ?? 0,
-      });
       return res.status(400).json({ error: "Missing model or prompt" });
     }
 
@@ -123,47 +149,42 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     let output = "";
     let tokens: number | undefined;
 
-    emitTelemetry("info", "Model router request received", federation, traceId, {
-      model,
-      max_tokens,
-      temperature,
-    });
-
-    // Vercel AI Gateway (primary — Claude via subscription)
     const gatewayUrl = process.env.VERCEL_AI_GATEWAY_URL;
     const gatewayToken = process.env.VERCEL_AI_GATEWAY_TOKEN;
     const gatewayModel = process.env.VERCEL_AI_GATEWAY_MODEL || "claude-sonnet-4-20250514";
 
-    if (gatewayUrl && gatewayToken) {
+    if (gatewayUrl && gatewayToken && !isCircuitOpen("vercel-ai-gateway")) {
       try {
-        const gatewayRes = await fetch(`${gatewayUrl}/openai/v1/chat/completions`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${gatewayToken}`,
+        const gatewayRes = await fetchWithRetry(
+          `${gatewayUrl}/openai/v1/chat/completions`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${gatewayToken}`,
+            },
+            body: JSON.stringify({
+              model: gatewayModel,
+              messages: [{ role: "user", content: prompt }],
+              max_tokens,
+              temperature,
+            }),
+            timeout: 20000,
           },
-          body: JSON.stringify({
-            model: gatewayModel,
-            messages: [{ role: "user", content: prompt }],
-            max_tokens,
-            temperature,
-          }),
-        });
+          1,
+        );
 
         if (gatewayRes.ok) {
           const gatewayData = await gatewayRes.json();
           output = gatewayData?.choices?.[0]?.message?.content ?? "";
           provider = "vercel-ai-gateway";
           tokens = typeof gatewayData?.usage?.total_tokens === "number" ? gatewayData.usage.total_tokens : undefined;
+          recordSuccess("vercel-ai-gateway");
         } else {
-          emitTelemetry("warn", "Vercel AI Gateway failed, falling back", federation, traceId, {
-            status: gatewayRes.status,
-          });
+          recordFailure("vercel-ai-gateway");
         }
       } catch (gatewayError) {
-        emitTelemetry("error", "Vercel AI Gateway error", federation, traceId, {
-          error: gatewayError instanceof Error ? gatewayError.message : "unknown",
-        });
+        recordFailure("vercel-ai-gateway");
       }
     }
 
@@ -178,7 +199,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(200).json(response);
     }
 
-    // Hugging Face provider
     if (
       model.startsWith("Qwen/") ||
       model.startsWith("mistralai/") ||
@@ -189,31 +209,30 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const hfToken = process.env.HUGGINGFACE_API_TOKEN;
 
       if (!hfToken) {
-        emitTelemetry("error", "HUGGINGFACE_API_TOKEN not configured", federation, traceId, { model });
         return res.status(500).json({
           error: "HF provider not configured",
           meta: { traceId, federation },
         });
       }
 
-      const hfRes = await fetch(`https://api-inference.huggingface.co/models/${model}`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${hfToken}`,
-          "Content-Type": "application/json",
+      const hfRes = await fetchWithRetry(
+        `https://api-inference.huggingface.co/models/${model}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${hfToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            inputs: prompt,
+            parameters: { max_new_tokens: max_tokens, temperature },
+          }),
+          timeout: 30000,
         },
-        body: JSON.stringify({
-          inputs: prompt,
-          parameters: { max_new_tokens: max_tokens, temperature },
-        }),
-      });
+      );
 
       if (!hfRes.ok) {
         const errText = await hfRes.text();
-        emitTelemetry("error", "HF API error", federation, traceId, {
-          status: hfRes.status,
-          snippet: errText.slice(0, 200),
-        });
         return res.status(502).json({
           error: "HF API error",
           meta: { traceId, federation },
@@ -226,73 +245,56 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       output = candidate?.generated_text ?? JSON.stringify(hfData);
       tokens = typeof candidate?.tokens === "number" ? candidate.tokens : undefined;
     } else {
-      // OpenLLM / future provider
       const openllmUrl = process.env.OPENLLM_API_URL;
 
       if (openllmUrl) {
         provider = "openllm";
+        try {
+          const ollmRes = await fetchWithRetry(
+            `${openllmUrl}/v1/chat/completions`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.OPENLLM_API_TOKEN || ""}`,
+              },
+              body: JSON.stringify({
+                model,
+                messages: [{ role: "user", content: prompt }],
+                max_tokens,
+                temperature,
+              }),
+              timeout: 15000,
+            },
+          );
 
-        const ollmRes = await fetch(`${openllmUrl}/v1/chat/completions`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.OPENLLM_API_TOKEN || ""}`,
-          },
-          body: JSON.stringify({
-            model,
-            messages: [{ role: "user", content: prompt }],
-            max_tokens,
-            temperature,
-          }),
-        });
-
-        if (!ollmRes.ok) {
-          const text = await ollmRes.text();
-          emitTelemetry("error", "OpenLLM API error", federation, traceId, {
-            status: ollmRes.status,
-            snippet: text.slice(0, 200),
-          });
+          if (!ollmRes.ok) {
+            const text = await ollmRes.text();
+            output = `Model ${model} unavailable via OpenLLM.`;
+          } else {
+            const ollmData = await ollmRes.json();
+            output = ollmData?.choices?.[0]?.message?.content ?? JSON.stringify(ollmData);
+            tokens = typeof ollmData?.usage?.total_tokens === "number" ? ollmData.usage.total_tokens : undefined;
+          }
+        } catch {
           output = `Model ${model} unavailable via OpenLLM.`;
-        } else {
-          const ollmData = await ollmRes.json();
-          output = ollmData?.choices?.[0]?.message?.content ?? JSON.stringify(ollmData);
-          tokens =
-            typeof ollmData?.usage?.total_tokens === "number"
-              ? ollmData.usage.total_tokens
-              : undefined;
         }
       } else {
-        emitTelemetry("warn", "No provider configured for model", federation, traceId, { model });
         output = `No provider configured for model: ${model}`;
       }
     }
 
     const latencyMs = Date.now() - start;
-
     const response: ModelRouterResponse = {
       provider,
       model,
       output,
-      meta: {
-        tokens,
-        latencyMs,
-        traceId,
-        federation,
-      },
+      meta: { tokens, latencyMs, traceId, federation },
     };
-
-    emitTelemetry("info", "Model router response ready", federation, traceId, {
-      provider,
-      latencyMs,
-      tokens,
-    });
 
     return res.status(200).json(response);
   } catch (e: unknown) {
     const errMsg = e instanceof Error ? e.message : "unknown error";
-    emitTelemetry("error", "Model router fatal error", federation, traceId, { error: errMsg });
-    // eslint-disable-next-line no-console
-    console.error("Model router error:", e);
     return res.status(500).json({
       error: "Model router error",
       detail: process.env.NODE_ENV === "development" ? errMsg : undefined,

@@ -3,6 +3,7 @@
 // Tabla: rate_limit_config (categoria TEXT PK, max INT, window_sec INT)
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
+import { corsHeaders as _cors, jsonResponse as _json } from "./cors.ts";
 
 export interface RateLimitConfig {
   max: number;
@@ -95,18 +96,8 @@ export async function checkRateLimitForRequest(
   return checkRateLimit(serviceKey, supabaseUrl, key, config);
 }
 
-export const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
-
-export function jsonResponse(obj: unknown, status = 200) {
-  return new Response(JSON.stringify(obj), {
-    status,
-    headers: { ...corsHeaders, "Content-Type": "application/json" },
-  });
-}
+export const corsHeaders = _cors;
+export const jsonResponse = _json;
 
 export function rateLimitResponse(retryAfter: number) {
   return new Response(JSON.stringify({ error: "rate_limit_exceeded", retryAfter }), {

@@ -115,6 +115,7 @@ jobs:
             pip install -r requirements.txt
           else
             echo "⚠️ No se encontró requirements.txt para Edge; se continúa con análisis estático puro."
+          fi
 
       - name: 🛰️ Initialize CodeQL Security Engines
         uses: github/codeql-action/init@v3

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   Target,
   Trophy,
@@ -166,95 +166,84 @@ export function QuestPanel({ compact = false }: QuestPanelProps) {
       <div
         className={`p-3 space-y-2 ${compact ? "max-h-[300px]" : "max-h-[500px]"} overflow-y-auto`}
       >
-        <AnimatePresence>
-          {filteredQuests.map((pq, i) => (
-            <motion.div
-              key={pq.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ delay: i * 0.05 }}
-              className={`relative p-3 rounded-xl border transition-all ${
-                pq.status === "completed"
-                  ? "bg-[hsl(var(--rdm-amber)/0.05)] border-[hsl(var(--rdm-amber)/0.2)]"
-                  : "bg-white/[0.02] border-white/[0.06] hover:border-white/10 hover:bg-white/[0.04]"
-              }`}
-            >
-              <div className="flex items-start gap-3">
-                {/* Track indicator */}
-                <div
-                  className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5"
-                  style={{ background: TRACK_COLORS[pq.quest.track] + "20" }}
-                >
-                  {pq.status === "completed" ? (
-                    <CheckCircle2
-                      className="w-4 h-4"
-                      style={{ color: TRACK_COLORS[pq.quest.track] }}
-                    />
-                  ) : (
-                    <Target className="w-4 h-4" style={{ color: TRACK_COLORS[pq.quest.track] }} />
-                  )}
-                </div>
-
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h4
-                      className="text-sm font-medium truncate"
-                      style={{ fontFamily: "var(--font-display)" }}
-                    >
-                      {pq.quest.name}
-                    </h4>
-                    <span
-                      className={`px-1.5 py-0.5 rounded text-[9px] font-medium ${DIFFICULTY_COLORS[pq.quest.difficulty]}`}
-                    >
-                      {pq.quest.difficulty}
-                    </span>
-                  </div>
-                  <p className="text-[11px] text-[hsl(var(--muted-foreground))] line-clamp-1 mb-2">
-                    {pq.quest.description}
-                  </p>
-
-                  {/* Progress bar */}
-                  <div className="flex items-center gap-2">
-                    <div className="flex-1 h-1.5 bg-white/5 rounded-full overflow-hidden">
-                      <motion.div
-                        className="h-full rounded-full"
-                        style={{ background: TRACK_COLORS[pq.quest.track] }}
-                        initial={{ width: 0 }}
-                        animate={{
-                          width: `${(pq.progress_json.current / pq.progress_json.target) * 100}%`,
-                        }}
-                        transition={{ duration: 0.8, ease: "easeOut", delay: i * 0.1 }}
-                      />
-                    </div>
-                    <span className="text-[10px] text-[hsl(var(--muted-foreground))] shrink-0">
-                      {pq.progress_json.current}/{pq.progress_json.target}
-                    </span>
-                  </div>
-
-                  {/* Reward preview */}
-                  {pq.quest.reward_json.xp && (
-                    <div className="flex items-center gap-1 mt-2">
-                      <Star className="w-3 h-3 text-[hsl(var(--rdm-amber))]" />
-                      <span className="text-[10px] text-[hsl(var(--rdm-amber))]">
-                        +{pq.quest.reward_json.xp} XP
-                      </span>
-                      {pq.quest.reward_json.badge_code && (
-                        <>
-                          <span className="text-[10px] text-[hsl(var(--muted-foreground))]">·</span>
-                          <Trophy className="w-3 h-3 text-purple-400" />
-                          <span className="text-[10px] text-purple-400">Badge</span>
-                        </>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                <ChevronRight className="w-4 h-4 text-[hsl(var(--muted-foreground)/0.5)] shrink-0 mt-1" />
+        {filteredQuests.map((pq, i) => (
+          <div
+            key={pq.id}
+            className={`relative p-3 rounded-xl border transition-all duration-200 ${
+              pq.status === "completed"
+                ? "bg-[hsl(var(--rdm-amber)/0.05)] border-[hsl(var(--rdm-amber)/0.2)]"
+                : "bg-white/[0.02] border-white/[0.06] hover:border-white/10 hover:bg-white/[0.04]"
+            }`}
+          >
+            <div className="flex items-start gap-3">
+              <div
+                className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5"
+                style={{ background: TRACK_COLORS[pq.quest.track] + "20" }}
+              >
+                {pq.status === "completed" ? (
+                  <CheckCircle2
+                    className="w-4 h-4"
+                    style={{ color: TRACK_COLORS[pq.quest.track] }}
+                  />
+                ) : (
+                  <Target className="w-4 h-4" style={{ color: TRACK_COLORS[pq.quest.track] }} />
+                )}
               </div>
-            </motion.div>
-          ))}
-        </AnimatePresence>
+
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <h4
+                    className="text-sm font-medium truncate"
+                    style={{ fontFamily: "var(--font-display)" }}
+                  >
+                    {pq.quest.name}
+                  </h4>
+                  <span
+                    className={`px-1.5 py-0.5 rounded text-[9px] font-medium ${DIFFICULTY_COLORS[pq.quest.difficulty]}`}
+                  >
+                    {pq.quest.difficulty}
+                  </span>
+                </div>
+                <p className="text-[11px] text-[hsl(var(--muted-foreground))] line-clamp-1 mb-2">
+                  {pq.quest.description}
+                </p>
+
+                <div className="flex items-center gap-2">
+                  <div className="flex-1 h-1.5 bg-white/5 rounded-full overflow-hidden">
+                    <div
+                      className="h-full rounded-full transition-all duration-700"
+                      style={{
+                        background: TRACK_COLORS[pq.quest.track],
+                        width: `${(pq.progress_json.current / pq.progress_json.target) * 100}%`,
+                      }}
+                    />
+                  </div>
+                  <span className="text-[10px] text-[hsl(var(--muted-foreground))] shrink-0">
+                    {pq.progress_json.current}/{pq.progress_json.target}
+                  </span>
+                </div>
+
+                {pq.quest.reward_json.xp && (
+                  <div className="flex items-center gap-1 mt-2">
+                    <Star className="w-3 h-3 text-[hsl(var(--rdm-amber))]" />
+                    <span className="text-[10px] text-[hsl(var(--rdm-amber))]">
+                      +{pq.quest.reward_json.xp} XP
+                    </span>
+                    {pq.quest.reward_json.badge_code && (
+                      <>
+                        <span className="text-[10px] text-[hsl(var(--muted-foreground))]">·</span>
+                        <Trophy className="w-3 h-3 text-purple-400" />
+                        <span className="text-[10px] text-purple-400">Badge</span>
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              <ChevronRight className="w-4 h-4 text-[hsl(var(--muted-foreground)/0.5)] shrink-0 mt-1" />
+            </div>
+          </div>
+        ))}
 
         {filteredQuests.length === 0 && (
           <div className="text-center py-8">

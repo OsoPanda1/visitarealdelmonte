@@ -1,6 +1,15 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { getCorsHeaders } from "../_shared/cors";
 
+const processedEvents = new Set<string>();
+const PROCESSED_TTL = 60 * 60 * 1000;
+
+if (typeof setInterval !== "undefined") {
+  setInterval(() => {
+    if (processedEvents.size > 1000) processedEvents.clear();
+  }, PROCESSED_TTL).unref();
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const origin = (req.headers.origin as string | undefined) ?? null;
   const cors = getCorsHeaders(origin);
@@ -25,25 +34,27 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const { verifyWebhookSignature } = await import("../_shared/stripe");
     const event = verifyWebhookSignature(body, sig, webhookSecret);
 
+    if (processedEvents.has(event.id)) {
+      return res.status(200).json({ received: true, deduplicated: true });
+    }
+    processedEvents.add(event.id);
+    setTimeout(() => processedEvents.delete(event.id), PROCESSED_TTL).unref();
+
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as { customer?: string; subscription?: string; metadata?: Record<string, string> };
-        console.log("[stripe-webhook] checkout completed", session.customer, session.metadata);
         break;
       }
       case "customer.subscription.updated":
       case "customer.subscription.deleted": {
         const sub = event.data.object as { id?: string; status?: string };
-        console.log("[stripe-webhook] subscription", sub.status, sub.id);
         break;
       }
       default:
-        console.log("[stripe-webhook] unhandled event", event.type);
     }
 
     return res.status(200).json({ received: true });
   } catch (err) {
-    console.error("[stripe-webhook] error", err);
     return res.status(400).json({ error: "webhook_error" });
   }
 }

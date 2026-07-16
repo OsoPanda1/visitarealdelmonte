@@ -1,16 +1,11 @@
-// ISA-AI / MEXA-AI Autonomous API Endpoint - Version 2.1 (Heptafederated Evolution)
-// Zero external AI dependencies — local matrix routing, memory compilation, structured outputs, and constitutional governance
-// Maintained by TAMV Online Network Architecture / Nodo Cero (RDM Digital)
-
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import crypto from "crypto";
 import { getCorsHeaders } from "./_shared/cors";
+import { requireAuth } from "./_shared/auth.js";
+import { emitTelemetry } from "./_shared/telemetry";
 import isaAiSchema from "./isa-ai.schema.json" with { type: "json" };
 
-// ========= TYPES & INTERFACES =========
-
 type MessageRole = "user" | "assistant" | "system";
-
 type Message = { role: MessageRole; content: string };
 
 type IsaAiRequest = {
@@ -116,8 +111,6 @@ interface IsaAiOutput {
   kb?: IsaAiKBTrace;
 }
 
-// ========= ARCHITECTURAL CONFIGURATION =========
-
 const ISABELLA_CONSTITUTION = {
   name: "Isabella Villase\u00f1or AI",
   voiceProfile: "Femenina, c\u00e1lida, 220Hz, acento neutro mexicano suave, cadencia po\u00e9tica.",
@@ -142,8 +135,6 @@ const OUTPUT_PIPELINE = [
   "format_structured",
   "msr_blockchain"
 ] as const;
-
-// ========= ADVANCED ROUTING MATRIX (Feature 1) =========
 
 const INTENT_MATRIX: Array<{ category: string; patterns: RegExp[]; weight: number; triggers: string[] }> = [
   { category: "saludo", patterns: [/hola|buenos d\u00edas|buenas tardes|qu\u00e9 tal|hey|saludos/i], weight: 1.0, triggers: ["hola", "buen", "tarde", "d\u00eda"] },
@@ -201,8 +192,6 @@ function mapIntentToHeptaDomain(intent: string, mode?: HeptaDomain): HeptaDomain
   }
 }
 
-// ========= KNOWLEDGE BASE (Feature 2, Embedded) =========
-
 const KB: KBEntry[] = [
   {
     id: "kb_pastes",
@@ -256,8 +245,6 @@ KB.forEach((e) => {
   e.sentences = e.content.split(/(?<=[.!?])\s+/);
 });
 
-// ========= CONTEXT & MEMORY COMPILER (Feature 2) =========
-
 function summarizeContext(messages: Message[]): string {
   const userMessages = messages.filter(m => m.role === "user");
   if (userMessages.length <= 1) return "";
@@ -265,8 +252,6 @@ function summarizeContext(messages: Message[]): string {
   const merged = recent.join(" | ");
   return `[Contexto de sesi\u00f3n: el usuario ha interactuado recientemente sobre: ${merged.slice(0, 200)}] `;
 }
-
-// ========= RUNTIME TOOL INJECTION (Feature 3) =========
 
 function executeRuntimeTools(category: string): { content: string; tools: IsaAiStructuredTool[] } {
   const tools: IsaAiStructuredTool[] = [];
@@ -294,8 +279,6 @@ function executeRuntimeTools(category: string): { content: string; tools: IsaAiS
   return { content: "", tools };
 }
 
-// ========= CONSTITUTIONAL GOVERNANCE FILTER (Feature 4) =========
-
 function applyConstitutionalFilter(
   baseContent: string,
   category: string,
@@ -317,8 +300,6 @@ function applyConstitutionalFilter(
 
   return processed;
 }
-
-// ========= RESPONSE SYNTHESIS ENGINE =========
 
 const TEMPLATES: Record<string, string[]> = {
   saludo: [
@@ -356,8 +337,6 @@ function retrieveKnowledge(query: string, category: string): { content: string; 
   };
 }
 
-// ========= MAIN HANDLER =========
-
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const start = Date.now();
   const origin = req.headers.origin ?? null;
@@ -385,11 +364,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const contextSummary = summarizeContext(messages);
     const sessionId = body.sessionId ?? crypto.randomUUID();
 
-    // Step 1: Intent + domain
     const intent = matrixClassify(lastPrompt);
     const heptaDomain = mapIntentToHeptaDomain(intent.category, body.mode);
 
-    // Step 2: Tool routing
     const toolResult = executeRuntimeTools(intent.category);
     let baseContent = toolResult.content;
 
@@ -404,7 +381,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const kbTrace: IsaAiKBTrace = {};
 
-    // Step 3: KB & template fallback
     if (!baseContent) {
       if (TEMPLATES[intent.category]) {
         const list = TEMPLATES[intent.category];
@@ -421,7 +397,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
     }
 
-    // Step 4: Governance filter
     const finalContent = applyConstitutionalFilter(baseContent, intent.category, contextSummary);
     const traceId = crypto.randomUUID();
     const processingTimeMs = Date.now() - start;
@@ -451,19 +426,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       kb: kbTrace
     };
 
-    console.log(
-      JSON.stringify({
-        level: "info",
-        traceId,
+    emitTelemetry({
+      level: "info",
+      message: "isa-ai response",
+      traceId,
+      data: {
         intent: output.intent,
         confidence: output.confidence,
         heptaDomain: output.heptaDomain,
         latencyMs: processingTimeMs,
         sessionId: output.sessionId
-      })
-    );
+      }
+    });
 
-    // Step 5: Streaming SSE (Feature 5)
     if (body.stream) {
       res.setHeader("Content-Type", "text/event-stream");
       res.setHeader("Cache-Control", "no-cache");
@@ -507,7 +482,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     return res.status(200).json(output);
   } catch (err) {
-    console.error("ISA-AI error", err);
+    emitTelemetry({
+      level: "error",
+      message: "ISA-AI error",
+      data: { error: err instanceof Error ? err.message : "ISA-AI internal error" }
+    });
     return res.status(500).json({
       error: err instanceof Error ? err.message : "ISA-AI internal error"
     });

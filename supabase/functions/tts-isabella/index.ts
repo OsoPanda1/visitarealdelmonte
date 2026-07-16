@@ -1,4 +1,5 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { corsHeaders as sharedCors, jsonResponse } from "../_shared/cors.ts";
+import { verifyAuth } from "../_shared/auth.ts";
 
 const ALLOWED_ORIGINS = [
   "https://www.visitarealdelmonte.online",
@@ -11,12 +12,7 @@ const ALLOWED_ORIGINS = [
 
 function corsHeaders(origin: string | null) {
   const allowed = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
-  return {
-    "Access-Control-Allow-Origin": allowed,
-    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Max-Age": "86400",
-  };
+  return { ...sharedCors, "Access-Control-Allow-Origin": allowed, "Access-Control-Max-Age": "86400" };
 }
 
 const SSML_PROFILES: Record<string, { rate: string; pitch: string; break_: string }> = {
@@ -42,17 +38,7 @@ async function sha256(input: string): Promise<string> {
   return Array.from(new Uint8Array(hashBuffer)).map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
-async function verifyAuth(authHeader: string | null): Promise<string> {
-  if (!authHeader) throw new Error("missing_auth");
-  const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-  const anonKey = Deno.env.get("SUPABASE_ANON_KEY") ?? Deno.env.get("SUPABASE_PUBLISHABLE_KEY")!;
-  const userClient = createClient(supabaseUrl, anonKey, {
-    global: { headers: { Authorization: authHeader } },
-  });
-  const { data: userData, error: userError } = await userClient.auth.getUser();
-  if (userError || !userData?.user) throw new Error("invalid_token");
-  return userData.user.id;
-}
+
 
 Deno.serve(async (req) => {
   const origin = req.headers.get("origin");
@@ -61,7 +47,7 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers });
 
   try {
-    await verifyAuth(req.headers.get("Authorization"));
+    await verifyAuth(req.headers.get("Authorization"), Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
 
     const body = await req.json();
     const text: string = body.text;

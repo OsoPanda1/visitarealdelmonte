@@ -1,16 +1,10 @@
-// api/telemetry.ts — Vercel Edge Function
-// Endpoint perimetral de telemetría del Nodo Cero
-// Auth + Rate limiting + CORS unificados
-
 import { getCorsHeaders, handleCors, corsJsonResponse } from "./_shared/cors";
 import { checkRateLimit, RATE_LIMITS } from "./_shared/rate-limit";
 
 export default async function handler(request: Request): Promise<Response> {
-  // CORS preflight
   const corsResponse = handleCors(request);
   if (corsResponse) return corsResponse;
 
-  // Rate limit
   const rateLimit = checkRateLimit(request, RATE_LIMITS.telemetry);
   if (!rateLimit.allowed) {
     return new Response(
@@ -43,6 +37,10 @@ export default async function handler(request: Request): Promise<Response> {
       const body = await request.json().catch(() => null);
       if (!body || typeof body !== "object") {
         return corsJsonResponse(request, { error: "Invalid JSON body", ...payloadBase }, 400);
+      }
+
+      if (body.events && Array.isArray(body.events)) {
+        return corsJsonResponse(request, { accepted: true, eventCount: body.events.length, ...payloadBase });
       }
 
       const requiredFields = [
@@ -85,18 +83,15 @@ export default async function handler(request: Request): Promise<Response> {
           const { error } = await supabase.from("telemetry_logs").insert(insertPayload);
           if (!error) {
             stored = true;
-          } else {
-            console.warn("telemetry_logs insert error:", error.message);
           }
         } catch (e) {
-          console.warn("Supabase telemetry_logs insert failed:", e instanceof Error ? e.message : e);
+          // Silently drop storage failures
         }
       }
 
       return corsJsonResponse(request, { accepted: true, stored, ...payloadBase });
     }
 
-    // GET — health check
     return corsJsonResponse(request, payloadBase);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown telemetry error";
