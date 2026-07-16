@@ -2,7 +2,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { Compass, ChevronDown, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
-import heroImg from "@/assets/images/imported/hero-real-del-monte.webp";
+import heroImg from "@/assets/images/hero-real-del-monte.webp";
 import rdmLogo from "@/assets/images/rdm-digital-nexus-logo.png";
 import { AuroraBackground, FloatingOrbs } from "@/components/VisualEffects";
 
