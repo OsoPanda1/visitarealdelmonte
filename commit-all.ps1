@@ -1,16 +1,39 @@
-# PowerShell script to commit & push all changes to GitHub main
-# Run this from PowerShell (not bash/cmd)
+# =================================================================
+# SCRIPT DE COMMIT ROBUSTO — PowerShell
+# =================================================================
+
+# Configuración estricta: detiene el script ante cualquier error
+$ErrorActionPreference = "Stop"
 
 $repo = "C:\Users\tamvo\Downloads\rdm digital\visitarealdelmonte"
 
-Write-Host "=== Staging all files ===" -ForegroundColor Cyan
-git -C $repo add -A
+# 1. Validar que la carpeta existe
+if (!(Test-Path -Path $repo)) {
+    Write-Host "Error: El repositorio '$repo' no existe." -ForegroundColor Red
+    exit 1
+}
 
-Write-Host "=== Status ===" -ForegroundColor Cyan
-git -C $repo status
+# Cambiar al directorio del repo de forma segura
+Push-Location $repo
 
-Write-Host "=== Committing ===" -ForegroundColor Cyan
-git -C $repo commit -m "feat: Vercel AI Gateway en todas las capas + CI fixes + README update
+try {
+    Write-Host "=== Validando cambios ===" -ForegroundColor Cyan
+    
+    # 2. Verificar si hay cambios pendientes
+    $status = git status --porcelain
+    if ([string]::IsNullOrWhiteSpace($status)) {
+        Write-Host "No hay cambios detectados. Nada que commitear." -ForegroundColor Yellow
+        exit 0
+    }
+
+    # 3. Staging
+    Write-Host "=== Staging de archivos ===" -ForegroundColor Cyan
+    git add -A
+
+    # 4. Commit
+    Write-Host "=== Creando commit ===" -ForegroundColor Cyan
+    $commitMsg = @"
+feat: Vercel AI Gateway en todas las capas + CI fixes + README update
 
 - Nuevo shared client vercel-ai-gateway.ts (callGatewayChat / callGatewayMessages)
 - isabella-ai: Vercel AI Gateway -> Model Router -> Gemini -> builtin
@@ -24,9 +47,20 @@ git -C $repo commit -m "feat: Vercel AI Gateway en todas las capas + CI fixes + 
 - Fix: @ts-ignore -> @ts-expect-error en cache/index.ts
 - Fix: syntax error en routes/musica.tsx (extra </div>)
 - Fix: unused eslint-disable directives eliminados (6 archivos)
-- README.md: documentacion completa de Vercel AI Gateway + cascada de modelos"
+- README.md: documentacion completa de Vercel AI Gateway + cascada de modelos
+"@
+    git commit -m $commitMsg
 
-Write-Host "=== Pushing to origin main ===" -ForegroundColor Cyan
-git -C $repo push origin main
+    # 5. Push
+    Write-Host "=== Pushing a origin main ===" -ForegroundColor Cyan
+    git push origin main
 
-Write-Host "=== Done! ===" -ForegroundColor Green
+    Write-Host "=== Proceso finalizado exitosamente ===" -ForegroundColor Green
+
+} catch {
+    Write-Host "ERROR: El proceso falló. Revisa la salida de Git arriba." -ForegroundColor Red
+    exit 1
+} finally {
+    # Regresar al directorio original siempre
+    Pop-Location
+}
