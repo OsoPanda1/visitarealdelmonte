@@ -1,0 +1,6 @@
+node_modules
+dist
+.vite
+.git
+coverage
+e2e/.auth
