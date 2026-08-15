@@ -15,7 +15,13 @@ export const queryClient = new QueryClient({
 export { QueryClientProvider };
 
 // API Client with base configuration
-const API_BASE_URL = import.meta.env.VITE_API_URL || "/api/v1";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "/api";
+
+// Normaliza la ruta: evita doble prefijo cuando el endpoint ya inicia con /api
+function buildApiUrl(endpoint: string): string {
+  if (endpoint.startsWith("/api/") || endpoint === "/api") return endpoint;
+  return `${API_BASE_URL}${endpoint}`;
+}
 
 // Request timeout
 const TIMEOUT_MS = 30000;
@@ -62,7 +68,7 @@ async function apiRequest<T>(endpoint: string, options: RequestInit = {}): Promi
   const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
   try {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    const response = await fetch(buildApiUrl(endpoint), {
       ...options,
       headers,
       signal: controller.signal,

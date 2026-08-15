@@ -50,6 +50,15 @@ const configFn: () => Promise<import("vite").UserConfig> = async () => {
     },
     envPrefix: ["VITE_"],
     cacheDir: ".vite",
+    server: {
+      proxy: {
+        "/api": {
+          target: process.env.VITE_DEV_PROXY_TARGET || "http://localhost:8787",
+          changeOrigin: true,
+          secure: false,
+        },
+      },
+    },
     css: {
       devSourcemap: false,
     },

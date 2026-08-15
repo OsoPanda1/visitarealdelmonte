@@ -40,12 +40,23 @@ import minaImg from "@/assets/images/mina-acosta.webp";
 import panteonImg from "@/assets/images/panteon-ingles.webp";
 import penasImg from "@/assets/images/penas-cargadas.webp";
 import callesImg from "@/assets/images/calles-colonial.webp";
+import { useApi } from "@/hooks/useApi";
+
+interface ApiPlace {
+  id: string;
+  slug?: string;
+  name?: string;
+  description?: string;
+  type?: string;
+  isFeatured?: boolean;
+  location?: { lat: number; lng: number; alt?: number };
+}
 
 const Map3DTwin = lazy(() =>
   import("@/components/map/Map3DTwin").then((module) => ({ default: module.Map3DTwin })),
 );
 
-const markers: MapMarkerData[] = [
+const fallbackMarkers: MapMarkerData[] = [
   {
     id: "1",
     name: "Mina de Acosta",
@@ -151,10 +162,33 @@ const markers: MapMarkerData[] = [
 function MapaPageContent() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [filter, setFilter] = useState<"all" | MarkerType>("all");
-  const [selected, setSelected] = useState<MapMarkerData | null>(markers[0]);
+  const [selected, setSelected] = useState<MapMarkerData | null>(fallbackMarkers[0]);
   const [query, setQuery] = useState("");
   const [mode, setMode] = useState<"2d" | "3d">("2d");
   const { viewport, syncFrom2D, syncFrom3D } = useMapSync();
+
+  // Gemelo digital territorial: consume /api/places (Express / nodo-cero) con fallback local.
+  const { data: apiPlaces } = useApi<{ data: ApiPlace[] }>("/api/places");
+  const markers = useMemo<MapMarkerData[]>(() => {
+    if (!apiPlaces?.data || !Array.isArray(apiPlaces.data) || apiPlaces.data.length === 0) {
+      return fallbackMarkers;
+    }
+    return apiPlaces.data
+      .filter((p) => p && p.location && typeof p.location.lat === "number" && typeof p.location.lng === "number")
+      .map((p, index) => ({
+        id: p.id || `place-${index}`,
+        name: p.name || `Lugar ${index + 1}`,
+        category: p.type || "Lugar",
+        lat: p.location.lat,
+        lng: p.location.lng,
+        description: p.description || "",
+        image: index % 2 === 0 ? minaImg : callesImg,
+        type: p.type === "BUSINESS" ? ("business" as const) : ("place" as const),
+        isPremium: p.isFeatured === true,
+        rating: 4.5,
+        status: p.isFeatured ? "Verificado" : "Activo",
+      }));
+  }, [apiPlaces]);
 
   // POI de territorio (panel deslizante) sincronizado con ?poi=
   const territoryPoiId = searchParams.get("poi");
@@ -187,7 +221,7 @@ function MapaPageContent() {
           .includes(query.toLowerCase().trim());
         return byType && byQuery;
       }),
-    [filter, query],
+    [filter, query, markers],
   );
 
   const stats = useMemo(
@@ -475,8 +509,7 @@ function MapaPageContent() {
                     )}
                     <button
                       className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--muted)/0.5)] px-3 py-2 text-sm font-medium text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]"
-                      onClick={() => setSelected(markers[0])}
-                      style={{ fontFamily: "var(--font-body)" }}
+                      onClick={() => setSelected(markers[0])}                      style={{ fontFamily: "var(--font-body)" }}
                     >
                       <LocateFixed className="h-4 w-4" /> Volver al nodo principal
                     </button>

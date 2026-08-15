@@ -31,7 +31,7 @@ interface Business {
   description: string;
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "/api/v1";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "/api";
 
 const culinaryHighlights = [
   {

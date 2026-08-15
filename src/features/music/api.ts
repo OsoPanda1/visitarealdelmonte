@@ -18,7 +18,7 @@ import { musicActionToGameEvent } from "./engine";
 import { processGameEvent } from "../gamification/engine";
 import placeholderImg from "@/assets/images/panteon-ingles.webp";
 
-const API_BASE = import.meta.env.VITE_API_URL || "/api/v1";
+const API_BASE = import.meta.env.VITE_API_URL || "/api";
 
 // ============================================================================
 // MOCK DATA

@@ -1,7 +1,9 @@
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, type ComponentType, type LazyExoticComponent } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { RouteErrorBoundary } from "@/components/RouteErrorBoundary";
+
+type TechRouteDef = { path: string; Component: LazyExoticComponent<ComponentType> };
 
 const Index = lazy(() => import("@/pages/Index"));
 const Lugares = lazy(() => import("@/pages/Lugares"));
@@ -118,6 +120,65 @@ const RFCDetail = lazy(() => import("@/pages/RFCDetail"));
 const TelemetryDashboardPage = lazy(() => import("@/pages/TelemetryDashboard"));
 const Tenochtitlan = lazy(() => import("@/pages/Tenochtitlan"));
 
+// Páginas tech/visión fuera del routing público por defecto.
+// Para habilitarlas: VITE_ENABLE_TECH_PAGES=true
+const TECH_ROUTES: TechRouteDef[] = [
+  { path: "/arquitectura", Component: Arquitectura },
+  { path: "/estrategia", Component: Estrategia },
+  { path: "/filosofia", Component: Filosofia },
+  { path: "/devhub", Component: DevHub },
+  { path: "/documentacion", Component: Documentacion },
+  { path: "/gobernanza", Component: Gobernanza },
+  { path: "/heptafederation", Component: Heptafederation },
+  { path: "/impacto-civilizatorio", Component: ImpactoCivilizatorio },
+  { path: "/ia-agentes", Component: IAAgentes },
+  { path: "/isabella-ai", Component: IsabellaAI },
+  { path: "/kit-apis", Component: KitAPIs },
+  { path: "/metaverso", Component: MetaverseHome },
+  { path: "/quantum-computing", Component: QuantumComputing },
+  { path: "/sistemas-avanzados", Component: SistemasAvanzados },
+  { path: "/territorial-data", Component: TerritorialDataCollector },
+  { path: "/xr-tecnologia", Component: XRTecnologia },
+  { path: "/biografia-ceo", Component: BiografiaCEO },
+  { path: "/despliegue", Component: Despliegue },
+  { path: "/economia-federada", Component: EconomiaFederada },
+  { path: "/manuales", Component: Manuales },
+  { path: "/blockchain-msr", Component: BlockchainMSR },
+  { path: "/seguridad-tenochtitlan", Component: SeguridadTenochtitlan },
+  { path: "/security-dashboard", Component: SecurityDashboard },
+  { path: "/security-antifragil", Component: SecurityDashboardAntifragil },
+  { path: "/security-logs", Component: SecurityLogs },
+  { path: "/fusion-repos", Component: FusionRepos },
+  { path: "/casos-de-uso", Component: CasosDeUso },
+  { path: "/visual-effects", Component: VisualEffects },
+  { path: "/timeline", Component: Timeline },
+  { path: "/feed", Component: Feed },
+  { path: "/rdm-page", Component: RDMPageShell },
+  { path: "/ecosistema-ltos", Component: EcosistemaLTOS },
+  { path: "/control-center", Component: ControlCenter },
+  { path: "/b2b", Component: B2BPortal },
+  { path: "/game-portal", Component: GamePortal },
+  { path: "/game-hub", Component: GameHub },
+  { path: "/juegos", Component: Juegos },
+  { path: "/ltos", Component: LTOS },
+  { path: "/demo-checklist", Component: DemoChecklist },
+  { path: "/api-explorer", Component: TAMVApiExplorer },
+  { path: "/tamv-hub", Component: TAMVHub },
+  { path: "/tamv-status", Component: TAMVStatus },
+  { path: "/tamv-thesis", Component: TAMVThesis },
+  { path: "/rfc", Component: RFCList },
+  { path: "/rfc/:slug", Component: RFCDetail },
+  { path: "/telemetry", Component: TelemetryDashboardPage },
+  { path: "/tenochtitlan", Component: Tenochtitlan },
+  { path: "/operativo", Component: Operativo },
+  { path: "/wiki/:slug", Component: Wiki },
+  { path: "/evolucion", Component: Evolucion },
+  { path: "/fusion-ecosystem", Component: FusionEcosystem },
+  { path: "/domain/:domainName", Component: DomainPage },
+];
+
+const TECH_ENABLED = import.meta.env.VITE_ENABLE_TECH_PAGES === "true";
+
 const RouteFallback = () => (
   <div className="min-h-screen w-full flex items-center justify-center bg-background" aria-label="Cargando contenido">
     <div className="animate-pulse text-muted-foreground">Cargando experiencia territorial…</div>
@@ -171,90 +232,47 @@ const AnimatedRoutes = () => {
             <Route path="/catalogo" element={<RouteErrorBoundary route="/catalogo"><Catalogo /></RouteErrorBoundary>} />
             <Route path="/negocios" element={<RouteErrorBoundary route="/negocios"><NegociosPortal /></RouteErrorBoundary>} />
             <Route path="/introduccion" element={<RouteErrorBoundary route="/introduccion"><Introduccion /></RouteErrorBoundary>} />
-            <Route path="/arquitectura" element={<RouteErrorBoundary route="/arquitectura"><Arquitectura /></RouteErrorBoundary>} />
-            <Route path="/estrategia" element={<RouteErrorBoundary route="/estrategia"><Estrategia /></RouteErrorBoundary>} />
-            <Route path="/filosofia" element={<RouteErrorBoundary route="/filosofia"><Filosofia /></RouteErrorBoundary>} />
-            <Route path="/devhub" element={<RouteErrorBoundary route="/devhub"><DevHub /></RouteErrorBoundary>} />
-            <Route path="/documentacion" element={<RouteErrorBoundary route="/documentacion"><Documentacion /></RouteErrorBoundary>} />
-            <Route path="/gobernanza" element={<RouteErrorBoundary route="/gobernanza"><Gobernanza /></RouteErrorBoundary>} />
-            <Route path="/heptafederation" element={<RouteErrorBoundary route="/heptafederation"><Heptafederation /></RouteErrorBoundary>} />
-            <Route path="/impacto-civilizatorio" element={<RouteErrorBoundary route="/impacto-civilizatorio"><ImpactoCivilizatorio /></RouteErrorBoundary>} />
-            <Route path="/ia-agentes" element={<RouteErrorBoundary route="/ia-agentes"><IAAgentes /></RouteErrorBoundary>} />
-            <Route path="/isabella-ai" element={<RouteErrorBoundary route="/isabella-ai"><IsabellaAI /></RouteErrorBoundary>} />
-            <Route path="/kit-apis" element={<RouteErrorBoundary route="/kit-apis"><KitAPIs /></RouteErrorBoundary>} />
-            <Route path="/metaverso" element={<RouteErrorBoundary route="/metaverso"><MetaverseHome /></RouteErrorBoundary>} />
-            <Route path="/patrimonio-cultural" element={<RouteErrorBoundary route="/patrimonio-cultural"><PatrimonioCultural /></RouteErrorBoundary>} />
-            <Route path="/quantum-computing" element={<RouteErrorBoundary route="/quantum-computing"><QuantumComputing /></RouteErrorBoundary>} />
-            <Route path="/red-social" element={<RouteErrorBoundary route="/red-social"><RedSocial /></RouteErrorBoundary>} />
-            <Route path="/sistemas-avanzados" element={<RouteErrorBoundary route="/sistemas-avanzados"><SistemasAvanzados /></RouteErrorBoundary>} />
-            <Route path="/territorial-data" element={<RouteErrorBoundary route="/territorial-data"><TerritorialDataCollector /></RouteErrorBoundary>} />
-            <Route path="/xr-tecnologia" element={<RouteErrorBoundary route="/xr-tecnologia"><XRTecnologia /></RouteErrorBoundary>} />
-            <Route path="/biografia-ceo" element={<RouteErrorBoundary route="/biografia-ceo"><BiografiaCEO /></RouteErrorBoundary>} />
-            <Route path="/despliegue" element={<RouteErrorBoundary route="/despliegue"><Despliegue /></RouteErrorBoundary>} />
-            <Route path="/economia-federada" element={<RouteErrorBoundary route="/economia-federada"><EconomiaFederada /></RouteErrorBoundary>} />
-            <Route path="/manuales" element={<RouteErrorBoundary route="/manuales"><Manuales /></RouteErrorBoundary>} />
-            <Route path="/blockchain-msr" element={<RouteErrorBoundary route="/blockchain-msr"><BlockchainMSR /></RouteErrorBoundary>} />
-            <Route path="/seguridad-tenochtitlan" element={<RouteErrorBoundary route="/seguridad-tenochtitlan"><SeguridadTenochtitlan /></RouteErrorBoundary>} />
-            <Route path="/estacionamientos" element={<RouteErrorBoundary route="/estacionamientos"><Estacionamientos /></RouteErrorBoundary>} />
-            <Route path="/security-dashboard" element={<RouteErrorBoundary route="/security-dashboard"><SecurityDashboard /></RouteErrorBoundary>} />
-            <Route path="/security-antifragil" element={<RouteErrorBoundary route="/security-antifragil"><SecurityDashboardAntifragil /></RouteErrorBoundary>} />
-            <Route path="/security-logs" element={<RouteErrorBoundary route="/security-logs"><SecurityLogs /></RouteErrorBoundary>} />
-            <Route path="/fusion-repos" element={<RouteErrorBoundary route="/fusion-repos"><FusionRepos /></RouteErrorBoundary>} />
             <Route path="/register" element={<RouteErrorBoundary route="/register"><Register /></RouteErrorBoundary>} />
             <Route path="/login" element={<RouteErrorBoundary route="/login"><Login /></RouteErrorBoundary>} />
             <Route path="/auth/callback" element={<RouteErrorBoundary route="/auth/callback"><AuthCallback /></RouteErrorBoundary>} />
-            <Route path="/casos-de-uso" element={<RouteErrorBoundary route="/casos-de-uso"><CasosDeUso /></RouteErrorBoundary>} />
             <Route path="/admin" element={<RouteErrorBoundary route="/admin"><Admin /></RouteErrorBoundary>} />
             <Route path="/admin/musica" element={<RouteErrorBoundary route="/admin/musica"><AdminMusica /></RouteErrorBoundary>} />
             <Route path="/admin/dashboard" element={<RouteErrorBoundary route="/admin/dashboard"><AdminDashboard /></RouteErrorBoundary>} />
-            <Route path="/visual-effects" element={<RouteErrorBoundary route="/visual-effects"><VisualEffects /></RouteErrorBoundary>} />
-            <Route path="/domain/:domainName" element={<RouteErrorBoundary route="/domain/:domainName"><DomainPage /></RouteErrorBoundary>} />
-            <Route path="/timeline" element={<RouteErrorBoundary route="/timeline"><Timeline /></RouteErrorBoundary>} />
             <Route path="/search" element={<RouteErrorBoundary route="/search"><SearchOverlayPage /></RouteErrorBoundary>} />
-            <Route path="/feed" element={<RouteErrorBoundary route="/feed"><Feed /></RouteErrorBoundary>} />
-            <Route path="/rdm-page" element={<RouteErrorBoundary route="/rdm-page"><RDMPageShell /></RouteErrorBoundary>} />
             <Route path="/atlas/pastes" element={<RouteErrorBoundary route="/atlas/pastes"><AtlasPastes /></RouteErrorBoundary>} />
             <Route path="/atlas/cementerio" element={<RouteErrorBoundary route="/atlas/cementerio"><AtlasCementerio /></RouteErrorBoundary>} />
             <Route path="/atlas/calles" element={<RouteErrorBoundary route="/atlas/calles"><AtlasCalles /></RouteErrorBoundary>} />
             <Route path="/atlas/leyendas" element={<RouteErrorBoundary route="/atlas/leyendas"><AtlasLeyendas /></RouteErrorBoundary>} />
             <Route path="/atlas" element={<RouteErrorBoundary route="/atlas"><AtlasMaximus /></RouteErrorBoundary>} />
-            <Route path="/ecosistema-ltos" element={<RouteErrorBoundary route="/ecosistema-ltos"><EcosistemaLTOS /></RouteErrorBoundary>} />
             <Route path="/perfil" element={<RouteErrorBoundary route="/perfil"><Perfil /></RouteErrorBoundary>} />
             <Route path="/leaderboard" element={<RouteErrorBoundary route="/leaderboard"><Leaderboard /></RouteErrorBoundary>} />
             <Route path="/territorial-dashboard" element={<RouteErrorBoundary route="/territorial-dashboard"><TerritorialDashboard /></RouteErrorBoundary>} />
-            <Route path="/wiki/:slug" element={<RouteErrorBoundary route="/wiki/:slug"><Wiki /></RouteErrorBoundary>} />
-            <Route path="/control-center" element={<RouteErrorBoundary route="/control-center"><ControlCenter /></RouteErrorBoundary>} />
-            <Route path="/b2b" element={<RouteErrorBoundary route="/b2b"><B2BPortal /></RouteErrorBoundary>} />
-            <Route path="/game-portal" element={<RouteErrorBoundary route="/game-portal"><GamePortal /></RouteErrorBoundary>} />
-            <Route path="/game-hub" element={<RouteErrorBoundary route="/game-hub"><GameHub /></RouteErrorBoundary>} />
-            <Route path="/juegos" element={<RouteErrorBoundary route="/juegos"><Juegos /></RouteErrorBoundary>} />
-            <Route path="/ltos" element={<RouteErrorBoundary route="/ltos"><LTOS /></RouteErrorBoundary>} />
             <Route path="/mitos" element={<RouteErrorBoundary route="/mitos"><Mitos /></RouteErrorBoundary>} />
             <Route path="/recorridos" element={<RouteErrorBoundary route="/recorridos"><Recorridos /></RouteErrorBoundary>} />
             <Route path="/ruta-del-paste" element={<RouteErrorBoundary route="/ruta-del-paste"><RutaDelPaste /></RouteErrorBoundary>} />
             <Route path="/admin-panel" element={<RouteErrorBoundary route="/admin-panel"><Admin /></RouteErrorBoundary>} />
-            <Route path="/demo-checklist" element={<RouteErrorBoundary route="/demo-checklist"><DemoChecklist /></RouteErrorBoundary>} />
             <Route path="/realito-ai" element={<RouteErrorBoundary route="/realito-ai"><RealitoAIPage /></RouteErrorBoundary>} />
             <Route path="/archivo-sonoro" element={<RouteErrorBoundary route="/archivo-sonoro"><ArchivoSonoro /></RouteErrorBoundary>} />
             <Route path="/comercios-checkout" element={<RouteErrorBoundary route="/comercios-checkout"><ComerciosCheckout /></RouteErrorBoundary>} />
             <Route path="/comercios-registro" element={<RouteErrorBoundary route="/comercios-registro"><ComerciosRegistroPage /></RouteErrorBoundary>} />
-            <Route path="/evolucion" element={<RouteErrorBoundary route="/evolucion"><Evolucion /></RouteErrorBoundary>} />
             <Route path="/faq" element={<RouteErrorBoundary route="/faq"><FAQPage /></RouteErrorBoundary>} />
-            <Route path="/fusion-ecosystem" element={<RouteErrorBoundary route="/fusion-ecosystem"><FusionEcosystem /></RouteErrorBoundary>} />
             <Route path="/membresias" element={<RouteErrorBoundary route="/membresias"><Membresias /></RouteErrorBoundary>} />
             <Route path="/premium" element={<RouteErrorBoundary route="/premium"><PremiumPlans /></RouteErrorBoundary>} />
             <Route path="/mina" element={<RouteErrorBoundary route="/mina"><Mina /></RouteErrorBoundary>} />
-            <Route path="/operativo" element={<RouteErrorBoundary route="/operativo"><Operativo /></RouteErrorBoundary>} />
-            <Route path="/api-explorer" element={<RouteErrorBoundary route="/api-explorer"><TAMVApiExplorer /></RouteErrorBoundary>} />
-            <Route path="/tamv-hub" element={<RouteErrorBoundary route="/tamv-hub"><TAMVHub /></RouteErrorBoundary>} />
-            <Route path="/tamv-status" element={<RouteErrorBoundary route="/tamv-status"><TAMVStatus /></RouteErrorBoundary>} />
-            <Route path="/tamv-thesis" element={<RouteErrorBoundary route="/tamv-thesis"><TAMVThesis /></RouteErrorBoundary>} />
-            <Route path="/rfc" element={<RouteErrorBoundary route="/rfc"><RFCList /></RouteErrorBoundary>} />
-            <Route path="/rfc/:slug" element={<RouteErrorBoundary route="/rfc/:slug"><RFCDetail /></RouteErrorBoundary>} />
-            <Route path="/telemetry" element={<RouteErrorBoundary route="/telemetry"><TelemetryDashboardPage /></RouteErrorBoundary>} />
-            <Route path="/tenochtitlan" element={<RouteErrorBoundary route="/tenochtitlan"><Tenochtitlan /></RouteErrorBoundary>} />
-            <Route path="*" element={<RouteErrorBoundary route="*"><NotFound /></RouteErrorBoundary>} />
             <Route path="/registrar-comercio" element={<RouteErrorBoundary route="/registrar-comercio"><RegistroComercio /></RouteErrorBoundary>} />
+            {TECH_ENABLED &&
+              TECH_ROUTES.map(({ path, Component }) => (
+                <Route
+                  key={path}
+                  path={path}
+                  element={
+                    <RouteErrorBoundary route={path}>
+                      <Component />
+                    </RouteErrorBoundary>
+                  }
+                />
+              ))}
+            <Route path="*" element={<RouteErrorBoundary route="*"><NotFound /></RouteErrorBoundary>} />
           </Routes>
         </Suspense>
       </motion.div>

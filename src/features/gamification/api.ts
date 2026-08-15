@@ -24,7 +24,7 @@ import type {
 } from "./types";
 import { calculateLevel, processGameEvent, calculateRoles } from "./engine";
 
-const API_BASE = import.meta.env.VITE_API_URL || "/api/v1";
+const API_BASE = import.meta.env.VITE_API_URL || "/api";
 
 // ============================================================================
 // MOCK DATA (for development without backend)
