@@ -174,7 +174,10 @@ function MapaPageContent() {
       return fallbackMarkers;
     }
     return apiPlaces.data
-      .filter((p) => p && p.location && typeof p.location.lat === "number" && typeof p.location.lng === "number")
+      .filter(
+        (p): p is ApiPlace & { location: { lat: number; lng: number } } =>
+          !!p && !!p.location && typeof p.location.lat === "number" && typeof p.location.lng === "number",
+      )
       .map((p, index) => ({
         id: p.id || `place-${index}`,
         name: p.name || `Lugar ${index + 1}`,
